@@ -1,0 +1,380 @@
+/* static/css/style.css */
+
+/* Generated with step one */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+
+
+/* Generated with step two */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Generated with step three */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Generated with step four */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Generated with step five */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Generated with step six */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Generated with step seven */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="file"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-check-label {
+    margin-left: 5px;
+}
+
+
+/* Generated with step eight */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    height: 100px;
+}
+
+
+/* Generated with step nine */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BD252D;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    height: 100px;
+}
+
+.form-check-label {
+    margin-left: 5px;
+}

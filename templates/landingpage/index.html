@@ -1,0 +1,533 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Kenya Software Summit 2025 - Breakfast Pre-Summit</title>
+    <link href="{% static 'images/cos.ico' %}" rel="icon">
+    <link href="{% static 'css/event/main.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<div class="animated-bg">
+    <div class="floating-particles" id="particles"></div>
+</div>
+<div id="codeRain"></div>
+
+<header>
+    <nav>
+        <a class="logo" href="#">Kenya Software Summit 2025</a>
+        <ul class="nav-links">
+            <li><a href="#breakfast">Home</a></li>
+            <li><a href="#agenda">Agenda</a></li>
+            <li><a href="#panelist">Panelist</a></li>
+            <li><a href="#summit">Summit</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero" id="breakfast">
+    <div class="hero-content">
+        <div class="exclusive-badge">
+            <i class="fas fa-crown"></i> Exclusive Invitation
+        </div>
+
+        <h1>Pre-Summit Breakfast Meeting</h1>
+        <p class="subtitle">A gathering of Kenya's software development leaders and innovators</p>
+
+        <div class="breakfast-info">
+            <div class="breakfast-header">
+                <i class="fas fa-coffee"></i>
+                <h2>Executive Breakfast</h2>
+            </div>
+
+            <div class="event-details">
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="detail-text">
+                        <div class="detail-label">Date</div>
+                        <div class="detail-value">August 5, 2025</div>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div class="detail-text">
+                        <div class="detail-label">Time</div>
+                        <div class="detail-value">6:30 AM - 09:00 AM</div>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="detail-text">
+                        <div class="detail-label">Venue</div>
+                        <div class="detail-value">Nairobi Serena Hotel</div>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-users"></i>
+                    <div class="detail-text">
+                        <div class="detail-label">Attendees</div>
+                        <div class="detail-value">100 Select Guests</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invitation-section">
+                <p class="invitation-text">
+                    "Join Kenya's most influential tech leaders for an exclusive morning of meaningful conversations,
+                    strategic discussions, and networking over a premium breakfast experience."
+                </p>
+                <a class="cta-button" href="#agenda">View Agenda</a>
+                <a class="cta-button" href="#panelist" id="confirmAttendanceBtn">View Panelist</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="agenda" id="agenda">
+    <h2>Breakfast Meeting Agenda</h2>
+    <p style="text-align: center; font-style: italic; color: var(--text-dark); margin-bottom: 3rem;">
+        Theme: "Charting Kenya's Future as Africa's Software Powerhouse"
+    </p>
+
+    <div class="agenda-timeline">
+        <div class="agenda-item">
+            <div class="agenda-time">6:30 AM - 7:00 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Arrival and Registration</div>
+                <div class="agenda-description">Networking and welcome refreshments</div>
+                <div class="agenda-facilitator">Secretariat</div>
+            </div>
+        </div>
+
+        <div class="agenda-item">
+            <div class="agenda-time">7:00 AM - 7:10 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Welcome Remarks</div>
+                <div class="agenda-description">Opening and event introduction</div>
+                <div class="agenda-facilitator">Secretary, E-Government</div>
+            </div>
+        </div>
+
+        <div class="agenda-item keynote">
+            <div class="agenda-time">7:10 AM - 7:20 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Keynote Speech</div>
+                <div class="agenda-description">"Laying the Policy Foundations for a Thriving Software Ecosystem"</div>
+                <div class="agenda-facilitator">Eng. John Tanui, Principal Secretary ICT</div>
+            </div>
+        </div>
+
+        <div class="agenda-item">
+            <div class="agenda-time">7:20 AM - 7:30 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Cabinet Secretary Remarks</div>
+                <div class="agenda-description">Strategic vision for Kenya's digital transformation</div>
+                <div class="agenda-facilitator">Cabinet Secretary</div>
+            </div>
+        </div>
+
+        <div class="agenda-item panel">
+            <div class="agenda-time">7:30 AM - 8:30 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Panel Discussion</div>
+                <div class="agenda-description">"Fuelling Kenya's Software Revolution: Ecosystem Builders in Action"
+                </div>
+                <div class="agenda-facilitator">Moderated by Josephine Ndambuki, KoTDA</div>
+            </div>
+        </div>
+
+        <div class="agenda-item">
+            <div class="agenda-time">8:30 AM - 8:45 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Plenary Discussion</div>
+                <div class="agenda-description">Open floor for questions and insights</div>
+                <div class="agenda-facilitator">All Participants</div>
+            </div>
+        </div>
+
+        <div class="agenda-item">
+            <div class="agenda-time">8:45 AM - 9:00 AM</div>
+            <div class="agenda-content">
+                <div class="agenda-title">Conclusion and Way Forward</div>
+                <div class="agenda-description">Next steps and summit preview</div>
+                <div class="agenda-facilitator">Director, Software & Digital Services</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panelist" id="panelist">
+    <h2>Panel Discussion Speakers</h2>
+    <p style="text-align: center;  margin-bottom: 3rem;">
+        Meet our distinguished panel of ecosystem builders who will share insights on Kenya's software revolution
+    </p>
+
+    <div class="panel-overview">
+        <div class="panel-info-card">
+            <h3><i class="fas fa-users"></i> Panel Theme</h3>
+            <p>"Fuelling Kenya's Software Revolution: Ecosystem Builders in Action"</p>
+        </div>
+        <div class="panel-info-card">
+            <h3><i class="fas fa-clock"></i> Duration</h3>
+            <p>60 minutes (7 minutes per panelist + 10 minutes Q&A)</p>
+        </div>
+        <div class="panel-info-card">
+            <h3><i class="fas fa-microphone"></i> Moderator</h3>
+            <p>Josephine Ndambuki, KoTDA</p>
+        </div>
+    </div>
+
+    <div class="panelist-table-container">
+        <table class="panelist-table">
+            <thead>
+            <tr>
+                <th>Panelist</th>
+                <th>Organization & Role</th>
+                <th>Topic Focus</th>
+                <th>Key Discussion Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="panelist-name">
+                    <div class="panelist-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <strong>Brian Omwenga</strong>
+                </td>
+                <td class="panelist-org">
+                    Team Lead<br>
+                    <span class="org-name">Tech Innovators Network (THiNK)</span>
+                </td>
+                <td class="topic-focus">
+                    "Scaling Software Start-ups in Kenya: Challenges and Catalysts"
+                </td>
+                <td class="discussion-points">
+                    • Talent & funding challenges<br>
+                    • Software IP rights<br>
+                    • Web hosting & cloud services
+                </td>
+            </tr>
+            <tr>
+                <td class="panelist-name">
+                    <div class="panelist-avatar">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <strong>Eng. Dr. Julius Butime</strong>
+                </td>
+                <td class="panelist-org">
+                    Dean, School of Computing<br>
+                    <span class="org-name">Strathmore University</span>
+                </td>
+                <td class="topic-focus">
+                    "Building an AI-Ready Workforce: Education, Skills, and Mindsets"
+                </td>
+                <td class="discussion-points">
+                    • Curriculum alignment<br>
+                    • Emerging technologies<br>
+                    • AI TRiSM Framework
+                </td>
+            </tr>
+            <tr>
+                <td class="panelist-name">
+                    <div class="panelist-avatar">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <strong>Johnny Falla</strong>
+                </td>
+                <td class="panelist-org">
+                    Innovation & Technology<br>
+                    <span class="org-name">Equity Group Foundation</span>
+                </td>
+                <td class="topic-focus">
+                    "Why Now? Investing in Kenya's Software and AI Talent"
+                </td>
+                <td class="discussion-points">
+                    • Success metrics<br>
+                    • Investment trends<br>
+                    • Market opportunities
+                </td>
+            </tr>
+            <tr>
+                <td class="panelist-name">
+                    <div class="panelist-avatar">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <strong>Catherine Muraga</strong>
+                </td>
+                <td class="panelist-org">
+                    Managing Director<br>
+                    <span class="org-name">Microsoft ADC & Engineering</span>
+                </td>
+                <td class="topic-focus">
+                    "The Case for Setting Up in Kenya: Talent, Innovation, and Opportunity"
+                </td>
+                <td class="discussion-points">
+                    • Global partnerships<br>
+                    • BPO opportunities<br>
+                    • Regional potential
+                </td>
+            </tr>
+            <tr>
+                <td class="panelist-name">
+                    <div class="panelist-avatar">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <strong>Francis Nderitu</strong>
+                </td>
+                <td class="panelist-org">
+                    Founder<br>
+                    <span class="org-name">KeepITCool</span>
+                </td>
+                <td class="topic-focus">
+                    "From Nairobi to the World: Unlocking Global Opportunities"
+                </td>
+                <td class="discussion-points">
+                    • Software exports<br>
+                    • Open-source contributions<br>
+                    • Global success stories
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="expected-outcomes">
+        <h3><i class="fas fa-target"></i> Expected Outcomes</h3>
+        <div class="outcomes-grid">
+            <div class="outcome-item">
+                <i class="fas fa-handshake"></i>
+                <h4>Strategic Partnerships</h4>
+                <p>Build collaboration ahead of the main Summit</p>
+            </div>
+            <div class="outcome-item">
+                <i class="fas fa-users-cog"></i>
+                <h4>Ecosystem Champions</h4>
+                <p>Identify potential leaders and advocates</p>
+            </div>
+            <div class="outcome-item">
+                <i class="fas fa-comments"></i>
+                <h4>National Dialogue</h4>
+                <p>Spark conversation on Kenya's software future</p>
+            </div>
+            <div class="outcome-item">
+                <i class="fas fa-globe-africa"></i>
+                <h4>Global Collaboration</h4>
+                <p>Enhance local talent and global market connections</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="coming-soon" id="summit">
+    <h2>Main Summit Coming Soon!</h2>
+    <p>The full Kenya Software Summit 2025 is just around the corner</p>
+
+    <div class="countdown-timer">
+        <h3><i class="fas fa-clock"></i> Summit Countdown</h3>
+        <div class="timer" id="summitCountdown">
+            <div class="time-unit">
+                <span class="time-value" id="summitDays">00</span>
+                <span class="time-label">Days</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="summitHours">00</span>
+                <span class="time-label">Hours</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="summitMinutes">00</span>
+                <span class="time-label">Minutes</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="summitSeconds">00</span>
+                <span class="time-label">Seconds</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="summit-preview">
+        <div class="preview-card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>October 22, 2025 - October 24, 2025</h3>
+            <p>Join hundreds of developers, tech innovators, industry players and entrepreneurs for the main event</p>
+        </div>
+
+        <div class="preview-card">
+            <i class="fas fa-users-cog"></i>
+            <h3>500+ Attendees</h3>
+            <p>Kenya's largest gathering of software developers, entrepreneurs, and tech innovators</p>
+        </div>
+
+        <div class="preview-card">
+            <i class="fas fa-star"></i>
+            <h3>World-Class Speakers</h3>
+            <p>International and local experts sharing cutting-edge insights and technologies</p>
+        </div>
+
+        <div class="preview-card">
+            <i class="fas fa-utensils"></i>
+            <h3>Meals Available</h3>
+            <p>Enjoy complimentary tea breaks and lunch during the summit sessions</p>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 3rem;">
+        <a class="cta-button" href="#register"
+           style="background: rgba(15, 23, 42, 0.9); color: var(--secondary-gold); border: 2px solid var(--secondary-gold);">
+            Get Summit Updates
+        </a>
+    </div>
+</section>
+
+<footer id="contact">
+    <div class="footer-content">
+        <h3>Kenya Software Summit 2025</h3>
+        <p>Organized by the <a href="https://ict.go.ke/" style="text-decoration: none;" target="_blank">State Department
+            for ICT and Digital Economy</a></p>
+
+        <div class="social-links">
+            <a href="https://x.com/MoICTKenya" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="mailto:information@ict.go.ke" target="_blank"><i class="fa fa-envelope"></i></a>
+            <a href="https://www.facebook.com/MoICTKE" target="_blank"><i class="fab fa-facebook"></i></a>
+        </div>
+
+        <p>&copy; <span id="year"></span> Kenya Software Summit. All rights reserved.</p>
+        <p style="color: var(--secondary-gold); margin-top: 1rem;">#kenyasoftwaresummit2025</p>
+
+        <script>
+            document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+
+    </div>
+</footer>
+
+<script>
+    // Summit Countdown Timer
+    function updateSummitCountdown() {
+        const summitDate = new Date('2025-10-22T09:00:00').getTime();
+        const now = new Date().getTime();
+        const timeLeft = summitDate - now;
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        document.getElementById('summitDays').textContent = days.toString().padStart(2, '0');
+        document.getElementById('summitHours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('summitMinutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('summitSeconds').textContent = seconds.toString().padStart(2, '0');
+
+        if (timeLeft < 0) {
+            document.getElementById('summitCountdown').innerHTML = '<div class="time-unit"><span class="time-value" style="font-size: 1.5rem;">Summit Started!</span></div>';
+        }
+    }
+
+    // Update countdown every second
+    setInterval(updateSummitCountdown, 1000);
+    updateSummitCountdown();
+
+    // Floating Particles Animation
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        const size = Math.random() * 6 + 4;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particle.style.animationDelay = Math.random() * 3 + 's';
+
+        document.getElementById('particles').appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 23000);
+    }
+
+    setInterval(createParticle, 800);
+
+    function createCodeRain() {
+        const codeChars = [
+            '0', '1', '{', '}', '(', ')', ';', '=', '+', '-', '*', '/',
+            '<', '>', '?', ':', '[', ']', 'if', 'for', 'var', 'let'
+        ];
+        const codeRain = document.getElementById('codeRain');
+
+        for (let i = 0; i < 50; i++) {
+            const span = document.createElement('span');
+            span.className = 'code-rain';
+            span.textContent = codeChars[Math.floor(Math.random() * codeChars.length)];
+
+            span.style.left = `${Math.random() * 100}%`;
+            span.style.top = `-${Math.random() * 50}px`;
+            span.style.animationDuration = `${Math.random() * 4 + 4}s`;
+            span.style.animationDelay = `${Math.random() * 3}s`;
+            span.style.fontSize = `${Math.random() * 8 + 12}px`;
+
+            codeRain.appendChild(span);
+
+            setTimeout(() => {
+                span.remove();
+            }, 9000); // slightly more than max animation time
+        }
+    }
+
+    setInterval(createCodeRain, 1500);
+    createCodeRain();
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 100) {
+            header.style.background = 'rgba(15, 23, 42, 0.98)';
+            header.style.borderBottom = '1px solid rgba(212, 175, 55, 0.5)';
+        } else {
+            header.style.background = 'rgba(15, 23, 42, 0.95)';
+            header.style.borderBottom = '1px solid rgba(212, 175, 55, 0.3)';
+        }
+    });
+
+    // Add some interactive elements
+    document.querySelectorAll('.agenda-item').forEach(item => {
+        item.addEventListener('mouseenter', function () {
+            this.style.backgroundColor = '#fff8dc';
+            this.style.transform = 'translateX(15px)';
+        });
+
+        item.addEventListener('mouseleave', function () {
+            this.style.backgroundColor = '#fdf8e1';
+            this.style.transform = 'translateX(0)';
+        });
+    });
+</script>
+</body>
+
+</html>

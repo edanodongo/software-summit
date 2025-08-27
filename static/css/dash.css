@@ -1,0 +1,93 @@
+a, h1, h2, h3, h4, h5, h6, p, span, div {
+    text-decoration: none !important;
+}
+
+
+/*--------------------------------------------------------------
+# Global Header
+--------------------------------------------------------------*/
+.header {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 15px 0;
+  transition: all 0.5s;
+  z-index: 997;
+}
+
+.header .logo {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.header .logo img {
+  width: auto;
+}
+
+.header .logo-divider {
+  width: 2px;
+  height: 80px; /* Match logo height */
+  background-color: #ccc;
+  margin: 0 12px;
+}
+
+
+.header .logo h1 {
+  font-size: 30px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+
+.header .btn-getstarted,
+.header .btn-getstarted:focus {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  font-size: 14px;
+  padding: 8px 25px;
+  margin: 0 0 0 30px;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+
+.header .btn-getstarted:hover,
+.header .btn-getstarted:focus:hover {
+  color: var(--contrast-color);
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
+@media (max-width: 1200px) {
+  .header .logo {
+    order: 1;
+  }
+
+  .header .btn-getstarted {
+    order: 2;
+    margin: 0 15px 0 0;
+    padding: 6px 15px;
+  }
+
+  .header .navmenu {
+    order: 3;
+  }
+}
+
+/* Responsive logo and divider size for smaller screens */
+@media (max-width: 768px) {
+  .header .logo img {
+    height: 50px;
+  }
+
+  .header .logo-divider {
+    height: 50px;
+  }
+
+  .header .logo h1 {
+    font-size: 24px;
+  }
+}
+
+.scrolled .header {
+  box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
+}
+
