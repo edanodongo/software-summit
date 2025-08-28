@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenya Software Summit 2025 - Code the Future, Build Africa</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #CE171C;
+            --primary-green: #01873F;
+            --primary-dark: #1C1C18;
+            --gradient-primary: linear-gradient(135deg, #CE171C 0%, #01873F 100%);
+            --gradient-secondary: linear-gradient(135deg, #01873F 0%, #1C1C18 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-dark);
+        }
+
+        .navbar {
+            background: rgba(28, 28, 24, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-red) !important;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-red) !important;
+        }
+
+        .hero-section {
+            height: 100vh;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-date {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-green);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary-custom:hover {
+            background: #015a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(1, 135, 63, 0.3);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid white;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-outline-custom:hover {
+            background: white;
+            color: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .objective-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-red);
+        }
+
+        .objective-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .objective-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .speaker-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .speaker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .speaker-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .speaker-info {
+            padding: 25px;
+        }
+
+        .speaker-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .speaker-title {
+            color: var(--primary-red);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .agenda-day {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .agenda-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+
+        .agenda-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .agenda-item h5 { 
+          color: var(--primary-dark); 
+        }
+
+        .agenda-item p {
+          color: #555;
+        }
+
+        .agenda-time {
+            font-weight: bold;
+            color: var(--primary-red);
+            font-size: 1.1rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            color: var(--primary-red);
+            margin-bottom: 20px;
+        }
+
+        .partner-logo {
+            max-height: 80px;
+            max-width: 150px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+            margin: 20px;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .media-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .media-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .media-item:hover {
+            transform: scale(1.05);
+        }
+
+        .media-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .media-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px;
+        }
+
+        .contact-form {
+            background: var(--gradient-primary);
+            padding: 50px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .form-control {
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-red);
+        }
+
+      .footer h6, .footer h5 { 
+        color: #fff; 
+        margin-bottom: 1rem; 
+      }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-red);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .contact-form {
+                padding: 30px;
+            }
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: var(--primary-green);
+            transform: translateY(-3px);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#home">
+          <i class="fas fa-code me-2"></i>
+          Kenya Software Summit
+          <span class="ms-2" id="themeIcon" style="font-size:1.3rem;"><i class="fas fa-moon"></i></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
+            <li class="nav-item"><a class="nav-link" href="#agenda">Agenda</a></li>
+            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#partners">Partners</a></li>
+            <li class="nav-item"><a class="nav-link" href="#media">Media</a></li>
+            <li class="nav-item"><a class="nav-link" href="#travel">Travel</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item d-flex align-items-center ms-2">
+              <button id="themeToggle" class="btn btn-sm btn-outline-light" style="border-radius:50%;width:38px;height:38px;" title="Toggle dark/light mode">
+                <i id="themeToggleIcon" class="fas fa-moon"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <script>
+      // Theme toggle logic
+      function setTheme(dark) {
+        if (dark) {
+          document.body.classList.add('dark-theme');
+          document.getElementById('themeToggleIcon').classList.remove('fa-moon');
+          document.getElementById('themeToggleIcon').classList.add('fa-sun');
+          document.getElementById('themeIcon').innerHTML = '<i class="fas fa-sun"></i>';
+          localStorage.setItem('theme', 'dark');
+        } else {
+          document.body.classList.remove('dark-theme');
+          document.getElementById('themeToggleIcon').classList.remove('fa-sun');
+          document.getElementById('themeToggleIcon').classList.add('fa-moon');
+          document.getElementById('themeIcon').innerHTML = '<i class="fas fa-moon"></i>';
+          localStorage.setItem('theme', 'light');
+        }
+      }
+      document.getElementById('themeToggle').addEventListener('click', function() {
+        const isDark = !document.body.classList.contains('dark-theme');
+        setTheme(isDark);
+      });
+      // On load, set theme from localStorage
+      (function() {
+        const theme = localStorage.getItem('theme');
+        setTheme(theme === 'dark');
+      })();
+      // Minimal dark theme CSS
+      const darkStyle = document.createElement('style');
+      darkStyle.textContent = `
+        body.dark-theme {
+          background: #181818 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .navbar, body.dark-theme .navbar * {
+          background: #232323 !important;
+          color: #fff !important;
+        }
+        body.dark-theme .card, body.dark-theme .section-padding, body.dark-theme .bg-light, body.dark-theme .agenda-day, body.dark-theme .feature-card, body.dark-theme .objective-card {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .card-header, body.dark-theme .card-body {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .btn-outline-light, body.dark-theme .btn-outline-custom {
+          border-color: #fff !important;
+          color: #fff !important;
+        }
+        body.dark-theme .btn-outline-light:hover, body.dark-theme .btn-outline-custom:hover {
+          background: #fff !important;
+          color: #232323 !important;
+        }
+        body.dark-theme .footer, body.dark-theme .footer * {
+          background: #181818 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .media-item, body.dark-theme .media-overlay {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .form-control, body.dark-theme .form-select {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+          border-color: #444 !important;
+        }
+        body.dark-theme .agenda-item {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .bg-white, body.dark-theme .bg-light {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+        }
+        body.dark-theme .alert-info {
+          background: #232323 !important;
+          color: #f1f1f1 !important;
+          border-color: #444 !important;
+        }
+        body.dark-theme .partner-logo {
+          filter: grayscale(100%) brightness(0.8) invert(1);
+        }
+      `;
+      document.head.appendChild(darkStyle);
+    </script>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 hero-content" data-aos="fade-up">
+                    <div class="hero-date">
+                        <i class="fas fa-calendar"></i> October 7-9, 2025 | Eldoret, Kenya
+                    </div>
+                    <h1 class="hero-title">Kenya Software Summit</h1>
+                    <p class="hero-subtitle">Code the Future. Build Africa.</p>
+                    <p class="lead mb-4">Join Africa's premier software development conference where innovation meets opportunity. Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#register" class="btn btn-primary-custom">Register Now</a>
+                        <a href="#about" class="btn btn-outline-custom">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center" data-aos="fade-left" data-aos-delay="200">
+                    <div class="hero-stats">
+                        <div class="stat-item mb-3">
+                            <h3 class="text-white">500+</h3>
+                            <p class="text-white-50">Developers</p>
+                        </div>
+                        <div class="stat-item mb-3">
+                            <h3 class="text-white">50+</h3>
+                            <p class="text-white-50">Speakers</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="text-white">3</h3>
+                            <p class="text-white-50">Days</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 text-center" data-aos="fade-left">
+                  <div class="mb-4"></div>
+                  <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--gradient-primary);">
+                  <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
+                  <div id="countdown" class="d-flex justify-content-center gap-3"></div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">About the Summit</h2>
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h3 class="mb-4">Background & Context</h3>
+                    <p class="lead">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
+                    <p>The Kenya Software Summit is an annual global event hosted in Eldoret at the University of Eldoret, aligning with Kenya's vision of decentralizing innovation and fostering regional digital economies.</p>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h3 class="mb-4">Our Vision</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Become Africa's leading annual software and digital innovation conference by 2030</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Cement Kenya's leadership as Africa's "Code Nation"</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Support Kenya's ambition to create 1 million digital economy jobs by 2030</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Position Kenya as a global partner in AI innovation and software exports</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Objectives -->
+            <div class="row mt-5">
+                <h3 class="text-center mb-4" data-aos="fade-up">Summit Objectives</h3>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="objective-card">
+                        <div class="objective-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h4>Build Software Ecosystem</h4>
+                        <p>Strengthen Kenya's software development ecosystem, positioning the country as Africa's premier hub for software innovation.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="objective-card">
+                        <div class="objective-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>Develop Talent</h4>
+                        <p>Develop software and AI talent, providing direct linkages between Kenyan developers and global technology players.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="objective-card">
+                        <div class="objective-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4>Connect Innovators</h4>
+                        <p>Connect emerging innovators, startups, and students with local and international companies, accelerators, and venture funds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Section -->
+    <section id="speakers" class="section-padding">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Keynote Speakers</h2>
+            <div class="row">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Dr. James Mwangi</h4>
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>
+                            <p class="speaker-bio">Leading digital transformation initiatives across Africa with 15+ years in cloud computing and AI development.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b412f944?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Sarah Ochieng</h4>
+                            <p class="speaker-title">Founder, TechAfrica Ventures</p>
+                            <p class="speaker-bio">Serial entrepreneur and investor focused on scaling African tech startups globally.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Prof. David Kim</h4>
+                            <p class="speaker-title">Director, Google AI Research</p>
+                            <p class="speaker-bio">Leading researcher in machine learning and artificial intelligence with focus on emerging markets.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Linda Mutua</h4>
+                            <p class="speaker-title">VP Engineering, Safaricom</p>
+                            <p class="speaker-bio">Expert in mobile technologies and financial services innovation in emerging markets.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda Section -->
+    <section id="agenda" class="section-padding bg-light position-relative">
+      <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Summit Agenda</h2>
+        <!-- Agenda Intro & Countdown -->
+        <div class="row mb-5 align-items-center">
+          <div class="col-lg-8" data-aos="fade-right">
+            <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
+              <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+                <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
+              </h4>
+              <p class="mb-0 text-secondary">
+                Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. <br>
+                <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
+              </p>
+            </div>
+          </div>
+          <!-- 
+          <div class="col-lg-4 text-center" data-aos="fade-left">
+            <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: #CE171C;">
+              <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
+              <div id="countdown" class="d-flex justify-content-center gap-3"></div>
+            </div>
+          </div>
+          -->
+        </div>
+        <!-- Day 1 -->
+        <div class="agenda-day d-flex align-items-center gap-3" data-aos="fade-up">
+          <div class="flex-shrink-0">
+            <span class="badge bg-danger fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 1</span>
+          </div>
+          <div>
+            <h3 class="mb-1 d-inline-block" style="color: var(--primary-red);">October 7, 2025</h3>
+            <span class="ms-2 badge bg-light text-dark fw-normal">Opening Ceremonies & Keynotes</span>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6" data-aos="fade-right">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 10:00 AM</div>
+                <span class="badge bg-success">Registration</span>
+              </div>
+              <h5 class="mb-2">Kenya Software Summit</h5>
+              <p class="mb-2">Africa's premier software development conference, bringing together innovators, developers, and tech leaders to code the future and build Africa's digital destiny.</p>
+              <div class="social-links mb-2">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+              </div>
+              <p class="mb-0"><i class="fas fa-mug-hot text-warning me-2"></i>Networking breakfast & welcome address</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>10:00 AM - 11:30 AM</div>
+                <span class="badge bg-primary">Keynote</span>
+              </div>
+              <h5 class="mb-2">Opening Keynote</h5>
+              <p class="mb-0">"The Future of Software Development in Africa" - <span class="fw-semibold">Dr. James Mwangi</span></p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>12:00 PM - 1:30 PM</div>
+                <span class="badge bg-info text-dark">Panel</span>
+              </div>
+              <h5 class="mb-2">AI & Machine Learning Panel</h5>
+              <p class="mb-0">Expert panel on AI applications in African markets</p>
+            </div>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>2:30 PM - 4:00 PM</div>
+                <span class="badge bg-success">Workshops</span>
+              </div>
+              <h5 class="mb-2">Technical Workshops</h5>
+              <p class="mb-0">Parallel sessions on cloud computing, mobile development, and cybersecurity</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>4:30 PM - 6:00 PM</div>
+                <span class="badge bg-warning text-dark">Pitch</span>
+              </div>
+              <h5 class="mb-2">Startup Pitch Competition</h5>
+              <p class="mb-0">Local and international startups present their innovations</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>7:00 PM - 9:00 PM</div>
+                <span class="badge bg-dark">Reception</span>
+              </div>
+              <h5 class="mb-2">Welcome Reception</h5>
+              <p class="mb-0">Networking dinner with cultural performances</p>
+            </div>
+          </div>
+        </div>
+        <!-- Day 2 -->
+        <div class="agenda-day mt-5 d-flex align-items-center gap-3" data-aos="fade-up">
+          <div class="flex-shrink-0">
+            <span class="badge bg-success fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 2</span>
+          </div>
+          <div>
+            <h3 class="mb-1 d-inline-block" style="color: var(--primary-green);">October 8, 2025</h3>
+            <span class="ms-2 badge bg-light text-dark fw-normal">Hackathons, Workshops & Tech Expo</span>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6" data-aos="fade-right">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 12:00 PM</div>
+                <span class="badge bg-danger">Hackathon</span>
+              </div>
+              <h5 class="mb-2">24-Hour Hackathon Begins</h5>
+              <p class="mb-0">Teams tackle real-world challenges in health, fintech, and agritech</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>1:00 PM - 2:30 PM</div>
+                <span class="badge bg-primary">Expo</span>
+              </div>
+              <h5 class="mb-2">Tech Expo Opening</h5>
+              <p class="mb-0">Exhibition of latest tools, platforms, and innovations</p>
+            </div>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>3:00 PM - 5:00 PM</div>
+                <span class="badge bg-success">Workshops</span>
+              </div>
+              <h5 class="mb-2">Developer Workshops</h5>
+              <p class="mb-0">Hands-on coding sessions with industry experts</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>6:00 PM - 8:00 PM</div>
+                <span class="badge bg-pink text-white" style="background: #e83e8c;">Forum</span>
+              </div>
+              <h5 class="mb-2">Women in Tech Forum</h5>
+              <p class="mb-0">Panel discussion on diversity and inclusion in technology</p>
+            </div>
+          </div>
+        </div>
+        <!-- Day 3 -->
+        <div class="agenda-day mt-5 d-flex align-items-center gap-3" data-aos="fade-up">
+          <div class="flex-shrink-0">
+            <span class="badge bg-dark fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 3</span>
+          </div>
+          <div>
+            <h3 class="mb-1 d-inline-block" style="color: var(--primary-dark);">October 9, 2025</h3>
+            <span class="ms-2 badge bg-light text-dark fw-normal">Awards, Policy Forum & Closing</span>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6" data-aos="fade-right">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 10:30 AM</div>
+                <span class="badge bg-danger">Hackathon</span>
+              </div>
+              <h5 class="mb-2">Hackathon Presentations</h5>
+              <p class="mb-0">Teams present solutions and compete for prizes</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>11:00 AM - 12:30 PM</div>
+                <span class="badge bg-secondary">Forum</span>
+              </div>
+              <h5 class="mb-2">Policy & Standards Forum</h5>
+              <p class="mb-0">Discussions on AI ethics, data security, and open standards</p>
+            </div>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>2:00 PM - 3:30 PM</div>
+                <span class="badge bg-warning text-dark">Awards</span>
+              </div>
+              <h5 class="mb-2">Awards Ceremony</h5>
+              <p class="mb-0">Recognition of outstanding innovations and contributors</p>
+            </div>
+            <div class="agenda-item shadow-sm border-0">
+              <div class="d-flex align-items-center mb-2">
+                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>4:00 PM - 5:00 PM</div>
+                <span class="badge bg-primary">Keynote</span>
+              </div>
+              <h5 class="mb-2">Closing Keynote</h5>
+              <p class="mb-0">"Building Kenya's Digital Future" - Closing remarks and next steps</p>
+            </div>
+          </div>
+        </div>
+        <!-- Agenda Callout  ->
+        <div class="alert alert-info mt-5 rounded-4 shadow-sm d-flex align-items-center" data-aos="fade-up">
+          <i class="fas fa-info-circle fa-2x me-3 text-primary"></i>
+          <div>
+            <strong>Note:</strong> Agenda is subject to change. For the latest updates, follow us on social media or subscribe to our newsletter.
+          </div>
+        </div>
+        <!-- Agenda Download Button ->
+        <div class="text-center mt-4" data-aos="zoom-in">
+          <a href="#" class="btn btn-primary-custom btn-lg px-5 shadow-sm">
+            <i class="fas fa-download me-2"></i>Download Full Agenda (PDF)
+          </a>
+        </div>
+      </div>
+       -->
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding" style="background: linear-gradient(135deg, #f8fafc 60%, #e6f4ea 100%);">
+      <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Summit Features</h2>
+        <div class="row g-4 justify-content-center">
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
+              <div class="feature-icon mb-3" style="color: #CE171C;">
+                <i class="fas fa-laptop-code"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
+              <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across sectors including healthcare, fintech, education, and agriculture.</p>
+              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
+              <div class="feature-icon mb-3" style="color: #01873F;">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Technical Workshops</h4>
+              <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing, cybersecurity, mobile app development, and software architecture best practices.</p>
+              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
+              <div class="feature-icon mb-3" style="color: #1C1C18;">
+                <i class="fas fa-store"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Tech Expo</h4>
+              <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source projects, and research collaborations from leading tech companies.</p>
+              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
+              <div class="feature-icon mb-3" style="color: #01873F;">
+                <i class="fas fa-users"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
+              <p class="text-secondary">Connect software developers with hiring companies and innovation projects through our dedicated talent pavilion and networking sessions.</p>
+              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
+              <div class="feature-icon mb-3" style="color: #CE171C;">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Startup Demos</h4>
+              <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and investment, with opportunities to connect with venture capital firms.</p>
+              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
+              <div class="feature-icon mb-3" style="color: #1C1C18;">
+                <i class="fas fa-gavel"></i>
+              </div>
+              <h4 class="fw-bold mb-2">Policy Forums</h4>
+              <p class="text-secondary">Discussions on AI ethics, open software standards, data security policies, and regulatory frameworks for the digital economy.</p>
+              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Partners</h2>
+            
+            <div class="row mb-5">
+                <div class="col-12" data-aos="fade-up">
+                    <h3 class="text-center mb-4">Government Partners</h3>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop" alt="Ministry of ICT" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop" alt="ICT Authority" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop" alt="Konza Technopolis" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop" alt="KAIST Kenya" class="partner-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-12" data-aos="fade-up">
+                    <h3 class="text-center mb-4">Technology Partners</h3>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop" alt="Microsoft" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop" alt="Google" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=150&h=80&fit=crop" alt="AWS" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop" alt="IBM" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop" alt="Oracle" class="partner-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12" data-aos="fade-up">
+                    <h3 class="text-center mb-4">International Partners</h3>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop" alt="ITU" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop" alt="ATU" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop" alt="European Union" class="partner-logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
+                            <div class="partner-logo-container">
+                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop" alt="GIZ" class="partner-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Section -->
+    <section id="media" class="section-padding">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Media Gallery</h2>
+            
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">Recent News & Updates</h3>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop" alt="Summit Announcement" class="media-img">
+                        <div class="media-overlay">
+                            <h5>Kenya Software Summit 2025 Officially Announced</h5>
+                            <p>Ministry of ICT announces the inaugural Kenya Software Summit...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop" alt="Speaker Lineup" class="media-img">
+                        <div class="media-overlay">
+                            <h5>World-Class Speakers Confirmed</h5>
+                            <p>Leading tech executives and innovators to keynote the summit...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=250&fit=crop" alt="Partnership" class="media-img">
+                        <div class="media-overlay">
+                            <h5>Major Tech Companies Join as Partners</h5>
+                            <p>Microsoft, Google, AWS among key partners supporting the summit...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">Photo Gallery</h3>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="media-item mb-4">
+                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop" alt="Conference Hall" class="media-img">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="media-item mb-4">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop" alt="Networking Session" class="media-img">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="media-item mb-4">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop" alt="Workshop" class="media-img">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="media-item mb-4">
+                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=200&fit=crop" alt="Tech Expo" class="media-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Info Section
+    <section id="travel" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Travel Information</h2>
+            
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h3 class="mb-4">Venue</h3>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5><i class="fas fa-map-marker-alt text-danger me-2"></i>University of Eldoret</h5>
+                            <p class="mb-2"><strong>Address:</strong> P.O. Box 1125-30100, Eldoret, Kenya</p>
+                            <p class="mb-2"><strong>Main Hall:</strong> University Auditorium Complex</p>
+                            <p class="mb-3"><strong>Capacity:</strong> 2,000 delegates</p>
+                            <p>The University of Eldoret provides a modern, well-equipped venue with state-of-the-art facilities for conferences, workshops, and exhibitions.</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="mb-4 mt-4">Getting There</h3>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6><i class="fas fa-plane text-primary me-2"></i>By Air</h6>
+                                <p>Eldoret International Airport (EDL) - 15 minutes from venue<br>
+                                Jomo Kenyatta International Airport (NBO) - 4 hours by road</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6><i class="fas fa-car text-success me-2"></i>By Road</h6>
+                                <p>From Nairobi: 4 hours via A104 highway<br>
+                                From Kisumu: 1.5 hours via A1 highway</p>
+                            </div>
+                            <div>
+                                <h6><i class="fas fa-train text-warning me-2"></i>By Rail</h6>
+                                <p>SGR train service available from Nairobi to Eldoret (under construction)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h3 class="mb-4">Accommodation</h3>
+                    
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h5 class="text-primary">Luxury Hotels</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><i class="fas fa-star text-warning me-2"></i><strong>Eldoret Grand Hotel</strong> - 5 minutes from venue</li>
+                                <li class="mb-2"><i class="fas fa-star text-warning me-2"></i><strong>Sirikwa Hotel</strong> - 10 minutes from venue</li>
+                                <li><i class="fas fa-star text-warning me-2"></i><strong>Boma Inn Eldoret</strong> - 8 minutes from venue</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h5 class="text-success">Mid-Range Hotels</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><i class="fas fa-bed text-info me-2"></i><strong>Eldoret Lodge</strong> - 12 minutes from venue</li>
+                                <li class="mb-2"><i class="fas fa-bed text-info me-2"></i><strong>White Castle Hotel</strong> - 15 minutes from venue</li>
+                                <li><i class="fas fa-bed text-info me-2"></i><strong>Comfort Inn</strong> - 10 minutes from venue</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="text-secondary">Budget Options</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><i class="fas fa-home text-dark me-2"></i><strong>University Guest House</strong> - On campus</li>
+                                <li class="mb-2"><i class="fas fa-home text-dark me-2"></i><strong>Eldoret Backpackers</strong> - 20 minutes from venue</li>
+                                <li><i class="fas fa-home text-dark me-2"></i><strong>City Lodge</strong> - 18 minutes from venue</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Special Rates:</strong> Negotiated discounts available for summit attendees. Use code <strong>KSS2025</strong> when booking.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     -->
+
+    <!-- Registration Section -->
+    <section id="register" class="section-padding" style="background: var(--gradient-primary);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center text-white" data-aos="fade-up">
+                    <h2 class="section-title text-white">Register for Kenya Software Summit 2025</h2>
+                    <p class="lead mb-4">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier software development conference.</p>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="row">
+                        <!-- Pricing Cards -->
+                        <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                            <div class="card h-100 border-0 shadow">
+                                <div class="card-header bg-light text-center border-0">
+                                    <h4 class="my-0 font-weight-normal">Student</h4>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h1 class="card-title pricing-card-title text-center">KSh 2,000 <small class="text-muted">/ 3 days</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4 flex-grow-1">
+                                        <li><i class="fas fa-check text-success me-2"></i>Access to all sessions</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Workshop participation</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Networking lunch</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Summit materials</li>
+                                        <li><i class="fas fa-times text-muted me-2"></i>Hackathon entry</li>
+                                    </ul>
+                                    <button type="button" class="btn btn-outline-primary btn-lg">Register Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="card h-100 border-0 shadow border-primary">
+                                <div class="card-header bg-primary text-white text-center border-0">
+                                    <h4 class="my-0 font-weight-normal">Professional</h4>
+                                    <span class="badge bg-warning text-dark">Most Popular</span>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h1 class="card-title pricing-card-title text-center">KSh 15,000 <small class="text-muted">/ 3 days</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4 flex-grow-1">
+                                        <li><i class="fas fa-check text-success me-2"></i>Access to all sessions</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Workshop participation</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>All meals included</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Summit materials</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Hackathon entry</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Networking events</li>
+                                    </ul>
+                                    <button type="button" class="btn btn-primary btn-lg">Register Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                            <div class="card h-100 border-0 shadow">
+                                <div class="card-header bg-dark text-white text-center border-0">
+                                    <h4 class="my-0 font-weight-normal">Corporate</h4>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h1 class="card-title pricing-card-title text-center">KSh 50,000 <small class="text-muted">/ 3 days</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4 flex-grow-1">
+                                        <li><i class="fas fa-check text-success me-2"></i>All Professional benefits</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>VIP seating</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Exclusive networking</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Summit recordings</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>1-on-1 meetings</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Welcome reception</li>
+                                    </ul>
+                                    <button type="button" class="btn btn-dark btn-lg">Register Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Registration Form -->
+                    <div class="row mt-5">
+                      <div class="col-lg-8 mx-auto">
+                        <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up" style="background: rgba(255,255,255,0.97);">
+                          <div class="card-body p-5">
+                            <h4 class="text-center mb-4 fw-bold" style="color: var(--primary-red); letter-spacing: 1px;">
+                              <i class="fas fa-user-plus me-2"></i>Quick Registration
+                            </h4>
+                            <form method="post" novalidate>
+                              {% csrf_token %}
+                              <div class="row g-3">
+                                 <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-user text-primary"></i>
+                                    </span>
+                                    {{ form.first_name }}
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-user text-primary"></i>
+                                    </span>
+                                    {{ form.last_name }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-envelope text-success"></i>
+                                    </span>
+                                    {{ form.email }}
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-phone text-info"></i>
+                                    </span>
+                                    {{ form.phone }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-building text-secondary"></i>
+                                    </span>
+                                    {{ form.organization }}
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                      <i class="fas fa-id-badge text-warning"></i>
+                                    </span>
+                                    {{ form.reg_type }}
+                                  </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                              </div>
+                              <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary-custom btn-lg px-5 shadow-sm" style="font-size: 1.15rem;">
+                                  <i class="fas fa-paper-plane me-2"></i>Complete Registration
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section
+    <section id="contact" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Contact Us</h2>
+            
+            <div class="row">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="contact-form">
+                        <h3 class="text-white mb-4">Get in Touch</h3>
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="tel" class="form-control" placeholder="Phone Number">
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control">
+                                        <option>General Inquiry</option>
+                                        <option>Partnership</option>
+                                        <option>Sponsorship</option>
+                                        <option>Media</option>
+                                        <option>Speakers</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                            <button type="submit" class="btn btn-outline-custom btn-lg">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="contact-info">
+                        <h3 class="mb-4">Contact Information</h3>
+                        
+                        <div class="contact-item mb-4">
+                            <h5><i class="fas fa-map-marker-alt text-danger me-3"></i>Address</h5>
+                            <p>Ministry of Information, Communications and the Digital Economy<br>
+                            ICT Complex, Nairobi<br>
+                            P.O. Box 30025-00100<br>
+                            Nairobi, Kenya</p>
+                        </div>
+                        
+                        <div class="contact-item mb-4">
+                            <h5><i class="fas fa-phone text-success me-3"></i>Phone</h5>
+                            <p>+254 20 4863000<br>
+                            +254 722 205 000</p>
+                        </div>
+                        
+                        <div class="contact-item mb-4">
+                            <h5><i class="fas fa-envelope text-primary me-3"></i>Email</h5>
+                            <p>info@kenyasoftwaresummit.go.ke<br>
+                            partnerships@kenyasoftwaresummit.go.ke</p>
+                        </div>
+                        
+                        <div class="contact-item mb-4">
+                            <h5><i class="fas fa-clock text-warning me-3"></i>Office Hours</h5>
+                            <p>Monday - Friday: 8:00 AM - 5:00 PM<br>
+                            Saturday: 9:00 AM - 1:00 PM<br>
+                            Sunday: Closed</p>
+                        </div>
+                        
+                        <div class="social-links">
+                            <h5 class="mb-3">Follow Us</h5>
+                            <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    -->
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h5>About Kenya Software Summit</h5>
+          <p>Africa’s premier software development and innovation conference. Join us in shaping the future of Africa’s digital economy through collaboration, talent development, and innovation.</p>
+          <div class="social-links mt-3">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6>Quick Links</h6>
+          <ul class="footer-links list-unstyled">
+            <li><a href="#about">About</a></li>
+            <li><a href="#speakers">Speakers</a></li>
+            <li><a href="#agenda">Agenda</a></li>
+            <li><a href="#register">Register</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6>Resources</h6>
+          <ul class="footer-links list-unstyled">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#partners">Partners</a></li>
+            <li><a href="#media">Media</a></li>
+            <li><a href="#travel">Travel Info</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6>Support</h6>
+          <ul class="footer-links list-unstyled">
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Accessibility</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6>Legal</h6>
+          <ul class="footer-links list-unstyled">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Code of Conduct</a></li>
+            <li><a href="#">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="my-4" style="border-color:#444;">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="text-light mb-0">&copy; 2025 Kenya Software Summit. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="text-light mb-0">Organized by: <a href="#" class="text-decoration-none" style="color: var(--primary-red);">Ministry of ICT & Digital Economy</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+        // Initialize AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar background change on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            const scrollTop = window.pageYOffset;
+            
+            if (scrollTop > 50) {
+                navbar.style.background = 'rgba(28, 28, 24, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
+            } else {
+                navbar.style.background = 'rgba(28, 28, 24, 0.95)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // Scroll to top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Form submissions
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show success message (in a real application, this would submit to a server)
+                const button = this.querySelector('button[type="submit"]');
+                const originalText = button.textContent;
+                
+                button.textContent = 'Submitting...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.textContent = 'Submitted Successfully!';
+                    button.style.background = 'var(--primary-green)';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.style.background = '';
+                        form.reset();
+                    }, 2000);
+                }, 1500);
+            });
+        });
+
+        // Registration pricing animation
+        document.querySelectorAll('.pricing-card-title').forEach(priceElement => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'pulse 2s infinite';
+                    }
+                });
+            });
+            
+            observer.observe(priceElement);
+        });
+
+        // Partner logo hover effects
+        document.querySelectorAll('.partner-logo').forEach(logo => {
+            logo.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1) rotate(5deg)';
+            });
+            
+            logo.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+
+        // Typing effect for hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect when page loads
+        window.addEventListener('load', function() {
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 100);
+            }
+        });
+
+        // Countdown timer (if event is in future)
+        function updateCountdown() {
+            const eventDate = new Date('2025-10-07T09:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
+
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // Update countdown display if element exists
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.innerHTML = `
+                        <div class="countdown-item">
+                            <span class="countdown-number">${days}</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">${hours}</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">${minutes}</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">${seconds}</span>
+                            <span class="countdown-label">Seconds</span>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+
+        // Add CSS animations for various elements
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            
+            @keyframes slideInUp {
+                from { transform: translateY(30px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            @keyframes fadeInScale {
+                from { transform: scale(0.8); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+            
+            .countdown-item {
+                display: inline-block;
+                text-align: center;
+                margin: 0 15px;
+            }
+            
+            .countdown-number {
+                display: block;
+                font-size: 2rem;
+                font-weight: bold;
+                color: white;
+            }
+            
+            .countdown-label {
+                display: block;
+                font-size: 0.9rem;
+                color: rgba(255,255,255,0.8);
+                text-transform: uppercase;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        console.log('Kenya Software Summit 2025 - Website loaded successfully!');
+        console.log('Code the Future. Build Africa. 🇰🇪');
+    </script>
+</body>
+</html>
+
+ 

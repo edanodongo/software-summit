@@ -1,0 +1,33 @@
+{% extends 'summit/base.html' %}
+{% block title %}Dashboard | Kenya Software Summit{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">Registered Users</h2>
+  <table class="table table-bordered table-hover bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Type</th>
+        <th>Organization</th>
+        <th>Registered At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for reg in registrations %}
+      <tr>
+        <td>{{ reg.first_name }} {{ reg.last_name }}</td>
+        <td>{{ reg.email }}</td>
+        <td>{{ reg.phone }}</td>
+        <td>{{ reg.get_reg_type_display }}</td>
+        <td>{{ reg.organization }}</td>
+        <td>{{ reg.created_at|date:\"M d, Y H:i\" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan=\"6\" class=\"text-center\">No registrations yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
