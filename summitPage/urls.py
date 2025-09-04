@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     path('summit/', views.landingEvent, name='summit'),
-    path('', views.summit, name='landing'),
+    path('alt/', views.summit, name='landing'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
     
@@ -20,5 +20,5 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('speakers/', views.speakers, name='speakers'),
     path('travel/', views.travel, name='travel'),
-    path('home/', views.home, name='home'),
+    path('', views.home, name='home'),
 ]
