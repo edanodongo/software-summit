@@ -539,7 +539,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-8 hero-content" data-aos="fade-up">
                     <div class="hero-date">
-                        <i class="fas fa-calendar"></i> October 7-9, 2025 | Eldoret, Kenya
+                        <i class="fas fa-calendar"></i> November 11-13, 2025 | Eldoret, Kenya
                     </div>
                     <h1 class="hero-title">Kenya Software Summit</h1>
                     <p class="hero-subtitle">Code the Future. Build Africa.</p>
@@ -1288,7 +1288,7 @@
     </section>
      -->
 
-    <!-- Registration Section 
+    <!-- Registration Section -->
     <section id="register" class="section-padding" style="background: var(--gradient-primary);">
         <div class="container">
             <div class="row justify-content-center">
@@ -1361,9 +1361,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
-                    <!-- Quick Registration Form
+                    <!-- Quick Registration Form -->
+                    <!-- Quick Registration Form -->
                     <div class="row mt-5">
                       <div class="col-lg-8 mx-auto">
                         <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up" style="background: rgba(255,255,255,0.97);">
@@ -1373,25 +1374,17 @@
                             </h4>
                             <form method="post" novalidate>
                               {% csrf_token %}
-                              <div class="row g-3">
-                                 <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
-                                      <i class="fas fa-user text-primary"></i>
-                                    </span>
-                                    {{ form.first_name }}
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
-                                      <i class="fas fa-user text-primary"></i>
-                                    </span>
-                                    {{ form.last_name }}
-                                  </div>
-                                </div>
+
+                              <!-- Full Name -->
+                              <div class="input-group mb-3">
+                                <span class="input-group-text bg-light border-0">
+                                  <i class="fas fa-user text-primary"></i>
+                                </span>
+                                {{ form.full_name }}
                               </div>
-                              <div class="row g-3 mt-2">
+
+                              <!-- Email + Phone -->
+                              <div class="row g-3">
                                 <div class="col-md-6">
                                   <div class="input-group">
                                     <span class="input-group-text bg-light border-0">
@@ -1409,6 +1402,8 @@
                                   </div>
                                 </div>
                               </div>
+
+                              <!-- Organization + Job Title -->
                               <div class="row g-3 mt-2">
                                 <div class="col-md-6">
                                   <div class="input-group">
@@ -1423,11 +1418,46 @@
                                     <span class="input-group-text bg-light border-0">
                                       <i class="fas fa-id-badge text-warning"></i>
                                     </span>
-                                    {{ form.reg_type }}
+                                    {{ form.job_title }}
                                   </div>
                                 </div>
-                                <div class="col-md-6"></div>
                               </div>
+
+                              <!-- Category -->
+                              <div class="input-group mt-3">
+                                <span class="input-group-text bg-light border-0">
+                                  <i class="fas fa-users text-danger"></i>
+                                </span>
+                                {{ form.category }}
+                              </div>
+
+                              <!-- Interests -->
+                              <div class="mt-3">
+                                <label class="form-label fw-semibold">
+                                  <i class="fas fa-star text-primary me-1"></i> Areas of Interest
+                                </label>
+                                <div class="d-flex flex-wrap">
+                                  {{ form.interests }}
+                                </div>
+                              </div>
+
+                              <!-- Accessibility Needs -->
+                              <div class="input-group mt-3">
+                                <span class="input-group-text bg-light border-0">
+                                  <i class="fas fa-universal-access text-success"></i>
+                                </span>
+                                {{ form.accessibility_needs }}
+                              </div>
+
+                              <!-- Updates Opt-in -->
+                              <div class="form-check mt-3">
+                                {{ form.updates_opt_in }}
+                                <label class="form-check-label">
+                                  I would like to receive updates about future summits
+                                </label>
+                              </div>
+
+                              <!-- Submit -->
                               <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-primary-custom btn-lg px-5 shadow-sm" style="font-size: 1.15rem;">
                                   <i class="fas fa-paper-plane me-2"></i>Complete Registration
@@ -1438,7 +1468,6 @@
                         </div>
                       </div>
                     </div>
-                     -->
                 </div>
             </div>
         </div>
@@ -1742,7 +1771,7 @@
 
         // Countdown timer (if event is in future)
         function updateCountdown() {
-            const eventDate = new Date('2025-10-07T09:00:00').getTime();
+            const eventDate = new Date('2025-11-11T13:00:00').getTime();
             const now = new Date().getTime();
             const timeLeft = eventDate - now;
 
