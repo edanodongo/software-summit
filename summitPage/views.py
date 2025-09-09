@@ -1,27 +1,49 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login   # rename login
+from django.contrib.auth import authenticate, login as auth_login   
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-# registrations/views.py
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import QuickRegistrationForm
+from .models import Registrant
+from .utils import send_confirmation_email
 
+from django.http import JsonResponse
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST)
+
         if form.is_valid():
             registrant = form.save()
-            # send confirmation email
-            send_confirmation_email(registrant)
-            messages.success(request, "Registration successful! Check your email for confirmation.")
+            try:
+                send_confirmation_email(registrant)
+            except Exception as e:
+                print("Email send error:", e)
+
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "message": "Registration successful!"})
+            
+            messages.success(request, "Registration successful!")
             return redirect('home')
+
+        else:
+            print("Form errors:", form.errors)
+
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse(
+                    {"success": False, "errors": form.errors},
+                    status=400
+                )
+
+            messages.error(request, "There was a problem with your registration.")
+    
     else:
         form = QuickRegistrationForm()
+
     return render(request, "summit/home.html", {'form': form})
 
-# registrations/views.py
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -30,12 +52,10 @@ def unsubscribe_view(request, token):
         registrant = Registrant.objects.get(unsubscribe_token=token)
         registrant.updates_opt_in = False
         registrant.save()
-        return render(request, "registrations/unsubscribe.html")
+        return render(request, "summit/unsubscribe.html")
     except Registrant.DoesNotExist:
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
 
-
-# registrations/views.py
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count
@@ -45,6 +65,7 @@ from .models import Registrant
 @api_view(['GET'])
 def dashboard_stats(request):
     total = Registrant.objects.count()
+    
 
     # Participation categories (pie chart)
     categories = Registrant.objects.values('category').annotate(count=Count('id'))
@@ -77,95 +98,201 @@ def dashboard_stats(request):
     })
 
 
-# registrations/views.py
+
 import csv
 from django.http import HttpResponse
+from openpyxl import Workbook
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from .models import Registrant
 
-def export_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="registrants.csv"'
 
-    writer = csv.writer(response)
-    writer.writerow([
-        'Full Name', 'Email', 'Phone', 'Organization',
-        'Job Title', 'Category', 'Interests',
-        'Accessibility Needs', 'Updates Opt-in', 'Date'
-    ])
+# === CSV Export ===
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.http import HttpResponse
+from django.utils import timezone
+from django.db.models import Count
 
-    for r in Registrant.objects.all():
-        writer.writerow([
-            r.full_name, r.email, r.phone,
-            r.organization, r.job_title, r.category,
-            ", ".join(r.interests), r.accessibility_needs,
-            "Yes" if r.updates_opt_in else "No",
-            r.created_at.strftime("%Y-%m-%d")
-        ])
+def export_registrants_csv(request):
+    registrants = Registrant.objects.all()
 
+    category_counts = (
+        registrants.values("category")
+        .annotate(count=Count("id"))
+        .order_by()
+    )
+
+    # Render HTML
+    html_string = render_to_string("summit/print_registrants.html", {
+        "registrants": registrants,
+        "category_counts": list(category_counts),
+        "now": timezone.now(),
+        "pdf_mode": True,  # flag to hide print button
+    })
+
+    # Convert to PDF
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    pdf = html.write_pdf()
+
+    # Return as file download
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = "attachment; filename=registrants_report.pdf"
     return response
 
-from openpyxl import Workbook
-from django.http import HttpResponse
 
-def export_excel(request):
+# === Excel Export ===
+def export_registrants_excel(request):
     wb = Workbook()
     ws = wb.active
     ws.title = "Registrants"
 
+    # Header row
     headers = [
-        'Full Name', 'Email', 'Phone', 'Organization',
-        'Job Title', 'Category', 'Interests',
-        'Accessibility Needs', 'Updates Opt-in', 'Date'
+        "Full Name", "Email", "Phone", "Organization",
+        "Job Title", "Category", "Interests", "Subscribed", "Registered On"
     ]
     ws.append(headers)
 
     for r in Registrant.objects.all():
         ws.append([
-            r.full_name, r.email, r.phone,
-            r.organization, r.job_title, r.category,
-            ", ".join(r.interests), r.accessibility_needs,
+            r.full_name,
+            r.email,
+            r.phone,
+            r.organization or "—",
+            r.job_title or "—",
+            r.get_category_display(),
+            ", ".join(r.interests) if r.interests else "—",
             "Yes" if r.updates_opt_in else "No",
-            r.created_at.strftime("%Y-%m-%d")
+            r.created_at.strftime("%Y-%m-%d %H:%M"),
         ])
 
-    response = HttpResponse(
-        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    response['Content-Disposition'] = 'attachment; filename=registrants.xlsx'
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="registrants.xlsx"'
     wb.save(response)
     return response
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+
+# === PDF Export in Landscape ===
+# === PDF Export in Landscape with Logo, Header & Footer ===
 from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib import colors
+from reportlab.platypus import (
+    SimpleDocTemplate, Table, TableStyle, Paragraph,
+    Image, Spacer
+)
+from reportlab.lib.styles import getSampleStyleSheet
+from django.conf import settings
+from django.utils.timezone import now
+import os
+from .models import Registrant
 
-def export_pdf(request):
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="registrants.pdf"'
 
-    p = canvas.Canvas(response, pagesize=letter)
-    width, height = letter
+def export_registrants_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="registrants.pdf"'
 
-    y = height - 50
-    p.setFont("Helvetica-Bold", 14)
-    p.drawString(50, y, "Summit Registrants")
-    y -= 30
+    # Landscape A4
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=landscape(A4),
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=40,  # leave room for footer
+    )
+    elements = []
+    styles = getSampleStyleSheet()
+    normal_style = styles["Normal"]
 
-    p.setFont("Helvetica", 10)
-    for r in Registrant.objects.all():
-        text = f"{r.full_name} | {r.email} | {r.category} | {', '.join(r.interests)}"
-        p.drawString(50, y, text)
-        y -= 15
-        if y < 50:  # new page if space runs out
-            p.showPage()
-            y = height - 50
+    # === Logo ===
+    logo_path = os.path.join(settings.BASE_DIR, "static", "img", "logo.png")
+    if os.path.exists(logo_path):
+        logo = Image(logo_path, width=80, height=80)
+        elements.append(logo)
 
-    p.save()
+    elements.append(Spacer(1, 10))
+
+    # === Header ===
+    elements.append(Paragraph("<b>Kenya Software Summit</b>", styles["Title"]))
+    elements.append(Paragraph("Summit Registrants Report", styles["Heading2"]))
+    elements.append(Spacer(1, 20))
+
+    # === Table headers ===
+    data = [[
+        "No.", "Full Name", "Email", "Phone", "Organization",
+        "Job Title", "Category", "Interests"
+    ]]
+
+    # === Table rows ===
+    for idx, r in enumerate(Registrant.objects.all(), start=1):
+        data.append([
+            idx,
+            Paragraph(r.full_name, normal_style),
+            Paragraph(r.email, normal_style),
+            Paragraph(r.phone, normal_style),
+            Paragraph(r.organization or "—", normal_style),
+            Paragraph(r.job_title or "—", normal_style),
+            Paragraph(r.get_category_display(), normal_style),
+            Paragraph(", ".join(r.interests) if r.interests else "—", normal_style),
+        ])
+
+    # === Column widths (landscape) ===
+    col_widths = [30, 120, 130, 80, 120, 100, 90, 160]
+
+    # === Table ===
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#01873F")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("WORDWRAP", (0, 0), (-1, -1), "CJK"),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    elements.append(table)
+
+    # === Footer function ===
+    def add_footer(canvas, doc):
+        canvas.saveState()
+        footer_text = f"Generated on {now().strftime('%b %d, %Y %H:%M')} | Kenya Software Summit © 2025"
+        canvas.setFont("Helvetica", 8)
+        canvas.drawCentredString(landscape(A4)[0] / 2, 20, footer_text)
+        canvas.restoreState()
+
+    # === Build PDF with footer on every page ===
+    doc.build(elements, onFirstPage=add_footer, onLaterPages=add_footer)
+
     return response
 
 
 
+from django.db.models import Count
 
-# registrations/views.py
+def print_registrants(request):
+    registrants = Registrant.objects.all()
+
+    # Aggregated counts
+    category_counts = (
+        registrants.values("category")
+        .annotate(count=Count("id"))
+        .order_by()
+    )
+
+    return render(request, "summit/print_registrants.html", {
+        "registrants": registrants,
+        "category_counts": list(category_counts),
+    })
+
+
+
 from django.core.mail import send_mass_mail
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
@@ -220,6 +347,81 @@ def bulk_email_view(request):
     return render(request, "summit/bulk_email.html", {"form": form})
 
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import render
+from .models import Registrant
+
+@staff_member_required
+def dashboard_view(request):
+    total_users = Registrant.objects.count()
+    updates_count = Registrant.objects.filter(updates_opt_in=True).count()
+    
+    registrants = Registrant.objects.all().order_by('-created_at')
+
+    # Breakdown by category
+    category_counts = (
+        Registrant.objects.values("category")
+        .annotate(count=Count("id"))
+        .order_by("category")
+    )
+
+    # # Breakdown by interests (if stored as CSV)
+    # interests_raw = Registrant.objects.exclude(interests__isnull=True).values_list("interests", flat=True)
+    # interest_map = {}
+    # for row in interests_raw:
+    #     for i in row.split(","):
+    #         i = i.strip()
+    #         if i:
+    #             interest_map[i] = interest_map.get(i, 0) + 1
+
+    # # Registrations over time
+    # registrations_over_time = (
+    #     Registrant.objects.extra({"date": "date(created_at)"})
+    #     .values("date")
+    #     .annotate(count=Count("id"))
+    #     .order_by("date")
+    # )
+
+    context = {
+        "total_users": total_users,
+        "updates_count": updates_count,
+        "category_counts": list(category_counts),
+        "registrants": registrants,
+        # "interest_counts": interest_map,
+        # "registrations_over_time": list(registrations_over_time),
+    }
+    return render(request, "summit/dashboard.html", context)
+
+
+# Endpoint for charts (AJAX/React)
+@staff_member_required
+def dashboard_data(request):
+    data = {
+        "categories": list(
+            Registrant.objects.values("category").annotate(count=Count("id")).order_by("category")
+        ),
+        "registrations_over_time": list(
+            Registrant.objects.extra({"date": "date(created_at)"})
+            .values("date")
+            .annotate(count=Count("id"))
+            .order_by("date")
+        ),
+        "updates_count": Registrant.objects.filter(updates_opt_in=True).count(),
+    }
+    return JsonResponse(data)
+
+from django.contrib.auth.views import LoginView, LogoutView
+
+class SummitLoginView(LoginView):
+    template_name = "summit/login.html"
+
+from django.contrib.auth.views import LogoutView
+
+class SummitLogoutView(LogoutView):
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 
@@ -237,31 +439,22 @@ def bulk_email_view(request):
 
 
 
+# def login_view(request):   
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+#         user = authenticate(request, username=username, password=password)
+#         if user:
+#             auth_login(request, user)   # ✅ use renamed login function
+#             return redirect("dashboard")
+#         else:
+#             messages.error(request, "Invalid credentials")
+#     return render(request, "summit/samples/login.html")
 
-
-
-
-
-
-
-
-
-def login_view(request):   
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user:
-            auth_login(request, user)   # ✅ use renamed login function
-            return redirect("dashboard")
-        else:
-            messages.error(request, "Invalid credentials")
-    return render(request, "summit/samples/login.html")
-
-@login_required
-def dashboard(request):
-    registrations = Registration.objects.all().order_by("-created_at")
-    return render(request, "summit/samples/dashboard.html", {"registrations": registrations})
+# @login_required
+# def dashboard(request):
+#     registrations = Registration.objects.all().order_by("-created_at")
+#     return render(request, "summit/samples/dashboard.html", {"registrations": registrations})
 
 
 # View for event page

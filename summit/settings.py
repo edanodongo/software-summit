@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'summitPage',
 ]
 
+
+LOGIN_URL = "custom_login"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "custom_login"
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

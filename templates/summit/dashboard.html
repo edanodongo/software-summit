@@ -1,43 +1,180 @@
-import { useEffect, useState } from "react";
-import { Pie, Bar, Line } from "react-chartjs-2";
+{% extends "summit/base.html" %}
+{% load static %}
 
-export default function Dashboard() {
-  const [stats, setStats] = useState(null);
+{% block content %}
+<div class="container mt-5">
+  <h2 class="fw-bold text-center mb-4">
+    <i class="fas fa-chart-line text-primary me-2"></i>Summit Dashboard
+  </h2>
 
-  useEffect(() => {
-    fetch("/api/dashboard/stats/")
-      .then(res => res.json())
-      .then(data => setStats(data));
-  }, []);
-
-  if (!stats) return <p>Loading...</p>;
-
-  return (
-    <div className="p-4">
-      <h2>Total Registrants: {stats.total}</h2>
-
-      <Pie
-        data={{
-          labels: stats.categories.map(c => c.category),
-          datasets: [{ data: stats.categories.map(c => c.count) }]
-        }}
-      />
-
-      <Bar
-        data={{
-          labels: Object.keys(stats.interests),
-          datasets: [{ data: Object.values(stats.interests) }]
-        }}
-      />
-
-      <Line
-        data={{
-          labels: stats.registrations_over_time.map(r => r.date),
-          datasets: [{ data: stats.registrations_over_time.map(r => r.count) }]
-        }}
-      />
-
-      <p>Updates Opt-in: {stats.updates_percent.toFixed(1)}%</p>
+  <!-- Stats Row -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm p-3 text-center">
+        <h6>Total Registrants</h6>
+        <h3 class="fw-bold">{{ total_users }}</h3>
+      </div>
     </div>
-  );
-}
+    <div class="col-md-3">
+      <div class="card shadow-sm p-3 text-center">
+        <h6>Future Updates List</h6>
+        <h3 class="fw-bold text-success">{{ updates_count }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mb-3 gap-2">
+    <a href="{% url 'export_csv' %}" class="btn btn-sm btn-outline-primary">
+      <i class="fas fa-file-csv"></i> Export CSV
+    </a>
+    <a href="{% url 'export_excel' %}" class="btn btn-sm btn-outline-success">
+      <i class="fas fa-file-excel"></i> Export Excel
+    </a>
+    <a href="{% url 'export_pdf' %}" class="btn btn-sm btn-outline-danger">
+      <i class="fas fa-file-pdf"></i> Export PDF
+    </a>
+    <a href="{% url 'export_print' %}" target="_blank" class="btn btn-sm btn-outline-dark">
+      <i class="fas fa-print"></i> Print View
+    </a>
+  </div>
+
+
+  <!-- Registrants Table -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card shadow-sm p-3">
+        <h6>Registrant Profiles Summary</h6>
+        {% if registrants %}
+          <div class="table-responsive">
+            <table id="registrants-table" class="table table-striped table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Organization</th>
+                  <th>Job Title</th>
+                  <th>Category</th>
+                  <th>Interests</th>
+                  <th>Subscribed</th>
+                  <th>Registered On</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reg in registrants %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ reg.full_name }}</td>
+                  <td>{{ reg.email }}</td>
+                  <td>{{ reg.phone }}</td>
+                  <td>{{ reg.organization|default:"—" }}</td>
+                  <td>{{ reg.job_title|default:"—" }}</td>
+                  <td>{{ reg.get_category_display }}</td>
+                  <td>
+                    {% if reg.interests %}
+                      {{ reg.interests|join:", " }}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if reg.updates_opt_in %}
+                      <span class="badge bg-success">Yes</span>
+                    {% else %}
+                      <span class="badge bg-secondary">No</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ reg.created_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">No registrants found.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h6>Participation Categories</h6>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h6>Registrations Over Time</h6>
+        <canvas id="timeChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const categoryData = {{ category_counts|safe }};
+const timeData = {{ registrations_over_time|safe }};
+
+// Category Pie Chart
+new Chart(document.getElementById('categoryChart'), {
+  type: 'pie',
+  data: {
+    labels: categoryData.map(c => c.category),
+    datasets: [{
+      data: categoryData.map(c => c.count),
+      backgroundColor: ['#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff','#ff9f40','#c9cbcf']
+    }]
+  }
+});
+
+// Registrations Over Time Line Chart
+new Chart(document.getElementById('timeChart'), {
+  type: 'line',
+  data: {
+    labels: timeData.map(r => r.date),
+    datasets: [{
+      label: 'Registrations',
+      data: timeData.map(r => r.count),
+      fill: true,
+      borderColor: '#36a2eb',
+      tension: 0.3
+    }]
+  }
+});
+</script>
+
+<!-- DataTables + Export Buttons -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<script>
+$(document).ready(function() {
+  $('#registrants-table').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+      { extend: 'copy', text: '📋 Copy' },
+      { extend: 'csv', text: '⬇️ CSV' },
+      { extend: 'excel', text: '📊 Excel' },
+      { extend: 'pdf', text: '📑 PDF' },
+      { extend: 'print', text: '🖨️ Print' }
+    ],
+    order: [[ 0, 'asc' ]] // default sort by #
+  });
+});
+</script>
+{% endblock %}
