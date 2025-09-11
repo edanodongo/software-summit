@@ -1,16 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login   
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from .forms import QuickRegistrationForm
-from .models import Registrant
 from .utils import send_confirmation_email
 
-from django.http import JsonResponse
+
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST)
@@ -42,7 +33,7 @@ def home(request):
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
-            
+
             messages.success(request, "Registration successful!")
             return redirect('home')
 
@@ -53,15 +44,12 @@ def home(request):
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
             messages.error(request, "There was a problem with your registration.")
-    
+
     else:
         form = QuickRegistrationForm()
 
     return render(request, "summit/home.html", {'form': form})
 
-
-from django.http import HttpResponse
-from django.shortcuts import render
 
 def unsubscribe_view(request, token):
     try:
@@ -72,16 +60,15 @@ def unsubscribe_view(request, token):
     except Registrant.DoesNotExist:
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
 
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Count
 from django.db.models.functions import TruncDate
-from .models import Registrant
+
 
 @api_view(['GET'])
 def dashboard_stats(request):
     total = Registrant.objects.count()
-    
 
     # Participation categories (pie chart)
     categories = Registrant.objects.values('category').annotate(count=Count('id'))
@@ -114,23 +101,13 @@ def dashboard_stats(request):
     })
 
 
-
-import csv
-from django.http import HttpResponse
 from openpyxl import Workbook
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from .models import Registrant
-
 
 # === CSV Export ===
 from django.template.loader import render_to_string
 from weasyprint import HTML
-from django.http import HttpResponse
 from django.utils import timezone
-from django.db.models import Count
+
 
 def export_registrants_csv(request):
     registrants = Registrant.objects.all()
@@ -201,10 +178,8 @@ from reportlab.platypus import (
     Image, Spacer
 )
 from reportlab.lib.styles import getSampleStyleSheet
-from django.conf import settings
 from django.utils.timezone import now
 import os
-from .models import Registrant
 
 
 def export_registrants_pdf(request):
@@ -289,9 +264,6 @@ def export_registrants_pdf(request):
     return response
 
 
-
-from django.db.models import Count
-
 def print_registrants(request):
     registrants = Registrant.objects.all()
 
@@ -308,14 +280,13 @@ def print_registrants(request):
     })
 
 
-
 from django.core.mail import send_mass_mail
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import BulkEmailForm
-from .models import Registrant
+
 
 @staff_member_required
 def bulk_email_view(request):
@@ -369,11 +340,12 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Registrant
 
+
 @staff_member_required
 def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
-    
+
     registrants = Registrant.objects.all().order_by('-created_at')
 
     # Breakdown by category
@@ -428,34 +400,23 @@ def dashboard_data(request):
     }
     return JsonResponse(data)
 
-from django.contrib.auth.views import LoginView, LogoutView
+
+from django.contrib.auth.views import LoginView
+
 
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
+
 from django.contrib.auth.views import LogoutView
+
 
 class SummitLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def login_view(request):   
+# def login_view(request):
 #     if request.method == "POST":
 #         username = request.POST.get("username")
 #         password = request.POST.get("password")
@@ -477,35 +438,46 @@ class SummitLogoutView(LogoutView):
 def landingEvent(request):
     return render(request, 'landingpage/index.html')
 
+
 def summit(request):
     return render(request, 'landingpage/summit.html')
+
 
 def about(request):
     return render(request, 'summit/samples/about.html')
 
+
 def agenda(request):
     return render(request, 'summit/agenda.html')
+
 
 def base(request):
     return render(request, 'summit/samples/base.html')
 
+
 def contact(request):
     return render(request, 'summit/samples/contact.html')
+
 
 def features(request):
     return render(request, 'summit/samples/features.html')
 
+
 def media(request):
     return render(request, 'summit/samples/media.html')
+
 
 def partners(request):
     return render(request, 'summit/samples/partners.html')
 
+
 def register(request):
     return render(request, 'summit/samples/register.html')
 
+
 def speakers(request):
     return render(request, 'summit/samples/speakers.html')
+
 
 def travel(request):
     return render(request, 'summit/samples/travel.html')
