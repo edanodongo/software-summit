@@ -9,6 +9,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
         :root {
+            --primary-color: #CE171C;
+            --secondary-color: #cd5155ff;
+            --accent-color: #CE171C;
+            --success-color: #027437ff;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --info-color: #CE171C;
+            --light-bg: #f7fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            
             --primary-red: #CE171C;
             --primary-green: #01873F;
             --primary-dark: #1C1C18;
@@ -979,123 +991,122 @@
     <!-- Keynote speakers -->
     <section id="speakers" class="section-padding">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Keynote Speakers</h2>
+            <h2 class="section-title text-center mb-5" data-aos="fade-up">
+              Featured Speakers
+            </h2>
             <div class="row">
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="speaker-card">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
                         <div class="speaker-info">
-                            <h4 class="speaker-name">Dr. James Mwangi</h4>
-                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>
-                            <p class="speaker-bio">Leading digital transformation initiatives across Africa with 15+ years in cloud computing and AI development.</p>
+                            <h3 class="speaker-name">Dr. James Mwangi</h3>
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="speaker-card">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616b412f944?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Sarah Ochieng</h4>
                             <p class="speaker-title">Founder, TechAfrica Ventures</p>
-                            <p class="speaker-bio">Serial entrepreneur and investor focused on scaling African tech startups globally.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="speaker-card">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
                         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Prof. David Kim</h4>
                             <p class="speaker-title">Director, Google AI Research</p>
-                            <p class="speaker-bio">Leading researcher in machine learning and artificial intelligence with focus on emerging markets.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="speaker-card">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
                         <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Linda Mutua</h4>
                             <p class="speaker-title">VP Engineering, Safaricom</p>
-                            <p class="speaker-bio">Expert in mobile technologies and financial services innovation in emerging markets.</p>
                         </div>
                     </div>
-                </div>                            
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <div class="speaker-info">
+                            <h3 class="speaker-name">Dr. James Mwangi</h3>
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Sarah Ochieng</h4>
+                            <p class="speaker-title">Founder, TechAfrica Ventures</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Prof. David Kim</h4>
+                            <p class="speaker-title">Director, Google AI Research</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Linda Mutua</h4>
+                            <p class="speaker-title">VP Engineering, Safaricom</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <div class="speaker-info">
+                            <h3 class="speaker-name">Dr. James Mwangi</h3>
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Sarah Ochieng</h4>
+                            <p class="speaker-title">Founder, TechAfrica Ventures</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Prof. David Kim</h4>
+                            <p class="speaker-title">Director, Google AI Research</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Linda Mutua</h4>
+                            <p class="speaker-title">VP Engineering, Safaricom</p>
+                        </div>
+                    </div>
+                </div>                          
             </div>
         </div>
     </section>
 
-
-    
-    <section id="speakers" class="section-padding bg-white">
-      <div class="container">
-        <h2 class="section-title text-center mb-5" data-aos="fade-up">
-          Featured Speakers
-        </h2>
-        <div class="row g-4">
-          
-          <!-- Speaker Card 1 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Government Official</p>
-              <p class="small">Session: Opening Keynote</p>
-            </div>
-          </div>
-
-          <!-- Speaker Card 2 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Industry Leader</p>
-              <p class="small">Session: Building a National Software Ecosystem Panel</p>
-            </div>
-          </div>
-
-          <!-- Speaker Card 3 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Academic Expert</p>
-              <p class="small">Session: Digital Skilling Keynote</p>
-            </div>
-          </div>
-
-          <!-- Speaker Card 4 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Startup Founder</p>
-              <p class="small">Session: Hackathon Finals</p>
-            </div>
-          </div>
-
-          <!-- Speaker Card 5 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker5Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Investor</p>
-              <p class="small">Session: Startup Support & Funding Panel</p>
-            </div>
-          </div>
-
-          <!-- Speaker Card 6 -->
-          <div class="col-md-4 col-sm-6" data-aos="fade-up">
-            <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-4 speaker-card" data-bs-toggle="modal" data-bs-target="#speaker6Modal">
-              <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="Speaker">
-              <h5 class="fw-bold">Speaker Name TBC</h5>
-              <p class="text-muted mb-1">Closing Keynote</p>
-              <p class="small">Session: Closing Plenary & Call to Action</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- ================= Speaker Modals ================= -->
 
@@ -1104,14 +1115,15 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header">
-            <h5 class="modal-title" id="speaker1Label">Speaker Name TBC – Government Official</h5>
+            <h5 class="modal-title" id="speaker1Label">Dr. James Mwangi </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Opening Keynote</p>
-            <p>Lorem ipsum bio placeholder. This speaker will deliver the opening keynote, setting the tone for the summit with a focus on national policy and the digital ecosystem.</p>
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"  alt="Speaker">
+            <p class="lead">VP Engineering, Safaricom</p>
+            <p class="speaker-bio">Leading digital transformation initiatives across Africa with 15+ years in cloud computing and AI development. Expert in mobile technologies and financial services innovation in emerging markets. This speaker will deliver the opening keynote, setting the tone for the summit with a focus on national policy and the digital ecosystem.</p>
           </div>
+          
         </div>
       </div>
     </div>
@@ -1121,13 +1133,13 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header">
-            <h5 class="modal-title" id="speaker2Label">Speaker Name TBC – Industry Leader</h5>
+            <h5 class="modal-title" id="speaker2Label">Sarah Ochieng </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Building a National Software Ecosystem Panel</p>
-            <p>Lorem ipsum bio placeholder. This speaker will share insights from the private sector on scaling innovation and driving policy change.</p>
+            <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Speaker">
+            <p class="lead">Founder, TechAfrica Ventures</p>
+            <p class="speaker-bio">Serial entrepreneur and investor focused on scaling African tech startups globally. This speaker will share insights from the private sector on scaling innovation and driving policy change.</p>
           </div>
         </div>
       </div>
@@ -1138,13 +1150,13 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header">
-            <h5 class="modal-title" id="speaker3Label">Speaker Name TBC – Academic Expert</h5>
+            <h5 class="modal-title" id="speaker3Label">Prof. David Kim</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Digital Skilling Keynote</p>
-            <p>Lorem ipsum bio placeholder. This speaker will highlight digital skilling initiatives and the importance of research in building talent pipelines.</p>
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Speaker">
+            <p class="lead"> Director, Google AI Research</p>
+            <p class="speaker-bio">Leading researcher in machine learning and artificial intelligence with focus on emerging markets. Lorem ipsum bio placeholder. This speaker will highlight digital skilling initiatives and the importance of research in building talent pipelines.</p>
           </div>
         </div>
       </div>
@@ -1155,13 +1167,13 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header">
-            <h5 class="modal-title" id="speaker4Label">Speaker Name TBC – Startup Founder</h5>
+            <h5 class="modal-title" id="speaker4Label">Linda Mutua</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Hackathon Finals</p>
-            <p>Lorem ipsum bio placeholder. This speaker will present the winning innovations and share the startup journey from idea to impact.</p>
+            <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Speaker">
+            <p class="lead">VP Engineering, Safaricom</p>
+            <p class="speaker-bio">Expert in mobile technologies and financial services innovation in emerging markets. Lorem ipsum bio placeholder. This speaker will present the winning innovations and share the startup journey from idea to impact.</p>
           </div>
         </div>
       </div>
@@ -1205,7 +1217,29 @@
     <!-- Agenda Section -->    
     <section id="agenda" class="section-padding bg-light position-relative">
         <div class="container">
-            <h2 class="section-title text-center mb-5" data-aos="fade-up">Kenya Software Summit 2024</h2>
+            <h2 class="section-title" data-aos="fade-up">Summit Agenda</h2>
+
+            <!-- Agenda Intro & Countdown -->
+            <div class="row mb-5 align-items-center">
+              <div class="col-lg-8" data-aos="fade-right">
+                <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
+                  <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+                    <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
+                  </h4>
+                  <p class="mb-0 text-secondary">
+                    Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. <br>
+                    <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
+                  </p>
+                </div>
+              </div>          
+              <div class="col-lg-4 text-center" data-aos="fade-left">
+                <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
+                  <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
+                  <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+                </div>
+              </div>
+            </div>
+
 
             <!-- Day Tabs -->
             <ul class="nav nav-pills justify-content-center mb-4" id="agendaTabs" role="tablist" data-aos="fade-up">
@@ -1297,7 +1331,7 @@
 
                             <!-- Tea Break -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-coffee me-2"></i>10:45 – 11:15 · Exhibition Tour & Tea Break</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:45 – 11:15 · Exhibition Tour & Tea Break</span>
                             </div>
 
                             <!-- Framing Panel -->
@@ -1366,7 +1400,7 @@
 
                             <!-- Lunch -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
                             </div>
 
                             <!-- Ecosystem Landscape Keynote -->
@@ -1510,7 +1544,7 @@
 
                             <!-- Tea Break -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-coffee me-2"></i>10:00 – 10:30 · Tea Break</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:00 – 10:30 · Tea Break</span>
                             </div>
 
                             <!-- Showcase: Software Innovation -->
@@ -1556,7 +1590,7 @@
 
                             <!-- Lunch -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
                             </div>
 
                             <!-- Breakouts (parallel tracks) -->
@@ -1704,7 +1738,7 @@
 
                             <!-- Tea Break -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-coffee me-2"></i>10:30 – 11:00 · Tea Break</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:30 – 11:00 · Tea Break</span>
                             </div>
 
                             <!-- Software Export -->
@@ -1740,7 +1774,7 @@
 
                             <!-- Lunch -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
                             </div>
 
                             <!-- Closing Plenary -->
@@ -1771,7 +1805,7 @@
 
                             <!-- Departure / Final Tea -->
                             <div class="card break-item mb-4">
-                                <span class="text-muted"><i class="fas fa-coffee me-2"></i>16:00 – 16:30 · Tea Break & Guests Depart</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>16:00 – 16:30 · Tea Break & Guests Depart</span>
                             </div>
 
                         </div>

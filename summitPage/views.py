@@ -484,7 +484,7 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 def agenda(request):
-    return render(request, 'summit/samples/agenda.html')
+    return render(request, 'summit/agenda.html')
 
 def base(request):
     return render(request, 'summit/samples/base.html')

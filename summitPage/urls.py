@@ -5,12 +5,6 @@ from .views import SummitLoginView, SummitLogoutView
 
 
 urlpatterns = [
-    # path('summit/', views.landingEvent, name='summit'),
-    # path('alt/', views.summit, name='landing'),
-    # path('dashboard/', views.dashboard, name='dashboard'),
-    # path('login/', views.login_view, name='login'),
-
-
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
     
@@ -24,5 +18,7 @@ urlpatterns = [
     path("export/csv/", views.export_registrants_csv, name="export_csv"),
     path("export/excel/", views.export_registrants_excel, name="export_excel"),
     path("export/pdf/", views.export_registrants_pdf, name="export_pdf"),
+    
+    # path('', views.agenda, name='agenda'),
     path('', views.home, name='home'),
 ]
