@@ -16,7 +16,25 @@ def home(request):
         form = QuickRegistrationForm(request.POST)
 
         if form.is_valid():
-            registrant = form.save()
+            registrant = form.save(commit=False)
+
+            # Handle custom category
+            if form.cleaned_data.get("category") == "other" and form.cleaned_data.get("other_category"):
+                registrant.other_category = form.cleaned_data["other_category"]
+
+            # Save first so we have an ID
+            registrant.save()
+
+            # Handle custom interests
+            interests = form.cleaned_data.get("interests", [])
+            if "other" in interests and form.cleaned_data.get("other_interest"):
+                # Replace "other" with actual text
+                interests = [i for i in interests if i != "other"]
+                interests.append(form.cleaned_data["other_interest"])
+
+            registrant.interests = interests
+            registrant.save()
+
             try:
                 send_confirmation_email(registrant)
             except Exception as e:
@@ -32,10 +50,7 @@ def home(request):
             print("Form errors:", form.errors)
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": False, "errors": form.errors},
-                    status=400
-                )
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
             messages.error(request, "There was a problem with your registration.")
     
@@ -43,6 +58,7 @@ def home(request):
         form = QuickRegistrationForm()
 
     return render(request, "summit/home.html", {'form': form})
+
 
 from django.http import HttpResponse
 from django.shortcuts import render

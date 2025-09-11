@@ -10,12 +10,23 @@ class QuickRegistrationForm(forms.ModelForm):
     )
     updates_opt_in = forms.BooleanField(required=False)
 
+    # Extra fields for user input
+    other_category = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control mt-2', 'placeholder': 'Please specify...'})
+    )
+    other_interest = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control mt-2', 'placeholder': 'Please specify...'})
+    )
+
     class Meta:
         model = Registrant
         fields = [
             'full_name', 'email', 'phone',
             'organization', 'job_title',
-            'category', 'interests',
+            'category', 'other_category',
+            'interests', 'other_interest',
             'accessibility_needs', 'updates_opt_in'
         ]
         widgets = {

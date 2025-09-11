@@ -57,8 +57,8 @@
                   <th>Job Title</th>
                   <th>Category</th>
                   <th>Interests</th>
-                  <th>Subscribed</th>
-                  <th>Registered On</th>
+                  {% comment %} <th>Subscribed</th>
+                  <th>Registered On</th> {% endcomment %}
                 </tr>
               </thead>
               <tbody>
@@ -70,22 +70,35 @@
                   <td>{{ reg.phone }}</td>
                   <td>{{ reg.organization|default:"—" }}</td>
                   <td>{{ reg.job_title|default:"—" }}</td>
-                  <td>{{ reg.get_category_display }}</td>
+                  {% comment %} <td>{{ reg.get_category_display }}</td> {% endcomment %}
                   <td>
-                    {% if reg.interests %}
-                      {{ reg.interests|join:", " }}
+
+                    {% if reg.category == "other"%}
+                      {{ reg.display_category}} {{ reg.other_category|join:", " }}
+                      
+                    {% elif reg.category %}
+                      {{ reg.other_category|join:", " }}
                     {% else %}
                       —
                     {% endif %}
                   </td>
                   <td>
+                    {% if reg.interests %}
+                      {{ reg.interests|join:", " }}
+                    {% elif reg.other_interest %}
+                      {{ reg.other_interest|join:", " }} {{ reg.interests|join:", " }}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </td>
+                  {% comment %} <td>
                     {% if reg.updates_opt_in %}
                       <span class="badge bg-success">Yes</span>
                     {% else %}
                       <span class="badge bg-secondary">No</span>
                     {% endif %}
-                  </td>
-                  <td>{{ reg.created_at|date:"M d, Y H:i" }}</td>
+                  </td> {% endcomment %}
+                  {% comment %} <td>{{ reg.created_at|date:"M d, Y H:i" }}</td> {% endcomment %}
                 </tr>
                 {% endfor %}
               </tbody>

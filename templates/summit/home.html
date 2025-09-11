@@ -580,7 +580,7 @@
         <div class="row align-items-center gy-5">
           <div class="col-lg-8 hero-content" data-aos="fade-up">
             <div class="hero-date">
-              <i class="fas fa-calendar"></i> November 11-13, 2025 | Eldoret, Kenya
+              <i class="fas fa-calendar"></i> October 21-23, 2025 | Eldoret, Kenya
             </div>
             <h1 class="hero-title">Kenya Software Summit</h1>
             <p class="hero-subtitle">Code the Future. Build Africa.</p>
@@ -807,213 +807,138 @@
     <!-- Agenda Section -->
     <section id="agenda" class="section-padding bg-light position-relative">
       <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Summit Agenda</h2>
-        <!-- Agenda Intro & Countdown -->
-        <div class="row mb-5 align-items-center">
-          <div class="col-lg-8" data-aos="fade-right">
-            <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
-              <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
-                <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
-              </h4>
-              <p class="mb-0 text-secondary">
-                Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. <br>
-                <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
-              </p>
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          Summit Agenda
+        </h2>
+
+        <!-- Tabs for Days -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="agendaTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1" type="button" role="tab">
+              <i class="fas fa-calendar-day me-2"></i>Day 1 – Oct 7
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button" role="tab">
+              <i class="fas fa-calendar-day me-2"></i>Day 2 – Oct 8
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button" role="tab">
+              <i class="fas fa-calendar-day me-2"></i>Day 3 – Oct 9
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="agendaTabsContent">
+
+          <!-- ================= Day 1 ================= -->
+          <div class="tab-pane fade show active" id="day1" role="tabpanel">
+            <div class="agenda-day mb-4 text-center">
+              <h4 class="fw-bold text-danger"><i class="fas fa-landmark me-2"></i>Focus: Government policy frameworks & enabling ecosystem</h4>
+            </div>
+            <div class="row g-4">
+              <div class="col-12">
+                <!-- Day 1 Sessions -->
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Exhibition</span> All Day – Exhibition</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Networking</span> 7:30 – 8:30 AM – Registration & Networking</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm">
+                  <span class="badge bg-danger me-2">Opening</span> 8:30 – 10:45 AM – Official Opening
+                  <ul class="small mt-2 mb-0">
+                    <li>Cultural entertainment, Anthem & Prayer</li>
+                    <li>Welcome remarks & Keynote addresses</li>
+                    <li>High-level panel discussion</li>
+                    <li>Opening by PS & CS</li>
+                  </ul>
+                </div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Break</span> 10:45 – 11:15 AM – Exhibition Tour & Tea Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm">
+                  <span class="badge bg-info text-dark me-2">Panel</span> 11:15 – 1:00 PM – Framing Panel: "Building a National Software Ecosystem"
+                  <ul class="small mt-2 mb-0">
+                    <li>Panelists: Government, Academia, Private Sector, Startup</li>
+                    <li>Breakouts: Data protection & AI, IP & Copyright, QA Frameworks</li>
+                  </ul>
+                </div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Lunch</span> 1:00 – 2:00 PM – Lunch Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-primary me-2">Keynote</span> 2:00 – 3:30 PM – Software Ecosystem Landscape</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-success me-2">Hackathon</span> 3:30 – 4:00 PM – Hackathon Kickoff</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Workshops</span> 4:00 – 5:00 PM – Sponsor Side Events (Microsoft, AWS, Google, GIZ/GovStack)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Networking</span> 5:30 – 7:00 PM – Welcome Cocktail</div>
+              </div>
             </div>
           </div>
-          <!-- 
-          <div class="col-lg-4 text-center" data-aos="fade-left">
-            <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: #CE171C;">
-              <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
-              <div id="countdown" class="d-flex justify-content-center gap-3"></div>
+
+          <!-- ================= Day 2 ================= -->
+          <div class="tab-pane fade" id="day2" role="tabpanel">
+            <div class="agenda-day mb-4 text-center">
+              <h4 class="fw-bold text-success"><i class="fas fa-lightbulb me-2"></i>Focus: Talent, Startups & Innovation Pipelines</h4>
+            </div>
+            <div class="row g-4">
+              <div class="col-12">
+                <!-- Day 2 Sessions -->
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Exhibition</span> All Day – Exhibition</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Networking</span> 7:30 – 8:30 AM – Registration & Networking</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm">
+                  <span class="badge bg-primary me-2">Keynote</span> 8:30 – 10:00 AM – Digital Skilling, Talent Acquisition & Retention
+                  <ul class="small mt-2 mb-0">
+                    <li>Keynote + Digital Labour Rights presentation</li>
+                    <li>Panel: Education, Upskilling, Remote Work, Talent Retention</li>
+                  </ul>
+                </div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Break</span> 10:00 – 10:30 AM – Tea Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-success me-2">Showcase</span> 10:30 – 1:00 PM – Showcase: Software Innovation (Fintech, Cloud & AI, Creative Economy, Accessibility)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Lunch</span> 1:00 – 2:00 PM – Lunch Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Breakouts</span> 2:00 – 3:30 PM – Opportunities for Software Innovation (Virtual Assets, Open Source, Cybersecurity)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Labs</span> 3:30 – 5:00 PM – Tech Labs (Monetization, Oracle, Huawei, IBM, GovStack)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Dinner</span> 5:30 – 9:00 PM – Gala Dinner</div>
+              </div>
             </div>
           </div>
-          -->
-        </div>
-        <!-- Day 1 -->
-        <div class="agenda-day d-flex align-items-center gap-3" data-aos="fade-up">
-          <div class="flex-shrink-0">
-            <span class="badge bg-danger fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 1</span>
-          </div>
-          <div>
-            <h3 class="mb-1 d-inline-block" style="color: var(--primary-red);">October 7, 2025</h3>
-            <span class="ms-2 badge bg-light text-dark fw-normal">Opening Ceremonies & Keynotes</span>
-          </div>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-6" data-aos="fade-right">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 10:00 AM</div>
-                <span class="badge bg-success">Registration</span>
-              </div>
-              <h5 class="mb-2">Kenya Software Summit</h5>
-              <p class="mb-2">Africa's premier software development conference, bringing together innovators, developers, and tech leaders to code the future and build Africa's digital destiny.</p>
-              <div class="social-links mb-2">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-              </div>
-              <p class="mb-0"><i class="fas fa-mug-hot text-warning me-2"></i>Networking breakfast & welcome address</p>
+
+          <!-- ================= Day 3 ================= -->
+          <div class="tab-pane fade" id="day3" role="tabpanel">
+            <div class="agenda-day mb-4 text-center">
+              <h4 class="fw-bold text-dark"><i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth</h4>
             </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>10:00 AM - 11:30 AM</div>
-                <span class="badge bg-primary">Keynote</span>
+            <div class="row g-4">
+              <div class="col-12">
+                <!-- Day 3 Sessions -->
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Exhibition</span> All Day – Exhibition</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-dark me-2">Networking</span> 7:30 – 8:30 AM – Software Advisory Council Breakfast + Registration</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-primary me-2">Keynote</span> 8:30 – 10:30 AM – Startup Support (Panel: Funding the Ecosystem)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Break</span> 10:30 – 11:00 AM – Tea Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-primary me-2">Keynote</span> 11:00 – 12:15 PM – Software Global Export (Panel: Enabling Environment for Export)</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-success me-2">Showcase</span> 12:15 – 1:00 PM – Hackathon Finals & Winner Announcement</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Lunch</span> 1:00 – 2:00 PM – Lunch Break</div>
+                <div class="card agenda-item p-3 mb-3 shadow-sm">
+                  <span class="badge bg-primary me-2">Closing</span> 2:00 – 4:00 PM – Closing Plenary & Call to Action
+                  <ul class="small mt-2 mb-0">
+                    <li>Closing Keynote, Panel, Conference Summary</li>
+                    <li>Signing Call to Action & Closing Ceremony</li>
+                    <li>Press Conference</li>
+                  </ul>
+                </div>
+                <div class="card agenda-item p-3 shadow-sm"><span class="badge bg-warning text-dark me-2">Break</span> 4:00 – 4:30 PM – Tea Break & Guests Depart</div>
               </div>
-              <h5 class="mb-2">Opening Keynote</h5>
-              <p class="mb-0">"The Future of Software Development in Africa" - <span class="fw-semibold">Dr. James Mwangi</span></p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>12:00 PM - 1:30 PM</div>
-                <span class="badge bg-info text-dark">Panel</span>
-              </div>
-              <h5 class="mb-2">AI & Machine Learning Panel</h5>
-              <p class="mb-0">Expert panel on AI applications in African markets</p>
-            </div>
-          </div>
-          <div class="col-md-6" data-aos="fade-left">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>2:30 PM - 4:00 PM</div>
-                <span class="badge bg-success">Workshops</span>
-              </div>
-              <h5 class="mb-2">Technical Workshops</h5>
-              <p class="mb-0">Parallel sessions on cloud computing, mobile development, and cybersecurity</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>4:30 PM - 6:00 PM</div>
-                <span class="badge bg-warning text-dark">Pitch</span>
-              </div>
-              <h5 class="mb-2">Startup Pitch Competition</h5>
-              <p class="mb-0">Local and international startups present their innovations</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>7:00 PM - 9:00 PM</div>
-                <span class="badge bg-dark">Reception</span>
-              </div>
-              <h5 class="mb-2">Welcome Reception</h5>
-              <p class="mb-0">Networking dinner with cultural performances</p>
-            </div>
-          </div>
-        </div>
-        <!-- Day 2 -->
-        <div class="agenda-day mt-5 d-flex align-items-center gap-3" data-aos="fade-up">
-          <div class="flex-shrink-0">
-            <span class="badge bg-success fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 2</span>
-          </div>
-          <div>
-            <h3 class="mb-1 d-inline-block" style="color: var(--primary-green);">October 8, 2025</h3>
-            <span class="ms-2 badge bg-light text-dark fw-normal">Hackathons, Workshops & Tech Expo</span>
-          </div>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-6" data-aos="fade-right">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 12:00 PM</div>
-                <span class="badge bg-danger">Hackathon</span>
-              </div>
-              <h5 class="mb-2">24-Hour Hackathon Begins</h5>
-              <p class="mb-0">Teams tackle real-world challenges in health, fintech, and agritech</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>1:00 PM - 2:30 PM</div>
-                <span class="badge bg-primary">Expo</span>
-              </div>
-              <h5 class="mb-2">Tech Expo Opening</h5>
-              <p class="mb-0">Exhibition of latest tools, platforms, and innovations</p>
-            </div>
-          </div>
-          <div class="col-md-6" data-aos="fade-left">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>3:00 PM - 5:00 PM</div>
-                <span class="badge bg-success">Workshops</span>
-              </div>
-              <h5 class="mb-2">Developer Workshops</h5>
-              <p class="mb-0">Hands-on coding sessions with industry experts</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>6:00 PM - 8:00 PM</div>
-                <span class="badge bg-pink text-white" style="background: #e83e8c;">Forum</span>
-              </div>
-              <h5 class="mb-2">Women in Tech Forum</h5>
-              <p class="mb-0">Panel discussion on diversity and inclusion in technology</p>
             </div>
           </div>
         </div>
-        <!-- Day 3 -->
-        <div class="agenda-day mt-5 d-flex align-items-center gap-3" data-aos="fade-up">
-          <div class="flex-shrink-0">
-            <span class="badge bg-dark fs-5 px-3 py-2 shadow"><i class="fas fa-calendar-day me-2"></i>Day 3</span>
-          </div>
-          <div>
-            <h3 class="mb-1 d-inline-block" style="color: var(--primary-dark);">October 9, 2025</h3>
-            <span class="ms-2 badge bg-light text-dark fw-normal">Awards, Policy Forum & Closing</span>
-          </div>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-6" data-aos="fade-right">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>9:00 AM - 10:30 AM</div>
-                <span class="badge bg-danger">Hackathon</span>
-              </div>
-              <h5 class="mb-2">Hackathon Presentations</h5>
-              <p class="mb-0">Teams present solutions and compete for prizes</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>11:00 AM - 12:30 PM</div>
-                <span class="badge bg-secondary">Forum</span>
-              </div>
-              <h5 class="mb-2">Policy & Standards Forum</h5>
-              <p class="mb-0">Discussions on AI ethics, data security, and open standards</p>
-            </div>
-          </div>
-          <div class="col-md-6" data-aos="fade-left">
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>2:00 PM - 3:30 PM</div>
-                <span class="badge bg-warning text-dark">Awards</span>
-              </div>
-              <h5 class="mb-2">Awards Ceremony</h5>
-              <p class="mb-0">Recognition of outstanding innovations and contributors</p>
-            </div>
-            <div class="agenda-item shadow-sm border-0">
-              <div class="d-flex align-items-center mb-2">
-                <div class="agenda-time me-3"><i class="fas fa-clock me-1"></i>4:00 PM - 5:00 PM</div>
-                <span class="badge bg-primary">Keynote</span>
-              </div>
-              <h5 class="mb-2">Closing Keynote</h5>
-              <p class="mb-0">"Building Kenya's Digital Future" - Closing remarks and next steps</p>
-            </div>
-          </div>
-        </div>
-        <!-- Agenda Callout  ->
+
+        <!-- Agenda Note -->
         <div class="alert alert-info mt-5 rounded-4 shadow-sm d-flex align-items-center" data-aos="fade-up">
           <i class="fas fa-info-circle fa-2x me-3 text-primary"></i>
           <div>
-            <strong>Note:</strong> Agenda is subject to change. For the latest updates, follow us on social media or subscribe to our newsletter.
+            <strong>Note:</strong> Agenda is subject to change. Follow us on social media or subscribe to our newsletter for updates.
           </div>
         </div>
-        <!-- Agenda Download Button ->
-        <div class="text-center mt-4" data-aos="zoom-in">
-          <a href="#" class="btn btn-primary-custom btn-lg px-5 shadow-sm">
-            <i class="fas fa-download me-2"></i>Download Full Agenda (PDF)
-          </a>
-        </div>
       </div>
-       -->
     </section>
+
+
+
+
+
+    
 
     <!-- Features Section -->
     <section id="features" class="section-padding" style="background: linear-gradient(135deg, #f8fafc 60%, #e6f4ea 100%);">
@@ -1407,7 +1332,6 @@
                     </div> -->
                     
                     <!-- Quick Registration Form -->
-                    <!-- Quick Registration Form -->
                     <div class="row mt-5">
                       <div class="col-lg-8 mx-auto">
                         <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up" style="background: rgba(255,255,255,0.97);">
@@ -1471,6 +1395,15 @@
                                   <i class="fas fa-users text-danger"></i>
                                 </span>
                                 {{ form.category }}
+                              </div>
+
+                              <!-- Hidden "Other Category" text box -->
+                              <div class="input-group mt-2" id="otherCategoryDiv" style="display:none;">
+                                <span class="input-group-text bg-light border-0">
+                                  <i class="fas fa-pen text-secondary"></i>
+                                </span>
+                                <input type="text" name="other_category" id="otherCategoryInput" 
+                                      class="form-control" placeholder="Please specify..." />
                               </div>
 
                               <!-- Interests -->
@@ -1683,6 +1616,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
     <script>
+        // === Show/Hide Other Category field ===
+        document.addEventListener("DOMContentLoaded", function () {
+            // === CATEGORY DROPDOWN ===
+            const categorySelect = document.getElementById("id_category"); 
+            const otherCategoryDiv = document.createElement("div");
+            otherCategoryDiv.className = "mt-2";
+            otherCategoryDiv.style.display = "none";
+            otherCategoryDiv.innerHTML = `
+                <input type="text" name="other_category" 
+                      id="otherCategoryInput"
+                      class="form-control mt-2"
+                      placeholder="Please specify category..." />
+            `;
+            categorySelect.parentNode.appendChild(otherCategoryDiv);
+
+            if (categorySelect) {
+                categorySelect.addEventListener("change", function () {
+                    if (categorySelect.value.toLowerCase() === "other") {
+                        otherCategoryDiv.style.display = "block";
+                        document.getElementById("otherCategoryInput").required = true;
+                    } else {
+                        otherCategoryDiv.style.display = "none";
+                        document.getElementById("otherCategoryInput").value = "";
+                        document.getElementById("otherCategoryInput").required = false;
+                    }
+                });
+            }
+
+            // === INTERESTS CHECKBOXES ===
+            const interestInputs = document.querySelectorAll("input[name='interests']");
+            const otherInterestDiv = document.createElement("div");
+            otherInterestDiv.className = "mt-2";
+            otherInterestDiv.style.display = "none";
+            otherInterestDiv.innerHTML = `
+                <input type="text" name="other_interest" 
+                      id="otherInterestInput"
+                      class="form-control mt-2"
+                      placeholder="Please specify your interest..." />
+            `;
+
+            // Insert after the interests container
+            if (interestInputs.length > 0) {
+                const interestContainer = interestInputs[interestInputs.length - 1].closest("div");
+                interestContainer.parentNode.appendChild(otherInterestDiv);
+            }
+
+            interestInputs.forEach(input => {
+                input.addEventListener("change", function () {
+                    // If "Others" checkbox is selected
+                    if (input.checked && input.value.toLowerCase() === "other") {
+                        otherInterestDiv.style.display = "block";
+                        document.getElementById("otherInterestInput").required = true;
+                    } 
+                    // If "Other" is unchecked
+                    else if (!Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === "other")) {
+                        otherInterestDiv.style.display = "none";
+                        document.getElementById("otherInterestInput").value = "";
+                        document.getElementById("otherInterestInput").required = false;
+                    }
+                });
+            });
+        });
+
         // Initialize AOS (Animate On Scroll)
         AOS.init({
             duration: 1000,
@@ -1875,7 +1871,7 @@
 
         // Countdown timer (if event is in future)
         function updateCountdown() {
-            const eventDate = new Date('2025-11-11T13:00:00').getTime();
+            const eventDate = new Date('2025-10-21T23:00:00').getTime();
             const now = new Date().getTime();
             const timeLeft = eventDate - now;
 
@@ -1885,9 +1881,13 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                // Update countdown display if element exists
-                const countdownElement = document.getElementById('countdown');
-                if (countdownElement) {
+                // Update all countdown displays
+                const countdownElements = [
+                  document.getElementById('countdown'),
+                  document.getElementById('countdown-agenda')
+                ];
+                countdownElements.forEach(countdownElement => {
+                  if (countdownElement) {
                     countdownElement.innerHTML = `
                         <div class="countdown-item">
                             <span class="countdown-number">${days}</span>
@@ -1906,7 +1906,8 @@
                             <span class="countdown-label">Seconds</span>
                         </div>
                     `;
-                }
+                  }
+                });
             }
         }
 

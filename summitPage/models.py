@@ -30,13 +30,31 @@ class Registrant(models.Model):
     job_title = models.CharField(max_length=255, blank=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     interests = models.JSONField(default=list, blank=True)  # stores checkbox selections
+
+    # 🔹 New fields for custom values
+    other_category = models.CharField(max_length=255, blank=True, null=True)
+    other_interest = models.CharField(max_length=255, blank=True, null=True)
+
     accessibility_needs = models.TextField(blank=True, null=True)
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
-        
-    updates_opt_in = models.BooleanField(default=False)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    
+    
+    def display_category(self):
+        if self.category == "other" and self.other_category:
+            return self.other_category
+        return self.get_category_display()
+
+    def display_interests(self):
+        interests = []
+        for i in self.interests:
+            if i == "other" and self.other_interest:
+                interests.append(self.other_interest)
+            else:
+                interests.append(i)
+        return ", ".join(interests)
 
     def get_unsubscribe_url(self):
         from django.urls import reverse
@@ -44,5 +62,3 @@ class Registrant(models.Model):
 
     def __str__(self):
         return self.full_name
-
-
