@@ -7,7 +7,9 @@ It includes features like PDF generation using **WeasyPrint**, which requires so
 
 ## Prerequisites
 
-Linux servers (Ubuntu/Debian-based) will need these installed before Python dependencies:
+### Linux (Ubuntu / Debian)
+
+Install system dependencies required for Python and WeasyPrint:
 
 ```bash
 sudo apt update
@@ -22,6 +24,27 @@ sudo apt install -y \
     fonts-dejavu-core fonts-liberation
 
 
+macOS
+
+On macOS you’ll need Homebrew (install from https://brew.sh
+).
+Then install dependencies:
+
+# Install brew if not installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Core libraries
+brew install python3 cairo pango gdk-pixbuf libffi
+
+# (Optional) fonts for WeasyPrint PDF rendering
+brew tap homebrew/cask-fonts
+brew install --cask font-dejavu font-liberation
+
+
+On macOS, Python 3 may already be installed. Check with python3 --version.
+
+## Setup
+
 1. Clone the repository
 git clone https://github.com/edanodongo/software-summit.git
 cd software-summit
@@ -35,7 +58,7 @@ pip install --upgrade pip wheel setuptools
 pip install -r requirements.txt
 
 
-requirements.txt includes Django, WeasyPrint, and all required project packages.
+requirements.txt includes Django, WeasyPrint, and all project packages.
 
 4. Configure environment variables
 
@@ -55,8 +78,6 @@ DATABASE_URL=postgres://user:password@localhost:5432/dbname
 # ALLOWED HOSTS
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','domain.com']
 
-
-
 5. Database setup
 python manage.py migrate
 
@@ -66,9 +87,9 @@ python manage.py collectstatic
 7. Test locally
 python manage.py runserver 0.0.0.0:8000
 
-Production Deployment
+Production Deployment (Linux servers)
 
-Gunicorn + Nginx setup.
+Production setup uses Gunicorn + Nginx.
 
 Run with Gunicorn
 gunicorn software_summit.wsgi:application --bind 0.0.0.0:8000
@@ -109,9 +130,11 @@ Verify installation with:
 weasyprint --info
 
 
-If fonts don’t render correctly in PDFs, install additional fonts:
+If fonts don’t render correctly in PDFs:
 
-sudo apt install fonts-noto fonts-freefont-ttf
+Linux: sudo apt install fonts-noto fonts-freefont-ttf
+
+macOS: install fonts via brew install --cask font-noto-sans
 
 Troubleshooting
 
