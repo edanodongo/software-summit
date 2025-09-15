@@ -63,7 +63,7 @@
         <div class="row align-items-center gy-5">
           <div class="col-lg-8 hero-content" data-aos="fade-up">
             <div class="hero-date">
-              <i class="fas fa-calendar"></i> October 21-23, 2025 | Eldoret, Kenya
+              <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
             </div>
             <h1 class="hero-title">Kenya Software Summit</h1>
             <p class="hero-subtitle">Code the Future. Build Africa.</p>
@@ -109,7 +109,7 @@
             <h2 class="section-title" data-aos="fade-up">About the Summit</h2>
             <div class="row">
                 <div class="col-lg-6" data-aos="fade-right">
-                    <h3 class="mb-4">Background & Context</h3>
+                    {% comment %} <h3 class="mb-4">Background & Context</h3> {% endcomment %}
                     <p class="lead">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
                     <p>The Kenya Software Summit is an annual global event hosted in Eldoret at the University of Eldoret, aligning with Kenya's vision of decentralizing innovation and fostering regional digital economies.</p>
                 </div>
@@ -417,17 +417,17 @@
             <ul class="nav nav-pills justify-content-center mb-4" id="agendaTabs" role="tablist" data-aos="fade-up">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1" type="button" role="tab" aria-controls="day1" aria-selected="true">
-                        <i class="fas fa-calendar-day me-2"></i>Day 1 — Oct 7
+                        <i class="fas fa-calendar-day me-2"></i>Day 1 — Oct 27
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button" role="tab" aria-controls="day2" aria-selected="false">
-                        <i class="fas fa-calendar-day me-2"></i>Day 2 — Oct 8
+                        <i class="fas fa-calendar-day me-2"></i>Day 2 — Oct 28
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button" role="tab" aria-controls="day3" aria-selected="false">
-                        <i class="fas fa-calendar-day me-2"></i>Day 3 — Oct 9
+                        <i class="fas fa-calendar-day me-2"></i>Day 3 — Oct 29
                     </button>
                 </li>
             </ul>
@@ -440,7 +440,7 @@
                         <h4 class="fw-bold text-danger">
                             <i class="fas fa-landmark me-2"></i>Focus: Government Policy Frameworks & Enabling Ecosystem
                         </h4>
-                        <p class="text-muted small mb-0">Tuesday, October 7 — policy, regulation, quality assurance, and ecosystem building.</p>
+                        <p class="text-muted small mb-0">Tuesday, October 27 — policy, regulation, quality assurance, and ecosystem building.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -667,7 +667,7 @@
                         <h4 class="fw-bold text-success">
                             <i class="fas fa-lightbulb me-2"></i>Focus: Talent, Startups & Innovation Pipelines
                         </h4>
-                        <p class="text-muted small mb-0">Wednesday, October 8 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
+                        <p class="text-muted small mb-0">Wednesday, October 28 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -857,11 +857,11 @@
 
                 <!-- ================= DAY 3 ================= -->
                 <div class="tab-pane fade" id="day3" role="tabpanel" aria-labelledby="day3-tab">
-                    <div class="agenda-day text-center" data-aos="fade-up">
-                        <h4 class="fw-bold text-dark">
-                            <i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth
-                        </h4>
-                        <p class="text-muted small mb-0">Thursday, October 9 — investment, export readiness, partnerships, and summit closing commitments.</p>
+                    <div class="agenda-day text-center bg-white" data-aos="fade-up">
+                      <h4 class="fw-bold text-dark">
+                      <i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth
+                      </h4>
+                      <p class="text-muted small mb-0">Thursday, October 29 — investment, export readiness, partnerships, and summit closing commitments.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -1325,7 +1325,7 @@
                               {% csrf_token %}
                               <!-- Full Name -->
                               <div class="input-group mb-3">
-                                <span class="input-group-text bg-light border-0">
+                                <span class="input-group-text  border-0">
                                   <i class="fas fa-user text-primary"></i>
                                 </span>
                                 {{ form.full_name }}
@@ -1335,7 +1335,7 @@
                               <div class="row g-3">
                                 <div class="col-md-6">
                                   <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
+                                    <span class="input-group-text  border-0">
                                       <i class="fas fa-envelope text-success"></i>
                                     </span>
                                     {{ form.email }}
@@ -1343,7 +1343,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
+                                    <span class="input-group-text border-0">
                                       <i class="fas fa-phone text-info"></i>
                                     </span>
                                     {{ form.phone }}
@@ -1355,7 +1355,7 @@
                               <div class="row g-3 mt-2">
                                 <div class="col-md-6">
                                   <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
+                                    <span class="input-group-text  border-0">
                                       <i class="fas fa-building text-secondary"></i>
                                     </span>
                                     {{ form.organization }}
@@ -1363,7 +1363,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
+                                    <span class="input-group-text  border-0">
                                       <i class="fas fa-id-badge text-warning"></i>
                                     </span>
                                     {{ form.job_title }}
@@ -1373,7 +1373,7 @@
 
                               <!-- Category -->
                               <div class="input-group mt-3">
-                                <span class="input-group-text bg-light border-0">
+                                <span class="input-group-text  border-0">
                                   <i class="fas fa-users text-danger"></i>
                                 </span>
                                 {{ form.category }}
@@ -1381,7 +1381,7 @@
 
                               <!-- Hidden "Other Category" text box -->
                               <div class="input-group mt-2" id="otherCategoryDiv" style="display:none;">
-                                <span class="input-group-text bg-light border-0">
+                                <span class="input-group-text border-0">
                                   <i class="fas fa-pen text-secondary"></i>
                                 </span>
                                 <input type="text" name="other_category" id="otherCategoryInput" 
@@ -1400,7 +1400,7 @@
 
                               <!-- Accessibility Needs -->
                               <div class="input-group mt-3">
-                                <span class="input-group-text bg-light border-0">
+                                <span class="input-group-text  border-0">
                                   <i class="fas fa-universal-access text-success"></i>
                                 </span>
                                 {{ form.accessibility_needs }}
@@ -1863,7 +1863,7 @@
                           }
                       }
                       messageDiv.innerHTML = `
-                          <div class="alert alert-danger">Please correct the errors below.</div>
+                          <div class="alert alert-danger">Please correct the errors.</div>
                       `;
                       submitButton.textContent = originalText;
                       submitButton.disabled = false;
@@ -1932,7 +1932,7 @@
 
       // Countdown timer (if event is in future)
       function updateCountdown() {
-          const eventDate = new Date('2025-10-21T23:00:00').getTime();
+          const eventDate = new Date('2025-10-27T23:00:00').getTime();
           const now = new Date().getTime();
           const timeLeft = eventDate - now;
 
