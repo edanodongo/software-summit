@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config, Csv
+import os
+from dotenv import load_dotenv
+
+load_dotenv() # This loads the variables from the .env file
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%mu=rd-m)c$%!asl@9a85p$4z+v+gqd9*w20-f9a(p72!t)r61'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True' # Don't forget to cast boolean values!
 
 ALLOWED_HOSTS = []
 
@@ -86,17 +91,17 @@ WSGI_APPLICATION = 'summit.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_DEFAULT_NAME'),
-        'USER': config('DB_DEFAULT_USER'),
-        'PASSWORD': config('DB_DEFAULT_PASSWORD'),
-        'HOST': config('DB_DEFAULT_HOST'),
-        'PORT': config('DB_DEFAULT_PORT'),
-    },
+        'NAME': os.getenv('DB_DEFAULT_NAME'),
+        'USER': os.getenv('DB_DEFAULT_USER'),
+        'PASSWORD': os.getenv('DB_DEFAULT_PASSWORD'),
+        'HOST': os.getenv('DB_DEFAULT_HOST'),
+        'PORT': os.getenv('DB_DEFAULT_PORT'),
+    }
 }
+
 
 
 # Password validation
