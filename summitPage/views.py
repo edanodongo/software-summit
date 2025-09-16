@@ -103,37 +103,37 @@ def dashboard_stats(request):
 
 from openpyxl import Workbook
 
-# === CSV Export ===
-from django.template.loader import render_to_string
-from weasyprint import HTML
-from django.utils import timezone
+# # === CSV Export ===
+# from django.template.loader import render_to_string
+# from weasyprint import HTML
+# from django.utils import timezone
 
 
-def export_registrants_csv(request):
-    registrants = Registrant.objects.all()
+# def export_registrants_csv(request):
+#     registrants = Registrant.objects.all()
 
-    category_counts = (
-        registrants.values("category")
-        .annotate(count=Count("id"))
-        .order_by()
-    )
+#     category_counts = (
+#         registrants.values("category")
+#         .annotate(count=Count("id"))
+#         .order_by()
+#     )
 
-    # Render HTML
-    html_string = render_to_string("summit/print_registrants.html", {
-        "registrants": registrants,
-        "category_counts": list(category_counts),
-        "now": timezone.now(),
-        "pdf_mode": True,  # flag to hide print button
-    })
+#     # Render HTML
+#     html_string = render_to_string("summit/print_registrants.html", {
+#         "registrants": registrants,
+#         "category_counts": list(category_counts),
+#         "now": timezone.now(),
+#         "pdf_mode": True,  # flag to hide print button
+#     })
 
-    # Convert to PDF
-    html = HTML(string=html_string, base_url=request.build_absolute_uri())
-    pdf = html.write_pdf()
+#     # Convert to PDF
+#     html = HTML(string=html_string, base_url=request.build_absolute_uri())
+#     pdf = html.write_pdf()
 
-    # Return as file download
-    response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = "attachment; filename=registrants_report.pdf"
-    return response
+#     # Return as file download
+#     response = HttpResponse(pdf, content_type="application/pdf")
+#     response["Content-Disposition"] = "attachment; filename=registrants_report.pdf"
+#     return response
 
 
 # === Excel Export ===
