@@ -1,106 +1,116 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kenya Software Summit 2025 - Code the Future, Build Africa</title>
-  
-  <!-- Fontawesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenya Software Summit 2025 - Code the Future, Build Africa</title>
 
-  <!-- Favicons -->
-  <link href="{% static 'images/cos.ico' %}" rel="icon">
-  <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link href="{% static 'images/cos.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
 
-  <!-- Vendor CSS Files -->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"  rel="stylesheet">
-  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}"  rel="stylesheet">
-  <link href="{% static 'vendor/aos/aos.css' %}"  rel="stylesheet">
-  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}"  rel="stylesheet">
-  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
 
-  <!-- Main CSS File -->
-  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#home">
-          Kenya Software Summit
-          <span class="ms-2" id="themeIcon" style="font-size:1.3rem;"><i class="fas fa-moon"></i></span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
-            <li class="nav-item"><a class="nav-link" href="#agenda">Agenda</a></li>
-            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-            <li class="nav-item"><a class="nav-link" href="#partners">Partners</a></li>
-            <li class="nav-item"><a class="nav-link" href="#media">Media</a></li>
-            <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-            <li class="nav-item d-flex align-items-center ms-2">
-              <button id="themeToggle" class="btn btn-sm btn-outline-light" style="border-radius:50%;width:38px;height:38px;" title="Toggle dark/light mode">
-                <i id="themeToggleIcon" class="fas fa-moon"></i>
-              </button>
-            </li>
-          </ul>
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                Kenya Software Summit
+                <span class="ms-2" id="themeIcon" style="font-size:1.3rem;"><i class="fas fa-moon"></i></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#agenda">Agenda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#partners">Partners</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#media">Media</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                    <li class="nav-item d-flex align-items-center ms-2">
+                        <button id="themeToggle" class="btn btn-sm btn-outline-light"
+                            style="border-radius:50%;width:38px;height:38px;" title="Toggle dark/light mode">
+                            <i id="themeToggleIcon" class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero-section">
-      <div class="container">
-        <div class="row align-items-center gy-5">
-          <div class="col-lg-8 hero-content" data-aos="fade-up">
-            <div class="hero-date">
-              <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
-            </div>
-            <h1 class="hero-title">Kenya Software Summit</h1>
-            <p class="hero-subtitle">Code the Future. Build Africa.</p>
-            <p class="lead mb-4">Join Africa's premier software development conference where innovation meets opportunity. Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.</p>
-            <div class="d-flex flex-wrap gap-3">
-              <a href="#register" class="btn btn-primary-custom">Register Now</a>
-              <a href="#about" class="btn btn-outline-custom">Learn More</a>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
-              <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
-                <div class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">500+</h3>
-                    <p class="text-white-50 mb-0">Developers</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">50+</h3>
-                    <p class="text-white-50 mb-0">Speakers</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">3</h3>
-                    <p class="text-white-50 mb-0">Days</p>
-                  </div>
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-8 hero-content" data-aos="fade-up">
+                    <div class="hero-date">
+                        <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
+                    </div>
+                    <h1 class="hero-title">Kenya Software Summit</h1>
+                    <p class="hero-subtitle">Code the Future. Build Africa.</p>
+                    <p class="lead mb-4">Join Africa's premier software development conference where innovation meets
+                        opportunity. Connect with global tech leaders, showcase your projects, and shape the future of
+                        technology in Africa.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#register" class="btn btn-primary-custom">Register Now</a>
+                        <a href="#about" class="btn btn-outline-custom">Learn More</a>
+                    </div>
                 </div>
-              </div>
-              <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
-                <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto" style="background: var(--gradient-primary); max-width: 350px;">
-                  <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
-                  <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
+                <div class="col-lg-4">
+                    <div
+                        class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
+                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
+                            <div
+                                class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
+                                <div class="stat-item">
+                                    <h3 class="text-white mb-0">500+</h3>
+                                    <p class="text-white-50 mb-0">Developers</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 class="text-white mb-0">50+</h3>
+                                    <p class="text-white-50 mb-0">Speakers</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 class="text-white mb-0">3</h3>
+                                    <p class="text-white-50 mb-0">Days</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
+                            <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto"
+                                style="background: var(--gradient-primary); max-width: 350px;">
+                                <h5 class="mb-3" style="color: white;"><i
+                                        class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
+                                <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
 
     <!-- About Section -->
@@ -110,20 +120,29 @@
             <div class="row">
                 <div class="col-lg-6" data-aos="fade-right">
                     {% comment %} <h3 class="mb-4">Background & Context</h3> {% endcomment %}
-                    <p class="lead">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
-                    <p>The Kenya Software Summit is an annual global event hosted in Eldoret at the University of Eldoret, aligning with Kenya's vision of decentralizing innovation and fostering regional digital economies.</p>
+                    <p class="lead">The global economy is being transformed by software development, artificial
+                        intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic
+                        youth population, thriving ICT sector, and fast-growing digital economy, is strategically
+                        positioned to lead Africa's next wave of digital transformation.</p>
+                    <p>The Kenya Software Summit is an annual global event hosted in Eldoret at the University of
+                        Eldoret, aligning with Kenya's vision of decentralizing innovation and fostering regional
+                        digital economies.</p>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <h3 class="mb-4">Our Vision</h3>
                     <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Become Africa's leading annual software and digital innovation conference by 2030</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Cement Kenya's leadership as Africa's "Code Nation"</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Support Kenya's ambition to create 1 million digital economy jobs by 2030</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Position Kenya as a global partner in AI innovation and software exports</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Become Africa's leading
+                            annual software and digital innovation conference by 2030</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Cement Kenya's leadership
+                            as Africa's "Code Nation"</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Support Kenya's ambition
+                            to create 1 million digital economy jobs by 2030</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Position Kenya as a
+                            global partner in AI innovation and software exports</li>
                     </ul>
                 </div>
             </div>
-            
+
             <!-- Objectives -->
             <div class="row mt-5">
                 <h3 class="text-center mb-4" data-aos="fade-up">Summit Objectives</h3>
@@ -133,7 +152,8 @@
                             <i class="fas fa-code"></i>
                         </div>
                         <h4>Build Software Ecosystem</h4>
-                        <p>Strengthen Kenya's software development ecosystem, positioning the country as Africa's premier hub for software innovation.</p>
+                        <p>Strengthen Kenya's software development ecosystem, positioning the country as Africa's
+                            premier hub for software innovation.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
@@ -142,7 +162,8 @@
                             <i class="fas fa-graduation-cap"></i>
                         </div>
                         <h4>Develop Talent</h4>
-                        <p>Develop software and AI talent, providing direct linkages between Kenyan developers and global technology players.</p>
+                        <p>Develop software and AI talent, providing direct linkages between Kenyan developers and
+                            global technology players.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
@@ -151,7 +172,8 @@
                             <i class="fas fa-handshake"></i>
                         </div>
                         <h4>Connect Innovators</h4>
-                        <p>Connect emerging innovators, startups, and students with local and international companies, accelerators, and venture funds.</p>
+                        <p>Connect emerging innovators, startups, and students with local and international companies,
+                            accelerators, and venture funds.</p>
                     </div>
                 </div>
             </div>
@@ -159,26 +181,28 @@
     </section>
 
     <!-- ================= Speakers Section ================= -->
-     
+
     <!-- Keynote speakers -->
     <section id="speakers" class="section-padding">
         <div class="container">
             <h2 class="section-title text-center mb-5" data-aos="fade-up">
-              Featured Speakers
+                Featured Speakers
             </h2>
             <div class="row">
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"
+                            alt="Dr. James Mwangi" class="speaker-img">
                         <div class="speaker-info">
                             <h3 class="speaker-name">Dr. James Mwangi</h3>
-                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Sarah Ochieng" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Sarah Ochieng</h4>
                             <p class="speaker-title">Founder, TechAfrica Ventures</p>
@@ -187,7 +211,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face"
+                            alt="Prof. David Kim" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Prof. David Kim</h4>
                             <p class="speaker-title">Director, Google AI Research</p>
@@ -196,7 +221,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Linda Mutua" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Linda Mutua</h4>
                             <p class="speaker-title">VP Engineering, Safaricom</p>
@@ -205,16 +231,18 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"
+                            alt="Dr. James Mwangi" class="speaker-img">
                         <div class="speaker-info">
                             <h3 class="speaker-name">Dr. James Mwangi</h3>
-                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Sarah Ochieng" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Sarah Ochieng</h4>
                             <p class="speaker-title">Founder, TechAfrica Ventures</p>
@@ -223,7 +251,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face"
+                            alt="Prof. David Kim" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Prof. David Kim</h4>
                             <p class="speaker-title">Director, Google AI Research</p>
@@ -232,7 +261,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Linda Mutua" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Linda Mutua</h4>
                             <p class="speaker-title">VP Engineering, Safaricom</p>
@@ -241,16 +271,18 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"
+                            alt="Dr. James Mwangi" class="speaker-img">
                         <div class="speaker-info">
                             <h3 class="speaker-name">Dr. James Mwangi</h3>
-                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
+                            <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Sarah Ochieng" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Sarah Ochieng</h4>
                             <p class="speaker-title">Founder, TechAfrica Ventures</p>
@@ -259,7 +291,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face"
+                            alt="Prof. David Kim" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Prof. David Kim</h4>
                             <p class="speaker-title">Director, Google AI Research</p>
@@ -268,13 +301,14 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                            alt="Linda Mutua" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Linda Mutua</h4>
                             <p class="speaker-title">VP Engineering, Safaricom</p>
                         </div>
                     </div>
-                </div>                          
+                </div>
             </div>
         </div>
     </section>
@@ -284,149 +318,169 @@
 
     <!-- Speaker 1 Modal -->
     <div class="modal fade" id="speaker1Modal" tabindex="-1" aria-labelledby="speaker1Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker1Label">Dr. James Mwangi </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"  alt="Speaker">
-            <p class="lead">VP Engineering, Safaricom</p>
-            <p class="speaker-bio">Leading digital transformation initiatives across Africa with 15+ years in cloud computing and AI development. Expert in mobile technologies and financial services innovation in emerging markets. This speaker will deliver the opening keynote, setting the tone for the summit with a focus on national policy and the digital ecosystem.</p>
-          </div>
-          
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker1Label">Dr. James Mwangi </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face"
+                        alt="Speaker">
+                    <p class="lead">VP Engineering, Safaricom</p>
+                    <p class="speaker-bio">Leading digital transformation initiatives across Africa with 15+ years in
+                        cloud computing and AI development. Expert in mobile technologies and financial services
+                        innovation in emerging markets. This speaker will deliver the opening keynote, setting the tone
+                        for the summit with a focus on national policy and the digital ecosystem.</p>
+                </div>
+
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Speaker 2 Modal -->
     <div class="modal fade" id="speaker2Modal" tabindex="-1" aria-labelledby="speaker2Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker2Label">Sarah Ochieng </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Speaker">
-            <p class="lead">Founder, TechAfrica Ventures</p>
-            <p class="speaker-bio">Serial entrepreneur and investor focused on scaling African tech startups globally. This speaker will share insights from the private sector on scaling innovation and driving policy change.</p>
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker2Label">Sarah Ochieng </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                        alt="Speaker">
+                    <p class="lead">Founder, TechAfrica Ventures</p>
+                    <p class="speaker-bio">Serial entrepreneur and investor focused on scaling African tech startups
+                        globally. This speaker will share insights from the private sector on scaling innovation and
+                        driving policy change.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Speaker 3 Modal -->
     <div class="modal fade" id="speaker3Modal" tabindex="-1" aria-labelledby="speaker3Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker3Label">Prof. David Kim</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Speaker">
-            <p class="lead"> Director, Google AI Research</p>
-            <p class="speaker-bio">Leading researcher in machine learning and artificial intelligence with focus on emerging markets. Lorem ipsum bio placeholder. This speaker will highlight digital skilling initiatives and the importance of research in building talent pipelines.</p>
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker3Label">Prof. David Kim</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face"
+                        alt="Speaker">
+                    <p class="lead"> Director, Google AI Research</p>
+                    <p class="speaker-bio">Leading researcher in machine learning and artificial intelligence with focus
+                        on emerging markets. Lorem ipsum bio placeholder. This speaker will highlight digital skilling
+                        initiatives and the importance of research in building talent pipelines.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Speaker 4 Modal -->
     <div class="modal fade" id="speaker4Modal" tabindex="-1" aria-labelledby="speaker4Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker4Label">Linda Mutua</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Speaker">
-            <p class="lead">VP Engineering, Safaricom</p>
-            <p class="speaker-bio">Expert in mobile technologies and financial services innovation in emerging markets. Lorem ipsum bio placeholder. This speaker will present the winning innovations and share the startup journey from idea to impact.</p>
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker4Label">Linda Mutua</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face"
+                        alt="Speaker">
+                    <p class="lead">VP Engineering, Safaricom</p>
+                    <p class="speaker-bio">Expert in mobile technologies and financial services innovation in emerging
+                        markets. Lorem ipsum bio placeholder. This speaker will present the winning innovations and
+                        share the startup journey from idea to impact.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Speaker 5 Modal -->
     <div class="modal fade" id="speaker5Modal" tabindex="-1" aria-labelledby="speaker5Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker5Label">Speaker Name TBC – Investor</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Startup Support & Funding Panel</p>
-            <p>Lorem ipsum bio placeholder. This speaker will provide insights on venture funding, investment opportunities, and supporting scale-ups in Africa.</p>
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker5Label">Speaker Name TBC – Investor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
+                    <p class="lead">Session: Startup Support & Funding Panel</p>
+                    <p>Lorem ipsum bio placeholder. This speaker will provide insights on venture funding, investment
+                        opportunities, and supporting scale-ups in Africa.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Speaker 6 Modal -->
     <div class="modal fade" id="speaker6Modal" tabindex="-1" aria-labelledby="speaker6Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="speaker6Label">Speaker Name TBC – Closing Keynote</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
-            <p class="lead">Session: Closing Plenary & Call to Action</p>
-            <p>Lorem ipsum bio placeholder. This speaker will conclude the summit with key insights, commitments, and a call to action for the future of the software ecosystem.</p>
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speaker6Label">Speaker Name TBC – Closing Keynote</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://via.placeholder.com/200" class="rounded-circle mb-3" alt="Speaker">
+                    <p class="lead">Session: Closing Plenary & Call to Action</p>
+                    <p>Lorem ipsum bio placeholder. This speaker will conclude the summit with key insights,
+                        commitments, and a call to action for the future of the software ecosystem.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
 
-    <!-- Agenda Section -->    
+    <!-- Agenda Section -->
     <section id="agenda" class="section-padding bg-light position-relative">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Summit Agenda</h2>
 
             <!-- Agenda Intro & Countdown -->
             <div class="row mb-5 align-items-center">
-              <div class="col-lg-8" data-aos="fade-right">
-                <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
-                  <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
-                    <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
-                  </h4>
-                  <p class="mb-0 text-secondary">
-                    Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. <br>
-                    <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
-                  </p>
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
+                        <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+                            <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
+                        </h4>
+                        <p class="mb-0 text-secondary">
+                            Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and
+                            networking events. <br>
+                            <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
+                        </p>
+                    </div>
                 </div>
-              </div>          
-              <div class="col-lg-4 text-center" data-aos="fade-left">
-                <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
-                  <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
-                  <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+                <div class="col-lg-4 text-center" data-aos="fade-left">
+                    <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
+                        <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to
+                            Summit</h5>
+                        <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+                    </div>
                 </div>
-              </div>
             </div>
 
 
             <!-- Day Tabs -->
             <ul class="nav nav-pills justify-content-center mb-4" id="agendaTabs" role="tablist" data-aos="fade-up">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1" type="button" role="tab" aria-controls="day1" aria-selected="true">
+                    <button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1"
+                        type="button" role="tab" aria-controls="day1" aria-selected="true">
                         <i class="fas fa-calendar-day me-2"></i>Day 1 — Oct 27
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button" role="tab" aria-controls="day2" aria-selected="false">
+                    <button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button"
+                        role="tab" aria-controls="day2" aria-selected="false">
                         <i class="fas fa-calendar-day me-2"></i>Day 2 — Oct 28
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button" role="tab" aria-controls="day3" aria-selected="false">
+                    <button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button"
+                        role="tab" aria-controls="day3" aria-selected="false">
                         <i class="fas fa-calendar-day me-2"></i>Day 3 — Oct 29
                     </button>
                 </li>
@@ -440,7 +494,8 @@
                         <h4 class="fw-bold text-danger">
                             <i class="fas fa-landmark me-2"></i>Focus: Government Policy Frameworks & Enabling Ecosystem
                         </h4>
-                        <p class="text-muted small mb-0">Tuesday, October 27 — policy, regulation, quality assurance, and ecosystem building.</p>
+                        <p class="text-muted small mb-0">Tuesday, October 27 — policy, regulation, quality assurance,
+                            and ecosystem building.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -449,31 +504,37 @@
                             <!-- Exhibition (All Day) -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Innovation Exhibition</h5>
-                                <p class="mb-0">Showcases from government agencies, development partners, global tech firms, and startups demonstrating tools, platforms, and pilots supporting the national software agenda.</p>
+                                <p class="mb-0">Showcases from government agencies, development partners, global tech
+                                    firms, and startups demonstrating tools, platforms, and pilots supporting the
+                                    national software agenda.</p>
                             </div>
 
                             <!-- Registration -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span></div>
+                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span>
+                                    </div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Registration & Morning Networking</h5>
-                                <p class="mb-0">Delegate check-in, badge collection and exhibition walkthroughs; early networking opportunities.</p>
+                                <p class="mb-0">Delegate check-in, badge collection and exhibition walkthroughs; early
+                                    networking opportunities.</p>
                             </div>
 
                             <!-- Opening -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-danger"><i class="fas fa-landmark me-1"></i>Opening</span></div>
+                                    <div><span class="badge bg-danger"><i
+                                                class="fas fa-landmark me-1"></i>Opening</span></div>
                                     <div class="time-display">08:30 – 10:45</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Official Opening Ceremony</h5>
-                                
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
                                         <div class="breakout-title">Cultural Performance & Protocol</div>
@@ -485,7 +546,8 @@
                                     </div>
                                     <div class="breakout-item">
                                         <div class="breakout-title">Keynote Addresses</div>
-                                        <p class="mb-1 small">Positioning Kenya as a regional software hub; global perspectives</p>
+                                        <p class="mb-1 small">Positioning Kenya as a regional software hub; global
+                                            perspectives</p>
                                         <div class="facilitator">Speakers TBC</div>
                                     </div>
                                     <div class="breakout-item">
@@ -497,27 +559,35 @@
                                         <div class="facilitator">Government Leadership (Speakers TBC)</div>
                                     </div>
                                 </div>
-                                
-                                <p class="text-muted small mt-2 mb-0"><i class="fas fa-info-circle me-1"></i>Opening sets policy intent, national priorities and high-level commitments for the summit.</p>
+
+                                <p class="text-muted small mt-2 mb-0"><i class="fas fa-info-circle me-1"></i>Opening
+                                    sets policy intent, national priorities and high-level commitments for the summit.
+                                </p>
                             </div>
 
                             <!-- Tea Break -->
                             <div class="card break-item mb-4">
-                                <span class=""><i class="fas fa-coffee me-2"></i>10:45 – 11:15 · Exhibition Tour & Tea Break</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:45 – 11:15 · Exhibition Tour & Tea
+                                    Break</span>
                             </div>
 
                             <!-- Framing Panel -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-info text-white"><i class="fas fa-comments me-1"></i>Panel</span></div>
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-comments me-1"></i>Panel</span></div>
                                     <div class="time-display">11:15 – 13:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Framing Panel — <em>"Building a National Software Ecosystem: Policy & Regulation"</em></h5>
-                                <p class="mb-3">Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports.</p>
-                                
+                                <h5 class="fw-bold mb-3">Framing Panel — <em>"Building a National Software Ecosystem:
+                                        Policy & Regulation"</em></h5>
+                                <p class="mb-3">Multi-stakeholder perspectives on regulatory design, enabling
+                                    infrastructure, and public-private collaboration to support software development and
+                                    exports.</p>
+
                                 <!-- Panel Discussion -->
                                 <div class="mb-4">
-                                    <h6 class="fw-bold text-primary mb-3"><i class="fas fa-users me-2"></i>Panel Discussion (11:15 – 12:15)</h6>
+                                    <h6 class="fw-bold text-primary mb-3"><i class="fas fa-users me-2"></i>Panel
+                                        Discussion (11:15 – 12:15)</h6>
                                     <div class="panelists-container">
                                         <div class="panelist-card">
                                             <div class="panelist-icon">
@@ -552,18 +622,21 @@
 
                                 <!-- Breakout Sessions -->
                                 <div>
-                                    <h6 class="fw-bold text-success mb-3"><i class="fas fa-th-large me-2"></i>Breakout Sessions (12:15 – 13:00)</h6>
+                                    <h6 class="fw-bold text-success mb-3"><i class="fas fa-th-large me-2"></i>Breakout
+                                        Sessions (12:15 – 13:00)</h6>
                                     <div class="breakout-container">
                                         <div class="breakout-item">
                                             <div class="breakout-title">Breakout A: Data Protection & Ethical AI</div>
                                             <div class="facilitator">Facilitators TBC</div>
                                         </div>
                                         <div class="breakout-item">
-                                            <div class="breakout-title">Breakout B: Intellectual Property & Copyright Policy</div>
+                                            <div class="breakout-title">Breakout B: Intellectual Property & Copyright
+                                                Policy</div>
                                             <div class="facilitator">Facilitators TBC</div>
                                         </div>
                                         <div class="breakout-item">
-                                            <div class="breakout-title">Breakout C: Software Quality Assurance & Standards</div>
+                                            <div class="breakout-title">Breakout C: Software Quality Assurance &
+                                                Standards</div>
                                             <div class="facilitator">Facilitators TBC</div>
                                         </div>
                                     </div>
@@ -578,19 +651,22 @@
                             <!-- Ecosystem Landscape Keynote -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-primary"><i class="fas fa-microphone me-1"></i>Keynote</span></div>
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-microphone me-1"></i>Keynote</span></div>
                                     <div class="time-display">14:00 – 15:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Software Ecosystem Landscape</h5>
-                                <p class="mb-3">Insights into market dynamics, talent pipelines, export opportunities and the Kenya Software Ecosystem Baseline Survey presentation.</p>
-                                
+                                <p class="mb-3">Insights into market dynamics, talent pipelines, export opportunities
+                                    and the Kenya Software Ecosystem Baseline Survey presentation.</p>
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
                                         <div class="breakout-title">Keynote: Global trends & opportunities</div>
                                         <div class="facilitator">Speaker TBC</div>
                                     </div>
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Presentation: Kenya Software Ecosystem Baseline Survey</div>
+                                        <div class="breakout-title">Presentation: Kenya Software Ecosystem Baseline
+                                            Survey</div>
                                         <div class="facilitator">Government / Research Partner (TBC)</div>
                                     </div>
                                 </div>
@@ -599,22 +675,26 @@
                             <!-- Hackathon Kickoff -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-success"><i class="fas fa-rocket me-1"></i>Hackathon</span></div>
+                                    <div><span class="badge bg-success"><i
+                                                class="fas fa-rocket me-1"></i>Hackathon</span></div>
                                     <div class="time-display">15:30 – 16:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Hackathon Kickoff</h5>
-                                <p class="mb-0">Official launch, rules, judging criteria, team briefings and sponsor introductions for participating teams.</p>
+                                <p class="mb-0">Official launch, rules, judging criteria, team briefings and sponsor
+                                    introductions for participating teams.</p>
                             </div>
 
                             <!-- Sponsor Labs & Workshops -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-flask me-1"></i>Labs / Workshops</span></div>
+                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-flask me-1"></i>Labs
+                                            / Workshops</span></div>
                                     <div class="time-display">16:00 – 17:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Partner Labs & Sponsor Workshops</h5>
-                                <p class="mb-3">Hands-on sessions and product deep-dives from strategic partners and sponsor organisations.</p>
-                                
+                                <p class="mb-3">Hands-on sessions and product deep-dives from strategic partners and
+                                    sponsor organisations.</p>
+
                                 <div class="labs-grid">
                                     <div class="lab-card">
                                         <div class="lab-title">
@@ -650,11 +730,13 @@
                             <!-- Welcome Cocktail -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-glass-cheers me-1"></i>Networking</span></div>
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-glass-cheers me-1"></i>Networking</span></div>
                                     <div class="time-display">17:30 – 19:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Welcome Cocktail</h5>
-                                <p class="mb-0">Evening reception with partners, delegates and speakers for informal networking over light refreshments.</p>
+                                <p class="mb-0">Evening reception with partners, delegates and speakers for informal
+                                    networking over light refreshments.</p>
                             </div>
 
                         </div>
@@ -667,7 +749,8 @@
                         <h4 class="fw-bold text-success">
                             <i class="fas fa-lightbulb me-2"></i>Focus: Talent, Startups & Innovation Pipelines
                         </h4>
-                        <p class="text-muted small mb-0">Wednesday, October 28 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
+                        <p class="text-muted small mb-0">Wednesday, October 28 — talent, skills, startups, showcases and
+                            labs to accelerate innovation.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -676,17 +759,20 @@
                             <!-- Exhibition -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Innovation Exhibition Continues</h5>
-                                <p class="mb-0">Continued demos, partner showcases, and engagement booths focused on scaling solutions and talent attraction.</p>
+                                <p class="mb-0">Continued demos, partner showcases, and engagement booths focused on
+                                    scaling solutions and talent attraction.</p>
                             </div>
 
                             <!-- Registration -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span></div>
+                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span>
+                                    </div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Registration & Morning Networking</h5>
@@ -696,19 +782,23 @@
                             <!-- Digital Skilling Keynote & Panel -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-primary"><i class="fas fa-microphone me-1"></i>Keynote</span></div>
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-microphone me-1"></i>Keynote</span></div>
                                     <div class="time-display">08:30 – 10:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Digital Skilling & Talent Ecosystem</h5>
-                                <p class="mb-3">Examines workforce development, digital labour rights, and the role of education and industry in preparing talent.</p>
-                                
+                                <p class="mb-3">Examines workforce development, digital labour rights, and the role of
+                                    education and industry in preparing talent.</p>
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Keynote: Digital labour rights & skilling models</div>
+                                        <div class="breakout-title">Keynote: Digital labour rights & skilling models
+                                        </div>
                                         <div class="facilitator">Speaker TBC</div>
                                     </div>
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Panel: Education, upskilling, remote work & retention</div>
+                                        <div class="breakout-title">Panel: Education, upskilling, remote work &
+                                            retention</div>
                                         <div class="facilitator">Panelists TBC</div>
                                     </div>
                                 </div>
@@ -722,12 +812,13 @@
                             <!-- Showcase: Software Innovation -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-success"><i class="fas fa-star me-1"></i>Showcase</span></div>
+                                    <div><span class="badge bg-success"><i class="fas fa-star me-1"></i>Showcase</span>
+                                    </div>
                                     <div class="time-display">10:30 – 13:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Showcase — Software Innovation</h5>
                                 <p class="mb-3">Presentations and demos across priority tracks:</p>
-                                
+
                                 <div class="labs-grid">
                                     <div class="lab-card">
                                         <div class="lab-title">
@@ -768,12 +859,13 @@
                             <!-- Breakouts (parallel tracks) -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-info text-white"><i class="fas fa-th-large me-1"></i>Breakouts</span></div>
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-th-large me-1"></i>Breakouts</span></div>
                                     <div class="time-display">14:00 – 15:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Opportunities for Software Innovation (Breakout Tracks)</h5>
                                 <p class="mb-3">Concurrent discussions focused on concrete opportunity areas.</p>
-                                
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
                                         <div class="breakout-title">Virtual Assets & Web3</div>
@@ -797,11 +889,12 @@
                             <!-- Tech Labs -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-cogs me-1"></i>Tech Labs</span></div>
+                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-cogs me-1"></i>Tech
+                                            Labs</span></div>
                                     <div class="time-display">15:30 – 17:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Partner Tech Labs</h5>
-                                
+
                                 <div class="labs-grid">
                                     <div class="lab-card">
                                         <div class="lab-title">
@@ -844,11 +937,14 @@
                             <!-- Gala Dinner -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-utensils me-1"></i>Dinner</span></div>
+                                    <div><span class="badge bg-dark"><i class="fas fa-utensils me-1"></i>Dinner</span>
+                                    </div>
                                     <div class="time-display">17:30 – 21:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Gala Dinner</h5>
-                                <p class="mb-0">Formal dinner with keynote reflections, entertainment and networking. <em>Guest Speaker TBC</em></p>
+                                <p class="mb-0">Formal dinner with keynote reflections, entertainment and networking.
+                                    <em>Guest Speaker TBC</em>
+                                </p>
                             </div>
 
                         </div>
@@ -858,10 +954,11 @@
                 <!-- ================= DAY 3 ================= -->
                 <div class="tab-pane fade" id="day3" role="tabpanel" aria-labelledby="day3-tab">
                     <div class="agenda-day text-center bg-white" data-aos="fade-up">
-                      <h4 class="fw-bold text-dark">
-                      <i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth
-                      </h4>
-                      <p class="text-muted small mb-0">Thursday, October 29 — investment, export readiness, partnerships, and summit closing commitments.</p>
+                        <h4 class="fw-bold text-dark">
+                            <i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth
+                        </h4>
+                        <p class="text-muted small mb-0">Thursday, October 29 — investment, export readiness,
+                            partnerships, and summit closing commitments.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -870,39 +967,46 @@
                             <!-- Exhibition -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Final Day Exhibition & Partner Activations</h5>
-                                <p class="mb-0">Final showcases and partner demonstrations focused on scale, export-readiness and commercial partnerships.</p>
+                                <p class="mb-0">Final showcases and partner demonstrations focused on scale,
+                                    export-readiness and commercial partnerships.</p>
                             </div>
 
                             <!-- Advisory Breakfast -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-dark"><i class="fas fa-coffee me-1"></i>Breakfast</span></div>
+                                    <div><span class="badge bg-dark"><i class="fas fa-coffee me-1"></i>Breakfast</span>
+                                    </div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Software Advisory Council Breakfast</h5>
-                                <p class="mb-0">Private breakfast for advisory council, government and partners to finalize recommendations and commitments.</p>
+                                <p class="mb-0">Private breakfast for advisory council, government and partners to
+                                    finalize recommendations and commitments.</p>
                             </div>
 
                             <!-- Startup Support -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-primary"><i class="fas fa-seedling me-1"></i>Plenary</span></div>
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-seedling me-1"></i>Plenary</span></div>
                                     <div class="time-display">08:30 – 10:30</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Startup Support — Funding the Ecosystem</h5>
-                                <p class="mb-3">Discussions on venture funding, financing instruments, growth-stage support and public sector interventions to catalyze scale-ups.</p>
-                                
+                                <p class="mb-3">Discussions on venture funding, financing instruments, growth-stage
+                                    support and public sector interventions to catalyze scale-ups.</p>
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
                                         <div class="breakout-title">Keynote on financing models</div>
                                         <div class="facilitator">Speaker TBC</div>
                                     </div>
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Panel: Investors, DFIs, corporates and accelerators</div>
+                                        <div class="breakout-title">Panel: Investors, DFIs, corporates and accelerators
+                                        </div>
                                         <div class="facilitator">Panelists TBC</div>
                                     </div>
                                 </div>
@@ -916,19 +1020,23 @@
                             <!-- Software Export -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-info text-white"><i class="fas fa-plane-departure me-1"></i>Panel</span></div>
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-plane-departure me-1"></i>Panel</span></div>
                                     <div class="time-display">11:00 – 12:15</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Software Global Export — Market Access & Standards</h5>
-                                <p class="mb-3">Practical steps to increase export competitiveness, compliance, and market-entry strategies for Kenyan software firms.</p>
-                                
+                                <p class="mb-3">Practical steps to increase export competitiveness, compliance, and
+                                    market-entry strategies for Kenyan software firms.</p>
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Keynote: Export readiness & trade opportunities</div>
+                                        <div class="breakout-title">Keynote: Export readiness & trade opportunities
+                                        </div>
                                         <div class="facilitator">Speaker TBC</div>
                                     </div>
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Panel: Regulators, export promotion agencies, exporters</div>
+                                        <div class="breakout-title">Panel: Regulators, export promotion agencies,
+                                            exporters</div>
                                         <div class="facilitator">Panelists TBC</div>
                                     </div>
                                 </div>
@@ -937,11 +1045,13 @@
                             <!-- Hackathon Finals -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-success"><i class="fas fa-trophy me-1"></i>Showcase</span></div>
+                                    <div><span class="badge bg-success"><i
+                                                class="fas fa-trophy me-1"></i>Showcase</span></div>
                                     <div class="time-display">12:15 – 13:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-2">Hackathon Finals & Awards</h5>
-                                <p class="mb-0">Finalist pitches, judges' deliberation and announcement of winners; prizes and follow-on support details.</p>
+                                <p class="mb-0">Finalist pitches, judges' deliberation and announcement of winners;
+                                    prizes and follow-on support details.</p>
                             </div>
 
                             <!-- Lunch -->
@@ -952,11 +1062,12 @@
                             <!-- Closing Plenary -->
                             <div class="card agenda-item p-4 mb-4">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div><span class="badge bg-primary"><i class="fas fa-bullhorn me-1"></i>Closing</span></div>
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-bullhorn me-1"></i>Closing</span></div>
                                     <div class="time-display">14:00 – 16:00</div>
                                 </div>
                                 <h5 class="fw-bold mb-3">Closing Plenary & Call to Action</h5>
-                                
+
                                 <div class="breakout-container">
                                     <div class="breakout-item">
                                         <div class="breakout-title">Closing keynote & reflections</div>
@@ -967,7 +1078,8 @@
                                         <div class="facilitator">Panelists TBC</div>
                                     </div>
                                     <div class="breakout-item">
-                                        <div class="breakout-title">Signing of Call to Action and public commitments</div>
+                                        <div class="breakout-title">Signing of Call to Action and public commitments
+                                        </div>
                                     </div>
                                     <div class="breakout-item">
                                         <div class="breakout-title">Closing ceremony & press conference</div>
@@ -977,7 +1089,8 @@
 
                             <!-- Departure / Final Tea -->
                             <div class="card break-item mb-4">
-                                <span class=""><i class="fas fa-coffee me-2"></i>16:00 – 16:30 · Tea Break & Guests Depart</span>
+                                <span class=""><i class="fas fa-coffee me-2"></i>16:00 – 16:30 · Tea Break & Guests
+                                    Depart</span>
                             </div>
 
                         </div>
@@ -990,7 +1103,9 @@
             <div class="alert alert-info mt-5 d-flex align-items-center" data-aos="fade-up">
                 <i class="fas fa-info-circle fa-2x me-3 text-primary"></i>
                 <div>
-                    <strong>Important Note:</strong> This agenda is based on the Summit Program Draft. Times and sessions are subject to final confirmation. Speakers are shown as <em>Speaker TBC</em> until official confirmation.
+                    <strong>Important Note:</strong> This agenda is based on the Summit Program Draft. Times and
+                    sessions are subject to final confirmation. Speakers are shown as <em>Speaker TBC</em> until
+                    official confirmation.
                 </div>
             </div>
         </div>
@@ -1004,104 +1119,121 @@
 
 
 
-    
+
 
     <!-- Features Section -->
-    <section id="features" class="section-padding" style="background: linear-gradient(135deg, #f8fafc 60%, #e6f4ea 100%);">
-      <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Summit Features</h2>
-        <div class="row g-4 justify-content-center">
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
-              <div class="feature-icon mb-3" style="color: #CE171C;">
-                <i class="fas fa-laptop-code"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
-              <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across sectors including healthcare, fintech, education, and agriculture.</p>
-              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+    <section id="features" class="section-padding"
+        style="background: linear-gradient(135deg, #f8fafc 60%, #e6f4ea 100%);">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Summit Features</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #CE171C;">
+                        <div class="feature-icon mb-3" style="color: #CE171C;">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
+                        <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across
+                            sectors including healthcare, fintech, education, and agriculture.</p>
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #01873F;">
+                        <div class="feature-icon mb-3" style="color: #01873F;">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Technical Workshops</h4>
+                        <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing,
+                            cybersecurity, mobile app development, and software architecture best practices.</p>
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #1C1C18;">
+                        <div class="feature-icon mb-3" style="color: #1C1C18;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Tech Expo</h4>
+                        <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source
+                            projects, and research collaborations from leading tech companies.</p>
+                        <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #01873F;">
+                        <div class="feature-icon mb-3" style="color: #01873F;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
+                        <p class="text-secondary">Connect software developers with hiring companies and innovation
+                            projects through our dedicated talent pavilion and networking sessions.</p>
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #CE171C;">
+                        <div class="feature-icon mb-3" style="color: #CE171C;">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Startup Demos</h4>
+                        <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and
+                            investment, with opportunities to connect with venture capital firms.</p>
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #1C1C18;">
+                        <div class="feature-icon mb-3" style="color: #1C1C18;">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Policy Forums</h4>
+                        <p class="text-secondary">Discussions on AI ethics, open software standards, data security
+                            policies, and regulatory frameworks for the digital economy.</p>
+                        <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
-              <div class="feature-icon mb-3" style="color: #01873F;">
-                <i class="fas fa-chalkboard-teacher"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Technical Workshops</h4>
-              <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing, cybersecurity, mobile app development, and software architecture best practices.</p>
-              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
-              <div class="feature-icon mb-3" style="color: #1C1C18;">
-                <i class="fas fa-store"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Tech Expo</h4>
-              <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source projects, and research collaborations from leading tech companies.</p>
-              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
-              <div class="feature-icon mb-3" style="color: #01873F;">
-                <i class="fas fa-users"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
-              <p class="text-secondary">Connect software developers with hiring companies and innovation projects through our dedicated talent pavilion and networking sessions.</p>
-              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
-              <div class="feature-icon mb-3" style="color: #CE171C;">
-                <i class="fas fa-rocket"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Startup Demos</h4>
-              <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and investment, with opportunities to connect with venture capital firms.</p>
-              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
-              <div class="feature-icon mb-3" style="color: #1C1C18;">
-                <i class="fas fa-gavel"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Policy Forums</h4>
-              <p class="text-secondary">Discussions on AI ethics, open software standards, data security policies, and regulatory frameworks for the digital economy.</p>
-              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
-            </div>
-          </div>
         </div>
-      </div>
     </section>
 
     <!-- Partners Section -->
     <section id="partners" class="section-padding bg-light">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Partners</h2>
-            
+
             <div class="row mb-5">
                 <div class="col-12" data-aos="fade-up">
                     <h3 class="text-center mb-4">Government Partners</h3>
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop" alt="Ministry of ICT" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop"
+                                    alt="Ministry of ICT" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop" alt="ICT Authority" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop"
+                                    alt="ICT Authority" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop" alt="Konza Technopolis" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop"
+                                    alt="Konza Technopolis" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop" alt="KAIST Kenya" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop"
+                                    alt="KAIST Kenya" class="partner-logo">
                             </div>
                         </div>
                     </div>
@@ -1114,27 +1246,32 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop" alt="Microsoft" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop"
+                                    alt="Microsoft" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop" alt="Google" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop"
+                                    alt="Google" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=150&h=80&fit=crop" alt="AWS" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=150&h=80&fit=crop"
+                                    alt="AWS" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop" alt="IBM" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=80&fit=crop"
+                                    alt="IBM" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop" alt="Oracle" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=150&h=80&fit=crop"
+                                    alt="Oracle" class="partner-logo">
                             </div>
                         </div>
                     </div>
@@ -1147,22 +1284,26 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop" alt="ITU" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=80&fit=crop"
+                                    alt="ITU" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop" alt="ATU" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=150&h=80&fit=crop"
+                                    alt="ATU" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop" alt="European Union" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=150&h=80&fit=crop"
+                                    alt="European Union" class="partner-logo">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 text-center">
                             <div class="partner-logo-container">
-                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop" alt="GIZ" class="partner-logo">
+                                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=150&h=80&fit=crop"
+                                    alt="GIZ" class="partner-logo">
                             </div>
                         </div>
                     </div>
@@ -1175,14 +1316,15 @@
     <section id="media" class="section-padding">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Media Gallery</h2>
-            
+
             <div class="row mb-5">
                 <div class="col-12">
                     <h3 class="text-center mb-4">Recent News & Updates</h3>
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop" alt="Summit Announcement" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop"
+                            alt="Summit Announcement" class="media-img">
                         <div class="media-overlay">
                             <h5>Kenya Software Summit 2025 Officially Announced</h5>
                             <p>Ministry of ICT announces the inaugural Kenya Software Summit...</p>
@@ -1191,7 +1333,8 @@
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop" alt="Speaker Lineup" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop"
+                            alt="Speaker Lineup" class="media-img">
                         <div class="media-overlay">
                             <h5>World-Class Speakers Confirmed</h5>
                             <p>Leading tech executives and innovators to keynote the summit...</p>
@@ -1200,7 +1343,8 @@
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=250&fit=crop" alt="Partnership" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=250&fit=crop"
+                            alt="Partnership" class="media-img">
                         <div class="media-overlay">
                             <h5>Major Tech Companies Join as Partners</h5>
                             <p>Microsoft, Google, AWS among key partners supporting the summit...</p>
@@ -1215,22 +1359,26 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
                     <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop" alt="Conference Hall" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop"
+                            alt="Conference Hall" class="media-img">
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
                     <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop" alt="Networking Session" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop"
+                            alt="Networking Session" class="media-img">
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
                     <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop" alt="Workshop" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop"
+                            alt="Workshop" class="media-img">
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
                     <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=200&fit=crop" alt="Tech Expo" class="media-img">
+                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=200&fit=crop"
+                            alt="Tech Expo" class="media-img">
                     </div>
                 </div>
             </div>
@@ -1244,10 +1392,11 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center text-white" data-aos="fade-up">
                     <h2 class="section-title text-white">Register for Kenya Software Summit 2025</h2>
-                    <p class="lead mb-4">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier software development conference.</p>
+                    <p class="lead mb-4">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier
+                        software development conference.</p>
                 </div>
             </div>
-            
+
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="row">
@@ -1312,101 +1461,103 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                    <!-- Quick Registration Form -->
-                    <div class="row mt-5">
-                      <div class="col-lg-8 mx-auto">
-                        <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up" style="background: rgba(255,255,255,0.97);">
-                          <div class="card-body p-5">
-                            <h4 class="text-center mb-4 fw-bold" style="color: var(--primary-red); letter-spacing: 1px;">
-                              <i class="fas fa-user-plus me-2"></i>Quick Registration
-                            </h4>
-                            <form id="registrationForm" method="post" action="{% url 'home' %}" novalidate>
-                              {% csrf_token %}
-                              <!-- Full Name -->
-                              <div class="input-group mb-3">
-                                <span class="input-group-text  border-0">
-                                  <i class="fas fa-user text-primary"></i>
-                                </span>
-                                {{ form.full_name }}
-                              </div>
 
-                              <!-- Email + Phone -->
-                              <div class="row g-3">
-                                <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text  border-0">
-                                      <i class="fas fa-envelope text-success"></i>
-                                    </span>
-                                    {{ form.email }}
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text border-0">
-                                      <i class="fas fa-phone text-info"></i>
-                                    </span>
-                                    {{ form.phone }}
-                                  </div>
-                                </div>
-                              </div>
+                        <!-- Quick Registration Form -->
+                        <div class="row mt-5">
+                            <div class="col-lg-12 mx-auto">
+                                <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up"
+                                    style="background: rgba(255,255,255,0.97);">
+                                    <div class="card-body p-5">
+                                        <h4 class="text-center mb-4 fw-bold"
+                                            style="color: var(--primary-red); letter-spacing: 1px;">
+                                            <i class="fas fa-user-plus me-2"></i>Quick Registration
+                                        </h4>
+                                        <form id="registrationForm" method="post" action="{% url 'home' %}" novalidate>
+                                            {% csrf_token %}
+                                            <!-- Full Name -->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text  border-0">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </span>
+                                                {{ form.full_name }}
+                                            </div>
 
-                              <!-- Organization + Job Title -->
-                              <div class="row g-3 mt-2">
-                                <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text  border-0">
-                                      <i class="fas fa-building text-secondary"></i>
-                                    </span>
-                                    {{ form.organization }}
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="input-group">
-                                    <span class="input-group-text  border-0">
-                                      <i class="fas fa-id-badge text-warning"></i>
-                                    </span>
-                                    {{ form.job_title }}
-                                  </div>
-                                </div>
-                              </div>
+                                            <!-- Email + Phone -->
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text  border-0">
+                                                            <i class="fas fa-envelope text-success"></i>
+                                                        </span>
+                                                        {{ form.email }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text border-0">
+                                                            <i class="fas fa-phone text-info"></i>
+                                                        </span>
+                                                        {{ form.phone }}
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                              <!-- Category -->
-                              <div class="input-group mt-3">
-                                <span class="input-group-text  border-0">
-                                  <i class="fas fa-users text-danger"></i>
-                                </span>
-                                {{ form.category }}
-                              </div>
+                                            <!-- Organization + Job Title -->
+                                            <div class="row g-3 mt-2">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text  border-0">
+                                                            <i class="fas fa-building text-secondary"></i>
+                                                        </span>
+                                                        {{ form.organization }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text  border-0">
+                                                            <i class="fas fa-id-badge text-warning"></i>
+                                                        </span>
+                                                        {{ form.job_title }}
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                              <!-- Hidden "Other Category" text box -->
-                              <div class="input-group mt-2" id="otherCategoryDiv" style="display:none;">
-                                <span class="input-group-text border-0">
-                                  <i class="fas fa-pen text-secondary"></i>
-                                </span>
-                                <input type="text" name="other_category" id="otherCategoryInput" 
-                                      class="form-control" placeholder="Please specify..." />
-                              </div>
+                                            <!-- Category -->
+                                            <div class="input-group mt-3">
+                                                <span class="input-group-text  border-0">
+                                                    <i class="fas fa-users text-danger"></i>
+                                                </span>
+                                                {{ form.category }}
+                                            </div>
 
-                              <!-- Interests -->
-                              <div class="mt-3">
-                                <label class="form-label fw-semibold">
-                                  <i class="fas fa-star text-primary me-1"></i> Areas of Interest
-                                </label>
-                                <div class="d-flex flex-wrap">
-                                  {{ form.interests }}
-                                </div>
-                              </div>
+                                            <!-- Hidden "Other Category" text box -->
+                                            <div class="input-group mt-2" id="otherCategoryDiv" style="display:none;">
+                                                <span class="input-group-text border-0">
+                                                    <i class="fas fa-pen text-secondary"></i>
+                                                </span>
+                                                <input type="text" name="other_category" id="otherCategoryInput"
+                                                    class="form-control" placeholder="Please specify..." />
+                                            </div>
 
-                              <!-- Accessibility Needs -->
-                              <div class="input-group mt-3">
-                                <span class="input-group-text  border-0">
-                                  <i class="fas fa-universal-access text-success"></i>
-                                </span>
-                                {{ form.accessibility_needs }}
-                              </div>
+                                            <!-- Interests -->
+                                            <div class="mt-3">
+                                                <label class="form-label fw-semibold">
+                                                    <i class="fas fa-star text-primary me-1"></i> Areas of Interest
+                                                </label>
+                                                <div class="d-flex flex-wrap" style="margin-left: 40px;">
+                                                    {{ form.interests }}
+                                                </div>
+                                            </div>
 
-                              <!-- Updates Opt-in 
+                                            <!-- Accessibility Needs -->
+                                            <div class="input-group mt-3">
+                                                <span class="input-group-text  border-0">
+                                                    <i class="fas fa-universal-access text-success"></i>
+                                                </span>
+                                                {{ form.accessibility_needs }}
+                                            </div>
+
+                                            <!-- Updates Opt-in 
                               <div class="form-check mt-3">
                                 {{ form.updates_opt_in }}
                                 <label class="form-check-label">
@@ -1414,23 +1565,25 @@
                                 </label>
                               </div>-->
 
-                              <!-- Submit -->
-                              <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary-custom btn-lg px-5 shadow-sm" style="font-size: 1.15rem;">
-                                  <i class="fas fa-paper-plane me-2"></i>Register Now
-                                </button>
-                              </div>
-                            </form>
-                            
-                            <!-- Success/Error placeholder -->
-                             <div id="formMessage" class="mt-3"></div>
-                          </div>
+                                            <!-- Submit -->
+                                            <div class="text-center mt-4">
+                                                <button type="submit"
+                                                    class="btn btn-primary-custom btn-lg px-5 shadow-sm"
+                                                    style="font-size: 1.15rem;">
+                                                    <i class="fas fa-paper-plane me-2"></i>Register Now
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                        <!-- Success/Error placeholder -->
+                                        <div id="formMessage" class="mt-3"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- Contact Section
@@ -1522,105 +1675,106 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-  <!-- Footer -->
-  <footer class="footer" id="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 mb-4">
-          <h5>About Kenya Software Summit</h5>
-          <p>Africa’s premier software development and innovation conference. Join us in shaping the future of Africa’s digital economy through collaboration, talent development, and innovation.</p>
-          <div class="social-links mt-3">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>About Kenya Software Summit</h5>
+                    <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                        Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                    <div class="social-links mt-3">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
 
-        <div class="col-lg-2 col-md-6 mb-4">
-          <h6>Quick Links</h6>
-          <ul class="footer-links list-unstyled">
-            <li><a href="#about">About</a></li>
-            <li><a href="#speakers">Speakers</a></li>
-            <li><a href="#agenda">Agenda</a></li>
-            <li><a href="#register">Register</a></li>
-          </ul>
-        </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#speakers">Speakers</a></li>
+                        <li><a href="#agenda">Agenda</a></li>
+                        <li><a href="#register">Register</a></li>
+                    </ul>
+                </div>
 
-        <div class="col-lg-2 col-md-6 mb-4">
-          <h6>Resources</h6>
-          <ul class="footer-links list-unstyled">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#partners">Partners</a></li>
-            <li><a href="#media">Media</a></li>
-          </ul>
-        </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Resources</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#media">Media</a></li>
+                    </ul>
+                </div>
 
-        <div class="col-lg-2 col-md-6 mb-4">
-          <h6>Support</h6>
-          <ul class="footer-links list-unstyled">
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Accessibility</a></li>
-          </ul>
-        </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Support</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
 
-        <div class="col-lg-2 col-md-6 mb-4">
-          <h6>Legal</h6>
-          <ul class="footer-links list-unstyled">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Code of Conduct</a></li>
-            <li><a href="#">Refund Policy</a></li>
-          </ul>
-        </div>
-      </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Legal</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Code of Conduct</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
 
-      <hr class="my-4" style="border-color:#444;">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <p class="text-light mb-0">&copy; 2025 Kenya Software Summit. All rights reserved.</p>
+            <hr class="my-4" style="border-color:#444;">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-light mb-0">&copy; 2025 Kenya Software Summit. All rights reserved.</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    </footer>
 
-  <script>
-    
-    // Theme toggle logic
-    function setTheme(dark) {
-      if (dark) {
-        document.body.classList.add('dark-theme');
-        document.getElementById('themeToggleIcon').classList.remove('fa-moon');
-        document.getElementById('themeToggleIcon').classList.add('fa-sun');
-        document.getElementById('themeIcon').innerHTML = '<i class="fas fa-sun"></i>';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.body.classList.remove('dark-theme');
-        document.getElementById('themeToggleIcon').classList.remove('fa-sun');
-        document.getElementById('themeToggleIcon').classList.add('fa-moon');
-        document.getElementById('themeIcon').innerHTML = '<i class="fas fa-moon"></i>';
-        localStorage.setItem('theme', 'light');
-      }
-    }
-    document.getElementById('themeToggle').addEventListener('click', function() {
-      const isDark = !document.body.classList.contains('dark-theme');
-      setTheme(isDark);
-    });
-    // On load, set theme from localStorage
-    (function() {
-      const theme = localStorage.getItem('theme');
-      setTheme(theme === 'dark');
-    })();
-    // Minimal dark theme CSS
-    const darkStyle = document.createElement('style');
-    darkStyle.textContent = `
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+
+        // Theme toggle logic
+        function setTheme(dark) {
+            if (dark) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggleIcon').classList.remove('fa-moon');
+                document.getElementById('themeToggleIcon').classList.add('fa-sun');
+                document.getElementById('themeIcon').innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.getElementById('themeToggleIcon').classList.remove('fa-sun');
+                document.getElementById('themeToggleIcon').classList.add('fa-moon');
+                document.getElementById('themeIcon').innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        document.getElementById('themeToggle').addEventListener('click', function () {
+            const isDark = !document.body.classList.contains('dark-theme');
+            setTheme(isDark);
+        });
+        // On load, set theme from localStorage
+        (function () {
+            const theme = localStorage.getItem('theme');
+            setTheme(theme === 'dark');
+        })();
+        // Minimal dark theme CSS
+        const darkStyle = document.createElement('style');
+        darkStyle.textContent = `
       body.dark-theme {
         background: #181818 !important;
         color: #f1f1f1 !important;
@@ -1675,281 +1829,281 @@
         filter: grayscale(100%) brightness(0.8) invert(1);
       }
     `;
-    document.head.appendChild(darkStyle);
+        document.head.appendChild(darkStyle);
 
-      // === Show/Hide Other Category field ===
-      document.addEventListener("DOMContentLoaded", function () {
-          // === CATEGORY DROPDOWN ===
-          const categorySelect = document.getElementById("id_category"); 
-          const otherCategoryDiv = document.createElement("div");
-          otherCategoryDiv.className = "mt-2";
-          otherCategoryDiv.style.display = "none";
-          otherCategoryDiv.innerHTML = `
+        // === Show/Hide Other Category field ===
+        document.addEventListener("DOMContentLoaded", function () {
+            // === CATEGORY DROPDOWN ===
+            const categorySelect = document.getElementById("id_category");
+            const otherCategoryDiv = document.createElement("div");
+            otherCategoryDiv.className = "mt-2";
+            otherCategoryDiv.style.display = "none";
+            otherCategoryDiv.innerHTML = `
               <input type="text" name="other_category" 
                     id="otherCategoryInput"
                     class="form-control mt-2"
                     placeholder="Please specify category..." />
           `;
-          categorySelect.parentNode.appendChild(otherCategoryDiv);
+            categorySelect.parentNode.appendChild(otherCategoryDiv);
 
-          if (categorySelect) {
-              categorySelect.addEventListener("change", function () {
-                  if (categorySelect.value.toLowerCase() === "other") {
-                      otherCategoryDiv.style.display = "block";
-                      document.getElementById("otherCategoryInput").required = true;
-                  } else {
-                      otherCategoryDiv.style.display = "none";
-                      document.getElementById("otherCategoryInput").value = "";
-                      document.getElementById("otherCategoryInput").required = false;
-                  }
-              });
-          }
+            if (categorySelect) {
+                categorySelect.addEventListener("change", function () {
+                    if (categorySelect.value.toLowerCase() === "other") {
+                        otherCategoryDiv.style.display = "block";
+                        document.getElementById("otherCategoryInput").required = true;
+                    } else {
+                        otherCategoryDiv.style.display = "none";
+                        document.getElementById("otherCategoryInput").value = "";
+                        document.getElementById("otherCategoryInput").required = false;
+                    }
+                });
+            }
 
-          // === INTERESTS CHECKBOXES ===
-          const interestInputs = document.querySelectorAll("input[name='interests']");
-          const otherInterestDiv = document.createElement("div");
-          otherInterestDiv.className = "mt-2";
-          otherInterestDiv.style.display = "none";
-          otherInterestDiv.innerHTML = `
+            // === INTERESTS CHECKBOXES ===
+            const interestInputs = document.querySelectorAll("input[name='interests']");
+            const otherInterestDiv = document.createElement("div");
+            otherInterestDiv.className = "mt-2";
+            otherInterestDiv.style.display = "none";
+            otherInterestDiv.innerHTML = `
               <input type="text" name="other_interest" 
                     id="otherInterestInput"
                     class="form-control mt-2"
                     placeholder="Please specify your interest..." />
           `;
 
-          // Insert after the interests container
-          if (interestInputs.length > 0) {
-              const interestContainer = interestInputs[interestInputs.length - 1].closest("div");
-              interestContainer.parentNode.appendChild(otherInterestDiv);
-          }
+            // Insert after the interests container
+            if (interestInputs.length > 0) {
+                const interestContainer = interestInputs[interestInputs.length - 1].closest("div");
+                interestContainer.parentNode.appendChild(otherInterestDiv);
+            }
 
-          interestInputs.forEach(input => {
-              input.addEventListener("change", function () {
-                  // If "Others" checkbox is selected
-                  if (input.checked && input.value.toLowerCase() === "other") {
-                      otherInterestDiv.style.display = "block";
-                      document.getElementById("otherInterestInput").required = true;
-                  } 
-                  // If "Other" is unchecked
-                  else if (!Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === "other")) {
-                      otherInterestDiv.style.display = "none";
-                      document.getElementById("otherInterestInput").value = "";
-                      document.getElementById("otherInterestInput").required = false;
-                  }
-              });
-          });
-      });
+            interestInputs.forEach(input => {
+                input.addEventListener("change", function () {
+                    // If "Others" checkbox is selected
+                    if (input.checked && input.value.toLowerCase() === "other") {
+                        otherInterestDiv.style.display = "block";
+                        document.getElementById("otherInterestInput").required = true;
+                    }
+                    // If "Other" is unchecked
+                    else if (!Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === "other")) {
+                        otherInterestDiv.style.display = "none";
+                        document.getElementById("otherInterestInput").value = "";
+                        document.getElementById("otherInterestInput").required = false;
+                    }
+                });
+            });
+        });
 
-      // Initialize AOS (Animate On Scroll)
-      AOS.init({
-          duration: 1000,
-          easing: 'ease-in-out',
-          once: true,
-          offset: 100
-      });
+        // Initialize AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
 
-      // Smooth scrolling for navigation links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function (e) {
-              e.preventDefault();
-              const target = document.querySelector(this.getAttribute('href'));
-              if (target) {
-                  const headerOffset = 80;
-                  const elementPosition = target.offsetTop;
-                  const offsetPosition = elementPosition - headerOffset;
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
 
-                  window.scrollTo({
-                      top: offsetPosition,
-                      behavior: 'smooth'
-                  });
-              }
-          });
-      });
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
 
-      // Navbar background change on scroll
-      window.addEventListener('scroll', function() {
-          const navbar = document.querySelector('.navbar');
-          const scrollTop = window.pageYOffset;
-          
-          if (scrollTop > 50) {
-              navbar.style.background = 'rgba(28, 28, 24, 0.98)';
-              navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
-          } else {
-              navbar.style.background = 'rgba(28, 28, 24, 0.95)';
-              navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-          }
-      });
+        // Navbar background change on scroll
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            const scrollTop = window.pageYOffset;
 
-      // Scroll to top functionality
-      const scrollToTopBtn = document.getElementById('scrollToTop');
-      
-      window.addEventListener('scroll', function() {
-          if (window.pageYOffset > 300) {
-              scrollToTopBtn.classList.add('show');
-          } else {
-              scrollToTopBtn.classList.remove('show');
-          }
-      });
+            if (scrollTop > 50) {
+                navbar.style.background = 'rgba(28, 28, 24, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
+            } else {
+                navbar.style.background = 'rgba(28, 28, 24, 0.95)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            }
+        });
 
-      scrollToTopBtn.addEventListener('click', function() {
-          window.scrollTo({
-              top: 0,
-              behavior: 'smooth'
-          });
-      });
+        // Scroll to top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
 
-      // Form submissions
-      document.addEventListener("DOMContentLoaded", () => {
-          const form = document.getElementById("registrationForm");
-          const messageDiv = document.getElementById("formMessage");
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
 
-          if (!form) return;
+        scrollToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
-          form.addEventListener("submit", async function(e) {
-              e.preventDefault();
+        // Form submissions
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("registrationForm");
+            const messageDiv = document.getElementById("formMessage");
 
-              const submitButton = form.querySelector('button[type="submit"]');
-              const originalText = submitButton.textContent;
+            if (!form) return;
 
-              // Reset previous errors
-              form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-              form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+            form.addEventListener("submit", async function (e) {
+                e.preventDefault();
 
-              // Show "submitting..."
-              submitButton.textContent = "Submitting...";
-              submitButton.disabled = true;
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
 
-              const formData = new FormData(form);
+                // Reset previous errors
+                form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+                form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
 
-              try {
-                  const response = await fetch(form.action, {
-                      method: "POST",
-                      body: formData,
-                      headers: {
-                          "X-Requested-With": "XMLHttpRequest"
-                      }
-                  });
+                // Show "submitting..."
+                submitButton.textContent = "Submitting...";
+                submitButton.disabled = true;
 
-                  const data = await response.json();
+                const formData = new FormData(form);
 
-                  if (response.ok && data.success) {
-                      // Success UI
-                      messageDiv.innerHTML = `
+                try {
+                    const response = await fetch(form.action, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.success) {
+                        // Success UI
+                        messageDiv.innerHTML = `
                           <div class="alert alert-success">${data.message}</div>
                       `;
-                      form.reset();
+                        form.reset();
 
-                      // Success button state
-                      submitButton.textContent = "Submitted Successfully!";
-                      submitButton.style.background = "var(--primary-green)";
+                        // Success button state
+                        submitButton.textContent = "Submitted Successfully!";
+                        submitButton.style.background = "var(--primary-green)";
 
-                      setTimeout(() => {
-                          submitButton.textContent = originalText;
-                          submitButton.disabled = false;
-                          submitButton.style.background = "";
-                      }, 2000);
-                  } else {
-                      // Show validation errors
-                      if (data.errors) {
-                          for (const [field, errors] of Object.entries(data.errors)) {
-                              const input = form.querySelector(`[name="${field}"]`);
-                              if (input) {
-                                  input.classList.add("is-invalid");
-                                  const errorDiv = document.createElement("div");
-                                  errorDiv.className = "invalid-feedback";
-                                  errorDiv.innerText = errors.join(", ");
-                                  input.parentNode.appendChild(errorDiv);
-                              }
-                          }
-                      }
-                      messageDiv.innerHTML = `
+                        setTimeout(() => {
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
+                            submitButton.style.background = "";
+                        }, 2000);
+                    } else {
+                        // Show validation errors
+                        if (data.errors) {
+                            for (const [field, errors] of Object.entries(data.errors)) {
+                                const input = form.querySelector(`[name="${field}"]`);
+                                if (input) {
+                                    input.classList.add("is-invalid");
+                                    const errorDiv = document.createElement("div");
+                                    errorDiv.className = "invalid-feedback";
+                                    errorDiv.innerText = errors.join(", ");
+                                    input.parentNode.appendChild(errorDiv);
+                                }
+                            }
+                        }
+                        messageDiv.innerHTML = `
                           <div class="alert alert-danger">Please correct the errors.</div>
                       `;
-                      submitButton.textContent = originalText;
-                      submitButton.disabled = false;
-                  }
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                    }
 
-              } catch (err) {
-                  console.error("Error submitting form:", err);
-                  messageDiv.innerHTML = `
+                } catch (err) {
+                    console.error("Error submitting form:", err);
+                    messageDiv.innerHTML = `
                       <div class="alert alert-danger">Something went wrong. Please try again.</div>
                   `;
-                  submitButton.textContent = originalText;
-                  submitButton.disabled = false;
-              }
-          });
-      });
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }
+            });
+        });
 
 
-      // Registration pricing animation
-      document.querySelectorAll('.pricing-card-title').forEach(priceElement => {
-          const observer = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                      entry.target.style.animation = 'pulse 2s infinite';
-                  }
-              });
-          });
-          
-          observer.observe(priceElement);
-      });
+        // Registration pricing animation
+        document.querySelectorAll('.pricing-card-title').forEach(priceElement => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'pulse 2s infinite';
+                    }
+                });
+            });
 
-      // Partner logo hover effects
-      document.querySelectorAll('.partner-logo').forEach(logo => {
-          logo.addEventListener('mouseenter', function() {
-              this.style.transform = 'scale(1.1) rotate(5deg)';
-          });
-          
-          logo.addEventListener('mouseleave', function() {
-              this.style.transform = 'scale(1) rotate(0deg)';
-          });
-      });
+            observer.observe(priceElement);
+        });
 
-      // Typing effect for hero title
-      function typeWriter(element, text, speed = 100) {
-          let i = 0;
-          element.innerHTML = '';
-          
-          function type() {
-              if (i < text.length) {
-                  element.innerHTML += text.charAt(i);
-                  i++;
-                  setTimeout(type, speed);
-              }
-          }
-          
-          type();
-      }
+        // Partner logo hover effects
+        document.querySelectorAll('.partner-logo').forEach(logo => {
+            logo.addEventListener('mouseenter', function () {
+                this.style.transform = 'scale(1.1) rotate(5deg)';
+            });
 
-      // Initialize typing effect when page loads
-      window.addEventListener('load', function() {
-          const heroTitle = document.querySelector('.hero-title');
-          if (heroTitle) {
-              const originalText = heroTitle.textContent;
-              typeWriter(heroTitle, originalText, 100);
-          }
-      });
+            logo.addEventListener('mouseleave', function () {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
 
-      // Countdown timer (if event is in future)
-      function updateCountdown() {
-          const eventDate = new Date('2025-10-27T23:00:00').getTime();
-          const now = new Date().getTime();
-          const timeLeft = eventDate - now;
+        // Typing effect for hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
 
-          if (timeLeft > 0) {
-              const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-              const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-              const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-              const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
 
-              // Update all countdown displays
-              const countdownElements = [
-                document.getElementById('countdown'),
-                document.getElementById('countdown-agenda')
-              ];
-              countdownElements.forEach(countdownElement => {
-                if (countdownElement) {
-                  countdownElement.innerHTML = `
+            type();
+        }
+
+        // Initialize typing effect when page loads
+        window.addEventListener('load', function () {
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 100);
+            }
+        });
+
+        // Countdown timer (if event is in future)
+        function updateCountdown() {
+            const eventDate = new Date('2025-10-27T23:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
+
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // Update all countdown displays
+                const countdownElements = [
+                    document.getElementById('countdown'),
+                    document.getElementById('countdown-agenda')
+                ];
+                countdownElements.forEach(countdownElement => {
+                    if (countdownElement) {
+                        countdownElement.innerHTML = `
                       <div class="countdown-item">
                           <span class="countdown-number">${days}</span>
                           <span class="countdown-label">Days</span>
@@ -1967,18 +2121,18 @@
                           <span class="countdown-label">Seconds</span>
                       </div>
                   `;
-                }
-              });
-          }
-      }
+                    }
+                });
+            }
+        }
 
-      // Update countdown every second
-      setInterval(updateCountdown, 1000);
-      updateCountdown(); // Initial call
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
 
-      // Add CSS animations for various elements
-      const style = document.createElement('style');
-      style.textContent = `
+        // Add CSS animations for various elements
+        const style = document.createElement('style');
+        style.textContent = `
           @keyframes pulse {
               0% { transform: scale(1); }
               50% { transform: scale(1.05); }
@@ -2015,46 +2169,45 @@
               text-transform: uppercase;
           }
       `;
-      document.head.appendChild(style);
-      
-      console.log('Kenya Software Summit 2025 - Website loaded successfully!');
-      console.log('Code the Future. Build Africa. 🇰🇪');
+        document.head.appendChild(style);
 
-      
-    // Initialize AOS
-    AOS.init({
-        duration: 800,
-        once: true,
-        offset: 100
-    });
+        console.log('Kenya Software Summit 2025 - Website loaded successfully!');
+        console.log('Code the Future. Build Africa. 🇰🇪');
 
-    // Add smooth scrolling and enhanced interactions
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add hover effects to agenda items
-        const agendaItems = document.querySelectorAll('.agenda-item');
-        agendaItems.forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-4px)';
-            });
-            
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
         });
 
-        // Tab switching animation
-        const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Add loading animation or transition effects here
-                setTimeout(() => {
-                    AOS.refresh();
-                }, 100);
+        // Add smooth scrolling and enhanced interactions
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add hover effects to agenda items
+            const agendaItems = document.querySelectorAll('.agenda-item');
+            agendaItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-4px)';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Tab switching animation
+            const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Add loading animation or transition effects here
+                    setTimeout(() => {
+                        AOS.refresh();
+                    }, 100);
+                });
             });
         });
-    });
-  </script>
+    </script>
 </body>
-</html>
 
- 
+</html>
