@@ -105,35 +105,15 @@ from openpyxl import Workbook
 
 # === CSV Export ===
 from django.template.loader import render_to_string
-from weasyprint import HTML
+# from weasyprint import HTML  # Temporarily disabled due to library issues
 from django.utils import timezone
 
 
 def export_registrants_csv(request):
-    registrants = Registrant.objects.all()
-
-    category_counts = (
-        registrants.values("category")
-        .annotate(count=Count("id"))
-        .order_by()
-    )
-
-    # Render HTML
-    html_string = render_to_string("summit/print_registrants.html", {
-        "registrants": registrants,
-        "category_counts": list(category_counts),
-        "now": timezone.now(),
-        "pdf_mode": True,  # flag to hide print button
-    })
-
-    # Convert to PDF
-    html = HTML(string=html_string, base_url=request.build_absolute_uri())
-    pdf = html.write_pdf()
-
-    # Return as file download
-    response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = "attachment; filename=registrants_report.pdf"
-    return response
+    # Temporarily disabled due to WeasyPrint library issues on macOS
+    from django.contrib import messages
+    messages.error(request, "PDF export is temporarily unavailable due to library issues. Please use Excel export instead.")
+    return redirect('dashboard')
 
 
 # === Excel Export ===
