@@ -123,17 +123,14 @@
     <!-- Page Break -->
     <div class="page-break"></div>
 
-    <!-- Print Button (only visible on screen) -->
+    <!-- Print Button (only visible on screen)
     {% if not pdf_mode %}
-        <div class="d-flex justify-content-end no-print mb-3">
-        <a href="{% url 'export_pdf' %}" class="btn btn-sm btn-success me-2">
-            <i class="fas fa-file-pdf"></i> Export PDF
-        </a>
         <button onclick="window.print()" class="btn btn-sm btn-primary">
             <i class="fas fa-print"></i> Print
         </button>
         </div>
     {% endif %}
+     -->
     
     <div class="d-flex justify-content-end no-print mb-3">
       <button onclick="window.print()" class="btn btn-sm btn-primary">

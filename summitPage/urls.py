@@ -10,7 +10,7 @@ urlpatterns = [
     
     path("login/", SummitLoginView.as_view(), name="custom_login"),
     path("logout/", SummitLogoutView.as_view(), name="logout"),
-    # path("export/print/", views.print_registrants, name="export_print"),
+    path("export/print/", views.print_registrants, name="export_print"),
 
     path("unsubscribe/<uuid:token>/", views.unsubscribe_view, name="unsubscribe"),
     path('bulk-email/', views.bulk_email_view, name='bulk_email'),
