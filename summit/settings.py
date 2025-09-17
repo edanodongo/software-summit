@@ -12,21 +12,26 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config, Csv
+import json 
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Load configuration from config.json
+with open(BASE_DIR / 'config.json') as config_file: 
+    config = json.load(config_file)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%mu=rd-m)c$%!asl@9a85p$4z+v+gqd9*w20-f9a(p72!t)r61'
+SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config['ALLOWED_HOSTS']
 
 
 # Application definition
@@ -77,24 +82,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'summit.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_DEFAULT_NAME'),
-        'USER': config('DB_DEFAULT_USER'),
-        'PASSWORD': config('DB_DEFAULT_PASSWORD'),
-        'HOST': config('DB_DEFAULT_HOST'),
-        'PORT': config('DB_DEFAULT_PORT'),
+        'NAME': config['DB_DEFAULT_NAME'],
+        'USER': config['DB_DEFAULT_USER'],
+        'PASSWORD': config['DB_DEFAULT_PASSWORD'],
+        'HOST': config['DB_DEFAULT_HOST'],
+        'PORT': config['DB_DEFAULT_PORT'],
     },
 }
 
@@ -123,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -142,8 +139,8 @@ STATICFILES_DIRS = [
 ]
 
 # Only used in production (when running `collectstatic`)
-STATIC_ROOT = BASE_DIR / "staticfiles"
-MEDIA_ROOT = BASE_DIR / "mediafiles"
+STATIC_ROOT = BASE_DIR / "static_root"
+MEDIA_ROOT = BASE_DIR / "media_root"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -151,11 +148,11 @@ MEDIA_ROOT = BASE_DIR / "mediafiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+EMAIL_BACKEND = config['EMAIL_BACKEND']
+EMAIL_HOST = config['EMAIL_HOST']
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = config['DEFAULT_FROM_EMAIL']
 

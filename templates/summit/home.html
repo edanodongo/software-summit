@@ -31,7 +31,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#home">
-          Kenya Software Summit
+          <img src="{% static 'images/cos.ico' %}" alt="Kenya Software Summit Logo" style="height:32px;width:32px;">
+          <span class="ms-2 fw-bold">Kenya Software Summit</span>
           <span class="ms-2" id="themeIcon" style="font-size:1.3rem;"><i class="fas fa-moon"></i></span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -58,59 +59,96 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section">
-      <div class="container">
-        <div class="row align-items-center gy-5">
-          <div class="col-lg-8 hero-content" data-aos="fade-up">
-            <div class="hero-date">
-              <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
-            </div>
-            <h1 class="hero-title">Kenya Software Summit</h1>
-            <p class="hero-subtitle">Code the Future. Build Africa.</p>
-            <p class="lead mb-4">Join Africa's premier software development conference where innovation meets opportunity. Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.</p>
-            <div class="d-flex flex-wrap gap-3">
-              <a href="#register" class="btn btn-primary-custom">Register Now</a>
-              <a href="#about" class="btn btn-outline-custom">Learn More</a>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
-              <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
-                <div class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">500+</h3>
-                    <p class="text-white-50 mb-0">Developers</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">50+</h3>
-                    <p class="text-white-50 mb-0">Speakers</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3 class="text-white mb-0">3</h3>
-                    <p class="text-white-50 mb-0">Days</p>
-                  </div>
+    <section id="home" class="hero-section bg-light" style="padding-top: 100px;">
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-8 hero-content" data-aos="fade-up">
+                    <div class="hero-date d-none d-lg-block">
+                        <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
+                    </div>
+                    <h1 class="hero-title">Kenya Software Summit</h1>
+                    <p class="hero-subtitle">Code the Future. Build Africa.</p>
+                    <p class="lead mb-4 dark">
+                        Join Africa's premier software development conference where innovation meets opportunity. Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#register" class="btn btn-primary-custom">Register Now</a>
+                        <a href="#about" class="btn btn-outline-custom">Learn More</a>
+                    </div>
                 </div>
-              </div>
-              <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
-                <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto" style="background: var(--gradient-primary); max-width: 350px;">
-                  <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
-                  <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
+                <div class="col-lg-4">
+                    <div class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
+                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
+                            <div class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
+                                <div class="stat-item">
+                                    <h3 class="--primary-green mb-0">500+</h3>
+                                    <p class="--primary-green mb-0 dark">Developers</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 class="--primary-green mb-0">50+</h3>
+                                    <p class="--primary-green mb-0 dark">Speakers</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 class="--primary-green mb-0">3</h3>
+                                    <p class="--primary-green mb-0 dark">Days</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hero-date d-lg-none mt-3">
+                            <i class="fas fa-calendar"></i> October 27-29, 2025 | Eldoret, Kenya
+                        </div>
+                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
+                            <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto" style="background: var(--gradient-primary); max-width: 350px;">
+                                <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
+                                <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
+    <style>
+        @media (max-width: 991.98px) {
+            .hero-section {
+                padding-top: 120px !important;
+            }
+            .hero-date.d-none.d-lg-block {
+                display: none !important;
+            }
+            .hero-date.d-lg-none {
+                display: block !important;
+                font-size: 1rem;
+                color: #555;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .hero-section {
+                padding-top: 130px !important;
+            }
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            .hero-subtitle {
+                font-size: 1.1rem !important;
+            }
+            .hero-stats {
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+        }
+    </style>
 
     <!-- About Section -->
     <section id="about" class="section-padding bg-light">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">About the Summit</h2>
+            <h2 class="section-title about-lead-text" data-aos="fade-up">About the Summit</h2>
             <div class="row">
                 <div class="col-lg-6" data-aos="fade-right">
                     {% comment %} <h3 class="mb-4">Background & Context</h3> {% endcomment %}
-                    <p class="lead">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
+                    <p class="lead about-lead-text">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
+                    
                     <p>The Kenya Software Summit is an annual global event hosted in Eldoret at the University of Eldoret, aligning with Kenya's vision of decentralizing innovation and fostering regional digital economies.</p>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
@@ -163,7 +201,7 @@
     <!-- Keynote speakers -->
     <section id="speakers" class="section-padding">
         <div class="container">
-            <h2 class="section-title text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
               Featured Speakers
             </h2>
             <div class="row">
@@ -205,7 +243,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=250&fit=crop&crop=face" alt="Dr. James Mwangi" class="speaker-img">
+                        <img src="{% static 'images/speakers/james.jpeg' %}" alt="Dr. James Mwangi" class="speaker-img">
                         <div class="speaker-info">
                             <h3 class="speaker-name">Dr. James Mwangi</h3>
                             <p class="speaker-title">Chief Technology Officer, Microsoft Africa</p>                            
@@ -214,7 +252,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Sarah Ochieng" class="speaker-img">
+                        <img src="{% static 'images/speakers/sarah.jpeg' %}" alt="Sarah Ochieng" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Sarah Ochieng</h4>
                             <p class="speaker-title">Founder, TechAfrica Ventures</p>
@@ -223,7 +261,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=250&fit=crop&crop=face" alt="Prof. David Kim" class="speaker-img">
+                        <img src="{% static 'images/speakers/david.jpeg' %}" alt="Prof. David Kim" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Prof. David Kim</h4>
                             <p class="speaker-title">Director, Google AI Research</p>
@@ -232,7 +270,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-                        <img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=300&h=250&fit=crop&crop=face" alt="Linda Mutua" class="speaker-img">
+                        <img src="{% static 'images/speakers/linda.jpeg' %}" alt="Linda Mutua" class="speaker-img">
                         <div class="speaker-info">
                             <h4 class="speaker-name">Linda Mutua</h4>
                             <p class="speaker-title">VP Engineering, Safaricom</p>
@@ -389,7 +427,7 @@
     <!-- Agenda Section -->    
     <section id="agenda" class="section-padding bg-light position-relative">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Summit Agenda</h2>
+            <h2 class="section-title dark" data-aos="fade-up">Summit Agenda</h2>
 
             <!-- Agenda Intro & Countdown -->
             <div class="row mb-5 align-items-center">
@@ -438,9 +476,9 @@
                 <div class="tab-pane fade show active" id="day1" role="tabpanel" aria-labelledby="day1-tab">
                     <div class="agenda-day text-center" data-aos="fade-up">
                         <h4 class="fw-bold text-danger">
-                            <i class="fas fa-landmark me-2"></i>Focus: Government Policy Frameworks & Enabling Ecosystem
+                            <i class="fas fa-landmark me-2 dark"></i>Focus: Government Policy Frameworks & Enabling Ecosystem
                         </h4>
-                        <p class="text-muted small mb-0">Tuesday, October 27 — policy, regulation, quality assurance, and ecosystem building.</p>
+                        <p class="text-muted small mb-0 dark">Tuesday, October 27 — policy, regulation, quality assurance, and ecosystem building.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -452,7 +490,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Innovation Exhibition</h5>
+                                <h5 class="fw-bold mb-2 dark">Innovation Exhibition</h5>
                                 <p class="mb-0">Showcases from government agencies, development partners, global tech firms, and startups demonstrating tools, platforms, and pilots supporting the national software agenda.</p>
                             </div>
 
@@ -462,7 +500,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span></div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Registration & Morning Networking</h5>
+                                <h5 class="fw-bold mb-2 dark">Registration & Morning Networking</h5>
                                 <p class="mb-0">Delegate check-in, badge collection and exhibition walkthroughs; early networking opportunities.</p>
                             </div>
 
@@ -472,7 +510,7 @@
                                     <div><span class="badge bg-danger"><i class="fas fa-landmark me-1"></i>Opening</span></div>
                                     <div class="time-display">08:30 – 10:45</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Official Opening Ceremony</h5>
+                                <h5 class="fw-bold mb-3 dark">Official Opening Ceremony</h5>
                                 
                                 <div class="breakout-container">
                                     <div class="breakout-item">
@@ -512,7 +550,7 @@
                                     <div><span class="badge bg-info text-white"><i class="fas fa-comments me-1"></i>Panel</span></div>
                                     <div class="time-display">11:15 – 13:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Framing Panel — <em>"Building a National Software Ecosystem: Policy & Regulation"</em></h5>
+                                <h5 class="fw-bold mb-3 dark">Framing Panel — <em>"Building a National Software Ecosystem: Policy & Regulation"</em></h5>
                                 <p class="mb-3">Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports.</p>
                                 
                                 <!-- Panel Discussion -->
@@ -581,7 +619,7 @@
                                     <div><span class="badge bg-primary"><i class="fas fa-microphone me-1"></i>Keynote</span></div>
                                     <div class="time-display">14:00 – 15:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Software Ecosystem Landscape</h5>
+                                <h5 class="fw-bold mb-3 dark">Software Ecosystem Landscape</h5>
                                 <p class="mb-3">Insights into market dynamics, talent pipelines, export opportunities and the Kenya Software Ecosystem Baseline Survey presentation.</p>
                                 
                                 <div class="breakout-container">
@@ -602,7 +640,7 @@
                                     <div><span class="badge bg-success"><i class="fas fa-rocket me-1"></i>Hackathon</span></div>
                                     <div class="time-display">15:30 – 16:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Hackathon Kickoff</h5>
+                                <h5 class="fw-bold mb-2 dark">Hackathon Kickoff</h5>
                                 <p class="mb-0">Official launch, rules, judging criteria, team briefings and sponsor introductions for participating teams.</p>
                             </div>
 
@@ -612,7 +650,7 @@
                                     <div><span class="badge bg-warning text-dark"><i class="fas fa-flask me-1"></i>Labs / Workshops</span></div>
                                     <div class="time-display">16:00 – 17:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Partner Labs & Sponsor Workshops</h5>
+                                <h5 class="fw-bold mb-3 dark">Partner Labs & Sponsor Workshops</h5>
                                 <p class="mb-3">Hands-on sessions and product deep-dives from strategic partners and sponsor organisations.</p>
                                 
                                 <div class="labs-grid">
@@ -653,7 +691,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-glass-cheers me-1"></i>Networking</span></div>
                                     <div class="time-display">17:30 – 19:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Welcome Cocktail</h5>
+                                <h5 class="fw-bold mb-2 dark">Welcome Cocktail</h5>
                                 <p class="mb-0">Evening reception with partners, delegates and speakers for informal networking over light refreshments.</p>
                             </div>
 
@@ -665,9 +703,9 @@
                 <div class="tab-pane fade" id="day2" role="tabpanel" aria-labelledby="day2-tab">
                     <div class="agenda-day text-center" data-aos="fade-up">
                         <h4 class="fw-bold text-success">
-                            <i class="fas fa-lightbulb me-2"></i>Focus: Talent, Startups & Innovation Pipelines
+                            <i class="fas fa-lightbulb me-2 dark"></i>Focus: Talent, Startups & Innovation Pipelines
                         </h4>
-                        <p class="text-muted small mb-0">Wednesday, October 28 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
+                        <p class="text-muted small mb-0 dark">Wednesday, October 28 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -679,7 +717,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Innovation Exhibition Continues</h5>
+                                <h5 class="fw-bold mb-2 dark">Innovation Exhibition Continues</h5>
                                 <p class="mb-0">Continued demos, partner showcases, and engagement booths focused on scaling solutions and talent attraction.</p>
                             </div>
 
@@ -689,7 +727,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span></div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Registration & Morning Networking</h5>
+                                <h5 class="fw-bold mb-2 dark">Registration & Morning Networking</h5>
                                 <p class="mb-0">Sign-ins and morning catch-ups; meet exhibitors and partners.</p>
                             </div>
 
@@ -699,7 +737,7 @@
                                     <div><span class="badge bg-primary"><i class="fas fa-microphone me-1"></i>Keynote</span></div>
                                     <div class="time-display">08:30 – 10:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Digital Skilling & Talent Ecosystem</h5>
+                                <h5 class="fw-bold mb-3 dark">Digital Skilling & Talent Ecosystem</h5>
                                 <p class="mb-3">Examines workforce development, digital labour rights, and the role of education and industry in preparing talent.</p>
                                 
                                 <div class="breakout-container">
@@ -725,7 +763,7 @@
                                     <div><span class="badge bg-success"><i class="fas fa-star me-1"></i>Showcase</span></div>
                                     <div class="time-display">10:30 – 13:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Showcase — Software Innovation</h5>
+                                <h5 class="fw-bold mb-3 dark">Showcase — Software Innovation</h5>
                                 <p class="mb-3">Presentations and demos across priority tracks:</p>
                                 
                                 <div class="labs-grid">
@@ -771,7 +809,7 @@
                                     <div><span class="badge bg-info text-white"><i class="fas fa-th-large me-1"></i>Breakouts</span></div>
                                     <div class="time-display">14:00 – 15:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Opportunities for Software Innovation (Breakout Tracks)</h5>
+                                <h5 class="fw-bold mb-3 dark">Opportunities for Software Innovation (Breakout Tracks)</h5>
                                 <p class="mb-3">Concurrent discussions focused on concrete opportunity areas.</p>
                                 
                                 <div class="breakout-container">
@@ -800,7 +838,7 @@
                                     <div><span class="badge bg-warning text-dark"><i class="fas fa-cogs me-1"></i>Tech Labs</span></div>
                                     <div class="time-display">15:30 – 17:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Partner Tech Labs</h5>
+                                <h5 class="fw-bold mb-3 dark">Partner Tech Labs</h5>
                                 
                                 <div class="labs-grid">
                                     <div class="lab-card">
@@ -847,7 +885,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-utensils me-1"></i>Dinner</span></div>
                                     <div class="time-display">17:30 – 21:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Gala Dinner</h5>
+                                <h5 class="fw-bold mb-2 dark">Gala Dinner</h5>
                                 <p class="mb-0">Formal dinner with keynote reflections, entertainment and networking. <em>Guest Speaker TBC</em></p>
                             </div>
 
@@ -858,10 +896,10 @@
                 <!-- ================= DAY 3 ================= -->
                 <div class="tab-pane fade" id="day3" role="tabpanel" aria-labelledby="day3-tab">
                     <div class="agenda-day text-center bg-white" data-aos="fade-up">
-                      <h4 class="fw-bold text-dark">
-                      <i class="fas fa-handshake me-2"></i>Focus: Investment, Partnerships & Long-term Growth
+                      <h4 class="fw-bold text-dark dark">
+                      <i class="fas fa-handshake me-2 dark"></i>Focus: Investment, Partnerships & Long-term Growth
                       </h4>
-                      <p class="text-muted small mb-0">Thursday, October 29 — investment, export readiness, partnerships, and summit closing commitments.</p>
+                      <p class="text-muted small mb-0 dark">Thursday, October 29 — investment, export readiness, partnerships, and summit closing commitments.</p>
                     </div>
 
                     <div class="row g-4" data-aos="fade-up">
@@ -873,7 +911,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-handshake me-1"></i>Exhibition</span></div>
                                     <div class="time-display">All Day</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Final Day Exhibition & Partner Activations</h5>
+                                <h5 class="fw-bold mb-2 dark">Final Day Exhibition & Partner Activations</h5>
                                 <p class="mb-0">Final showcases and partner demonstrations focused on scale, export-readiness and commercial partnerships.</p>
                             </div>
 
@@ -883,7 +921,7 @@
                                     <div><span class="badge bg-dark"><i class="fas fa-coffee me-1"></i>Breakfast</span></div>
                                     <div class="time-display">07:30 – 08:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Software Advisory Council Breakfast</h5>
+                                <h5 class="fw-bold mb-2 dark">Software Advisory Council Breakfast</h5>
                                 <p class="mb-0">Private breakfast for advisory council, government and partners to finalize recommendations and commitments.</p>
                             </div>
 
@@ -893,7 +931,7 @@
                                     <div><span class="badge bg-primary"><i class="fas fa-seedling me-1"></i>Plenary</span></div>
                                     <div class="time-display">08:30 – 10:30</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Startup Support — Funding the Ecosystem</h5>
+                                <h5 class="fw-bold mb-3 dark">Startup Support — Funding the Ecosystem</h5>
                                 <p class="mb-3">Discussions on venture funding, financing instruments, growth-stage support and public sector interventions to catalyze scale-ups.</p>
                                 
                                 <div class="breakout-container">
@@ -919,7 +957,7 @@
                                     <div><span class="badge bg-info text-white"><i class="fas fa-plane-departure me-1"></i>Panel</span></div>
                                     <div class="time-display">11:00 – 12:15</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Software Global Export — Market Access & Standards</h5>
+                                <h5 class="fw-bold mb-3 dark">Software Global Export — Market Access & Standards</h5>
                                 <p class="mb-3">Practical steps to increase export competitiveness, compliance, and market-entry strategies for Kenyan software firms.</p>
                                 
                                 <div class="breakout-container">
@@ -940,7 +978,7 @@
                                     <div><span class="badge bg-success"><i class="fas fa-trophy me-1"></i>Showcase</span></div>
                                     <div class="time-display">12:15 – 13:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-2">Hackathon Finals & Awards</h5>
+                                <h5 class="fw-bold mb-2 dark">Hackathon Finals & Awards</h5>
                                 <p class="mb-0">Finalist pitches, judges' deliberation and announcement of winners; prizes and follow-on support details.</p>
                             </div>
 
@@ -955,7 +993,7 @@
                                     <div><span class="badge bg-primary"><i class="fas fa-bullhorn me-1"></i>Closing</span></div>
                                     <div class="time-display">14:00 – 16:00</div>
                                 </div>
-                                <h5 class="fw-bold mb-3">Closing Plenary & Call to Action</h5>
+                                <h5 class="fw-bold mb-3 dark">Closing Plenary & Call to Action</h5>
                                 
                                 <div class="breakout-container">
                                     <div class="breakout-item">
@@ -1009,7 +1047,7 @@
     <!-- Features Section -->
     <section id="features" class="section-padding" style="background: linear-gradient(135deg, #f8fafc 60%, #e6f4ea 100%);">
       <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Summit Features</h2>
+        <h2 class="section-title dark" data-aos="fade-up">Summit Features</h2>
         <div class="row g-4 justify-content-center">
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
@@ -1078,7 +1116,7 @@
     <!-- Partners Section -->
     <section id="partners" class="section-padding bg-light">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Our Partners</h2>
+            <h2 class="section-title dark" data-aos="fade-up">Our Partners</h2>
             
             <div class="row mb-5">
                 <div class="col-12" data-aos="fade-up">
@@ -1172,9 +1210,9 @@
     </section>
 
     <!-- Media Section -->
-    <section id="media" class="section-padding">
+    <section id="media" class="section-padding dark">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Media Gallery</h2>
+            <h2 class="section-title dark" data-aos="fade-up">Media Gallery</h2>
             
             <div class="row mb-5">
                 <div class="col-12">
@@ -1239,12 +1277,12 @@
 
 
     <!-- Registration Section -->
-    <section id="register" class="section-padding" style="background: var(--gradient-primary);">
+    <section id="register" class="section-padding dark" style="background: var(--gradient-primary);">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center text-white" data-aos="fade-up">
                     <h2 class="section-title text-white">Register for Kenya Software Summit 2025</h2>
-                    <p class="lead mb-4">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier software development conference.</p>
+                    <p class="lead mb-4 dark">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier software development conference.</p>
                 </div>
             </div>
             
@@ -1314,9 +1352,9 @@
                     </div> -->
                     
                     <!-- Quick Registration Form -->
-                    <div class="row mt-5">
+                    <div class="row mt-5 dark">
                       <div class="col-lg-8 mx-auto">
-                        <div class="card border-0 shadow-lg rounded-4" data-aos="fade-up" style="background: rgba(255,255,255,0.97);">
+                        <div class="card border-0 shadow-lg rounded-4 dark" data-aos="fade-up" >
                           <div class="card-body p-5">
                             <h4 class="text-center mb-4 fw-bold" style="color: var(--primary-red); letter-spacing: 1px;">
                               <i class="fas fa-user-plus me-2"></i>Quick Registration
@@ -1324,9 +1362,9 @@
                             <form id="registrationForm" method="post" action="{% url 'home' %}" novalidate>
                               {% csrf_token %}
                               <!-- Full Name -->
-                              <div class="input-group mb-3">
-                                <span class="input-group-text  border-0">
-                                  <i class="fas fa-user text-primary"></i>
+                              <div class="input-group mb-3 dark">
+                                <span class="input-group-text dark border-0">
+                                  <i class="fas fa-user text-primary dark"></i>
                                 </span>
                                 {{ form.full_name }}
                               </div>
@@ -1932,7 +1970,7 @@
 
       // Countdown timer (if event is in future)
       function updateCountdown() {
-          const eventDate = new Date('2025-10-27T23:00:00').getTime();
+          const eventDate = new Date('2025-10-27T00:00:00').getTime();
           const now = new Date().getTime();
           const timeLeft = eventDate - now;
 
