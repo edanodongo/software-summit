@@ -83,68 +83,7 @@ filter: grayscale(100%) brightness(0.8) invert(1);
 `;
 document.head.appendChild(darkStyle);
 
-// === Show/Hide Other Category field ===
-document.addEventListener("DOMContentLoaded", function () {
-    // === CATEGORY DROPDOWN ===
-    const categorySelect = document.getElementById("id_category");
-    const otherCategoryDiv = document.createElement("div");
-    otherCategoryDiv.className = "mt-2";
-    otherCategoryDiv.style.display = "none";
-    otherCategoryDiv.innerHTML = `
-        <input type="text" name="other_category" 
-            id="otherCategoryInput"
-            class="form-control mt-2"
-            placeholder="Please specify category..." />
-    `;
-    categorySelect.parentNode.appendChild(otherCategoryDiv);
 
-    if (categorySelect) {
-        categorySelect.addEventListener("change", function () {
-            if (categorySelect.value.toLowerCase() === "other") {
-                otherCategoryDiv.style.display = "block";
-                document.getElementById("otherCategoryInput").required = true;
-            } else {
-                otherCategoryDiv.style.display = "none";
-                document.getElementById("otherCategoryInput").value = "";
-                document.getElementById("otherCategoryInput").required = false;
-            }
-        });
-    }
-
-    // === INTERESTS CHECKBOXES ===
-    const interestInputs = document.querySelectorAll("input[name='interests']");
-    const otherInterestDiv = document.createElement("div");
-    otherInterestDiv.className = "mt-2";
-    otherInterestDiv.style.display = "none";
-    otherInterestDiv.innerHTML = `
-        <input type="text" name="other_interest" 
-            id="otherInterestInput"
-            class="form-control mt-2"
-            placeholder="Please specify your interest..." />
-    `;
-
-    // Insert after the interests container
-    if (interestInputs.length > 0) {
-        const interestContainer = interestInputs[interestInputs.length - 1].closest("div");
-        interestContainer.parentNode.appendChild(otherInterestDiv);
-    }
-
-    interestInputs.forEach(input => {
-        input.addEventListener("change", function () {
-            // If "Others" checkbox is selected
-            if (input.checked && input.value.toLowerCase() === "other") {
-                otherInterestDiv.style.display = "block";
-                document.getElementById("otherInterestInput").required = true;
-            }
-            // If "Other" is unchecked
-            else if (!Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === "other")) {
-                otherInterestDiv.style.display = "none";
-                document.getElementById("otherInterestInput").value = "";
-                document.getElementById("otherInterestInput").required = false;
-            }
-        });
-    });
-});
 
 // Initialize AOS (Animate On Scroll)
 AOS.init({
@@ -205,86 +144,135 @@ scrollToTopBtn.addEventListener('click', function () {
 });
 
 // Form submissions
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("registrationForm");
-    const messageDiv = document.getElementById("formMessage");
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('registration-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const alertContainer = document.getElementById('alert-container');
 
-    if (!form) return;
+  // ===== CATEGORY DROPDOWN =====
+  const categorySelect = document.getElementById('id_category');
+  const otherCategoryDiv = document.createElement('div');
+  otherCategoryDiv.className = 'mt-2';
+  otherCategoryDiv.style.display = 'none';
+  otherCategoryDiv.innerHTML = `
+      <label for="otherCategoryInput" class="form-label fw-semibold text-white">
+          Other Category
+      </label>
+      <input type="text" 
+             name="other_category" 
+             id="otherCategoryInput"
+             class="form-control mt-2"
+             placeholder="Please specify category..." />
+  `;
+  categorySelect.parentNode.appendChild(otherCategoryDiv);
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+  categorySelect.addEventListener('change', () => {
+    if (categorySelect.value.toLowerCase() === 'other') {
+      otherCategoryDiv.style.display = 'block';
+      document.getElementById('otherCategoryInput').required = true;
+    } else {
+      otherCategoryDiv.style.display = 'none';
+      document.getElementById('otherCategoryInput').value = '';
+      document.getElementById('otherCategoryInput').required = false;
+    }
+  });
 
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
+  // ===== INTERESTS CHECKBOXES =====
+  const interestInputs = document.querySelectorAll("input[name='interests']");
+  const otherInterestDiv = document.createElement('div');
+  otherInterestDiv.className = 'mt-2';
+  otherInterestDiv.style.display = 'none';
+  otherInterestDiv.innerHTML = `
+      <label for="otherInterestInput" class="form-label fw-semibold text-white">
+          Other Interest
+      </label>
+      <input type="text" 
+             name="other_interest" 
+             id="otherInterestInput"
+             class="form-control mt-2"
+             placeholder="Please specify your interest..." />
+  `;
+  if (interestInputs.length > 0) {
+    const interestContainer = interestInputs[interestInputs.length - 1].closest('div');
+    interestContainer.parentNode.appendChild(otherInterestDiv);
+  }
 
-        // Reset previous errors
-        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
-
-        // Show "submitting..."
-        submitButton.textContent = "Submitting...";
-        submitButton.disabled = true;
-
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(form.action, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Success UI
-                messageDiv.innerHTML = `
-                    <div class="alert alert-success">${data.message}</div>
-                `;
-                form.reset();
-
-                // Success button state
-                submitButton.textContent = "Submitted Successfully!";
-                submitButton.style.background = "var(--primary-green)";
-
-                setTimeout(() => {
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                    submitButton.style.background = "";
-                }, 2000);
-            } else {
-                // Show validation errors
-                if (data.errors) {
-                    for (const [field, errors] of Object.entries(data.errors)) {
-                        const input = form.querySelector(`[name="${field}"]`);
-                        if (input) {
-                            input.classList.add("is-invalid");
-                            const errorDiv = document.createElement("div");
-                            errorDiv.className = "invalid-feedback";
-                            errorDiv.innerText = errors.join(", ");
-                            input.parentNode.appendChild(errorDiv);
-                        }
-                    }
-                }
-                messageDiv.innerHTML = `
-                    <div class="alert alert-danger">Please correct the errors.</div>
-                `;
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            }
-
-        } catch (err) {
-            console.error("Error submitting form:", err);
-            messageDiv.innerHTML = `
-                <div class="alert alert-danger">Something went wrong. Please try again.</div>
-            `;
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
-        }
+  interestInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      if (Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === 'other')) {
+        otherInterestDiv.style.display = 'block';
+        document.getElementById('otherInterestInput').required = true;
+      } else {
+        otherInterestDiv.style.display = 'none';
+        document.getElementById('otherInterestInput').value = '';
+        document.getElementById('otherInterestInput').required = false;
+      }
     });
+  });
+
+  // ===== FORM SUBMISSION (AJAX) =====
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Clear previous errors
+    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    form.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Submitting...';
+
+    const formData = new FormData(form);
+
+    fetch('', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok) throw data;
+        return data;
+      })
+      .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
+        alertContainer.innerHTML = `
+          <div class="alert alert-success">Registration successful!</div>`;
+        form.reset();
+        otherCategoryDiv.style.display = 'none';
+        otherInterestDiv.style.display = 'none';
+      })
+      .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
+
+        if (err.errors) {
+          alertContainer.innerHTML = `
+            <div class="alert alert-danger">Please fix the errors below.</div>`;
+          Object.keys(err.errors).forEach(field => {
+            const fieldEl = document.getElementById('id_' + field);
+            if (fieldEl) {
+              fieldEl.classList.add('is-invalid');
+              // Try to find or create an error feedback element
+              let feedback = fieldEl.nextElementSibling;
+              if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+                feedback = document.createElement('div');
+                feedback.className = 'invalid-feedback d-block';
+                fieldEl.insertAdjacentElement('afterend', feedback);
+              }
+              feedback.textContent = err.errors[field][0];
+            }
+          });
+        } else {
+          alertContainer.innerHTML = `
+            <div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+          console.error(err);
+        }
+      });
+  });
 });
+
+
 
 
 // Registration pricing animation
@@ -491,48 +479,4 @@ document.addEventListener('DOMContentLoaded', () => {
   categorySelect.addEventListener('change', toggleOtherCategory);
   interestCheckboxes.forEach(cb => cb.addEventListener('change', toggleOtherInterest));
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Submitting...';
-
-    const formData = new FormData(form);
-
-    fetch('', {
-      method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
-
-      if (data.success) {
-        alertContainer.innerHTML = `
-          <div class="alert alert-success">✅ Registration successful!</div>`;
-        form.reset();
-        otherCategoryField.style.display = 'none';
-        otherInterestField.style.display = 'none';
-      } else {
-        alertContainer.innerHTML = `
-          <div class="alert alert-danger">⚠️ There were errors. Please fix them.</div>`;
-        Object.keys(data.errors).forEach(field => {
-          const fieldEl = document.getElementById('id_' + field);
-          if (fieldEl) {
-            fieldEl.classList.add('is-invalid');
-            fieldEl.nextElementSibling.textContent = data.errors[field][0];
-          }
-        });
-      }
-    })
-    .catch(err => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
-      alertContainer.innerHTML = `
-        <div class="alert alert-danger">🚨 Something went wrong. Please try again.</div>`;
-      console.error(err);
-    });
-  });
 });
