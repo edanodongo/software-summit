@@ -81,19 +81,6 @@
         </ul>
 
 
-        <!-- Category Breakdown -->
-        <h5 class="mt-3">By Category</h5>
-        <ul class="list-group">
-          {% regroup registrants by category as category_list %}
-          {% for c in category_list %}
-            <li class="list-group-item d-flex justify-content-between">
-              <span>{{ c.grouper }}:</span>
-              <strong>{{ c.list|length }}</strong>
-            </li>
-          {% empty %}
-            <li class="list-group-item">No category data available</li>
-          {% endfor %}
-        </ul>
 
         
         <!-- Organization Breakdown -->
