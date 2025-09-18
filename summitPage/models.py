@@ -14,13 +14,12 @@ class Registrant(models.Model):
     ]
 
     INTEREST_CHOICES = [
-        ('ai', 'AI'),
-        ('cybersecurity', 'Cybersecurity'),
-        ('cloud', 'Cloud'),
-        ('data_science', 'Data Science'),
-        ('mobile_apps', 'Mobile Apps'),
-        ('policy', 'Policy & Governance'),
-        ('other', 'Other'),
+        ("ai", "AI & Machine Learning"),
+        ("web", "Web Development"),
+        ("mobile", "Mobile Development"),
+        ("data", "Data Science"),
+        ("cyber", "Cybersecurity"),
+        ("other", "Other"),
     ]
 
     full_name = models.CharField(max_length=255)
