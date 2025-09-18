@@ -459,3 +459,80 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
+/* Form */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('registration-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const alertContainer = document.getElementById('alert-container');
+  const categorySelect = document.getElementById('id_category');
+  const otherCategoryField = document.getElementById('other-category-field');
+  const interestCheckboxes = document.querySelectorAll('#id_interests input[type=checkbox]');
+  const otherInterestField = document.getElementById('other-interest-field');
+
+  function toggleOtherCategory() {
+    otherCategoryField.style.display = categorySelect.value === 'other' ? 'block' : 'none';
+  }
+
+  function toggleOtherInterest() {
+    const show = Array.from(interestCheckboxes).some(cb => cb.value === 'other' && cb.checked);
+    otherInterestField.style.display = show ? 'block' : 'none';
+  }
+
+  categorySelect.addEventListener('change', toggleOtherCategory);
+  interestCheckboxes.forEach(cb => cb.addEventListener('change', toggleOtherInterest));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Submitting...';
+
+    const formData = new FormData(form);
+
+    fetch('', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
+
+      if (data.success) {
+        alertContainer.innerHTML = `
+          <div class="alert alert-success">✅ Registration successful!</div>`;
+        form.reset();
+        otherCategoryField.style.display = 'none';
+        otherInterestField.style.display = 'none';
+      } else {
+        alertContainer.innerHTML = `
+          <div class="alert alert-danger">⚠️ There were errors. Please fix them.</div>`;
+        Object.keys(data.errors).forEach(field => {
+          const fieldEl = document.getElementById('id_' + field);
+          if (fieldEl) {
+            fieldEl.classList.add('is-invalid');
+            fieldEl.nextElementSibling.textContent = data.errors[field][0];
+          }
+        });
+      }
+    })
+    .catch(err => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
+      alertContainer.innerHTML = `
+        <div class="alert alert-danger">🚨 Something went wrong. Please try again.</div>`;
+      console.error(err);
+    });
+  });
+});

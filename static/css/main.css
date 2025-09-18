@@ -13,6 +13,7 @@
     
     --primary-red: #CE171C;
     --primary-green: #01873F;
+    --primary-blue: rgba(2, 52, 79, 0.8);
     --primary-dark: #1C1C18;
     --gradient-primary: linear-gradient(135deg, #CE171C 0%, #01873F 100%);
     --gradient-secondary: linear-gradient(135deg, #01873F 0%, #1C1C18 100%);
@@ -31,15 +32,15 @@ body {
 }
 
 .navbar {
-    background: rgba(28, 28, 24, 0.95) !important;
+    background: rgba(2, 52, 79, 0.8) !important;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    box-shadow: #01873F;
 }
 
 .navbar-brand {
     font-weight: bold;
-    color: var(--primary-red) !important;
+    color: white !important;
     font-size: 1.5rem;
 }
 
@@ -227,7 +228,7 @@ body {
 }
 
 .speaker-title {
-    color: var(--primary-red);
+    color: var(--primary-blue);
     font-weight: 600;
     margin-bottom: 10px;
 }
@@ -1110,6 +1111,7 @@ body.dark-theme .dark{
 }
 
 .keynote-speaker-title {
+    color: var(--primary-blue);
     font-size: 1.2rem !important;
     margin-bottom: 1.5rem !important;
     font-weight: 500;
@@ -1184,4 +1186,83 @@ body.dark-theme .dark{
     .keynote-speaker-title {
         font-size: 1rem !important;
     }
+}
+
+
+
+
+
+/* Form */
+
+.bg-green {
+    background: rgba(41, 61, 72, 0.8) !important;
+}
+
+.registration-card {
+  border-top: 4px solid var(--primary-blue);
+  border-radius: 1rem;
+  background: var(--bg-light);
+  transition: background 0.3s, color 0.3s;
+}
+
+.input-with-icon {
+  position: relative;
+}
+.input-with-icon input {
+  padding-left: 2.4rem;
+}
+.form-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+/* Light mode defaults */
+body {
+  color: var(--text-dark);
+}
+.form-control, .form-select, .form-check-label, .form-label {
+  color: var(--text-dark);
+  border-color: #ced4da;
+}
+.form-control::placeholder {
+  color: #6c757d;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: var(--text-light);
+  }
+  .registration-card {
+    background: var(--bg-dark);
+    color: var(--text-light);
+  }
+  .form-control, .form-select {
+    background-color: #2c2c2c;
+    border-color: #555;
+    color: var(--text-light);
+  }
+  .form-control::placeholder {
+    color: #aaa;
+  }
+  .form-check-label, .form-label {
+    color: var(--text-light);
+  }
+  .form-icon {
+    color: #bbb;
+  }
+}
+
+/* Primary button */
+.btn-primary {
+  background: var(--primary-color);
+  border: none;
+  transition: background 0.2s ease;
+}
+.btn-primary:hover {
+  background: #a81216;
 }

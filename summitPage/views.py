@@ -1,6 +1,15 @@
 from .forms import QuickRegistrationForm
 from .utils import send_confirmation_email
 
+# registrations/views.py
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib import messages
+from .forms import QuickRegistrationForm
+from .models import Registrant
+from .utils import send_confirmation_email  # if you have this helper
+
+from .models import Registrant
 
 def home(request):
     if request.method == 'POST':
@@ -9,27 +18,18 @@ def home(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # Handle custom category
             if form.cleaned_data.get("category") == "other" and form.cleaned_data.get("other_category"):
                 registrant.other_category = form.cleaned_data["other_category"]
 
-            # Save first so we have an ID
             registrant.save()
 
-            # Handle custom interests
             interests = form.cleaned_data.get("interests", [])
             if "other" in interests and form.cleaned_data.get("other_interest"):
-                # Replace "other" with actual text
                 interests = [i for i in interests if i != "other"]
                 interests.append(form.cleaned_data["other_interest"])
 
             registrant.interests = interests
             registrant.save()
-
-            try:
-                send_confirmation_email(registrant)
-            except Exception as e:
-                print("Email send error:", e)
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
@@ -38,17 +38,17 @@ def home(request):
             return redirect('home')
 
         else:
-            print("Form errors:", form.errors)
-
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
             messages.error(request, "There was a problem with your registration.")
-
     else:
         form = QuickRegistrationForm()
 
-    return render(request, "summit/home.html", {'form': form})
+    return render(request, "summit/home.html", {
+        'form': form,
+        'interests_choices': Registrant.INTEREST_CHOICES
+    })
 
 
 def unsubscribe_view(request, token):
