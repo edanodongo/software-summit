@@ -552,37 +552,52 @@
                     {% csrf_token %}
 
                     <!-- Full Name -->
-                    <div class="mb-3 input-with-icon">
-                    <i class="fa fa-user form-icon"></i>
-                    {{ form.full_name }}
-                    <div class="invalid-feedback"></div>
+                    <div class="mb-3">
+                        <label for="{{ form.full_name.id_for_label }}" class="form-label fw-semibold">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fa fa-user form-icon"></i>
+                            {{ form.full_name }}
+                        </div>
+                        <div class="invalid-feedback"></div>
                     </div>
 
                     <!-- Email -->
-                    <div class="mb-3 input-with-icon">
-                    <i class="fa fa-envelope form-icon"></i>
-                    {{ form.email }}
+                    <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">Email</label>
+                    <div class="input-with-icon">
+                        <i class="fa fa-envelope form-icon"></i>
+                        {{ form.email }}
+                    </div>
                     <div class="invalid-feedback"></div>
                     </div>
 
                     <!-- Phone -->
-                    <div class="mb-3 input-with-icon">
-                    <i class="fa fa-phone form-icon"></i>
-                    {{ form.phone }}
+                    <div class="mb-3">
+                    <label for="{{ form.phone.id_for_label }}" class="form-label fw-semibold">Phone</label>
+                    <div class="input-with-icon">
+                        <i class="fa fa-phone form-icon"></i>
+                        {{ form.phone }}
+                    </div>
                     <div class="invalid-feedback"></div>
                     </div>
-
+                    
                     <!-- Organization -->
-                    <div class="mb-3 input-with-icon">
-                    <i class="fa fa-building form-icon"></i>
-                    {{ form.organization }}
+                    <div class="mb-3">
+                    <label for="{{ form.organization.id_for_label }}" class="form-label fw-semibold">Organization</label>
+                    <div class="input-with-icon">
+                        <i class="fa fa-building form-icon"></i>
+                        {{ form.organization }}
+                    </div>
                     <div class="invalid-feedback"></div>
                     </div>
-
+                   
                     <!-- Job Title -->
-                    <div class="mb-3 input-with-icon">
-                    <i class="fa fa-briefcase form-icon"></i>
-                    {{ form.job_title }}
+                    <div class="mb-3">
+                    <label for="{{ form.job_title.id_for_label }}" class="form-label fw-semibold">Job Title / Role</label>
+                    <div class="input-with-icon">
+                        <i class="fa fa-briefcase form-icon"></i>
+                        {{ form.job_title }}
+                    </div>
                     <div class="invalid-feedback"></div>
                     </div>
 
@@ -594,9 +609,13 @@
                     </div>
 
                     <!-- Other Category -->
-                    <div class="mb-3" id="id_category text-white" style="display:none;">
+                    <div class="mb-3" id="id_category" style="display:none;">
+                    <label for="{{ form.other_category.id_for_label }}" class="form-label fw-semibold">
+                        Please specify your category
+                    </label>
                     {{ form.other_category }}
                     </div>
+
 
                     <!-- Interests -->
                     <div class="mb-3">
@@ -614,13 +633,20 @@
 
                     <!-- Other Interest -->
                     <div class="mb-3" id="other_interest" style="display:none;">
+                    <label for="{{ form.other_interest.id_for_label }}" class="form-label fw-semibold">
+                        Please specify your interest
+                    </label>
                     {{ form.other_interest }}
                     </div>
 
                     <!-- Accessibility -->
                     <div class="mb-3">
+                    <label for="{{ form.accessibility_needs.id_for_label }}" class="form-label fw-semibold">
+                        Accessibility / Dietary Needs (optional)
+                    </label>
                     {{ form.accessibility_needs }}
                     </div>
+
 
                     <!-- Updates opt-in 
                     <div class="form-check mb-4">
@@ -656,10 +682,10 @@
                     <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
                         Africa’s digital economy through collaboration, talent development, and innovation.</p>
                     <div class="social-links mt-3">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a ><i class="fab fa-twitter"></i></a>
+                        <a ><i class="fab fa-facebook"></i></a>
+                        <a ><i class="fab fa-linkedin"></i></a>
+                        <a ><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
