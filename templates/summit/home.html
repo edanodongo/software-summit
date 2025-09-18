@@ -111,34 +111,6 @@
         </div>
     </section>
     <style>
-        @media (max-width: 991.98px) {
-            .hero-section {
-                padding-top: 120px !important;
-            }
-            .hero-date.d-none.d-lg-block {
-                display: none !important;
-            }
-            .hero-date.d-lg-none {
-                display: block !important;
-                font-size: 1rem;
-                color: #555;
-            }
-        }
-        @media (max-width: 575.98px) {
-            .hero-section {
-                padding-top: 130px !important;
-            }
-            .hero-title {
-                font-size: 2rem !important;
-            }
-            .hero-subtitle {
-                font-size: 1.1rem !important;
-            }
-            .hero-stats {
-                flex-direction: column !important;
-                gap: 1rem !important;
-            }
-        }
     </style>
 
     <!-- About Section -->
@@ -210,39 +182,80 @@
     <section id="speakers" class="section-padding">
         <div class="container">
             <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
-                Featured Speakers
+                Keynote Speakers
             </h2>
             <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-8" data-aos="fade-up" data-aos-delay="100">
-                    <div class="speaker-card-horizontal" data-bs-toggle="modal" data-bs-target="#speaker1Modal" 
-                        style="display: flex !important; align-items: center !important; flex-direction: row !important;">
-                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Dr. James Mwangi" class="speaker-img"
-                            style="width: 80px !important; height: 80px !important; border-radius: 50% !important; margin-right: 1rem !important; margin-bottom: 0 !important; flex-shrink: 0 !important;">
-                        <div class="speaker-info" style="flex: 1 !important;">
-                            <h3 class="speaker-name">Name</h3>
-                            <p class="speaker-title">Cabinet Secretary, Information Communications and The Digital Economy</p>
-                            <p class="speaker-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum rutrum sollicitudin ante eget convallis. Phasellus vel est at sapien mollis interdum. Nunc eget tortor elit. Aliquam facilisis augue in nibh posuere gravida. Duis facilisis auctor nunc quis mattis. Curabitur aliquam tortor blandit, molestie odio ut, rhoncus velit. Etiam posuere condimentum lorem, non sodales nibh hendrerit vel. Mauris tempus dui nec mauris tristique cursus. Cras tempus dui lectus, non sodales orci tincidunt at. Praesent cursus gravida magna, ac posuere dui lobortis in. Sed non condimentum nisi, sit amet viverra justo. </p>
+                <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="100">
+                    <div class="speaker-card-horizontal" data-bs-toggle="modal" data-bs-target="#speaker1Modal"
+                        style="display: flex !important; align-items: flex-start !important; flex-direction: row !important; height: auto !important;">
+                        <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}" alt="Dr. James Mwangi" class="speaker-img"
+                            style="width: 300px !important; height: 300px !important; border-radius: 0% !important; margin-right: 2rem !important; margin-bottom: 0 !important; flex-shrink: 0 !important;">
+                        <div class="speaker-info" style="flex: 1 !important; padding-top: 0 !important;">
+                            <h3 class="speaker-name" style="font-size: 1.8rem !important; margin-top: 0 !important; margin-bottom: 1.5rem !important; ">Hon. William Kabogo Gitau</h3>
+                            <p class="speaker-title" style="font-size: 1.2rem !important; margin-bottom: 1.5rem !important; color: #01873F !important;">Cabinet Secretary, Ministry of ICT & Digital Economy (MICDE), Government of the Republic of Kenya</p>
+                            <p class="speaker-bio" style="font-size: 1rem !important; margin-bottom: 0 !important; line-height: 1.6 !important; display: block !important; -webkit-line-clamp: none !important; overflow: visible !important; text-overflow: initial !important; -webkit-box-orient: initial !important;">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. </p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="row justify-content-center mt-3">
-                <div class="col-lg-6 col-md-8" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="speaker-card-horizontal" data-bs-toggle="modal" data-bs-target="#speaker2Modal"
-                        style="display: flex !important; align-items: center !important; flex-direction: row !important;">
-                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Sarah Ochieng" class="speaker-img"
-                            style="width: 80px !important; height: 80px !important; border-radius: 50% !important; margin-right: 1rem !important; margin-bottom: 0 !important; flex-shrink: 0 !important;">
-                        <div class="speaker-info" style="flex: 1 !important;">
-                            <h4 class="speaker-name">Name</h4>
-                            <p class="speaker-title">Principal Secretary, State Department Information Communications and The Digital Economy</p>
-                            <p class="speaker-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum rutrum sollicitudin ante eget convallis. Phasellus vel est at sapien mollis interdum. Nunc eget tortor elit. Aliquam facilisis augue in nibh posuere gravida. Duis facilisis auctor nunc quis mattis. Curabitur aliquam tortor blandit, molestie odio ut, rhoncus velit. Etiam posuere condimentum lorem, non sodales nibh hendrerit vel. Mauris tempus dui nec mauris tristique cursus. Cras tempus dui lectus, non sodales orci tincidunt at. Praesent cursus gravida magna, ac posuere dui lobortis in. Sed non condimentum nisi, sit amet viverra justo. </p>
+                        style="display: flex !important; align-items: flex-start !important; flex-direction: row !important; height: auto !important;">
+                        <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}" alt="Sarah Ochieng" class="speaker-img"
+                            style="width: 300px !important; height: 300px !important; border-radius: 0% !important; margin-right: 2rem !important; margin-bottom: 0 !important; flex-shrink: 0 !important;">
+                        <div class="speaker-info" style="flex: 1 !important; padding-top: 0 !important;">
+                            <h4 class="speaker-name" style="font-size: 1.8rem !important; margin-top: 0 !important; margin-bottom: 1.5rem !important; ">Eng. John Tanui</h4>
+                            <p class="speaker-title" style="font-size: 1.2rem !important; margin-bottom: 1.5rem !important; color: #01873F !important;">Principal Secretary - State Department of ICT and Digital Economy, Government of Kenya</p>
+                            <p class="speaker-bio" style="font-size: 1rem !important; margin-bottom: 0 !important; line-height: 1.6 !important; display: block !important; -webkit-line-clamp: none !important; overflow: visible !important; text-overflow: initial !important; -webkit-box-orient: initial !important;">I am an engineer with over 24 years of experience in the technology sector globally, keen on leveraging innovative technologies to solve the most pressing challenges facing economies. I am passionate about mentoring the next generation of technology and business leaders. </p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Speakers -->
+    <section id="speakers" class="section-padding">
+        <div class="container">
+            <!-- <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
+                Featured Speakers
+            </h2> -->
+
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
+                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Dr. James Mwangi" class="speaker-img">
+                        <div class="speaker-info">
+                            <h3 class="speaker-name">Mary N. Kerema, OGW</h3>
+                            <p class="speaker-title">Secretary ICT, E-Government</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
+                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Sarah Ochieng" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Mr. Washington Okoth</h4>
+                            <p class="speaker-title">Secretary ICT Infrastructure</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
+                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Prof. David Kim" class="speaker-img">
+                        <div class="speaker-info">
+                            <h4 class="speaker-name">Mr. Emmanuel Kata Kimeu</h4>
+                            <p class="speaker-title">Secretary, ICT - Security and Audit Control</p>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+
 
             <div class="row">
+                <!-- 
                 <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
                         <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Dr. James Mwangi" class="speaker-img">
@@ -269,7 +282,7 @@
                             <p class="speaker-title">Secretary Infrastracture</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
             </div>
 
@@ -1433,12 +1446,12 @@
                                                 </div>
 
                                                 <!-- Updates Opt-in 
-                                    <div class="form-check mt-3">
-                                    {{ form.updates_opt_in }}
-                                    <label class="form-check-label">
-                                        I would like to receive updates about future summits
-                                    </label>
-                                    </div>-->
+                                                <div class="form-check mt-3">
+                                                {{ form.updates_opt_in }}
+                                                <label class="form-check-label">
+                                                    I would like to receive updates about future summits
+                                                </label>
+                                                </div>-->
 
                                                 <!-- Submit -->
                                                 <div class="text-center mt-4">
