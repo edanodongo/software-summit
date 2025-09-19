@@ -291,19 +291,33 @@ body {
     margin-bottom: 20px;
 }
 
-.partner-logo {
-    max-height: 80px;
-    max-width: 150px;
-    object-fit: contain;
-    filter: grayscale(100%);
-    transition: all 0.3s ease;
-    margin: 20px;
+
+#partners .partners-logos {
+    display: flex;
+    flex-wrap: wrap;             /* allows vertical wrapping on smaller screens */
+    justify-content: center;     /* center align all logos */
+    gap: 60px;                    /* increased spacing between logos */
+    margin-top: 40px;
 }
 
-.partner-logo:hover {
-    filter: grayscale(0%);
+#partners .partner-logo-container {
+    flex: 0 1 180px;              /* a bit wider min width so they don't squeeze */
+    text-align: center;
+}
+
+#partners .partner-logo {
+    max-height: 150px;            
+    max-width: 240px;              
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+#partners .partner-logo:hover {
     transform: scale(1.1);
 }
+
+
+
 
 .media-gallery {
     display: grid;

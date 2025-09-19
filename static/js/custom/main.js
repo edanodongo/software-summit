@@ -3,27 +3,27 @@
 function setTheme(dark) {
     if (dark) {
         document.body.classList.add('dark-theme');
-        document.getElementById('themeToggleIcon').classList.remove('fa-moon');
-        document.getElementById('themeToggleIcon').classList.add('fa-sun');
-        document.getElementById('themeIcon').innerHTML = '<i class="fas fa-sun"></i>';
+        document.getElementById('themeToggle').textContent = '☀️';
         localStorage.setItem('theme', 'dark');
     } else {
         document.body.classList.remove('dark-theme');
-        document.getElementById('themeToggleIcon').classList.remove('fa-sun');
-        document.getElementById('themeToggleIcon').classList.add('fa-moon');
-        document.getElementById('themeIcon').innerHTML = '<i class="fas fa-moon"></i>';
+        document.getElementById('themeToggle').textContent = '🌙';
         localStorage.setItem('theme', 'light');
     }
 }
+
 document.getElementById('themeToggle').addEventListener('click', function () {
     const isDark = !document.body.classList.contains('dark-theme');
     setTheme(isDark);
 });
-// On load, set theme from localStorage
+
+// Apply saved theme on page load
 (function () {
     const theme = localStorage.getItem('theme');
     setTheme(theme === 'dark');
 })();
+
+
 // Minimal dark theme CSS
 const darkStyle = document.createElement('style');
 darkStyle.textContent = `
@@ -289,15 +289,15 @@ document.querySelectorAll('.pricing-card-title').forEach(priceElement => {
 });
 
 // Partner logo hover effects
-document.querySelectorAll('.partner-logo').forEach(logo => {
-    logo.addEventListener('mouseenter', function () {
-        this.style.transform = 'scale(1.1) rotate(5deg)';
-    });
+// document.querySelectorAll('.partner-logo').forEach(logo => {
+//     logo.addEventListener('mouseenter', function () {
+//         this.style.transform = 'scale(1.1) rotate(5deg)';
+//     });
 
-    logo.addEventListener('mouseleave', function () {
-        this.style.transform = 'scale(1) rotate(0deg)';
-    });
-});
+//     logo.addEventListener('mouseleave', function () {
+//         this.style.transform = 'scale(1) rotate(0deg)';
+//     });
+// });
 
 // Typing effect for hero title
 function typeWriter(element, text, speed = 100) {
