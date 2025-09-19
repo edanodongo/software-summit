@@ -29,18 +29,15 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top bg-white" >
+    <div class="container">
+        
         <a class="navbar-brand d-flex align-items-center" href="#home">
-          <img src="{% static 'images/cos.ico' %}" alt="Kenya Software Summit Logo" style="height:32px;width:32px;">
-          <span class="ms-2 fw-bold">Kenya Software Summit</span>
-          <span class="ms-2" id="themeIcon" style="font-size:1.3rem;"><i class="fas fa-moon"></i></span>
+            <img src="{% static 'images/summit_logo.jpeg' %}" alt="Kenya Software Summit Logo" style="height:100%;width:150px;">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
             <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
@@ -50,13 +47,13 @@
             <li class="nav-item"><a class="nav-link" href="#partners">Partners</a></li>
             <li class="nav-item"><a class="nav-link" href="#media">Media</a></li>
             <li class="nav-item d-flex align-items-center ms-2">
-              <button id="themeToggle" class="btn btn-sm btn-outline-light" style="border-radius:50%;width:38px;height:38px;" title="Toggle dark/light mode">
+            <button id="themeToggle" class="btn btn-sm" style="border-radius:50%;width:38px;height:38px;" title="Toggle dark/light mode">
                 <i id="themeToggleIcon" class="fas fa-moon"></i>
-              </button>
+            </button>
             </li>
-          </ul>
+        </ul>
         </div>
-      </div>
+    </div>
     </nav>
 
     <!-- Hero Section -->
@@ -207,9 +204,9 @@
                         <div class="keynote-speaker-info ">
                             <h4 class="keynote-speaker-name" >Eng. John Tanui</h4>
                             <p class="keynote-speaker-title " >Principal Secretary - State Department of ICT and Digital Economy, Government of Kenya</p>
-                            <p class="keynote-speaker-bio">I am an engineer with over 24 years of experience in the technology sector globally, 
+                            <p class="keynote-speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in the technology sector globally, 
                                 keen on leveraging innovative technologies to solve the most pressing challenges facing economies. 
-                                I am passionate about mentoring the next generation of technology and business leaders. </p>
+                                He is passionate about mentoring the next generation of technology and business leaders. </p>
                         </div>
                     </div>
                 </div>
@@ -294,9 +291,9 @@
                     <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}"
                         alt="Speaker">
                     <p class="lead">Principal Secretary - State Department of ICT and Digital Economy, Government of Kenya</p>
-                    <p class="speaker-bio">I am an engineer with over 24 years of experience in the technology sector globally, 
+                    <p class="speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in the technology sector globally, 
                                 keen on leveraging innovative technologies to solve the most pressing challenges facing economies. 
-                                I am passionate about mentoring the next generation of technology and business leaders. </p>
+                                He is passionate about mentoring the next generation of technology and business leaders. </p>
                 </div>
             </div>
         </div>
@@ -459,6 +456,61 @@
       </div>
     </section>
 
+
+    <!-- Sponsors Section  -->
+    <section id="partners" class="section-padding bg-light">
+        
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Kenya Software Summit 2025 Sponsors</h2>
+
+            <div class="partners-logos" data-aos="fade-up">
+            <div class="partner-logo-container">
+                <img src="{% static 'images/summit_logo.jpeg' %}" alt="Ministry of ICT" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/icta.png' %}" alt="ICT Authority" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="Konza Technopolis" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="KAIST Kenya" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="ODPC" class="partner-logo">
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Partners Section  -->
+    <section id="partners" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Our Partners</h2>
+
+            <div class="partners-logos" data-aos="fade-up">
+            <div class="partner-logo-container">
+                <img src="{% static 'images/summit_logo.jpeg' %}" alt="Ministry of ICT" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/icta.png' %}" alt="ICT Authority" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="Konza Technopolis" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="KAIST Kenya" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_technolopolis.jpg' %}" alt="ODPC" class="partner-logo">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
     <!-- Media Section -->
     <section id="media" class="section-padding dark">
         <div class="container">
@@ -534,7 +586,7 @@
 
 
     <!-- Registration Section -->
-    <section id="register" class="section-padding bg-green" >
+    <section id="register" class="section-padding bg-gradient">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center text-white" data-aos="fade-up">
@@ -656,7 +708,7 @@
                     </div>
                     -->
 
-                    <button type="submit" class="btn btn-primary w-100" style="background-color: rgba(2, 52, 79, 0.8);" id="submit-btn">
+                    <button type="submit" class="btn btn-primary w-100 bg-gradient" id="submit-btn">
                     <i class="fa fa-paper-plane me-1"></i> Submit
                     </button>
                 </form>
