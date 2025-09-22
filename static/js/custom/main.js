@@ -480,3 +480,5 @@ document.addEventListener('DOMContentLoaded', () => {
   interestCheckboxes.forEach(cb => cb.addEventListener('change', toggleOtherInterest));
 
 });
+
+document.getElementById("year").textContent = new Date().getFullYear();
