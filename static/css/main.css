@@ -1280,3 +1280,7 @@ body {
 .btn-primary:hover {
   background: #a81216;
 }
+
+.bg-blue {
+    background: rgba(49, 130, 206, 0.1) !important;
+}
