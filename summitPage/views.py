@@ -8,15 +8,12 @@ def home(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            if form.cleaned_data.get("category") == "other" and form.cleaned_data.get("other_category"):
-                registrant.other_category = form.cleaned_data["other_category"]
-
-            registrant.save()
-
+            # Save interests cleanly
             interests = form.cleaned_data.get("interests", [])
             if "other" in interests and form.cleaned_data.get("other_interest"):
                 interests = [i for i in interests if i != "other"]
-                interests.append(form.cleaned_data["other_interest"])
+                interests.append("other")
+                registrant.other_interest = form.cleaned_data["other_interest"]
 
             registrant.interests = interests
             registrant.save()
@@ -47,7 +44,7 @@ def home(request):
 
     return render(request, "summit/home.html", {
         'form': form,
-        'interests_choices': Registrant.INTEREST_CHOICES
+        'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
 

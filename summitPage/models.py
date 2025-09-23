@@ -2,36 +2,48 @@
 from django.db import models
 import uuid
 
+
 class Registrant(models.Model):
-    CATEGORY_CHOICES = [
-        ('govt', 'Government'),
-        ('private', 'Private Sector'),
-        ('startup', 'Startup'),
-        ('academia', 'Academia'),
-        ('student', 'Student'),
-        ('investor', 'Investor'),
-        ('other', 'Other'),
+    TITLE_CHOICES = [
+        ("prof", "Prof."),
+        ("dr", "Dr."),
+        ("eng", "Eng."),
+        ("mr", "Mr."),
+        ("mrs", "Mrs."),
+        ("ms", "Ms"),
+    ]
+
+    ORG_TYPE_CHOICES = [
+        ("govt", "Government Agency"),
+        ("private", "Private Company"),
+        ("academia", "Academic Institution"),
+        ("association", "Sector Association"),
+        ("advocacy", "Industry Advocacy Groups"),
+        ("dev_partner", "Development Partners"),
+        ("other", "Others"),
     ]
 
     INTEREST_CHOICES = [
-        ("ai", "AI & Machine Learning"),
-        ("web", "Web Development"),
-        ("mobile", "Mobile Development"),
-        ("data", "Data Science"),
-        ("cyber", "Cybersecurity"),
-        ("other", "Other"),
+        ("knowledge", "Knowledge and skill development"),
+        ("networking", "Networking and Community building"),
+        ("business", "Business and Career Growth"),
+        ("others", "Others"),
     ]
 
-    full_name = models.CharField(max_length=255)
+    # New fields
+    title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
+    first_name = models.CharField(max_length=100)
+    second_name = models.CharField(max_length=100)
+
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=50)
-    organization = models.CharField(max_length=255, blank=True)
-    job_title = models.CharField(max_length=255, blank=True)
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    interests = models.JSONField(default=list, blank=True)  # stores checkbox selections
 
-    # 🔹 New fields for custom values
-    other_category = models.CharField(max_length=255, blank=True, null=True)
+    organization_type = models.CharField(max_length=20, choices=ORG_TYPE_CHOICES)
+    other_organization_type = models.CharField(max_length=255, blank=True, null=True)
+
+    job_title = models.CharField(max_length=255, blank=True)
+
+    interests = models.JSONField(default=list, blank=True)
     other_interest = models.CharField(max_length=255, blank=True, null=True)
 
     accessibility_needs = models.TextField(blank=True, null=True)
@@ -39,25 +51,21 @@ class Registrant(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    
-    
-    def display_category(self):
-        if self.category == "other" and self.other_category:
-            return self.other_category
-        return self.get_category_display()
+
+    # ==== Display helpers ====
+    def display_org_type(self):
+        if self.organization_type == "other" and self.other_organization_type:
+            return self.other_organization_type
+        return self.get_organization_type_display()
 
     def display_interests(self):
-        interests = []
+        items = []
         for i in self.interests:
             if i == "other" and self.other_interest:
-                interests.append(self.other_interest)
+                items.append(self.other_interest)
             else:
-                interests.append(i)
-        return ", ".join(interests)
-
-    def get_unsubscribe_url(self):
-        from django.urls import reverse
-        return reverse("unsubscribe", args=[str(self.unsubscribe_token)])
+                items.append(dict(self.INTEREST_CHOICES).get(i, i))
+        return ", ".join(items)
 
     def __str__(self):
-        return self.full_name
+        return f"{self.title} {self.first_name} {self.second_name}"
