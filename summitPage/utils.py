@@ -24,12 +24,12 @@ def send_confirmation_email(registrant):
 
           <!-- Ministry Logo -->
           <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://geoclock.onrender.com/static/images/banner-logo.png" alt="MINISTRY LOGO" style="height:70px;">
+            <img src="https://iili.io/KcnJtXs.md.png" alt="MINISTRY LOGO" style="height:70px;">
           </div>
 
           <!-- Summit Logo -->
           <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://geoclock.onrender.com/static/images/summit_logo.png" alt="Summit Logo" style="height:60px;">
+            <img src="https://iili.io/KcnJDLG.md.png" alt="Summit Logo" style="height:60px;">
           </div>
 
           <!-- Greeting -->
@@ -65,7 +65,11 @@ def send_confirmation_email(registrant):
 
         <!-- Footer outside card -->
         <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-          <p>&copy; {current_year} Kenya Software Summit. All rights reserved.</p>
+          <p>&copy; {current_year} Kenya Software Summit.</p>
+          <p> The Ministry of Information, Communications and The Digital Economy</p>
+          <p> 6th Floor, Bruce House, Standard Street</p>
+          <p> Email: softwaresummit@ict.go.ke </p>
+          <p>  All rights reserved.</p>
         </footer>
       </body>
     </html>
