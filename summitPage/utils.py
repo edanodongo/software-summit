@@ -6,43 +6,71 @@ from datetime import datetime
 def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
     plain_message = (
-        f"Hello {registrant.first_name},\n\n"
+        f"Hello {registrant.first_name} {registrant.second_name},\n\n"
         "Thank you for registering for the 2025 Kenya Software Summit!\n\n"
         "Details:\n"
-        f"- Category: {registrant.organization_type()}\n"
+        f"- Category: {registrant.organization_type}\n"
         f"- Organization: {registrant.other_organization_type or 'N/A'}\n\n"
         "We’ll keep you updated with more information as the event approaches.\n\n"
         "Best regards,\nThe Summit Team"
     )
 
-    current_year = datetime.now().year  # dynamic year
+    current_year = datetime.now().year
 
     html_message = f"""
     <html>
-      <body style="font-family: Arial, sans-serif; background-color:#f9f9f9; padding:20px;">
-        <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:8px; padding:20px; border:1px solid #ddd;">
+      <body style="font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px; margin:0;">
+        <div style="max-width:650px; margin:40px auto; background:#ffffff; border-radius:8px; padding:30px; border:1px solid #e0e0e0;">
+
+          <!-- Ministry Logo -->
           <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://example.com/static/logo.png" alt="Summit Logo" style="height:60px;">
+            <img src="https://iili.io/KcnJtXs.md.png" alt="MINISTRY LOGO" style="height:70px;">
           </div>
-          <h2 style="color:#2c3e50;">Hello {registrant.first_name},</h2>
-          <p>Thank you for registering for the <strong>2025 Kenya Software Summit!</strong></p>
 
-          <h3 style="margin-top:20px; color:#2c3e50;">Details:</h3>
-          <ul style="line-height:1.6; color:#555;">
-            <li><strong>Category:</strong> {registrant.organization_type()}</li>
-            <li><strong>Organization:</strong> {registrant.other_organization_type or 'N/A'}</li>
-          </ul>
+          <!-- Summit Logo -->
+          <div style="text-align:center; margin-bottom:20px;">
+            <img src="https://iili.io/KcnJDLG.md.png" alt="Summit Logo" style="height:60px;">
+          </div>
 
-          <p>We’ll keep you updated with more information as the event approaches.</p>
+          <!-- Greeting -->
+          <h2 style="color:#2c3e50; text-align:center; margin-bottom:10px;">Hello {registrant.first_name} {registrant.second_name},</h2>
+          <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
+            Thank you for registering for the <strong>2025 Kenya Software Summit!</strong>
+          </p>
 
-          <p style="margin-top:30px;">Best regards,<br><strong>The Summit Team</strong></p>
+          <!-- Details in tabular style -->
+          <table style="width:100%; border-collapse:collapse; margin-bottom:25px; font-size:14px; color:#333;">
+            <tr>
+              <td style="border:1px solid #ddd; padding:8px; font-weight:bold; width:35%;">Category</td>
+              <td style="border:1px solid #ddd; padding:8px;">{registrant.organization_type}</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #ddd; padding:8px; font-weight:bold;">Organization</td>
+              <td style="border:1px solid #ddd; padding:8px;">{registrant.other_organization_type or 'N/A'}</td>
+            </tr>
+          </table>
 
-          <hr style="margin:30px 0; border:none; border-top:1px solid #eee;">
-          <footer style="text-align:center; font-size:12px; color:#888;">
-            <p>&copy; {current_year} Kenya Software Summit.<br>
-            All rights reserved.</p>
-          </footer>
+          <!-- CTA button -->
+          <div style="margin:30px 0; text-align:center;">
+            <a href="https://softwaresummit.go.ke/" 
+               style="background-color:#007bff; color:#fff; padding:12px 25px; border-radius:4px; text-decoration:none; font-weight:bold; font-size:14px;">
+              Visit Summit Portal
+            </a>
+          </div>
+
+          <p style="color:#333; font-size:14px;">We’ll keep you updated with more information as the event approaches.</p>
+
+          <p style="margin-top:30px; color:#333; font-size:14px;">Best regards,<br><strong>The Summit Team</strong></p>
         </div>
+
+        <!-- Footer outside card -->
+        <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
+          <p>&copy; {current_year} Kenya Software Summit.</p>
+          <p> The Ministry of Information, Communications and The Digital Economy</p>
+          <p> 6th Floor, Bruce House, Standard Street</p>
+          <p> Email: softwaresummit@ict.go.ke </p>
+          <p>  All rights reserved.</p>
+        </footer>
       </body>
     </html>
     """
