@@ -66,7 +66,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero-section">
     <div class="container">
-        <div class="row  justify-content-center gy-5">
+        <div class="row align-items-center gy-5">
         <!-- Left -->
         <div class="col-lg-8 hero-content justify-content-center" data-aos="fade-up">
             <h1 class="hero-title">Kenya Software Summit</h1>
@@ -452,46 +452,46 @@
                     
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200&h=600&fit=crop" alt="Conference Hall">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_9.jpg' %}" alt="Conference Hall">
+                            <!-- <div class="carousel-caption">
                                 <h4>Conference Hall</h4>
                                 <p>State-of-the-art conference facilities with cutting-edge technology and comfortable seating for all attendees.</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="carousel-item">
-                            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop" alt="Networking Session">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_7.jpg' %}" alt="Networking Session">
+                            <!-- <div class="carousel-caption">
                                 <h4>Networking Session</h4>
                                 <p>Connect with industry professionals and build valuable relationships in our dedicated networking areas.</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="carousel-item">
-                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop" alt="Workshop">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_6.jpg' %}" alt="Workshop">
+                            <!-- <div class="carousel-caption">
                                 <h4>Interactive Workshops</h4>
                                 <p>Hands-on learning experiences led by industry experts and thought leaders.</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="carousel-item">
-                            <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop" alt="Tech Expo">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_8.jpg' %}" alt="Tech Expo">
+                            <!-- <div class="carousel-caption">
                                 <h4>Tech Expo</h4>
                                 <p>Explore the latest innovations and technologies from leading companies and startups.</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="carousel-item">
-                            <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200&h=600&fit=crop" alt="Keynote Speaker">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_4.jpg' %}" alt="Keynote Speaker">
+                            <!-- <div class="carousel-caption">
                                 <h4>Keynote Presentations</h4>
                                 <p>Inspiring talks from renowned speakers sharing insights and industry trends.</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="carousel-item">
-                            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&h=600&fit=crop" alt="Awards Ceremony">
-                            <div class="carousel-caption">
+                            <img src="{% static 'images/gallery/photo_5.jpg' %}" alt="Awards Ceremony">
+                            <!-- <div class="carousel-caption">
                                 <h4>Awards Ceremony</h4>
                                 <p>Celebrating excellence and innovation in our annual awards ceremony.</p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     
@@ -532,7 +532,7 @@
     <!-- Registration Form -->
     <div class="row justify-content-center">
       <div class="col-lg-7 col-md-9">
-        <div class="card registration-card p-4 bg-light">
+        <div class="card registration-card p-4 bg-red-light">
           <form id="registration-form" method="post" novalidate>
             {% csrf_token %}
 
@@ -566,11 +566,11 @@
 
             <!-- Organization Type -->
             <div class="row g-3 mt-3">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <label class="form-label fw-semibold dark">Organization Type</label>
                 {{ form.organization_type }}
               </div>
-              <div class="col-md-6" id="other-org-type" style="display:none;">
+              <div class="col-md-12" id="other-org-type" style="display:none;">
                 <label class="form-label fw-semibold dark">Please specify</label>
                 {{ form.other_organization_type }}
               </div>
@@ -603,8 +603,8 @@
 
             <!-- Submit -->
             <div class="d-grid mt-4">
-              <button type="submit" id="submit-btn" class="btn btn-submit btn-lg bg-danger" >
-                <i class="fa fa-paper-plane me-2 dark"></i> Submit Registration
+              <button type="submit" id="submit-btn" class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark" >
+                <i class="fa fa-paper-plane me-2"></i> Register Now
               </button>
             </div>
           </form>
