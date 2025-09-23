@@ -1,5 +1,22 @@
 from .forms import QuickRegistrationForm
 from .utils import *
+from openpyxl import Workbook
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models.functions import TruncDate
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib import colors
+from reportlab.platypus import (
+    SimpleDocTemplate, Table, TableStyle, Paragraph,
+    Image, Spacer
+)
+from reportlab.lib.styles import getSampleStyleSheet
+from django.utils.timezone import now
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView
+import os
+
 
 def home(request):
     if request.method == 'POST':
@@ -24,18 +41,14 @@ def home(request):
             except Exception as e:
                 print("Email Send error:", e)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse({"success": False, "message": "Registration saved but email could not be sent."}, status=500)
+                    return JsonResponse(
+                        {"success": False, "message": "Registration saved but email could not be sent."}, status=500)
                 messages.warning(request, "Registered, but confirmation email failed.")
-
-
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
 
-            messages.success(request, "Registration successful!")\
-
-
-
+            messages.success(request, "Registration successful!")
             return redirect('home')
 
         else:
@@ -62,9 +75,7 @@ def unsubscribe_view(request, token):
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
 
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.db.models.functions import TruncDate
+
 
 
 @api_view(['GET'])
@@ -101,43 +112,6 @@ def dashboard_stats(request):
         "updates_percent": updates_percent,
     })
 
-
-from openpyxl import Workbook
-
-
-# # === CSV Export ===
-# from django.template.loader import render_to_string
-# from weasyprint import HTML
-# from django.utils import timezone
-
-
-# def export_registrants_csv(request):
-#     registrants = Registrant.objects.all()
-
-#     category_counts = (
-#         registrants.values("category")
-#         .annotate(count=Count("id"))
-#         .order_by()
-#     )
-
-#     # Render HTML
-#     html_string = render_to_string("summit/print_registrants.html", {
-#         "registrants": registrants,
-#         "category_counts": list(category_counts),
-#         "now": timezone.now(),
-#         "pdf_mode": True,  # flag to hide print button
-#     })
-
-#     # Convert to PDF
-#     html = HTML(string=html_string, base_url=request.build_absolute_uri())
-#     pdf = html.write_pdf()
-
-#     # Return as file download
-#     response = HttpResponse(pdf, content_type="application/pdf")
-#     response["Content-Disposition"] = "attachment; filename=registrants_report.pdf"
-#     return response
-
-
 # === Excel Export ===
 def export_registrants_excel(request):
     wb = Workbook()
@@ -172,16 +146,7 @@ def export_registrants_excel(request):
 
 # === PDF Export in Landscape ===
 # === PDF Export in Landscape with Logo, Header & Footer ===
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib import colors
-from reportlab.platypus import (
-    SimpleDocTemplate, Table, TableStyle, Paragraph,
-    Image, Spacer
-)
-from reportlab.lib.styles import getSampleStyleSheet
-from django.utils.timezone import now
-import os
+
 
 
 def export_registrants_pdf(request):
@@ -282,59 +247,9 @@ def print_registrants(request):
     })
 
 
-from django.core.mail import send_mass_mail
-from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib import messages
-from .forms import BulkEmailForm
-
-
-@staff_member_required
-def bulk_email_view(request):
-    if request.method == "POST":
-        form = BulkEmailForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data["subject"]
-            message = form.cleaned_data["message"]
-            category = form.cleaned_data["category"]
-
-            # Choose recipients based on category
-            if category == "all":
-                recipients = Registrant.objects.values_list("email", flat=True)
-            elif category == "updates":
-                recipients = Registrant.objects.filter(updates_opt_in=True).values_list("email", flat=True)
-            else:
-                recipients = Registrant.objects.filter(category=category).values_list("email", flat=True)
-
-            # Prepare datatuple with unsubscribe links
-            datatuple = []
-            for email in recipients:
-                try:
-                    registrant = Registrant.objects.get(email=email)
-                    unsubscribe_link = request.build_absolute_uri(registrant.get_unsubscribe_url())
-                    message_with_unsub = (
-                        f"{message}\n\n---\n"
-                        f"To stop receiving these updates, click here: {unsubscribe_link}"
-                    )
-                except Registrant.DoesNotExist:
-                    message_with_unsub = message  # fallback (shouldn’t normally happen)
-
-                datatuple.append((subject, message_with_unsub, settings.DEFAULT_FROM_EMAIL, [email]))
-
-            # Send all at once
-            if datatuple:
-                send_mass_mail(datatuple, fail_silently=False)
-                messages.success(request, f"Bulk email sent to {len(datatuple)} recipients.")
-            else:
-                messages.warning(request, "No recipients found for this segment.")
-
-            return redirect("bulk_email")
-    else:
-        form = BulkEmailForm()
-
-    return render(request, "summit/bulk_email.html", {"form": form})
-
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count
@@ -357,22 +272,6 @@ def dashboard_view(request):
         .order_by("category")
     )
 
-    # # Breakdown by interests (if stored as CSV)
-    # interests_raw = Registrant.objects.exclude(interests__isnull=True).values_list("interests", flat=True)
-    # interest_map = {}
-    # for row in interests_raw:
-    #     for i in row.split(","):
-    #         i = i.strip()
-    #         if i:
-    #             interest_map[i] = interest_map.get(i, 0) + 1
-
-    # # Registrations over time
-    # registrations_over_time = (
-    #     Registrant.objects.extra({"date": "date(created_at)"})
-    #     .values("date")
-    #     .annotate(count=Count("id"))
-    #     .order_by("date")
-    # )
 
     context = {
         "total_users": total_users,
@@ -403,47 +302,19 @@ def dashboard_data(request):
     return JsonResponse(data)
 
 
-from django.contrib.auth.views import LoginView
+
 
 
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
 
-from django.contrib.auth.views import LogoutView
+
 
 
 class SummitLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
-
-
-# def login_view(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-#         user = authenticate(request, username=username, password=password)
-#         if user:
-#             auth_login(request, user)   # ✅ use renamed login function
-#             return redirect("dashboard")
-#         else:
-#             messages.error(request, "Invalid credentials")
-#     return render(request, "summit/samples/login.html")
-
-# @login_required
-# def dashboard(request):
-#     registrations = Registration.objects.all().order_by("-created_at")
-#     return render(request, "summit/samples/dashboard.html", {"registrations": registrations})
-
-
-# View for event page
-def landingEvent(request):
-    return render(request, 'landingpage/index.html')
-
-
-def summit(request):
-    return render(request, 'landingpage/summit.html')
-
 
 def about(request):
     return render(request, 'summit/samples/about.html')
@@ -452,34 +323,3 @@ def about(request):
 def agenda(request):
     return render(request, 'summit/agenda.html')
 
-
-def base(request):
-    return render(request, 'summit/samples/base.html')
-
-
-def contact(request):
-    return render(request, 'summit/samples/contact.html')
-
-
-def features(request):
-    return render(request, 'summit/samples/features.html')
-
-
-def media(request):
-    return render(request, 'summit/samples/media.html')
-
-
-def partners(request):
-    return render(request, 'summit/samples/partners.html')
-
-
-def register(request):
-    return render(request, 'summit/samples/register.html')
-
-
-def speakers(request):
-    return render(request, 'summit/samples/speakers.html')
-
-
-def travel(request):
-    return render(request, 'summit/samples/travel.html')

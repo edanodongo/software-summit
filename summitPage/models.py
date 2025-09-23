@@ -5,6 +5,7 @@ import uuid
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
+        ('', 'Select Title'),
         ("Prof", "Prof."),
         ("Dr", "Dr."),
         ("Eng", "Eng."),
@@ -14,6 +15,7 @@ class Registrant(models.Model):
     ]
 
     ORG_TYPE_CHOICES = [
+        ('', 'Select Organization Type'),
         ("Government Agency", "Government Agency"),
         ("Private Company", "Private Company"),
         ("Academic Institution", "Academic Institution"),

@@ -12,11 +12,19 @@ class QuickRegistrationForm(forms.ModelForm):
 
     other_organization_type = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control mt-2', 'placeholder': 'Please specify...'})
+        widget=forms.Textarea(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Please specify...',
+            'rows': 3  # optional: controls height
+        })
     )
     other_interest = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control mt-2', 'placeholder': 'Please specify...'})
+        widget=forms.Textarea(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Please specify...',
+            'rows': 3  # optional: controls height
+        })
     )
 
     class Meta:
@@ -62,33 +70,3 @@ class QuickRegistrationForm(forms.ModelForm):
             )
 
         return cleaned_data
-
-
-# registrations/forms.py
-from django import forms
-from .models import Registrant
-
-class BulkEmailForm(forms.Form):
-    ORG_TYPE_CHOICES = [
-        ('all', 'All'),
-        ('updates', 'Future Updates Mailing List'),
-    ] + Registrant.ORG_TYPE_CHOICES
-
-    subject = forms.CharField(
-        max_length=200,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Email Subject"
-        })
-    )
-    message = forms.CharField(
-        widget=forms.Textarea(attrs={
-            "class": "form-control",
-            "rows": 6,
-            "placeholder": "Write your message here..."
-        })
-    )
-    category = forms.ChoiceField(
-        choices=ORG_TYPE_CHOICES,
-        widget=forms.Select(attrs={"class": "form-select"})
-    )
