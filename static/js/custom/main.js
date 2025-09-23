@@ -1,16 +1,19 @@
 
 // Theme toggle logic
 function setTheme(dark) {
+    const toggleIcon = document.getElementById('themeToggle').querySelector('i');
+
     if (dark) {
         document.body.classList.add('dark-theme');
-        document.getElementById('themeToggle').textContent = '☀️';
+        toggleIcon.className = 'fas fa-sun'; // white sun icon
         localStorage.setItem('theme', 'dark');
     } else {
         document.body.classList.remove('dark-theme');
-        document.getElementById('themeToggle').textContent = '🌙';
+        toggleIcon.className = 'fas fa-moon'; // white moon icon
         localStorage.setItem('theme', 'light');
     }
 }
+
 
 document.getElementById('themeToggle').addEventListener('click', function () {
     const isDark = !document.body.classList.contains('dark-theme');
@@ -144,132 +147,53 @@ scrollToTopBtn.addEventListener('click', function () {
 });
 
 // Form submissions
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('registration-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const alertContainer = document.getElementById('alert-container');
+document.addEventListener("DOMContentLoaded", function () {
+    const orgTypeSelect = document.getElementById("id_organization_type");
+    const otherOrgField = document.getElementById("id_other_organization_type").closest(".mb-3");
+    const interestCheckboxes = document.querySelectorAll("#id_interests input[type=checkbox]");
+    const otherInterestField = document.getElementById("id_other_interest").closest(".mb-3");
 
-  // ===== CATEGORY DROPDOWN =====
-  const categorySelect = document.getElementById('id_category');
-  const otherCategoryDiv = document.createElement('div');
-  otherCategoryDiv.className = 'mt-2';
-  otherCategoryDiv.style.display = 'none';
-  otherCategoryDiv.innerHTML = `
-      <label for="otherCategoryInput" class="form-label fw-semibold text-white">
-          Other Category
-      </label>
-      <input type="text" 
-             name="other_category" 
-             id="otherCategoryInput"
-             class="form-control mt-2"
-             placeholder="Please specify category..." />
-  `;
-  categorySelect.parentNode.appendChild(otherCategoryDiv);
+    // Hide both fields initially
+    if (otherOrgField) otherOrgField.style.display = "none";
+    if (otherInterestField) otherInterestField.style.display = "none";
 
-  categorySelect.addEventListener('change', () => {
-    if (categorySelect.value.toLowerCase() === 'other') {
-      otherCategoryDiv.style.display = 'block';
-      document.getElementById('otherCategoryInput').required = true;
-    } else {
-      otherCategoryDiv.style.display = 'none';
-      document.getElementById('otherCategoryInput').value = '';
-      document.getElementById('otherCategoryInput').required = false;
-    }
-  });
-
-  // ===== INTERESTS CHECKBOXES =====
-  const interestInputs = document.querySelectorAll("input[name='interests']");
-  const otherInterestDiv = document.createElement('div');
-  otherInterestDiv.className = 'mt-2';
-  otherInterestDiv.style.display = 'none';
-  otherInterestDiv.innerHTML = `
-      <label for="otherInterestInput" class="form-label fw-semibold text-white">
-          Other Interest
-      </label>
-      <input type="text" 
-             name="other_interest" 
-             id="otherInterestInput"
-             class="form-control mt-2"
-             placeholder="Please specify your interest..." />
-  `;
-  if (interestInputs.length > 0) {
-    const interestContainer = interestInputs[interestInputs.length - 1].closest('div');
-    interestContainer.parentNode.appendChild(otherInterestDiv);
-  }
-
-  interestInputs.forEach(input => {
-    input.addEventListener('change', () => {
-      if (Array.from(interestInputs).some(i => i.checked && i.value.toLowerCase() === 'other')) {
-        otherInterestDiv.style.display = 'block';
-        document.getElementById('otherInterestInput').required = true;
-      } else {
-        otherInterestDiv.style.display = 'none';
-        document.getElementById('otherInterestInput').value = '';
-        document.getElementById('otherInterestInput').required = false;
-      }
-    });
-  });
-
-  // ===== FORM SUBMISSION (AJAX) =====
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Clear previous errors
-    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-    form.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Submitting...';
-
-    const formData = new FormData(form);
-
-    fetch('', {
-      method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      body: formData
-    })
-      .then(async response => {
-        const data = await response.json();
-        if (!response.ok) throw data;
-        return data;
-      })
-      .then(data => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
-        alertContainer.innerHTML = `
-          <div class="alert alert-success">Registration successful!</div>`;
-        form.reset();
-        otherCategoryDiv.style.display = 'none';
-        otherInterestDiv.style.display = 'none';
-      })
-      .catch(err => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> Submit';
-
-        if (err.errors) {
-          alertContainer.innerHTML = `
-            <div class="alert alert-danger">Please fix the errors below.</div>`;
-          Object.keys(err.errors).forEach(field => {
-            const fieldEl = document.getElementById('id_' + field);
-            if (fieldEl) {
-              fieldEl.classList.add('is-invalid');
-              // Try to find or create an error feedback element
-              let feedback = fieldEl.nextElementSibling;
-              if (!feedback || !feedback.classList.contains('invalid-feedback')) {
-                feedback = document.createElement('div');
-                feedback.className = 'invalid-feedback d-block';
-                fieldEl.insertAdjacentElement('afterend', feedback);
-              }
-              feedback.textContent = err.errors[field][0];
-            }
-          });
+    // Show textbox when any org type is chosen
+    function toggleOrgField() {
+        if (orgTypeSelect && orgTypeSelect.value) {
+            otherOrgField.style.display = "block";
         } else {
-          alertContainer.innerHTML = `
-            <div class="alert alert-danger">Something went wrong. Please try again.</div>`;
-          console.error(err);
+            otherOrgField.style.display = "none";
+            document.getElementById("id_other_organization_type").value = "";
         }
-      });
-  });
+    }
+
+    // Show textbox when "Others" is checked in interests
+    function toggleInterestField() {
+        let othersChecked = false;
+        interestCheckboxes.forEach(cb => {
+            if (cb.checked && cb.value.toLowerCase() === "others") {
+                othersChecked = true;
+            }
+        });
+
+        if (othersChecked) {
+            otherInterestField.style.display = "block";
+        } else {
+            otherInterestField.style.display = "none";
+            document.getElementById("id_other_interest").value = "";
+        }
+    }
+
+    // Event listeners
+    if (orgTypeSelect) {
+        orgTypeSelect.addEventListener("change", toggleOrgField);
+        toggleOrgField(); // run on page load
+    }
+
+    interestCheckboxes.forEach(cb => {
+        cb.addEventListener("change", toggleInterestField);
+    });
+    toggleInterestField(); // run on page load
 });
 
 

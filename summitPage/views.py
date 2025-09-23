@@ -1,16 +1,13 @@
 from .forms import QuickRegistrationForm
 from .utils import send_confirmation_email
 
-# registrations/views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import QuickRegistrationForm
 from .models import Registrant
-from .utils import send_confirmation_email  # if you have this helper
-
-from .models import Registrant
-
+from .utils import send_confirmation_email 
+ 
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST)
@@ -18,18 +15,20 @@ def home(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            if form.cleaned_data.get("category") == "other" and form.cleaned_data.get("other_category"):
-                registrant.other_category = form.cleaned_data["other_category"]
-
-            registrant.save()
-
+            # Save interests cleanly
             interests = form.cleaned_data.get("interests", [])
             if "other" in interests and form.cleaned_data.get("other_interest"):
                 interests = [i for i in interests if i != "other"]
-                interests.append(form.cleaned_data["other_interest"])
+                interests.append("other")
+                registrant.other_interest = form.cleaned_data["other_interest"]
 
             registrant.interests = interests
             registrant.save()
+
+            try:
+                send_confirmation_email(registrant)
+            except Exception as e:
+                print("Email send error:", e)
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
@@ -47,7 +46,7 @@ def home(request):
 
     return render(request, "summit/home.html", {
         'form': form,
-        'interests_choices': Registrant.INTEREST_CHOICES
+        'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
 
