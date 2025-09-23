@@ -1,4 +1,4 @@
-# Software Summit – Django Project
+# Software Summit Website
 
 This is a Django-based web application that powers the **Software Summit** platform.  
 It includes features like PDF generation using **WeasyPrint**, which requires some additional system setup.

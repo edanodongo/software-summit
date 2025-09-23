@@ -1,13 +1,6 @@
 from .forms import QuickRegistrationForm
-from .utils import send_confirmation_email
+from .utils import *
 
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.contrib import messages
-from .forms import QuickRegistrationForm
-from .models import Registrant
-from .utils import send_confirmation_email 
- 
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST)
@@ -25,15 +18,20 @@ def home(request):
             registrant.interests = interests
             registrant.save()
 
+            # send email
             try:
                 send_confirmation_email(registrant)
             except Exception as e:
-                print("Email send error:", e)
+                print("Email Send error:", e)
+
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
 
-            messages.success(request, "Registration successful!")
+            messages.success(request, "Registration successful!")\
+
+
+
             return redirect('home')
 
         else:
@@ -101,6 +99,7 @@ def dashboard_stats(request):
 
 
 from openpyxl import Workbook
+
 
 # # === CSV Export ===
 # from django.template.loader import render_to_string

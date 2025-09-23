@@ -8,11 +8,10 @@
     <title>Kenya Software Summit 2025 - Code the Future, Build Africa</title>
 
     <!-- Fontawesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
 
     <!-- Favicons -->
-    <link href="{% static 'images/cos.ico' %}" rel="icon">
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
     <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
     <!-- Vendor CSS Files -->
@@ -28,8 +27,8 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top bg-white" >
+<!-- Navigation -->
+<nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top bg-white">
     <div class="container">
         
         <!-- <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}" >
@@ -63,87 +62,98 @@
         </ul>
         </div>
     </div>
-    </nav>
+</nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero-section bg-light" style="padding-top: 100px;">
-        <div class="container">
-            <div class="row align-items-center gy-5">
-                <div class="col-lg-8 hero-content" data-aos="fade-up">
-                    <div class="hero-date d-none d-lg-block">
+<!-- Hero Section -->
+<section id="home" class="hero-section bg-light" style="padding-top: 100px;">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-8 hero-content" data-aos="fade-up">
+                <div class="hero-date d-none d-lg-block">
+                    <i class="fas fa-calendar"></i> October 28-30, 2025 | Eldoret City, Kenya
+                </div>
+                <h1 class="hero-title">Kenya Software Summit</h1>
+                <p class="hero-subtitle">Code the Future. Build Africa.</p>
+                <p class="lead mb-4 dark">
+                    Join Africa's premier software development conference where innovation meets opportunity. Connect
+                    with global tech leaders, showcase your projects, and shape the future of technology in Africa.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#register" class="btn btn-primary-custom">Register Now</a>
+                    <a href="#about" class="btn btn-outline-custom">Learn More</a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
+                    <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
+                        <div class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
+                            <div class="stat-item">
+                                <h3 class="--primary-green mb-0">500+</h3>
+                                <p class="--primary-green mb-0 dark">Developers</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 class="--primary-green mb-0">50+</h3>
+                                <p class="--primary-green mb-0 dark">Speakers</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 class="--primary-green mb-0">3</h3>
+                                <p class="--primary-green mb-0 dark">Days</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-date d-lg-none mt-3">
                         <i class="fas fa-calendar"></i> October 28-30, 2025 | Eldoret City, Kenya
                     </div>
-                    <h1 class="hero-title">Kenya Software Summit</h1>
-                    <p class="hero-subtitle">Code the Future. Build Africa.</p>
-                    <p class="lead mb-4 dark">
-                        Join Africa's premier software development conference where innovation meets opportunity. Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.
-                    </p>
-                    <div class="d-flex flex-wrap gap-3">
-                        <a href="#register" class="btn btn-primary-custom">Register Now</a>
-                        <a href="#about" class="btn btn-outline-custom">Learn More</a>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row h-100 flex-lg-column flex-md-row flex-sm-row flex-column align-items-center justify-content-center gy-4">
-                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="100">
-                            <div class="hero-stats d-flex flex-lg-column flex-md-row flex-sm-row flex-row justify-content-center align-items-center gap-4 mb-4">
-                                <div class="stat-item">
-                                    <h3 class="--primary-green mb-0">500+</h3>
-                                    <p class="--primary-green mb-0 dark">Developers</p>
-                                </div>
-                                <div class="stat-item">
-                                    <h3 class="--primary-green mb-0">50+</h3>
-                                    <p class="--primary-green mb-0 dark">Speakers</p>
-                                </div>
-                                <div class="stat-item">
-                                    <h3 class="--primary-green mb-0">3</h3>
-                                    <p class="--primary-green mb-0 dark">Days</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="hero-date d-lg-none mt-3">
-                            <i class="fas fa-calendar"></i> October 28-30, 2025 | Eldoret City, Kenya
-                        </div>
-                        <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
-                            <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto" style="background: var(--gradient-primary); max-width: 350px;">
-                                <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown to Summit</h5>
-                                <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
-                            </div>
+                    <div class="col-12 text-center" data-aos="fade-left" data-aos-delay="200">
+                        <div class="bg-gradient rounded-4 shadow-sm p-4 w-100 mx-auto"
+                             style="background: var(--gradient-primary); max-width: 350px;">
+                            <h5 class="mb-3" style="color: white;"><i class="fas fa-hourglass-half me-2"></i>Countdown
+                                to Summit</h5>
+                            <div id="countdown" class="d-flex justify-content-center gap-3 flex-wrap"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <style>
-    </style>
+    </div>
+</section>
+<style>
+</style>
 
-    <!-- About Section -->
-    <section id="about" class="section-padding ">
-        <div class="container">
-            <h2 class="section-title about-lead-text dark" data-aos="fade-up">About the Summit</h2>
-            <div class="row">
-                <div class="col-lg-6" data-aos="fade-right">
-                    {% comment %} <h3 class="mb-4">Background & Context</h3> {% endcomment %}
-                    <p class="lead about-lead-text dark">The global economy is being transformed by software development, artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically positioned to lead Africa's next wave of digital transformation.</p>
-                    
-                    <p>The Kenya Software Summit aligns with Kenya's vision of decentralizing innovation and fostering regional digital economies.</p>
-                </div>
-                <div class="col-lg-6" data-aos="fade-left">
-                    <h3 class="mb-4">Our Vision</h3>
-                    <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Become Africa's leading
-                            annual software and digital innovation conference by 2030</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Cement Kenya's leadership
-                            as Africa's "Code Nation"</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Support Kenya's ambition
-                            to create 1 million digital economy jobs by 2030</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Position Kenya as a
-                            global partner in AI innovation and software exports</li>
-                    </ul>
-                </div>
+<!-- About Section -->
+<section id="about" class="section-padding ">
+    <div class="container">
+        <h2 class="section-title about-lead-text dark" data-aos="fade-up">About the Summit</h2>
+        <div class="row">
+            <div class="col-lg-6" data-aos="fade-right">
+                {% comment %} <h3 class="mb-4">Background & Context</h3> {% endcomment %}
+                <p class="lead about-lead-text dark">The global economy is being transformed by software development,
+                    artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its
+                    dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically
+                    positioned to lead Africa's next wave of digital transformation.</p>
+
+                <p>The Kenya Software Summit aligns with Kenya's vision of decentralizing innovation and fostering
+                    regional digital economies.</p>
             </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <h3 class="mb-4">Our Vision</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Become Africa's leading
+                        annual software and digital innovation conference by 2030
+                    </li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Cement Kenya's leadership
+                        as Africa's "Code Nation"
+                    </li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Support Kenya's ambition
+                        to create 1 million digital economy jobs by 2030
+                    </li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Position Kenya as a
+                        global partner in AI innovation and software exports
+                    </li>
+                </ul>
+            </div>
+        </div>
 
             <!-- Objectives -->
             <div class="row mt-5">
@@ -182,297 +192,330 @@
         </div>
     </section>
 
-    <!-- ================= Speakers Section ================= -->
+<!-- ================= Speakers Section ================= -->
 
-    <!-- Keynote speakers -->
-    <section id="speakers" class="section-padding">
-        <div class="container">
-            <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
-                Speakers
-            </h2>
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="100">
-                    <div class="keynote-speaker-card " style="color: black;" data-bs-toggle="modal" data-bs-target="#speaker1Modal">
-                        <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}" alt="Hon. William Kabogo Gitau" class="keynote-speaker-img">
-                        <div class="keynote-speaker-info">
-                            <h3 class="keynote-speaker-name ">Hon. William Kabogo Gitau</h3>
-                            <p class="keynote-speaker-title ">Cabinet Secretary, Ministry of ICT & Digital Economy (MICDE), Government of the Republic of Kenya</p>
-                            <p class="keynote-speaker-bio">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he 
-                                dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing 
-                                county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of 
-                                Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row justify-content-center mt-4">
-                <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="200">
-                    <div class="keynote-speaker-card " style="color: black;" data-bs-toggle="modal" data-bs-target="#speaker2Modal">
-                        <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}" alt="Eng. John Tanui" class="keynote-speaker-img">
-                        <div class="keynote-speaker-info ">
-                            <h4 class="keynote-speaker-name" >Eng. John Tanui</h4>
-                            <p class="keynote-speaker-title " >Principal Secretary - State Department of ICT and Digital Economy, Government of Kenya</p>
-                            <p class="keynote-speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in the technology sector globally, 
-                                keen on leveraging innovative technologies to solve the most pressing challenges facing economies. 
-                                He is passionate about mentoring the next generation of technology and business leaders. </p>
-                        </div>
+<!-- Keynote speakers -->
+<section id="speakers" class="section-padding">
+    <div class="container">
+        <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
+            Speakers
+        </h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="keynote-speaker-card " style="color: black;" data-bs-toggle="modal"
+                     data-bs-target="#speaker1Modal">
+                    <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}" alt="Hon. William Kabogo Gitau"
+                         class="keynote-speaker-img">
+                    <div class="keynote-speaker-info">
+                        <h3 class="keynote-speaker-name ">Hon. William Kabogo Gitau</h3>
+                        <p class="keynote-speaker-title ">Cabinet Secretary, Ministry of ICT & Digital Economy (MICDE),
+                            Government of the Republic of Kenya</p>
+                        <p class="keynote-speaker-bio">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu
+                            County, a role in which he
+                            dedicated his visionary leadership and business acumen, leading to the recognition of the
+                            County as the second-best performing
+                            county in revenue collection in the Financial Year 2016-2017. Prior to being elected
+                            Governor, Hon. Kabogo had served as Member of
+                            Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries,
+                            and an auditor in the Office of the Auditor General. </p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Speakers -->
-    <section id="speakers" class="section-padding">
-        <div class="container">
-            <!-- <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
-                Featured Speakers
-            </h2> -->
-
-            <div class="row justify-content-center">
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
-                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mary N. Kerema, OGW" class="speaker-img">
-                        <div class="speaker-info">
-                            <h3 class="speaker-name">Mary N. Kerema, OGW</h3>
-                            <p class="speaker-title">Secretary ICT, E-Government</p>
-                        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-10 col-md-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="keynote-speaker-card " style="color: black;" data-bs-toggle="modal"
+                     data-bs-target="#speaker2Modal">
+                    <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}" alt="Eng. John Tanui"
+                         class="keynote-speaker-img">
+                    <div class="keynote-speaker-info ">
+                        <h4 class="keynote-speaker-name">Eng. John Tanui</h4>
+                        <p class="keynote-speaker-title ">Principal Secretary - State Department of ICT and Digital
+                            Economy, Government of Kenya</p>
+                        <p class="keynote-speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in
+                            the technology sector globally,
+                            keen on leveraging innovative technologies to solve the most pressing challenges facing
+                            economies.
+                            He is passionate about mentoring the next generation of technology and business
+                            leaders. </p>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
-                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mr. Washington Okoth" class="speaker-img">
-                        <div class="speaker-info">
-                            <h4 class="speaker-name">Mr. Washington Okoth</h4>
-                            <p class="speaker-title">Secretary ICT Infrastructure</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker5Modal">
-                        <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mr. Emmanuel Kata Kimeu" class="speaker-img">
-                        <div class="speaker-info">
-                            <h4 class="speaker-name">Mr. Emmanuel Kata Kimeu</h4>
-                            <p class="speaker-title">Secretary, ICT - Security and Audit Control</p>
-                        </div>
-                    </div>
-                </div>            
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ================= Speaker Modals ================= -->
-
-    <!-- Speaker 1 Modal -->
-    <div class="modal fade" id="speaker1Modal" tabindex="-1" aria-labelledby="speaker1Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="speaker1Label">Hon. William Kabogo Gitau </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}"
-                        alt="Speaker">
-                    <p class="lead">Cabinet Secretary, Ministry of ICT & Digital Economy (MICDE), Government of the Republic of Kenya</p>
-                    <p class="speaker-bio">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he 
-                                dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing 
-                                county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of 
-                                Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. </p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Speaker 2 Modal -->
-    <div class="modal fade" id="speaker2Modal" tabindex="-1" aria-labelledby="speaker2Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="speaker2Label">Eng. John Tanui </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}"
-                        alt="Speaker">
-                    <p class="lead">Principal Secretary - State Department of ICT and Digital Economy, Government of Kenya</p>
-                    <p class="speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in the technology sector globally, 
-                                keen on leveraging innovative technologies to solve the most pressing challenges facing economies. 
-                                He is passionate about mentoring the next generation of technology and business leaders. </p>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Speaker 3 Modal -->
-    <div class="modal fade" id="speaker3Modal" tabindex="-1" aria-labelledby="speaker3Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="speaker3Label">Mary N. Kerema, OGW</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="{% static 'images/speakers/placeholder.jpg' %}"
-                        alt="Speaker">
-                    <p class="lead">Secretary ICT, E-Government</p>
-                    <p class="speaker-bio"> </p>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Speakers -->
+<section id="speakers" class="section-padding">
+    <div class="container">
+        <!-- <h2 class="section-title text-center mb-5 featured-lead-text dark" data-aos="fade-up">
+            Featured Speakers
+        </h2> -->
 
-    <!-- Speaker 4 Modal -->
-    <div class="modal fade" id="speaker4Modal" tabindex="-1" aria-labelledby="speaker4Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="speaker4Label">Mr. Washington Okoth</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="{% static 'images/speakers/placeholder.jpg' %}"
-                        alt="Speaker">
-                    <p class="lead">Secretary ICT Infrastructure</p>
-                    <p class="speaker-bio"> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Speaker 5 Modal -->
-    <div class="modal fade" id="speaker5Modal" tabindex="-1" aria-labelledby="speaker4Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="speaker4Label">Mr. Emmanuel Kata Kimeu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="{% static 'images/speakers/placeholder.jpg' %}"
-                        alt="Speaker">
-                    <p class="lead">Secretary, ICT - Security and Audit Control</p>
-                    <p class="speaker-bio"> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Agenda Section -->
-    <section id="agenda" class="section-padding  position-relative">
-        <div class="container">
-            <h2 class="section-title dark" data-aos="fade-up">Summit Agenda</h2>
-
-            <!-- Agenda Intro & Countdown -->
-            <div class="row mb-5 align-items-center">
-                <div class="col-lg-8" data-aos="fade-right">
-                    <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
-                        <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
-                            <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
-                        </h4>
-                        <p class="mb-0 text-secondary">
-                            Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and
-                            networking events. <br>
-                            <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-center" data-aos="fade-left">
-                    <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
-                        <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to
-                            Summit</h5>
-                        <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker3Modal">
+                    <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mary N. Kerema, OGW"
+                         class="speaker-img">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Mary N. Kerema, OGW</h3>
+                        <p class="speaker-title">Secretary ICT, E-Government</p>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker4Modal">
+                    <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mr. Washington Okoth"
+                         class="speaker-img">
+                    <div class="speaker-info">
+                        <h4 class="speaker-name">Mr. Washington Okoth</h4>
+                        <p class="speaker-title">Secretary ICT Infrastructure</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="speaker-card" data-bs-toggle="modal" data-bs-target="#speaker5Modal">
+                    <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mr. Emmanuel Kata Kimeu"
+                         class="speaker-img">
+                    <div class="speaker-info">
+                        <h4 class="speaker-name">Mr. Emmanuel Kata Kimeu</h4>
+                        <p class="speaker-title">Secretary, ICT - Security and Audit Control</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ================= Speaker Modals ================= -->
+
+<!-- Speaker 1 Modal -->
+<div class="modal fade" id="speaker1Modal" tabindex="-1" aria-labelledby="speaker1Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speaker1Label">Hon. William Kabogo Gitau </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}"
+                     alt="Speaker">
+                <p class="lead">Cabinet Secretary, Ministry of ICT & Digital Economy (MICDE), Government of the Republic
+                    of Kenya</p>
+                <p class="speaker-bio">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in
+                    which he
+                    dedicated his visionary leadership and business acumen, leading to the recognition of the County as
+                    the second-best performing
+                    county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon.
+                    Kabogo had served as Member of
+                    Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an
+                    auditor in the Office of the Auditor General. </p>
+            </div>
 
         </div>
-    </section>
+    </div>
+</div>
+
+<!-- Speaker 2 Modal -->
+<div class="modal fade" id="speaker2Modal" tabindex="-1" aria-labelledby="speaker2Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speaker2Label">Eng. John Tanui </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}"
+                     alt="Speaker">
+                <p class="lead">Principal Secretary - State Department of ICT and Digital Economy, Government of
+                    Kenya</p>
+                <p class="speaker-bio">Eng. John Tanui an engineer with over 24 years of experience in the technology
+                    sector globally,
+                    keen on leveraging innovative technologies to solve the most pressing challenges facing economies.
+                    He is passionate about mentoring the next generation of technology and business leaders. </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Speaker 3 Modal -->
+<div class="modal fade" id="speaker3Modal" tabindex="-1" aria-labelledby="speaker3Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speaker3Label">Mary N. Kerema, OGW</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{% static 'images/speakers/placeholder.jpg' %}"
+                     alt="Speaker">
+                <p class="lead">Secretary ICT, E-Government</p>
+                <p class="speaker-bio"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Speaker 4 Modal -->
+<div class="modal fade" id="speaker4Modal" tabindex="-1" aria-labelledby="speaker4Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speaker4Label">Mr. Washington Okoth</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{% static 'images/speakers/placeholder.jpg' %}"
+                     alt="Speaker">
+                <p class="lead">Secretary ICT Infrastructure</p>
+                <p class="speaker-bio"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Speaker 5 Modal -->
+<div class="modal fade" id="speaker5Modal" tabindex="-1" aria-labelledby="speaker4Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speaker4Label">Mr. Emmanuel Kata Kimeu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{% static 'images/speakers/placeholder.jpg' %}"
+                     alt="Speaker">
+                <p class="lead">Secretary, ICT - Security and Audit Control</p>
+                <p class="speaker-bio"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agenda Section -->
+<section id="agenda" class="section-padding  position-relative">
+    <div class="container">
+        <h2 class="section-title dark" data-aos="fade-up">Summit Agenda</h2>
+
+        <!-- Agenda Intro & Countdown -->
+        <div class="row mb-5 align-items-center">
+            <div class="col-lg-8" data-aos="fade-right">
+                <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
+                    <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+                        <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
+                    </h4>
+                    <p class="mb-0 text-secondary">
+                        Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and
+                        networking events. <br>
+                        <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center" data-aos="fade-left">
+                <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
+                    <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to
+                        Summit</h5>
+                    <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 
 
-
-
-    <!-- Features Section -->
-    <section id="features" class="section-padding" >
-      <div class="container">
+<!-- Features Section -->
+<section id="features" class="section-padding">
+    <div class="container">
         <h2 class="section-title dark" data-aos="fade-up">Summit Features</h2>
         <div class="row g-4 justify-content-center">
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
-              <div class="feature-icon mb-3" style="color: #CE171C;">
-                <i class="fas fa-laptop-code"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
-              <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across sectors including healthcare, fintech, education, and agriculture.</p>
-              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #CE171C;">
+                    <div class="feature-icon mb-3" style="color: #CE171C;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
+                    <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across
+                        sectors including healthcare, fintech, education, and agriculture.</p>
+                    <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
-              <div class="feature-icon mb-3" style="color: #01873F;">
-                <i class="fas fa-chalkboard-teacher"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Technical Workshops</h4>
-              <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing, cybersecurity, mobile app development, and software architecture best practices.</p>
-              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #01873F;">
+                    <div class="feature-icon mb-3" style="color: #01873F;">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Technical Workshops</h4>
+                    <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing, cybersecurity,
+                        mobile app development, and software architecture best practices.</p>
+                    <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
-              <div class="feature-icon mb-3" style="color: #1C1C18;">
-                <i class="fas fa-store"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Tech Expo</h4>
-              <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source projects, and research collaborations from leading tech companies.</p>
-              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #1C1C18;">
+                    <div class="feature-icon mb-3" style="color: #1C1C18;">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Tech Expo</h4>
+                    <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source projects,
+                        and research collaborations from leading tech companies.</p>
+                    <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #01873F;">
-              <div class="feature-icon mb-3" style="color: #01873F;">
-                <i class="fas fa-users"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
-              <p class="text-secondary">Connect software developers with hiring companies and innovation projects through our dedicated talent pavilion and networking sessions.</p>
-              <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #01873F;">
+                    <div class="feature-icon mb-3" style="color: #01873F;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
+                    <p class="text-secondary">Connect software developers with hiring companies and innovation projects
+                        through our dedicated talent pavilion and networking sessions.</p>
+                    <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #CE171C;">
-              <div class="feature-icon mb-3" style="color: #CE171C;">
-                <i class="fas fa-rocket"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Startup Demos</h4>
-              <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and investment, with opportunities to connect with venture capital firms.</p>
-              <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #CE171C;">
+                    <div class="feature-icon mb-3" style="color: #CE171C;">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Startup Demos</h4>
+                    <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and investment,
+                        with opportunities to connect with venture capital firms.</p>
+                    <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="feature-card h-100 shadow-lg border-0 position-relative" style="background: #fff; border-top: 5px solid #1C1C18;">
-              <div class="feature-icon mb-3" style="color: #1C1C18;">
-                <i class="fas fa-gavel"></i>
-              </div>
-              <h4 class="fw-bold mb-2">Policy Forums</h4>
-              <p class="text-secondary">Discussions on AI ethics, open software standards, data security policies, and regulatory frameworks for the digital economy.</p>
-              <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                     style="background: #fff; border-top: 5px solid #1C1C18;">
+                    <div class="feature-icon mb-3" style="color: #1C1C18;">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Policy Forums</h4>
+                    <p class="text-secondary">Discussions on AI ethics, open software standards, data security policies,
+                        and regulatory frameworks for the digital economy.</p>
+                    <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
 
-    <!-- Sponsors Section  -->
-    <section id="partners" class="section-padding ">
-        
-        <div class="container">
-            <h2 class="section-title dark" data-aos="fade-up">Kenya Software Summit 2025 Sponsors</h2>
+<!-- Sponsors Section  -->
+<section id="partners" class="section-padding ">
 
-            <div class="partners-logos" data-aos="fade-up">
+    <div class="container">
+        <h2 class="section-title dark" data-aos="fade-up">Kenya Software Summit 2025 Sponsors</h2>
+
+        <div class="partners-logos" data-aos="fade-up">
             <div class="partner-logo-container">
                 <img src="{% static 'images/partners/odpc_logo.png' %}" alt="Ministry of ICT" class="partner-logo">
             </div>
@@ -497,16 +540,16 @@
             <div class="partner-logo-container">
                 <img src="{% static 'images/partners/micde_logo.png' %}" alt="ODPC" class="partner-logo">
             </div>
-            
+
         </div>
-    </section>
+</section>
 
     <!-- Partners Section  -->
     <section id="partners" class="section-padding ">
         <div class="container">
             <h2 class="section-title dark" data-aos="fade-up">Our Partners</h2>
 
-            <div class="partners-logos" data-aos="fade-up">
+        <div class="partners-logos" data-aos="fade-up">
             <div class="partner-logo-container">
                 <img src="{% static 'images/partners/odpc_logo.png' %}" alt="Ministry of ICT" class="partner-logo">
             </div>
@@ -536,91 +579,90 @@
 </section>
 
 
+<!-- Media Section -->
+<section id="media" class="section-padding dark">
+    <div class="container">
+        <h2 class="section-title dark" data-aos="fade-up">Media Gallery</h2>
 
-
-    <!-- Media Section -->
-    <section id="media" class="section-padding dark">
-        <div class="container">
-            <h2 class="section-title dark" data-aos="fade-up">Media Gallery</h2>
-            
-            <div class="row mb-5">
-                <div class="col-12">
-                    <h3 class="text-center mb-4">Recent News & Updates</h3>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop"
-                            alt="Summit Announcement" class="media-img">
-                        <div class="media-overlay">
-                            <h5>Kenya Software Summit 2025 Officially Announced</h5>
-                            <p>Ministry of ICT announces the inaugural Kenya Software Summit...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop"
-                            alt="Speaker Lineup" class="media-img">
-                        <div class="media-overlay">
-                            <h5>World-Class Speakers Confirmed</h5>
-                            <p>Leading tech executives and innovators to keynote the summit...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=250&fit=crop"
-                            alt="Partnership" class="media-img">
-                        <div class="media-overlay">
-                            <h5>Major Tech Companies Join as Partners</h5>
-                            <p>Microsoft, Google, AWS among key partners supporting the summit...</p>
-                        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Recent News & Updates</h3>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop"
+                         alt="Summit Announcement" class="media-img">
+                    <div class="media-overlay">
+                        <h5>Kenya Software Summit 2025 Officially Announced</h5>
+                        <p>Ministry of ICT announces the inaugural Kenya Software Summit...</p>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="text-center mb-4">Photo Gallery</h3>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop"
-                            alt="Conference Hall" class="media-img">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop"
+                         alt="Speaker Lineup" class="media-img">
+                    <div class="media-overlay">
+                        <h5>World-Class Speakers Confirmed</h5>
+                        <p>Leading tech executives and innovators to keynote the summit...</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop"
-                            alt="Networking Session" class="media-img">
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop"
-                            alt="Workshop" class="media-img">
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="media-item mb-4">
-                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=200&fit=crop"
-                            alt="Tech Expo" class="media-img">
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=250&fit=crop"
+                         alt="Partnership" class="media-img">
+                    <div class="media-overlay">
+                        <h5>Major Tech Companies Join as Partners</h5>
+                        <p>Microsoft, Google, AWS among key partners supporting the summit...</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-
-    <!-- Registration Section -->
-    <section id="register" class="section-padding ">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center " data-aos="fade-up">
-                    <h2 class="section-title dark">Register for Kenya Software Summit 2025</h2>
-                    <p class="lead mb-4 dark">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier software development conference.</p>
+        <div class="row">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Photo Gallery</h3>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="media-item mb-4">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop"
+                         alt="Conference Hall" class="media-img">
                 </div>
             </div>
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="media-item mb-4">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop"
+                         alt="Networking Session" class="media-img">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="media-item mb-4">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop"
+                         alt="Workshop" class="media-img">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                <div class="media-item mb-4">
+                    <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=200&fit=crop"
+                         alt="Tech Expo" class="media-img">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Registration Section -->
+<section id="register" class="section-padding ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center " data-aos="fade-up">
+                <h2 class="section-title dark">Register for Kenya Software Summit 2025</h2>
+                <p class="lead mb-4 dark">Join 500+ developers, entrepreneurs, and tech leaders for Africa's premier
+                    software development conference.</p>
+            </div>
+        </div>
 
     
             <div class="row justify-content-center">
@@ -707,92 +749,103 @@
                 </div>
             </div>
 
-        </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top" id="scrollToTop">
-        <i class="fas fa-chevron-up"></i>
-    </button>
+<!-- Scroll to Top Button -->
+<button class="scroll-to-top" id="scrollToTop">
+    <i class="fas fa-chevron-up"></i>
+</button>
 
-    <!-- Footer -->
-    <footer class="footer" id="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5>About Kenya Software Summit</h5>
-                    <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
-                        Africa’s digital economy through collaboration, talent development, and innovation.</p>
-                    <div class="social-links mt-3">
-                        <a ><i class="fab fa-twitter"></i></a>
-                        <a ><i class="fab fa-facebook"></i></a>
-                        <a ><i class="fab fa-linkedin"></i></a>
-                        <a ><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Quick Links</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#speakers">Speakers</a></li>
-                        <li><a href="#agenda">Agenda</a></li>
-                        <li><a href="#register">Register</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Resources</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#partners">Partners</a></li>
-                        <li><a href="#media">Media</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Support</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Accessibility</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Legal</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Code of Conduct</a></li>
-                        <li><a href="#">Refund Policy</a></li>
-                    </ul>
+<!-- Footer -->
+<footer class="footer" id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <h5>About Kenya Software Summit</h5>
+                <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                    Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                <div class="social-links d-flex mt-3">
+                    <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+                    <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a aria-label="Connect with us on LinkedIn"
+                       href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
+                       target="_blank">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                       target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
                 </div>
             </div>
 
-            <hr class="my-4" style="border-color:#444;">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="text-light mb-0">&copy; 2025 Kenya Software Summit. All rights reserved.</p>
-                </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#speakers">Speakers</a></li>
+                    <li><a href="#agenda">Agenda</a></li>
+                    <li><a href="#register">Register</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Resources</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#partners">Partners</a></li>
+                    <li><a href="#media">Media</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Support</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Legal</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Code of Conduct</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
 
-    <!-- Scripts -->
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
-    <script src="{% static 'vendor/aos/aos.js' %}"></script>
-    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
-    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
-    <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
-    
-    <!-- Main JS File -->
-    <script src="{% static 'js/custom/main.js' %}"></script>
+        <hr class="my-4" style="border-color:#444;">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="text-light mb-0">&copy; <span id="year"></span> Kenya Software Summit. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'vendor/aos/aos.js' %}"></script>
+<script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+<script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+<script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+<!-- Main JS File -->
+<script src="{% static 'js/custom/main.js' %}"></script>
 
 
 </body>
