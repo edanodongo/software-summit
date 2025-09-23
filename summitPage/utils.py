@@ -6,16 +6,16 @@ from datetime import datetime
 def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
     plain_message = (
-        f"Hello {registrant.full_name},\n\n"
+        f"Hello {registrant.first_name},\n\n"
         "Thank you for registering for the 2025 Kenya Software Summit!\n\n"
         "Details:\n"
-        f"- Category: {registrant.get_category_display()}\n"
-        f"- Organization: {registrant.organization or 'N/A'}\n\n"
+        f"- Category: {registrant.organization_type()}\n"
+        f"- Organization: {registrant.other_organization_type or 'N/A'}\n\n"
         "We’ll keep you updated with more information as the event approaches.\n\n"
         "Best regards,\nThe Summit Team"
     )
 
-    current_year = datetime.now().year  # 👈 dynamic year
+    current_year = datetime.now().year  # dynamic year
 
     html_message = f"""
     <html>
@@ -24,13 +24,13 @@ def send_confirmation_email(registrant):
           <div style="text-align:center; margin-bottom:20px;">
             <img src="https://example.com/static/logo.png" alt="Summit Logo" style="height:60px;">
           </div>
-          <h2 style="color:#2c3e50;">Hello {registrant.full_name},</h2>
+          <h2 style="color:#2c3e50;">Hello {registrant.first_name},</h2>
           <p>Thank you for registering for the <strong>2025 Kenya Software Summit!</strong></p>
 
           <h3 style="margin-top:20px; color:#2c3e50;">Details:</h3>
           <ul style="line-height:1.6; color:#555;">
-            <li><strong>Category:</strong> {registrant.get_category_display()}</li>
-            <li><strong>Organization:</strong> {registrant.organization or 'N/A'}</li>
+            <li><strong>Category:</strong> {registrant.organization_type()}</li>
+            <li><strong>Organization:</strong> {registrant.other_organization_type or 'N/A'}</li>
           </ul>
 
           <p>We’ll keep you updated with more information as the event approaches.</p>
