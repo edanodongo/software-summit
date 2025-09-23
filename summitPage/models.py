@@ -5,21 +5,21 @@ import uuid
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
-        ("prof", "Prof."),
-        ("dr", "Dr."),
-        ("eng", "Eng."),
-        ("mr", "Mr."),
-        ("mrs", "Mrs."),
-        ("ms", "Ms"),
+        ("Prof", "Prof."),
+        ("Dr", "Dr."),
+        ("Eng", "Eng."),
+        ("Mr", "Mr."),
+        ("Mrs", "Mrs."),
+        ("Ms", "Ms"),
     ]
 
     ORG_TYPE_CHOICES = [
-        ("govt", "Government Agency"),
-        ("private", "Private Company"),
-        ("academia", "Academic Institution"),
-        ("association", "Sector Association"),
-        ("advocacy", "Industry Advocacy Groups"),
-        ("dev_partner", "Development Partners"),
+        ("Government Agency", "Government Agency"),
+        ("Private Company", "Private Company"),
+        ("Academic Institution", "Academic Institution"),
+        ("Sector Association", "Sector Association"),
+        ("Industry Advocacy Groups", "Industry Advocacy Groups"),
+        ("Development Partners", "Development Partners"),
         ("other", "Others"),
     ]
 
@@ -38,7 +38,7 @@ class Registrant(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=50)
 
-    organization_type = models.CharField(max_length=20, choices=ORG_TYPE_CHOICES)
+    organization_type = models.CharField(max_length=100, choices=ORG_TYPE_CHOICES)
     other_organization_type = models.CharField(max_length=255, blank=True, null=True)
 
     job_title = models.CharField(max_length=255, blank=True)

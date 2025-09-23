@@ -146,55 +146,126 @@ scrollToTopBtn.addEventListener('click', function () {
     });
 });
 
-// Form submissions
-document.addEventListener("DOMContentLoaded", function () {
-    const orgTypeSelect = document.getElementById("id_organization_type");
-    const otherOrgField = document.getElementById("id_other_organization_type").closest(".mb-3");
-    const interestCheckboxes = document.querySelectorAll("#id_interests input[type=checkbox]");
-    const otherInterestField = document.getElementById("id_other_interest").closest(".mb-3");
+// Form submission with AJAX
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("registration-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const alertContainer = document.getElementById("alert-container");
 
-    // Hide both fields initially
-    if (otherOrgField) otherOrgField.style.display = "none";
-    if (otherInterestField) otherInterestField.style.display = "none";
+  // --- Get wrapper divs ---
+  const otherOrgWrapper = document.getElementById("other-org-type");
+  const otherInterestWrapper = document.getElementById("other-interest");
 
-    // Show textbox when any org type is chosen
-    function toggleOrgField() {
-        if (orgTypeSelect && orgTypeSelect.value) {
-            otherOrgField.style.display = "block";
+  // --- Get form elements ---
+  const orgTypeSelect = document.getElementById("id_organization_type");
+  const otherOrgInput = document.getElementById("id_other_organization_type");
+
+  const interestCheckboxes = document.querySelectorAll(
+    "#id_interests input[type=checkbox]"
+  );
+  const otherInterestInput = document.getElementById("id_other_interest");
+
+  // --- Utility to toggle visibility ---
+  function toggleVisibility(wrapper, input, show) {
+    if (!wrapper || !input) return;
+    if (show) {
+      wrapper.style.display = "block";
+      input.setAttribute("required", "required");
+    } else {
+      wrapper.style.display = "none";
+      input.removeAttribute("required");
+      input.value = ""; // clear hidden field
+    }
+  }
+
+  // --- Handle Organization Type ---
+  function handleOrgTypeChange() {
+    if (orgTypeSelect && orgTypeSelect.value) {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, true);
+    } else {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
+    }
+  }
+
+  // --- Handle Interests ---
+  function handleInterestChange() {
+    let othersChecked = Array.from(interestCheckboxes).some(
+      (cb) => cb.checked && cb.value.toLowerCase() === "others"
+    );
+    toggleVisibility(otherInterestWrapper, otherInterestInput, othersChecked);
+  }
+
+  // --- Event listeners ---
+  if (orgTypeSelect) {
+    orgTypeSelect.addEventListener("change", handleOrgTypeChange);
+  }
+  interestCheckboxes.forEach((cb) =>
+    cb.addEventListener("change", handleInterestChange)
+  );
+
+  // --- Run on page load (restore state if editing form) ---
+  handleOrgTypeChange();
+  handleInterestChange();
+
+  // --- Alerts ---
+  function showAlert(message, type = "success") {
+    alertContainer.innerHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`;
+  }
+
+  // --- AJAX Form Submit ---
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
+
+    fetch(form.action || window.location.href, {
+      method: "POST",
+      body: new FormData(form),
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+
+        if (data.success) {
+          showAlert(data.message, "success");
+          form.reset();
+          handleOrgTypeChange();
+          handleInterestChange();
+        } else if (data.errors) {
+          let errorList = Object.entries(data.errors)
+            .map(
+              ([field, errors]) =>
+                `<li><strong>${field}:</strong> ${errors.join(", ")}</li>`
+            )
+            .join("");
+          showAlert(`<ul>${errorList}</ul>`, "danger");
         } else {
-            otherOrgField.style.display = "none";
-            document.getElementById("id_other_organization_type").value = "";
+          showAlert("Something went wrong. Please try again.", "danger");
         }
-    }
-
-    // Show textbox when "Others" is checked in interests
-    function toggleInterestField() {
-        let othersChecked = false;
-        interestCheckboxes.forEach(cb => {
-            if (cb.checked && cb.value.toLowerCase() === "others") {
-                othersChecked = true;
-            }
-        });
-
-        if (othersChecked) {
-            otherInterestField.style.display = "block";
-        } else {
-            otherInterestField.style.display = "none";
-            document.getElementById("id_other_interest").value = "";
-        }
-    }
-
-    // Event listeners
-    if (orgTypeSelect) {
-        orgTypeSelect.addEventListener("change", toggleOrgField);
-        toggleOrgField(); // run on page load
-    }
-
-    interestCheckboxes.forEach(cb => {
-        cb.addEventListener("change", toggleInterestField);
-    });
-    toggleInterestField(); // run on page load
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+        showAlert("Server error. Please try again later.", "danger");
+      });
+  });
 });
+
+// Set footer year if needed
+document.getElementById("year").textContent = new Date().getFullYear();
+
+
+
 
 
 
@@ -378,31 +449,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
-/* Form */
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('registration-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const alertContainer = document.getElementById('alert-container');
-  const categorySelect = document.getElementById('id_category');
-  const otherCategoryField = document.getElementById('other-category-field');
-  const interestCheckboxes = document.querySelectorAll('#id_interests input[type=checkbox]');
-  const otherInterestField = document.getElementById('other-interest-field');
-
-  function toggleOtherCategory() {
-    otherCategoryField.style.display = categorySelect.value === 'other' ? 'block' : 'none';
-  }
-
-  function toggleOtherInterest() {
-    const show = Array.from(interestCheckboxes).some(cb => cb.value === 'other' && cb.checked);
-    otherInterestField.style.display = show ? 'block' : 'none';
-  }
-
-  categorySelect.addEventListener('change', toggleOtherCategory);
-  interestCheckboxes.forEach(cb => cb.addEventListener('change', toggleOtherInterest));
-
-});
-
-document.getElementById("year").textContent = new Date().getFullYear();

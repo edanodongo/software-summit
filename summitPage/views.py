@@ -23,6 +23,10 @@ def home(request):
                 send_confirmation_email(registrant)
             except Exception as e:
                 print("Email Send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({"success": False, "message": "Registration saved but email could not be sent."}, status=500)
+                messages.warning(request, "Registered, but confirmation email failed.")
+
 
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
