@@ -1045,10 +1045,22 @@ body.dark-theme .dark{
     color: #fff !important;
 }
 
+.btn-bg-light{
+    background: var(--primary-red);
+    color: white; /* White text on red background */
+    text-decoration: #FFF;
+    text-decoration-color: #FFF;
+    transform: translateY(-2px);
+}
+
+.bg-red-light{
+    background: #ffced0d8;
+}
+
 /* General Section */
 #speakers {
   /* background: #f9f9f9; */
-  background: #FFF; */
+  background: #FFF;
 }
 
 /* Keynote Speaker Styles */
