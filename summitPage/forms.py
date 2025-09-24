@@ -40,7 +40,7 @@ class QuickRegistrationForm(forms.ModelForm):
         widgets = {
             'title': forms.Select(attrs={'class': 'form-select'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Second Name'}),
+            'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Names'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
