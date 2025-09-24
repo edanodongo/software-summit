@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - Evently Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+   <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      />
+
+  <!-- Fontawesome -->
+  <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="" alt="Court of Arms" src="assets/img/logo.webp" height="60">
+            <div class="logo-divider mx-2"></div>
+        <img src="" alt="Court of Arms" src="assets/img/logo.webp" height="60">
+      </a>
+
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="schedule.html">REGISTER</a></li>
+          <li><a href="schedule.html">SCHEDULE</a></li>
+          <li><a href="speakers.html">SPEAKERS</a></li>
+          <li><a href="#features">FEATURES</a></li>
+          <!-- <li><a href="venue.html">VENUE</a></li> -->
+          <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="gallery.html">Gallery</a></li>
+              <!-- <li><a href="speaker-details.html">Speaker Details</a></li>
+              <li><a href="tickets.html">Tickets</a></li>
+              <li><a href="buy-tickets.html">Buy Tickets</a></li>
+              <li><a href="terms.html">Terms</a></li>
+              <li><a href="privacy.html">Privacy</a></li>
+              <li><a href="404.html">404</a></li> -->
+            </ul>
+          </li>
+          <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Dropdown 2</a></li>
+              <li><a href="#">Dropdown 3</a></li>
+              <li><a href="#">Dropdown 4</a></li>
+            </ul>
+          </li> -->
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <i id="themeToggleIcon" class="fas fa-moon"></i>
+        <button id="themeToggle" class="btn btn-sm theme-toggle-btn" title="Toggle dark/light mode">
+                <i id="themeToggleIcon" class="fas fa-moon"></i>
+            </button>
+      </nav>
+
+      <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <div class="background-overlay"></div>
+
+      <div class="hero-content">
+
+        <div class="container">
+
+          <div class="row justify-content-center text-center">
+
+            <div class="col-lg-10">
+
+              <div class="hero-text">
+
+                <h1 class="hero-title">Kenya Software&nbsp;<br>Summit 2025</h1>
+
+                <p class="hero-subtitle">
+                  Join Africa's premier software development conference where innovation meets opportunity. 
+                  Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.
+                </p>
+
+                <div class="event-details">
+                  <div class="detail-item">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>October 27-30, 2025</span>
+                  </div>
+                  <div class="detail-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>Eldoret City, Kenya</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="countdown-section">
+
+                <h3 class="countdown-label">Event Starts In</h3>
+
+                <div class="countdown d-flex justify-content-center" data-count="2025/10/27">
+                  <div>
+                    <h3 class="count-days">239</h3>
+                    <h4>Days</h4>
+                  </div>
+                  <div>
+                    <h3 class="count-hours">8</h3>
+                    <h4>Hours</h4>
+                  </div>
+                  <div>
+                    <h3 class="count-minutes">53</h3>
+                    <h4>Minutes</h4>
+                  </div>
+                  <div>
+                    <h3 class="count-seconds">23</h3>
+                    <h4>Seconds</h4>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="cta-section">
+
+                <div class="cta-buttons">
+                  <a href="#featured-speakers" class="btn btn-secondary btn-cta">View Speakers</a>
+                </div>
+
+                <!-- <p class="cta-note">Limited to 200 executive participants • Early bird pricing ends September 30th</p> -->
+
+              </div>
+
+            </div><!-- End col-lg-10 -->
+
+          </div><!-- End row -->
+
+          <div class="sponsors-section">
+
+            <p class="sponsors-label">Proudly supported by industry leaders</p>
+
+            <div class="sponsors-logos">
+              <img src="assets/img/clients/clients-1.webp" alt="Partner Logo" class="sponsor-logo">
+              <img src="assets/img/clients/clients-3.webp" alt="Partner Logo" class="sponsor-logo">
+              <img src="assets/img/clients/clients-5.webp" alt="Partner Logo" class="sponsor-logo">
+              <img src="assets/img/clients/clients-7.webp" alt="Partner Logo" class="sponsor-logo">
+              <img src="assets/img/clients/clients-9.webp" alt="Partner Logo" class="sponsor-logo">
+              <img src="assets/img/clients/clients-11.webp" alt="Partner Logo" class="sponsor-logo">
+            </div>
+
+          </div><!-- End sponsors-section -->
+
+        </div><!-- End container -->
+
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- Intro Section -->
+    <section id="intro" class="intro section">
+
+      <div class="container">
+
+        <div class="row g-4">
+
+          <div class="col-lg-6">
+            <div class="content">
+              <h2>The Definitive Tech Innovation Summit</h2>
+              <p class="lead">
+                The global economy is being transformed by software development,
+                    artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with its
+                    dynamic youth population, thriving ICT sector, and fast-growing digital economy, is strategically
+                    positioned to lead Africa's next wave of digital transformation.
+              </p>
+              <p>The Kenya Software Summit aligns with Kenya's vision of decentralizing innovation and fostering
+                    regional digital economies.</p>
+
+              <!-- <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-number">3</div>
+                  <div class="stat-label">Days</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">8</div>
+                  <div class="stat-label">Tracks</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">150+</div>
+                  <div class="stat-label">Speakers</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">3500+</div>
+                  <div class="stat-label">Attendees</div>
+                </div>
+              </div> -->
+
+              <div class="cta-section">
+                <a href="#" class="btn btn-primary">View Full Agenda</a>
+                <a href="#" class="btn btn-outline">Meet the Speakers</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="visual-section">
+              <div class="image-wrapper">
+                <img src="assets/img/events/showcase-5.webp" alt="Tech Summit" class="img-fluid">
+                <div class="gradient-overlay"></div>
+                <div class="floating-badge">
+                  <i class="bi bi-calendar-event"></i>
+                  <span>October 27-30 2025</span>
+                </div>
+              </div>
+
+              <div class="highlight-cards">
+                <div class="highlight-card">
+                  <i class="bi bi-people-fill"></i>
+                  <h4>Talent Networking</h4>
+                  <p>Develop software and AI talent, providing direct linkages between Kenyan developers and
+                            global technology players.</p>
+                </div>
+                <div class="highlight-card">
+                  <i class="bi bi-lightbulb-fill"></i>
+                  <h4>Innovation Showcase</h4>
+                  <p>Discover cutting-edge technologies and startups</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- <div class="founder-quote">
+          <div class="row align-items-center">
+            <div class="col-lg-3 text-center">
+              <img src="assets/img/person/person-m-8.webp" alt="Sarah Johnson" class="founder-img">
+            </div>
+            <div class="col-lg-9">
+              <blockquote>
+                <p>"Our mission has always been to bridge the gap between visionary ideas and practical implementation. This summit represents the culmination of years of bringing together the brightest minds in technology."</p>
+                <cite>
+                  <strong>Sarah Johnson</strong>
+                  <span>Founder &amp; Event Director</span>
+                </cite>
+              </blockquote>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+
+    </section><!-- /Intro Section -->
+
+
+
+
+    <!-- Featured Speakers Section -->
+    <section id="featured-speakers" class="featured-speakers section">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Featured Speakers</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <!-- Featured Speaker 1 -->
+          <div class="col-lg-6">
+            <div class="speaker-card featured">
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="speaker-image">
+                    <img src="assets/img/events/speaker-8.webp" alt="Emily Rodriguez" class="img-fluid">
+                    <div class="speaker-social">
+                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <div class="speaker-content">
+                    <span class="speaker-category">Keynote Speaker</span>
+                    <h3 class="speaker-name">Emily Rodriguez</h3>
+                    <p class="speaker-title">Chief Technology Officer</p>
+                    <p class="speaker-company">InnovaTech Global</p>
+                    <div class="speaker-session">
+                      <h4>Session: "The Future of AI in Business"</h4>
+                    </div>
+                    <a href="#" class="btn-speaker">View Profile</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Featured Speaker 1 -->
+
+          <!-- Featured Speaker 2 -->
+          <div class="col-lg-6">
+            <div class="speaker-card featured">
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="speaker-image">
+                    <img src="assets/img/events/speaker-1.webp" alt="Marcus Thompson" class="img-fluid">
+                    <div class="speaker-social">
+                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <div class="speaker-content">
+                    <span class="speaker-category">Panel Speaker</span>
+                    <h3 class="speaker-name">Marcus Thompson</h3>
+                    <p class="speaker-title">VP of Product Strategy</p>
+                    <p class="speaker-company">NextGen Solutions</p>
+                    <div class="speaker-session">
+                      <h4>Session: "Digital Transformation Strategies"</h4>
+                    </div>
+                    <a href="#" class="btn-speaker">View Profile</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Featured Speaker 2 -->
+
+        </div>
+
+        <!-- Additional Speakers Grid -->
+        <div class="row gy-4 mt-4">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="speaker-card compact">
+              <div class="speaker-image">
+                <img src="assets/img/events/speaker-11.webp" alt="Sarah Chen" class="img-fluid">
+                <div class="speaker-overlay">
+                  <div class="speaker-social">
+                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="speaker-content">
+                <h4 class="speaker-name">Sarah Chen</h4>
+                <p class="speaker-title">Design Director</p>
+                <p class="speaker-company">Creative Labs</p>
+                <span class="speaker-topic">"Design Thinking Workshop"</span>
+              </div>
+            </div>
+          </div><!-- End Speaker -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="speaker-card compact">
+              <div class="speaker-image">
+                <img src="assets/img/events/speaker-12.webp" alt="David Wilson" class="img-fluid">
+                <div class="speaker-overlay">
+                  <div class="speaker-social">
+                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="speaker-content">
+                <h4 class="speaker-name">David Wilson</h4>
+                <p class="speaker-title">Data Scientist</p>
+                <p class="speaker-company">Analytics Pro</p>
+                <span class="speaker-topic">"Big Data Analytics"</span>
+              </div>
+            </div>
+          </div><!-- End Speaker -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="speaker-card compact">
+              <div class="speaker-image">
+                <img src="assets/img/events/speaker-3.webp" alt="Lisa Martinez" class="img-fluid">
+                <div class="speaker-overlay">
+                  <div class="speaker-social">
+                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="speaker-content">
+                <h4 class="speaker-name">Lisa Martinez</h4>
+                <p class="speaker-title">Marketing Expert</p>
+                <p class="speaker-company">Brand Builders</p>
+                <span class="speaker-topic">"Digital Marketing Trends"</span>
+              </div>
+            </div>
+          </div><!-- End Speaker -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="speaker-card compact">
+              <div class="speaker-image">
+                <img src="assets/img/events/speaker-9.webp" alt="James Parker" class="img-fluid">
+                <div class="speaker-overlay">
+                  <div class="speaker-social">
+                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="speaker-content">
+                <h4 class="speaker-name">James Parker</h4>
+                <p class="speaker-title">CEO &amp; Founder</p>
+                <p class="speaker-company">StartupHub</p>
+                <span class="speaker-topic">"Entrepreneurship Panel"</span>
+              </div>
+            </div>
+          </div><!-- End Speaker -->
+
+        </div>
+
+
+      </div>
+
+    </section><!-- /Featured Speakers Section -->
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="schedule section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Schedule</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <!-- Day Selector -->
+        <div class="schedule-tabs">
+          <ul class="nav nav-pills justify-content-center mb-5">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#schedule-day1">Day 1 - March 15</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day2">Day 2 - March 16</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day3">Day 3 - March 17</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Schedule Content -->
+        <div class="tab-content schedule-content">
+
+          <!-- Day 1 Schedule -->
+          <div class="tab-pane fade show active" id="schedule-day1">
+
+            <!-- Track Headers -->
+            <div class="track-headers">
+              <div class="track-header development">
+                <!-- <i class="bi bi-code-slash"></i> -->
+                <span>Government Policy Frameworks & Enabling Ecosystem</span>
+              </div>
+              <div class="track-header design">
+                <!-- <i class="bi bi-palette"></i> -->
+                <span>Talent, Startups & Innovation Pipelines</span>
+              </div>
+              <div class="track-header business">
+                <!-- <i class="bi bi-briefcase"></i> -->
+                <span>Investment, Partnerships & Long-term Growth</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <!-- Time Slot 1 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">9:00 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote" colspan="3">
+                    <div class="session-type">
+                      <i class="bi bi-megaphone"></i>
+                      <span>Keynote</span>
+                    </div>
+                    <h4>Future of Digital Innovation</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-1.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Dr. Sarah Johnson</h5>
+                        <span>Chief Technology Officer, TechCorp</span>
+                      </div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 2 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:15 AM</span>
+                  <span class="duration">60 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-laptop"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>Advanced React Patterns</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-2.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Michael Chen</h5>
+                        <span>Senior Developer</span>
+                      </div>
+                    </div>
+                    <p>Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-brush"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Design Systems at Scale</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-3.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Emily Rodriguez</h5>
+                        <span>UX Director</span>
+                      </div>
+                    </div>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-people"></i>
+                      <span>Panel</span>
+                    </div>
+                    <h4>Scaling Tech Teams</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-4.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>David Park</h5>
+                        <span>VP of Engineering</span>
+                      </div>
+                    </div>
+                    <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">11:15 AM</span>
+                  <span class="duration">30 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Networking</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 3 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">11:45 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-code"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Microservices Architecture</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-5.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Alex Thompson</h5>
+                        <span>Solutions Architect</span>
+                      </div>
+                    </div>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-phone"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>Mobile-First Design</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-6.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Lisa Zhang</h5>
+                        <span>Product Designer</span>
+                      </div>
+                    </div>
+                    <p>Totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-graph-up"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Product Growth Strategies</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-7.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>James Wilson</h5>
+                        <span>Growth Manager</span>
+                      </div>
+                    </div>
+                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 1 -->
+
+          <!-- Day 2 Schedule -->
+          <div class="tab-pane fade" id="schedule-day2">
+
+            <div class="track-headers">
+              <div class="track-header development">
+                <i class="bi bi-code-slash"></i>
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design">
+                <i class="bi bi-palette"></i>
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business">
+                <i class="bi bi-briefcase"></i>
+                <span>Business Track</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">9:30 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote">
+                    <div class="session-type">
+                      <i class="bi bi-megaphone"></i>
+                      <span>Keynote</span>
+                    </div>
+                    <h4>AI Revolution in Development</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-8.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Dr. Maria Santos</h5>
+                        <span>AI Research Director</span>
+                      </div>
+                    </div>
+                    <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:45 AM</span>
+                  <span class="duration">60 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-gear"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>DevOps Best Practices</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-9.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Robert Kim</h5>
+                        <span>DevOps Engineer</span>
+                      </div>
+                    </div>
+                    <p>Irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-eye"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Accessibility in Design</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-10.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Anna Martinez</h5>
+                        <span>Accessibility Expert</span>
+                      </div>
+                    </div>
+                    <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-currency-dollar"></i>
+                      <span>Panel</span>
+                    </div>
+                    <h4>Funding Strategies for Startups</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-11.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Thomas Brown</h5>
+                        <span>Investment Partner</span>
+                      </div>
+                    </div>
+                    <p>Ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 2 -->
+
+          <!-- Day 3 Schedule -->
+          <div class="tab-pane fade" id="schedule-day3">
+
+            <div class="track-headers">
+              <div class="track-header development">
+                <i class="bi bi-code-slash"></i>
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design">
+                <i class="bi bi-palette"></i>
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business">
+                <i class="bi bi-briefcase"></i>
+                <span>Business Track</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:00 AM</span>
+                  <span class="duration">90 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card workshop">
+                    <div class="session-type">
+                      <i class="bi bi-tools"></i>
+                      <span>Hands-on Workshop</span>
+                    </div>
+                    <h4>Building Your First App</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-12.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Kevin Lee</h5>
+                        <span>Full-stack Developer</span>
+                      </div>
+                    </div>
+                    <p>Ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.</p>
+                    <div class="session-meta">
+                      <span class="venue">Workshop Room</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">12:00 PM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote">
+                    <div class="session-type">
+                      <i class="bi bi-award"></i>
+                      <span>Closing Keynote</span>
+                    </div>
+                    <h4>The Future is Collaborative</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-13.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Jennifer Adams</h5>
+                        <span>CEO, FutureTech</span>
+                      </div>
+                    </div>
+                    <p>In voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 3 -->
+
+        </div>
+
+        <!-- Download CTA -->
+        <div class="text-center">
+          <div class="download-cta">
+            <h4>Get the Complete Schedule</h4>
+            <p>Download the full agenda as PDF or add events to your calendar</p>
+            <div class="cta-buttons">
+              <a href="#" class="btn btn-primary">
+                <i class="bi bi-download"></i>
+                Download PDF
+              </a>
+              <a href="#" class="btn btn-outline-primary">
+                <i class="bi bi-calendar-plus"></i>
+                Add to Calendar
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Schedule Section -->
+
+
+    <!-- Agenda Section -->
+    <section id="agenda" class="section-padding bg-light position-relative">
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Summit Agenda</h2>
+
+            <!-- Agenda Intro & Countdown -->
+            <div class="row mb-5 align-items-center">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="bg-white rounded-4 shadow-sm p-4 mb-3">
+                        <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+                            <i class="fas fa-calendar-alt me-2"></i>3 Days of Innovation, Learning & Networking
+                        </h4>
+                        <p class="mb-0 text-secondary">
+                            Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and
+                            networking events. <br>
+                            <span class="fw-semibold text-danger">All times are East Africa Time (EAT).</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center" data-aos="fade-left">
+                    <div class="bg-gradient rounded-4 shadow-sm p-4" style="background: var(--primary-green);">
+                        <h5 class="mb-3" style="color: #FFFFFF;"><i class="fas fa-hourglass-half me-2"></i>Countdown to
+                            Summit</h5>
+                        <div id="countdown-agenda" class="d-flex justify-content-center gap-3"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Day Tabs -->
+            <ul class="nav nav-pills justify-content-center mb-4" id="agendaTabs" role="tablist" data-aos="fade-up">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1"
+                        type="button" role="tab" aria-controls="day1" aria-selected="true">
+                        <i class="fas fa-calendar-day me-2"></i>Day 1 — Oct 28
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button"
+                        role="tab" aria-controls="day2" aria-selected="false">
+                        <i class="fas fa-calendar-day me-2"></i>Day 2 — Oct 29
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button"
+                        role="tab" aria-controls="day3" aria-selected="false">
+                        <i class="fas fa-calendar-day me-2"></i>Day 3 — Oct 30
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="agendaTabsContent">
+
+                <!-- ================= DAY 1 =================  -->
+                <div class="tab-pane fade show active" id="day1" role="tabpanel" aria-labelledby="day1-tab">
+                    <div class="agenda-day text-center" data-aos="fade-up">
+                        <h4 class="fw-bold text-danger">
+                            <i class="fas fa-landmark me-2 dark"></i>Focus: Government Policy Frameworks & Enabling Ecosystem
+                        </h4>
+                        <p class="text-muted small mb-0 dark">Tuesday, October 28 — policy, regulation, quality assurance, and ecosystem building.</p>
+                    </div>
+
+                    <div class="row g-4" data-aos="fade-up">
+                        <div class="col-12">
+
+                            <!-- Exhibition (All Day)  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div class="time-display">All Day</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Innovation Exhibition</h5>
+                                <p class="mb-0">Showcases from government agencies, development partners, global tech firms, and startups demonstrating tools, platforms, and pilots supporting the national software agenda.</p>
+                            </div>
+
+                            <!-- Registration  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span>
+                                    </div>
+                                    <div class="time-display">07:30 – 08:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Registration & Morning Networking</h5>
+                                <p class="mb-0">Delegate check-in, badge collection and exhibition walkthroughs; early networking opportunities.</p>
+                            </div>
+
+                            <!-- Opening  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-danger"><i
+                                                class="fas fa-landmark me-1"></i>Opening</span></div>
+                                    <div class="time-display">08:30 – 10:45</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Official Opening Ceremony</h5>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Cultural Performance & Protocol</div>
+                                        <p class="mb-0 small">Cultural performance, National Anthem & Prayer</p>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Welcome Remarks</div>
+                                        <div class="facilitator">Chair, Organizing Committee (Speaker TBC)</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Keynote Addresses</div>
+                                        <p class="mb-1 small">Positioning Kenya as a regional software hub; global
+                                            perspectives</p>
+                                        <div class="facilitator">Speakers TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">High-level Panel Discussion</div>
+                                        <div class="facilitator">4 Panelists TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Official Opening</div>
+                                        <div class="facilitator">Government Leadership (Speakers TBC)</div>
+                                    </div>
+                                </div>
+
+                                <p class="text-muted small mt-2 mb-0"><i class="fas fa-info-circle me-1"></i>Opening
+                                    sets policy intent, national priorities and high-level commitments for the summit.
+                                </p>
+                            </div>
+
+                            <!-- Tea Break  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:45 – 11:15 · Exhibition Tour & Tea
+                                    Break</span>
+                            </div>
+
+                            <!-- Framing Panel  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-comments me-1"></i>Panel</span></div>
+                                    <div class="time-display">11:15 – 13:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Framing Panel — <em>"Building a National Software Ecosystem: Policy & Regulation"</em></h5>
+                                <p class="mb-3">Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports.</p>
+                                
+                                <!-- Panel Discussion  -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold text-primary mb-3"><i class="fas fa-users me-2"></i>Panel
+                                        Discussion (11:15 – 12:15)</h6>
+                                    <div class="panelists-container">
+                                        <div class="panelist-card">
+                                            <div class="panelist-icon">
+                                                <i class="fas fa-building"></i>
+                                            </div>
+                                            <div class="panelist-role">Government Representative</div>
+                                            <div class="panelist-name">Speaker TBC</div>
+                                        </div>
+                                        <div class="panelist-card">
+                                            <div class="panelist-icon">
+                                                <i class="fas fa-graduation-cap"></i>
+                                            </div>
+                                            <div class="panelist-role">Academia Representative</div>
+                                            <div class="panelist-name">Speaker TBC</div>
+                                        </div>
+                                        <div class="panelist-card">
+                                            <div class="panelist-icon">
+                                                <i class="fas fa-briefcase"></i>
+                                            </div>
+                                            <div class="panelist-role">Private Sector Leader</div>
+                                            <div class="panelist-name">Speaker TBC</div>
+                                        </div>
+                                        <div class="panelist-card">
+                                            <div class="panelist-icon">
+                                                <i class="fas fa-rocket"></i>
+                                            </div>
+                                            <div class="panelist-role">Startup Founder</div>
+                                            <div class="panelist-name">Speaker TBC</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Breakout Sessions  -->
+                                <div>
+                                    <h6 class="fw-bold text-success mb-3"><i class="fas fa-th-large me-2"></i>Breakout
+                                        Sessions (12:15 – 13:00)</h6>
+                                    <div class="breakout-container">
+                                        <div class="breakout-item">
+                                            <div class="breakout-title">Breakout A: Data Protection & Ethical AI</div>
+                                            <div class="facilitator">Facilitators TBC</div>
+                                        </div>
+                                        <div class="breakout-item">
+                                            <div class="breakout-title">Breakout B: Intellectual Property & Copyright
+                                                Policy</div>
+                                            <div class="facilitator">Facilitators TBC</div>
+                                        </div>
+                                        <div class="breakout-item">
+                                            <div class="breakout-title">Breakout C: Software Quality Assurance &
+                                                Standards</div>
+                                            <div class="facilitator">Facilitators TBC</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lunch  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                            </div>
+
+                            <!-- Ecosystem Landscape Keynote  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-microphone me-1"></i>Keynote</span></div>
+                                    <div class="time-display">14:00 – 15:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Software Ecosystem Landscape</h5>
+                                <p class="mb-3">Insights into market dynamics, talent pipelines, export opportunities and the Kenya Software Ecosystem Baseline Survey presentation.</p>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Keynote: Global trends & opportunities</div>
+                                        <div class="facilitator">Speaker TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Presentation: Kenya Software Ecosystem Baseline
+                                            Survey</div>
+                                        <div class="facilitator">Government / Research Partner (TBC)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hackathon Kickoff  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-success"><i
+                                                class="fas fa-rocket me-1"></i>Hackathon</span></div>
+                                    <div class="time-display">15:30 – 16:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Hackathon Kickoff</h5>
+                                <p class="mb-0">Official launch, rules, judging criteria, team briefings and sponsor introductions for participating teams.</p>
+                            </div>
+
+                            <!-- Sponsor Labs & Workshops  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-flask me-1"></i>Labs
+                                            / Workshops</span></div>
+                                    <div class="time-display">16:00 – 17:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Partner Labs & Sponsor Workshops</h5>
+                                <p class="mb-3">Hands-on sessions and product deep-dives from strategic partners and sponsor organisations.</p>
+                                
+                                <div class="labs-grid">
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fab fa-microsoft"></i>
+                                            Microsoft Workshop
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fab fa-aws"></i>
+                                            AWS Session
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fab fa-google"></i>
+                                            Google Developer Lab
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-cogs"></i>
+                                            GIZ / GovStack
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Welcome Cocktail  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-glass-cheers me-1"></i>Networking</span></div>
+                                    <div class="time-display">17:30 – 19:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Welcome Cocktail</h5>
+                                <p class="mb-0">Evening reception with partners, delegates and speakers for informal networking over light refreshments.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= DAY 2 =================  -->
+                <div class="tab-pane fade" id="day2" role="tabpanel" aria-labelledby="day2-tab">
+                    <div class="agenda-day text-center" data-aos="fade-up">
+                        <h4 class="fw-bold text-success">
+                            <i class="fas fa-lightbulb me-2 dark"></i>Focus: Talent, Startups & Innovation Pipelines
+                        </h4>
+                        <p class="text-muted small mb-0 dark">Wednesday, October 29 — talent, skills, startups, showcases and labs to accelerate innovation.</p>
+                    </div>
+
+                    <div class="row g-4" data-aos="fade-up">
+                        <div class="col-12">
+
+                            <!-- Exhibition  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div class="time-display">All Day</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Innovation Exhibition Continues</h5>
+                                <p class="mb-0">Continued demos, partner showcases, and engagement booths focused on scaling solutions and talent attraction.</p>
+                            </div>
+
+                            <!-- Registration  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i class="fas fa-users me-1"></i>Networking</span>
+                                    </div>
+                                    <div class="time-display">07:30 – 08:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Registration & Morning Networking</h5>
+                                <p class="mb-0">Sign-ins and morning catch-ups; meet exhibitors and partners.</p>
+                            </div>
+
+                            <!-- Digital Skilling Keynote & Panel  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-microphone me-1"></i>Keynote</span></div>
+                                    <div class="time-display">08:30 – 10:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Digital Skilling & Talent Ecosystem</h5>
+                                <p class="mb-3">Examines workforce development, digital labour rights, and the role of education and industry in preparing talent.</p>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Keynote: Digital labour rights & skilling models
+                                        </div>
+                                        <div class="facilitator">Speaker TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Panel: Education, upskilling, remote work &
+                                            retention</div>
+                                        <div class="facilitator">Panelists TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tea Break  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:00 – 10:30 · Tea Break</span>
+                            </div>
+
+                            <!-- Showcase: Software Innovation  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-success"><i class="fas fa-star me-1"></i>Showcase</span>
+                                    </div>
+                                    <div class="time-display">10:30 – 13:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Showcase — Software Innovation</h5>
+                                <p class="mb-3">Presentations and demos across priority tracks:</p>
+
+                                <div class="labs-grid">
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-credit-card"></i>
+                                            Fintech & Payments
+                                        </div>
+                                        <div class="lab-lead">Presenters TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-cloud"></i>
+                                            Cloud & AI Solutions
+                                        </div>
+                                        <div class="lab-lead">Presenters TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-palette"></i>
+                                            Creative Economy & Digital Content
+                                        </div>
+                                        <div class="lab-lead">Presenters TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-universal-access"></i>
+                                            Accessibility & Inclusive Tech
+                                        </div>
+                                        <div class="lab-lead">Presenters TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lunch  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                            </div>
+
+                            <!-- Breakouts (parallel tracks)  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-th-large me-1"></i>Breakouts</span></div>
+                                    <div class="time-display">14:00 – 15:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Opportunities for Software Innovation (Breakout Tracks)</h5>
+                                <p class="mb-3">Concurrent discussions focused on concrete opportunity areas.</p>
+
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Virtual Assets & Web3</div>
+                                        <div class="facilitator">Facilitator TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Open Source Collaboration & Public Goods</div>
+                                        <div class="facilitator">Facilitator TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Cybersecurity & Digital Trust</div>
+                                        <div class="facilitator">Facilitator TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">SME Digitalization & Adoption</div>
+                                        <div class="facilitator">Facilitator TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tech Labs  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-warning text-dark"><i class="fas fa-cogs me-1"></i>Tech
+                                            Labs</span></div>
+                                    <div class="time-display">15:30 – 17:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Partner Tech Labs</h5>
+                                
+                                <div class="labs-grid">
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            Monetization & Business Models Lab
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-database"></i>
+                                            Oracle
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            Huawei
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-laptop"></i>
+                                            IBM
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                    <div class="lab-card">
+                                        <div class="lab-title">
+                                            <i class="fas fa-link"></i>
+                                            GovStack & Interoperability Labs
+                                        </div>
+                                        <div class="lab-lead">Lead TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gala Dinner  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i class="fas fa-utensils me-1"></i>Dinner</span>
+                                    </div>
+                                    <div class="time-display">17:30 – 21:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Gala Dinner</h5>
+                                <p class="mb-0">Formal dinner with keynote reflections, entertainment and networking. <em>Guest Speaker TBC</em></p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= DAY 3 =================  -->
+                <div class="tab-pane fade" id="day3" role="tabpanel" aria-labelledby="day3-tab">
+                    <div class="agenda-day text-center bg-white" data-aos="fade-up">
+                      <h4 class="fw-bold text-dark dark">
+                      <i class="fas fa-handshake me-2 dark"></i>Focus: Investment, Partnerships & Long-term Growth
+                      </h4>
+                      <p class="text-muted small mb-0 dark">Thursday, October 30 — investment, export readiness, partnerships, and summit closing commitments.</p>
+                    </div>
+
+                    <div class="row g-4" data-aos="fade-up">
+                        <div class="col-12">
+
+                            <!-- Exhibition  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i
+                                                class="fas fa-handshake me-1"></i>Exhibition</span></div>
+                                    <div class="time-display">All Day</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Final Day Exhibition & Partner Activations</h5>
+                                <p class="mb-0">Final showcases and partner demonstrations focused on scale, export-readiness and commercial partnerships.</p>
+                            </div>
+
+                            <!-- Advisory Breakfast  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-dark"><i class="fas fa-coffee me-1"></i>Breakfast</span>
+                                    </div>
+                                    <div class="time-display">07:30 – 08:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Software Advisory Council Breakfast</h5>
+                                <p class="mb-0">Private breakfast for advisory council, government and partners to finalize recommendations and commitments.</p>
+                            </div>
+
+                            <!-- Startup Support  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-seedling me-1"></i>Plenary</span></div>
+                                    <div class="time-display">08:30 – 10:30</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Startup Support — Funding the Ecosystem</h5>
+                                <p class="mb-3">Discussions on venture funding, financing instruments, growth-stage support and public sector interventions to catalyze scale-ups.</p>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Keynote on financing models</div>
+                                        <div class="facilitator">Speaker TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Panel: Investors, DFIs, corporates and accelerators
+                                        </div>
+                                        <div class="facilitator">Panelists TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tea Break  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-coffee me-2"></i>10:30 – 11:00 · Tea Break</span>
+                            </div>
+
+                            <!-- Software Export  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-info text-white"><i
+                                                class="fas fa-plane-departure me-1"></i>Panel</span></div>
+                                    <div class="time-display">11:00 – 12:15</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Software Global Export — Market Access & Standards</h5>
+                                <p class="mb-3">Practical steps to increase export competitiveness, compliance, and market-entry strategies for Kenyan software firms.</p>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Keynote: Export readiness & trade opportunities
+                                        </div>
+                                        <div class="facilitator">Speaker TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Panel: Regulators, export promotion agencies,
+                                            exporters</div>
+                                        <div class="facilitator">Panelists TBC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hackathon Finals  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-success"><i
+                                                class="fas fa-trophy me-1"></i>Showcase</span></div>
+                                    <div class="time-display">12:15 – 13:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-2 dark">Hackathon Finals & Awards</h5>
+                                <p class="mb-0">Finalist pitches, judges' deliberation and announcement of winners; prizes and follow-on support details.</p>
+                            </div>
+
+                            <!-- Lunch  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-utensils me-2"></i>13:00 – 14:00 · Lunch Break</span>
+                            </div>
+
+                            <!-- Closing Plenary  -->
+                            <div class="card agenda-item p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div><span class="badge bg-primary"><i
+                                                class="fas fa-bullhorn me-1"></i>Closing</span></div>
+                                    <div class="time-display">14:00 – 16:00</div>
+                                </div>
+                                <h5 class="fw-bold mb-3 dark">Closing Plenary & Call to Action</h5>
+                                
+                                <div class="breakout-container">
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Closing keynote & reflections</div>
+                                        <div class="facilitator">Speaker TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Panel: Summit learnings and commitments</div>
+                                        <div class="facilitator">Panelists TBC</div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Signing of Call to Action and public commitments
+                                        </div>
+                                    </div>
+                                    <div class="breakout-item">
+                                        <div class="breakout-title">Closing ceremony & press conference</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Departure / Final Tea  -->
+                            <div class="card break-item mb-4">
+                                <span class=""><i class="fas fa-coffee me-2"></i>16:00 – 16:30 · Tea Break & Guests
+                                    Depart</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            Agenda Footer Note
+            <div class="alert alert-info mt-5 d-flex align-items-center" data-aos="fade-up">
+                <i class="fas fa-info-circle fa-2x me-3 text-primary"></i>
+                <div>
+                    <strong>Important Note:</strong> This agenda is based on the Summit Program Draft. Times and
+                    sessions are subject to final confirmation. Speakers are shown as <em>Speaker TBC</em> until
+                    official confirmation.
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Summit Features</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #CE171C;">
+                        <div class="feature-icon mb-3" style="color: #CE171C;">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
+                        <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across
+                            sectors including healthcare, fintech, education, and agriculture.</p>
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #01873F;">
+                        <div class="feature-icon mb-3" style="color: #01873F;">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Technical Workshops</h4>
+                        <p class="text-secondary">Hands-on learning sessions covering AI, cloud computing, cybersecurity,
+                            mobile app development, and software architecture best practices.</p>
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Hands-on</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #1C1C18;">
+                        <div class="feature-icon mb-3" style="color: #1C1C18;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Tech Expo</h4>
+                        <p class="text-secondary">Exhibition showcasing new tools, platforms, APIs, open-source projects,
+                            and research collaborations from leading tech companies.</p>
+                        <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Expo</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #01873F;">
+                        <div class="feature-icon mb-3" style="color: #01873F;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Talent Matchmaking</h4>
+                        <p class="text-secondary">Connect software developers with hiring companies and innovation projects
+                            through our dedicated talent pavilion and networking sessions.</p>
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3 shadow-sm">Careers</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #CE171C;">
+                        <div class="feature-icon mb-3" style="color: #CE171C;">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Startup Demos</h4>
+                        <p class="text-secondary">Showcase Kenyan and African innovations ready for scaling and investment,
+                            with opportunities to connect with venture capital firms.</p>
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Startups</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card h-100 shadow-lg border-0 position-relative"
+                        style="background: #fff; border-top: 5px solid #1C1C18;">
+                        <div class="feature-icon mb-3" style="color: #1C1C18;">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">Policy Forums</h4>
+                        <p class="text-secondary">Discussions on AI ethics, open software standards, data security policies,
+                            and regulatory frameworks for the digital economy.</p>
+                        <span class="badge bg-dark position-absolute top-0 end-0 m-3 shadow-sm">Policy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Registration Section -->
+    <section id="register" class="section-padding ">
+      <div class="container">
+        <!-- Title + Intro -->
+        <div class="row justify-content-center mb-5 ">
+          <div class="col-lg-8 text-center" data-aos="fade-up">
+            <h2 class="section-title text-dark fw-bold dark">
+              Register for Kenya Software Summit 2025
+            </h2>
+            <p class="lead text-muted dark">
+              Join <strong>500+ developers, entrepreneurs, and tech leaders</strong>
+              for Africa's premier software development conference.
+            </p>
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="row justify-content-center">
+          <div class="col-lg-7 col-md-9">
+            <div class="card registration-card p-4 bg-red-light">
+              <form id="registration-form" method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- Title, First Name, Second Name -->
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold dark">Title</label>
+                    {{ form.title }}
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold dark">First Name</label>
+                    {{ form.first_name }}
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold dark">Second Name</label>
+                    {{ form.second_name }}
+                  </div>
+                </div>
+
+                <!-- Email + Phone -->
+                <div class="row g-3 mt-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold dark">Email</label>
+                    {{ form.email }}
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold dark">Phone</label>
+                    {{ form.phone }}
+                  </div>
+                </div>
+
+                <!-- Organization Type -->
+                <div class="row g-3 mt-3">
+                  <div class="col-md-12">
+                    <label class="form-label fw-semibold dark">Organization Type</label>
+                    {{ form.organization_type }}
+                  </div>
+                  <div class="col-md-12" id="other-org-type" style="display:none;">
+                    <label class="form-label fw-semibold dark">Please specify</label>
+                    {{ form.other_organization_type }}
+                  </div>
+                </div>
+
+                <!-- Job Title -->
+                <div class="mt-3">
+                  <label class="form-label fw-semibold dark">Job Title / Role</label>
+                  {{ form.job_title }}
+                </div>
+
+                <!-- Interests -->
+                <div class="mt-3">
+                  <label class="form-label fw-semibold dark">Areas of Interest</label>
+                  <div id="id_interests" class="d-flex flex-wrap gap-3">
+                    {% for checkbox in form.interests %}
+                    <div class="form-check custom-check">
+                      {{ checkbox.tag }}
+                      <label class="form-check-label">{{ checkbox.choice_label }}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                <!-- Other Interest -->
+                <div class="mt-3" id="other-interest" style="display:none;">
+                  <label class="form-label fw-semibold dark">Please specify</label>
+                  {{ form.other_interest }}
+                </div>
+
+                <!-- Submit -->
+                <div class="d-grid mt-4">
+                  <button type="submit" id="submit-btn" class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark" >
+                    <i class="fa fa-paper-plane me-2"></i> Register Now
+                  </button>
+                </div>
+              </form>
+
+              <!-- Alerts -->
+              <div id="alert-container" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsors Section  -->
+    <section id="partners" class="section-padding ">
+
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Kenya Software Summit 2025 Sponsors</h2>
+
+            <div class="partners-logos" data-aos="fade-up">
+                <div class="partner-logo-container">
+                    <img src="#" alt="Ministry of ICT" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/icta_logo.png' %}" alt="ICT Authority" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/konza_logo.png' %}" alt="Konza Technopolis" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/afralti_logo.png' %}" alt="KAIST Kenya" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/atu_logo.png' %}" alt="ODPC" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/itu_logo.png' %}" alt="ODPC" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/kaist_logo.png' %}" alt="ODPC" class="partner-logo">
+                </div>
+                <div class="partner-logo-container">
+                    <img src="{% static 'images/partners/micde_logo.png' %}" alt="ODPC" class="partner-logo">
+                </div>
+
+            </div>
+    </section>
+
+    <!-- Partners Section  -->
+    <section id="partners" class="section-padding ">
+        <div class="container">
+            <h2 class="section-title dark" data-aos="fade-up">Our Partners</h2>
+
+        <div class="partners-logos" data-aos="fade-up">
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/odpc_logo.png' %}" alt="Ministry of ICT" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/icta_logo.png' %}" alt="ICT Authority" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/konza_logo.png' %}" alt="Konza Technopolis" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/afralti_logo.png' %}" alt="KAIST Kenya" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/atu_logo.png' %}" alt="ODPC" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/itu_logo.png' %}" alt="ODPC" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/kaist_logo.png' %}" alt="ODPC" class="partner-logo">
+            </div>
+            <div class="partner-logo-container">
+                <img src="{% static 'images/partners/micde_logo.png' %}" alt="ODPC" class="partner-logo">
+            </div>
+        </div>
+    </div>
+    </section>
+
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section">
+
+      <div class="container-fluid">
+
+        <div class="row gy-4 justify-content-center">
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-1.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-1.webp" title="Gallery 1" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-2.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-2.webp" title="Gallery 2" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-3.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-3.webp" title="Gallery 3" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-4.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-4.webp" title="Gallery 4" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-5.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-5.webp" title="Gallery 5" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-6.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-6.webp" title="Gallery 6" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-7.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-7.webp" title="Gallery 7" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/events/gallery-8.webp" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/events/gallery-8.webp" title="Gallery 8" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Gallery Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Gallery Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative dark-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename"> Kenya Software Summit</span>
+          </a>
+
+          <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+              Africa’s digital economy through collaboration, talent development, and innovation.</p>
+          <div class="social-links d-flex mt-3">
+              <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
+                  <i class="bi bi-twitter-x"></i>
+              </a>
+              <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
+                  <i class="bi bi-facebook"></i>
+              </a>
+              <a aria-label="Connect with us on LinkedIn"
+                href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
+                target="_blank">
+                  <i class="bi bi-linkedin"></i>
+              </a>
+              <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                target="_blank">
+                  <i class="fab fa-youtube"></i>
+              </a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#speakers">Speakers</a></li>
+            <li><a href="#agenda">Agenda</a></li>
+            <li><a href="#register">Register</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#partners">Partners</a></li>
+            <li><a href="#media">Media</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Accessibility</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Code of Conduct</a></li>
+            <li><a href="#">Refund Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span>  <strong class="px-1 sitename">Kenya Software Summit. </strong> <span>All Rights Reserved. </span></p>
+      
+    </div>
+
+  </footer>
+
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
