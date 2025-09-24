@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Schedule - Evently Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Evently
+  * Template URL: https://bootstrapmade.com/evently-bootstrap-events-template/
+  * Updated: Jul 19 2025 with Bootstrap v5.3.7
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="schedule-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.webp" alt=""> -->
+        <h1 class="sitename">Evently</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="schedule.html" class="active">Schedule</a></li>
+          <li><a href="speakers.html">Speakers</a></li>
+          <li><a href="venue.html">Venue</a></li>
+          <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="speaker-details.html">Speaker Details</a></li>
+              <li><a href="tickets.html">Tickets</a></li>
+              <li><a href="buy-tickets.html">Buy Tickets</a></li>
+              <li><a href="gallery.html">Gallery</a></li>
+              <li><a href="terms.html">Terms</a></li>
+              <li><a href="privacy.html">Privacy</a></li>
+              <li><a href="404.html">404</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Dropdown 2</a></li>
+              <li><a href="#">Dropdown 3</a></li>
+              <li><a href="#">Dropdown 4</a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
+      <div class="container position-relative">
+        <h1>Schedule</h1>
+        <p>Esse dolorum voluptatum ullam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias.</p>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Schedule</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="schedule section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Schedule</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <!-- Day Selector -->
+        <div class="schedule-tabs">
+          <ul class="nav nav-pills justify-content-center mb-5">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#schedule-day1">Day 1 - March 15</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day2">Day 2 - March 16</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day3">Day 3 - March 17</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Schedule Content -->
+        <div class="tab-content schedule-content">
+
+          <!-- Day 1 Schedule -->
+          <div class="tab-pane fade show active" id="schedule-day1">
+
+            <!-- Track Headers -->
+            <div class="track-headers">
+              <div class="track-header development">
+                <i class="bi bi-code-slash"></i>
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design">
+                <i class="bi bi-palette"></i>
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business">
+                <i class="bi bi-briefcase"></i>
+                <span>Business Track</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <!-- Time Slot 1 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">9:00 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote" colspan="3">
+                    <div class="session-type">
+                      <i class="bi bi-megaphone"></i>
+                      <span>Keynote</span>
+                    </div>
+                    <h4>Future of Digital Innovation</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-1.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Dr. Sarah Johnson</h5>
+                        <span>Chief Technology Officer, TechCorp</span>
+                      </div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 2 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:15 AM</span>
+                  <span class="duration">60 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-laptop"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>Advanced React Patterns</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-2.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Michael Chen</h5>
+                        <span>Senior Developer</span>
+                      </div>
+                    </div>
+                    <p>Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-brush"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Design Systems at Scale</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-3.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Emily Rodriguez</h5>
+                        <span>UX Director</span>
+                      </div>
+                    </div>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-people"></i>
+                      <span>Panel</span>
+                    </div>
+                    <h4>Scaling Tech Teams</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-4.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>David Park</h5>
+                        <span>VP of Engineering</span>
+                      </div>
+                    </div>
+                    <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">11:15 AM</span>
+                  <span class="duration">30 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Networking</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 3 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">11:45 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-code"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Microservices Architecture</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-5.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Alex Thompson</h5>
+                        <span>Solutions Architect</span>
+                      </div>
+                    </div>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-phone"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>Mobile-First Design</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-6.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Lisa Zhang</h5>
+                        <span>Product Designer</span>
+                      </div>
+                    </div>
+                    <p>Totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-graph-up"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Product Growth Strategies</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-7.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>James Wilson</h5>
+                        <span>Growth Manager</span>
+                      </div>
+                    </div>
+                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 1 -->
+
+          <!-- Day 2 Schedule -->
+          <div class="tab-pane fade" id="schedule-day2">
+
+            <div class="track-headers">
+              <div class="track-header development">
+                <i class="bi bi-code-slash"></i>
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design">
+                <i class="bi bi-palette"></i>
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business">
+                <i class="bi bi-briefcase"></i>
+                <span>Business Track</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">9:30 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote">
+                    <div class="session-type">
+                      <i class="bi bi-megaphone"></i>
+                      <span>Keynote</span>
+                    </div>
+                    <h4>AI Revolution in Development</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-8.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Dr. Maria Santos</h5>
+                        <span>AI Research Director</span>
+                      </div>
+                    </div>
+                    <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:45 AM</span>
+                  <span class="duration">60 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-gear"></i>
+                      <span>Workshop</span>
+                    </div>
+                    <h4>DevOps Best Practices</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-9.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Robert Kim</h5>
+                        <span>DevOps Engineer</span>
+                      </div>
+                    </div>
+                    <p>Irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room A</span>
+                      <span class="level intermediate">Intermediate</span>
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-eye"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Accessibility in Design</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-10.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Anna Martinez</h5>
+                        <span>Accessibility Expert</span>
+                      </div>
+                    </div>
+                    <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room B</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-currency-dollar"></i>
+                      <span>Panel</span>
+                    </div>
+                    <h4>Funding Strategies for Startups</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-11.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Thomas Brown</h5>
+                        <span>Investment Partner</span>
+                      </div>
+                    </div>
+                    <p>Ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation.</p>
+                    <div class="session-meta">
+                      <span class="venue">Room C</span>
+                      <span class="level advanced">Advanced</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 2 -->
+
+          <!-- Day 3 Schedule -->
+          <div class="tab-pane fade" id="schedule-day3">
+
+            <div class="track-headers">
+              <div class="track-header development">
+                <i class="bi bi-code-slash"></i>
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design">
+                <i class="bi bi-palette"></i>
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business">
+                <i class="bi bi-briefcase"></i>
+                <span>Business Track</span>
+              </div>
+            </div>
+
+            <div class="schedule-timeline">
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">10:00 AM</span>
+                  <span class="duration">90 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card workshop">
+                    <div class="session-type">
+                      <i class="bi bi-tools"></i>
+                      <span>Hands-on Workshop</span>
+                    </div>
+                    <h4>Building Your First App</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-12.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Kevin Lee</h5>
+                        <span>Full-stack Developer</span>
+                      </div>
+                    </div>
+                    <p>Ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.</p>
+                    <div class="session-meta">
+                      <span class="venue">Workshop Room</span>
+                      <span class="level beginner">Beginner</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">12:00 PM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote">
+                    <div class="session-type">
+                      <i class="bi bi-award"></i>
+                      <span>Closing Keynote</span>
+                    </div>
+                    <h4>The Future is Collaborative</h4>
+                    <div class="speaker">
+                      <img src="assets/img/events/speaker-13.webp" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Jennifer Adams</h5>
+                        <span>CEO, FutureTech</span>
+                      </div>
+                    </div>
+                    <p>In voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 3 -->
+
+        </div>
+
+        <!-- Download CTA -->
+        <div class="text-center">
+          <div class="download-cta">
+            <h4>Get the Complete Schedule</h4>
+            <p>Download the full agenda as PDF or add events to your calendar</p>
+            <div class="cta-buttons">
+              <a href="#" class="btn btn-primary">
+                <i class="bi bi-download"></i>
+                Download PDF
+              </a>
+              <a href="#" class="btn btn-outline-primary">
+                <i class="bi bi-calendar-plus"></i>
+                Add to Calendar
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Schedule Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative dark-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Evently</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>A108 Adam Street</p>
+            <p>New York, NY 535022</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+            <p><strong>Email:</strong> <span>info@example.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">Product Management</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Graphic Design</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Hic solutasetp</h4>
+          <ul>
+            <li><a href="#">Molestiae accusamus iure</a></li>
+            <li><a href="#">Excepturi dignissimos</a></li>
+            <li><a href="#">Suscipit distinctio</a></li>
+            <li><a href="#">Dilecta</a></li>
+            <li><a href="#">Sit quas consectetur</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Nobis illum</h4>
+          <ul>
+            <li><a href="#">Ipsam</a></li>
+            <li><a href="#">Laudantium dolorum</a></li>
+            <li><a href="#">Dinera</a></li>
+            <li><a href="#">Trodelas</a></li>
+            <li><a href="#">Flexo</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">MyWebsite</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

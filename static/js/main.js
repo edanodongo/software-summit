@@ -1,4 +1,10 @@
-
+/**
+* Template Name: Evently
+* Template URL: https://bootstrapmade.com/evently-bootstrap-events-template/
+* Updated: Jul 19 2025 with Bootstrap v5.3.7
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
 
 (function() {
   "use strict";
@@ -26,7 +32,9 @@
     mobileNavToggleBtn.classList.toggle('bi-list');
     mobileNavToggleBtn.classList.toggle('bi-x');
   }
-  mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  if (mobileNavToggleBtn) {
+    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  }
 
   /**
    * Hide mobile nav on same-page/hash links
@@ -84,62 +92,39 @@
   document.addEventListener('scroll', toggleScrollTop);
 
   /**
-   * Animation on scroll function and init
+   * Countdown timer
    */
-  function aosInit() {
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    });
-  }
-  window.addEventListener('load', aosInit);
+  function updateCountDown(countDownItem) {
+    const timeleft = new Date(countDownItem.getAttribute('data-count')).getTime() - new Date().getTime();
 
-  /**
-   * Initiate glightbox
-   */
-  const glightbox = GLightbox({
-    selector: '.glightbox'
+    const days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+
+    const daysElement = countDownItem.querySelector('.count-days');
+    const hoursElement = countDownItem.querySelector('.count-hours');
+    const minutesElement = countDownItem.querySelector('.count-minutes');
+    const secondsElement = countDownItem.querySelector('.count-seconds');
+
+    if (daysElement) daysElement.innerHTML = days;
+    if (hoursElement) hoursElement.innerHTML = hours;
+    if (minutesElement) minutesElement.innerHTML = minutes;
+    if (secondsElement) secondsElement.innerHTML = seconds;
+
+  }
+
+  document.querySelectorAll('.countdown').forEach(function(countDownItem) {
+    updateCountDown(countDownItem);
+    setInterval(function() {
+      updateCountDown(countDownItem);
+    }, 1000);
   });
 
   /**
    * Initiate Pure Counter
    */
   new PureCounter();
-
-  /**
-   * Init isotope layout and filters
-   */
-  document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
-    let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
-    let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
-    let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
-
-    let initIsotope;
-    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
-      initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
-        itemSelector: '.isotope-item',
-        layoutMode: layout,
-        filter: filter,
-        sortBy: sort
-      });
-    });
-
-    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
-      filters.addEventListener('click', function() {
-        isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
-        this.classList.add('filter-active');
-        initIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        if (typeof aosInit === 'function') {
-          aosInit();
-        }
-      }, false);
-    });
-
-  });
 
   /**
    * Init swiper sliders
@@ -161,43 +146,161 @@
   window.addEventListener("load", initSwiper);
 
   /**
-   * Correct scrolling position upon page load for URLs containing hash links.
+   * Initiate glightbox
    */
-  window.addEventListener('load', function(e) {
-    if (window.location.hash) {
-      if (document.querySelector(window.location.hash)) {
-        setTimeout(() => {
-          let section = document.querySelector(window.location.hash);
-          let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
-          window.scrollTo({
-            top: section.offsetTop - parseInt(scrollMarginTop),
-            behavior: 'smooth'
-          });
-        }, 100);
-      }
-    }
+  const glightbox = GLightbox({
+    selector: '.glightbox'
   });
 
-  /**
-   * Navmenu Scrollspy
+  /*
+   * Pricing Toggle
    */
-  let navmenulinks = document.querySelectorAll('.navmenu a');
 
-  function navmenuScrollspy() {
-    navmenulinks.forEach(navmenulink => {
-      if (!navmenulink.hash) return;
-      let section = document.querySelector(navmenulink.hash);
-      if (!section) return;
-      let position = window.scrollY + 200;
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
-        document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
-        navmenulink.classList.add('active');
+  const pricingContainers = document.querySelectorAll('.pricing-toggle-container');
+
+  pricingContainers.forEach(function(container) {
+    const pricingSwitch = container.querySelector('.pricing-toggle input[type="checkbox"]');
+    const monthlyText = container.querySelector('.monthly');
+    const yearlyText = container.querySelector('.yearly');
+
+    pricingSwitch.addEventListener('change', function() {
+      const pricingItems = container.querySelectorAll('.pricing-item');
+
+      if (this.checked) {
+        monthlyText.classList.remove('active');
+        yearlyText.classList.add('active');
+        pricingItems.forEach(item => {
+          item.classList.add('yearly-active');
+        });
       } else {
-        navmenulink.classList.remove('active');
+        monthlyText.classList.add('active');
+        yearlyText.classList.remove('active');
+        pricingItems.forEach(item => {
+          item.classList.remove('yearly-active');
+        });
       }
-    })
-  }
-  window.addEventListener('load', navmenuScrollspy);
-  document.addEventListener('scroll', navmenuScrollspy);
+    });
+  });
 
 })();
+
+
+
+// Form submission with AJAX
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("registration-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const alertContainer = document.getElementById("alert-container");
+
+  // --- Get wrapper divs ---
+  const otherOrgWrapper = document.getElementById("other-org-type");
+  const otherInterestWrapper = document.getElementById("other-interest");
+
+  // --- Get form elements ---
+  const orgTypeSelect = document.getElementById("id_organization_type");
+  const otherOrgInput = document.getElementById("id_other_organization_type");
+
+  const interestCheckboxes = document.querySelectorAll(
+    "#id_interests input[type=checkbox]"
+  );
+  const otherInterestInput = document.getElementById("id_other_interest");
+
+  // --- Utility to toggle visibility ---
+  function toggleVisibility(wrapper, input, show) {
+    if (!wrapper || !input) return;
+    if (show) {
+      wrapper.style.display = "block";
+      input.setAttribute("required", "required");
+    } else {
+      wrapper.style.display = "none";
+      input.removeAttribute("required");
+      input.value = ""; // clear hidden field
+    }
+  }
+
+  // --- Handle Organization Type ---
+  function handleOrgTypeChange() {
+    if (orgTypeSelect && orgTypeSelect.value) {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, true);
+    } else {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
+    }
+  }
+
+  // --- Handle Interests ---
+  function handleInterestChange() {
+    let othersChecked = Array.from(interestCheckboxes).some(
+      (cb) => cb.checked && cb.value.toLowerCase() === "others"
+    );
+    toggleVisibility(otherInterestWrapper, otherInterestInput, othersChecked);
+  }
+
+  // --- Event listeners ---
+  if (orgTypeSelect) {
+    orgTypeSelect.addEventListener("change", handleOrgTypeChange);
+  }
+  interestCheckboxes.forEach((cb) =>
+    cb.addEventListener("change", handleInterestChange)
+  );
+
+  // --- Run on page load (restore state if editing form) ---
+  handleOrgTypeChange();
+  handleInterestChange();
+
+  // --- Alerts ---
+  function showAlert(message, type = "success") {
+    alertContainer.innerHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`;
+  }
+
+  // --- AJAX Form Submit ---
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
+
+    fetch(form.action || window.location.href, {
+      method: "POST",
+      body: new FormData(form),
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+
+        if (data.success) {
+          showAlert(data.message, "success");
+          form.reset();
+          handleOrgTypeChange();
+          handleInterestChange();
+        } else if (data.errors) {
+          let errorList = Object.entries(data.errors)
+            .map(
+              ([field, errors]) =>
+                `<li><strong>${field}:</strong> ${errors.join(", ")}</li>`
+            )
+            .join("");
+          showAlert(`<ul>${errorList}</ul>`, "danger");
+        } else {
+          showAlert("Something went wrong. Please try again.", "danger");
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+        showAlert("Server error. Please try again later.", "danger");
+      });
+  });
+});
+
+// Set footer year if needed
+document.getElementById("year").textContent = new Date().getFullYear();
+
