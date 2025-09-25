@@ -29,7 +29,6 @@
     </a>
   </div>
 
-
   <!-- Registrants Table -->
   <div class="row mb-4">
     <div class="col">
@@ -46,50 +45,19 @@
                   <th>Phone</th>
                   <th>Organization</th>
                   <th>Job Title</th>
-                  <th>Category</th>
                   <th>Interests</th>
-                  {% comment %} <th>Subscribed</th>
-                  <th>Registered On</th> {% endcomment %}
                 </tr>
               </thead>
               <tbody>
                 {% for reg in registrants %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
-                  <td>{{ reg.full_name }}</td>
+                  <td>{{ reg.title }} {{ reg.first_name }} {{ reg.second_name }}</td>
                   <td>{{ reg.email }}</td>
                   <td>{{ reg.phone }}</td>
-                  <td>{{ reg.organization|default:"—" }}</td>
+                  <td>{{ reg.display_org_type }}</td>
                   <td>{{ reg.job_title|default:"—" }}</td>
-                  {% comment %} <td>{{ reg.get_category_display }}</td> {% endcomment %}
-                  <td>
-
-                    {% if reg.category == "other"%}
-                      {{ reg.display_category}} {{ reg.other_category|join:", " }}
-                      
-                    {% elif reg.category %}
-                      {{ reg.other_category|join:", " }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if reg.interests %}
-                      {{ reg.interests|join:", " }}
-                    {% elif reg.other_interest %}
-                      {{ reg.other_interest|join:", " }} {{ reg.interests|join:", " }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </td>
-                  {% comment %} <td>
-                    {% if reg.updates_opt_in %}
-                      <span class="badge bg-success">Yes</span>
-                    {% else %}
-                      <span class="badge bg-secondary">No</span>
-                    {% endif %}
-                  </td> {% endcomment %}
-                  {% comment %} <td>{{ reg.created_at|date:"M d, Y H:i" }}</td> {% endcomment %}
+                  <td>{{ reg.display_interests|default:"—" }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -101,58 +69,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Charts
-  <div class="row">
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm p-3">
-        <h6>Participation Categories</h6>
-        <canvas id="categoryChart"></canvas>
-      </div>
-    </div>
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm p-3">
-        <h6>Registrations Over Time</h6>
-        <canvas id="timeChart"></canvas>
-      </div>
-    </div>
-  </div>
-  -->
 </div>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const categoryData = {{ category_counts|safe }};
-const timeData = {{ registrations_over_time|safe }};
-
-// Category Pie Chart
-new Chart(document.getElementById('categoryChart'), {
-  type: 'pie',
-  data: {
-    labels: categoryData.map(c => c.category),
-    datasets: [{
-      data: categoryData.map(c => c.count),
-      backgroundColor: ['#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff','#ff9f40','#c9cbcf']
-    }]
-  }
-});
-
-// Registrations Over Time Line Chart
-new Chart(document.getElementById('timeChart'), {
-  type: 'line',
-  data: {
-    labels: timeData.map(r => r.date),
-    datasets: [{
-      label: 'Registrations',
-      data: timeData.map(r => r.count),
-      fill: true,
-      borderColor: '#36a2eb',
-      tension: 0.3
-    }]
-  }
-});
-</script>
 
 <!-- DataTables + Export Buttons -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -176,7 +93,6 @@ $(document).ready(function() {
       { extend: 'csv', text: '⬇️ CSV' },
       { extend: 'excel', text: '📊 Excel' },
       { extend: 'pdf', text: '📑 PDF' }
-      //{ extend: 'print', text: '🖨️ Print' }
     ],
     order: [[ 0, 'asc' ]] // default sort by #
   });

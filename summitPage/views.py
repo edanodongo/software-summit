@@ -230,30 +230,29 @@ def export_registrants_pdf(request):
 
     return response
 
+from django.db.models import Count
+from django.shortcuts import render
+from .models import Registrant
+
 
 def print_registrants(request):
-    registrants = Registrant.objects.all()
+    registrants = Registrant.objects.all().order_by("created_at")
 
-    # Aggregated counts
-    category_counts = (
-        registrants.values("category")
+    # Breakdown by organization_type
+    org_type_counts = (
+        registrants.values("organization_type")
         .annotate(count=Count("id"))
-        .order_by()
+        .order_by("organization_type")
     )
 
     return render(request, "summit/print_registrants.html", {
         "registrants": registrants,
-        "category_counts": list(category_counts),
+        "org_type_counts": list(org_type_counts),
     })
 
 
-from django.conf import settings
-from django.shortcuts import redirect
-from django.contrib import messages
-
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count
-from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Registrant
 
@@ -265,21 +264,10 @@ def dashboard_view(request):
 
     registrants = Registrant.objects.all().order_by('-created_at')
 
-    # Breakdown by category
-    category_counts = (
-        Registrant.objects.values("category")
-        .annotate(count=Count("id"))
-        .order_by("category")
-    )
-
-
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
-        "category_counts": list(category_counts),
         "registrants": registrants,
-        # "interest_counts": interest_map,
-        # "registrations_over_time": list(registrations_over_time),
     }
     return render(request, "summit/dashboard.html", context)
 
