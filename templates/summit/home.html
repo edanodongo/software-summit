@@ -60,13 +60,20 @@
             </ul>
           </li>  
         </ul>
-        <div class="d-flex align-items-center justify-content-center gap-2 flex-row flex-nowrap">
-          <!-- Mobile nav toggle (only visible on small screens) -->
-          <i class="mobile-nav-toggle d-xl-none bi bi-list fs-3"></i>
+        <div class="nav-extras d-flex align-items-center gap-2">
+          <!-- Mobile nav toggle -->
+           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 
-          <!-- Translation widget -->
-          <div class="gtranslate_wrapper"></div>  
+          <!-- Translate Globe (mobile only) -->
+          <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+          <!-- Translation widget (popover, hidden by default) -->
+          <div class="translate-popover d-none">
+            <div class="gtranslate_wrapper"></div>
+          </div>
         </div>
+
+
 
 
       </nav>

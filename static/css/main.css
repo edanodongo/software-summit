@@ -5877,9 +5877,46 @@ section,
 }
 
 
-.gtranslate_wrapper {
-  display: inline-flex !important;   /* keep it inline */
-  align-items: center;              /* vertically align content */
-  margin: 0 !important;             /* remove default spacing */
-  padding: 0 !important;
+
+
+
+
+/* ---- Translater ---- */
+
+/* Container stays aligned */
+.nav-extras {
+  display: flex !important;
+  align-items: center !important;
+  gap: .75rem !important;
 }
+
+/* Popover styles */
+.translate-popover {
+  position: absolute;
+  top: 100%;   /* place below the globe */
+  right: 0;    /* align to the right edge */
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: .5rem;
+  padding: .5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2000;
+  min-width: 140px;
+}
+
+/* Always visible on desktop (no popover) */
+@media (min-width: 1200px) {
+  .translate-popover {
+    position: static;
+    display: block !important;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+.gtranslate_wrapper,
+.gtranslate_wrapper * {
+  font-style: normal !important;
+}
+

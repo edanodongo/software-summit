@@ -304,3 +304,25 @@ document.addEventListener("DOMContentLoaded", () => {
 // Set footer year if needed
 document.getElementById("year").textContent = new Date().getFullYear();
 
+
+
+// Translater
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.querySelector('.translate-toggle');
+  const popover = document.querySelector('.translate-popover');
+
+  if (toggleBtn && popover) {
+    // Toggle on click
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don’t trigger document click
+      popover.classList.toggle('d-none');
+    });
+
+    // Hide when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!popover.contains(e.target) && !toggleBtn.contains(e.target)) {
+        popover.classList.add('d-none');
+      }
+    });
+  }
+});
