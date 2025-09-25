@@ -471,13 +471,1352 @@
     <!-- Schedule Section -->
     <section id="schedule" class="schedule section light-background">
 
-
       <!-- Section Title -->
       <div class="container section-title">
-        <h2>Summit Agenda</h2>
-        <p>Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events.</p>
+        <h2>Schedule</h2>
+        <p class="lead text-muted dark"><strong>Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. </strong></p>
       </div><!-- End Section Title -->
 
+      <div class="container">
+
+        <!-- Day Selector -->
+        <div class="schedule-tabs">
+          <ul class="nav nav-pills justify-content-center mb-5">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#schedule-day1">Day 1 - March 15</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day2">Day 2 - March 16</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#schedule-day3">Day 3 - March 17</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Schedule Content -->
+        <div class="tab-content schedule-content">
+
+          <!-- Day 1 Schedule -->
+          <div class="tab-pane fade show active" id="schedule-day1">
+
+            <!-- Track Headers 
+            <div class="track-headers">
+              <div class="track-header development" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-code-slash"></i> 
+                <span>Government Policy Frameworks & Enabling Ecosystem</span>
+              </div>
+              <div class="track-header design" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-palette"></i> 
+                <span>Talent, Startups & Innovation Pipelines</span>
+              </div>
+              <div class="track-header business" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-briefcase"></i> 
+                <span>Investment, Partnerships & Long-term Growth</span>
+              </div>
+            </div> -->
+
+            <div class="schedule-timeline">
+
+              <!-- Time Slot 1 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">7:30 AM</span>
+                  <span class="duration">45 min</span>
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Networking</span>
+                    </div>
+                    <h4>Registration & Morning Networking</h4>
+                    <!-- <p>Delegate check-in, badge collection and exhibition walkthroughs; early networking opportunities.</p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 2 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">8:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote" colspan="3">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Opening</span>
+                    </div>
+                    <h4>Welcome Remarks</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Chair, Organizing Committee</span>
+                      </div>
+                    </div>
+                    <!-- <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                  <div class="session-card keynote" colspan="3">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Keynote</span>
+                    </div>
+                    <h4>Addresses</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    <p>Positioning Kenya as a regional software hub; global perspectives.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4> Discussion — "TBC"</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+                  </div>  
+
+                  <div class="session-card keynote" colspan="3">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Opening</span>
+                    </div>
+                    <h4>Official Opening Ceremony</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Government Leadership (Speaker TBC)</span>
+                      </div>
+                    </div>
+                    <p>Setting policy intent, national priorities and high-level commitments for the summit. </p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">10:45 AM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Networking</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 3 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">11:15 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4>Framing Panel — "Building a National Software Ecosystem: Policy & Regulation"</h4>
+                    <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p>
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Government Representative</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Academia Representative</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Private Sector Leader</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Startup Founder</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+                  </div>                  
+
+                  <div class="session-card development">
+                    <div class="session-type">
+                      <i class="bi bi-code"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Data Protection & Ethical AI</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout A</span>
+                      <!-- <span class="level advanced">Advanced</span> -->
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <div class="session-type">
+                      <i class="bi bi-code"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Intellectual Property & Copyright Policy</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout B</span>
+                      <!-- <span class="level beginner">Beginner</span> -->
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <div class="session-type">
+                      <i class="bi bi-code"></i>
+                      <span>Talk</span>
+                    </div>
+                    <h4>Software Quality Assurance & Standards</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout C</span>
+                      <!-- <span class="level intermediate">Intermediate</span> -->
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+
+              <!-- Lunch -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">1:00 PM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-fork-knife"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Lunch Break</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 4 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">2:00 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Keynote</span>
+                    </div>
+                    <h4>Software Ecosystem Landscape</h4>
+                    <!-- <p>Insights into market dynamics, talent pipelines, export opportunities and the Kenya Software Ecosystem Baseline Survey presentation. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Keynote:</div>  
+                            <p> Global trends & opportunities</p>                       
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Government / Research Partner (TBC)</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Presentation: </div>                              
+                            <p>Kenya Software Ecosystem Baseline Survey</p>  
+                        </div>
+                    </div>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 5 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">3:30 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Hackathon</span>
+                    </div>
+                    <h4>Hackathon Kickoff</h4>
+                    <!-- <p>Official launch, rules, judging criteria, team briefings and sponsor introductions for participating teams. </p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 6 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">4:00 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <i class="bi bi-phone"></i>
+                      <span>Labs / Workshops</span>
+                    </div>
+                    <h4>Partner Labs & Sponsor Workshops</h4>
+                    <p>DHands-on sessions and product deep-dives from strategic partners and sponsor organisations.</p>
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Microsoft Workshop </div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">AWS Session</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Google Developer Lab </div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">GIZ / GovStack</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 7 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">5:30 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Networking</span>
+                    </div>
+                    <h4>Welcome Cocktail</h4>
+                    <!-- <p>Evening reception with partners, delegates and speakers for informal networking over light refreshments. </p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 1 -->
+
+          <!-- Day 2 Schedule -->
+          <div class="tab-pane fade" id="schedule-day2">
+            
+            <!-- Track Headers 
+            <div class="track-headers">
+              <div class="track-header development" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-code-slash"></i> 
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-palette"></i> 
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-briefcase"></i> 
+                <span>Business Track</span>
+              </div>
+            </div> -->
+
+            <div class="schedule-timeline">
+
+              <!-- Time Slot 1 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">7:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Networking</span>
+                    </div>
+                    <h4>Registration & Morning Networking</h4>
+                    <!-- <p>Sign-ins and morning catch-ups; meet exhibitors and partners. </p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 2 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">8:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">                  
+
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Keynote</span>
+                    </div>
+                    <h4>Digital Skilling & Talent Ecosystem</h4>
+                    <p>Examines workforce development, digital labour rights, and the role of education and industry in preparing talent. </p>
+
+                    
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    
+
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4> Education, upskilling, remote work & retention</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">10:45 AM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Networking</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Time Slot 3 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">11:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Showcase</span>
+                    </div>
+                    <h4>Showcase — Software Innovation</h4>
+                    <p>Presentations and demos across priority tracks: </p>
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Presenter TBC</h5>
+                                <span>Presenter Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Fintech & Payments</div>
+                            <div class="panelist-name">Presenter TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Presenter TBC</h5>
+                                <span>Presenter Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Cloud & AI Solutions </div>
+                            <div class="panelist-name">Presenter TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Presenter TBC</h5>
+                                <span>Presenter Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Creative Economy & Digital Content</div>
+                            <div class="panelist-name">Presenter TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Presenter TBC</h5>
+                                <span>Presenter Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Accessibility & Inclusive Tech</div>
+                            <div class="panelist-name">Presenter TBC</div>
+                        </div>
+                    </div>
+                  </div>
+                </div>                
+              </div>
+              
+              <!-- Lunch -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">1:00 PM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-fork-knife"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Lunch Break</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 4 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">2:00 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Breakouts</span>
+                    </div>
+                    <h4>Opportunities for Software Innovation (Breakout Tracks)</h4>
+                    <p>Concurrent discussions focused on concrete opportunity areas.</p>
+                    
+                  </div>                  
+
+                  <div class="session-card development">
+                    <h4>Data Protection & Ethical AI</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout A</span>
+                      <!-- <span class="level advanced">Advanced</span> -->
+                    </div>
+                  </div>
+                  <div class="session-card design">
+                    <h4>Intellectual Property & Copyright Policy</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout B</span>
+                      <!-- <span class="level beginner">Beginner</span> -->
+                    </div>
+                  </div>
+                  <div class="session-card business">
+                    <h4>Software Quality Assurance & Standards</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>TBC</h5>
+                        <span>TBC</span>
+                      </div>
+                    </div>
+                    <p>Facilitators TBC</p>
+                    <div class="session-meta">
+                      <span class="venue">Breakout C</span>
+                      <!-- <span class="level intermediate">Intermediate</span> -->
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+
+              <!-- Time Slot 5 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">3:30 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4> Discussion — "TBC"</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Lead TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Monetization & Business Models Lab</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Lead TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Oracle</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Lead TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">Huawei</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Lead TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">IBM</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Lead TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">GovStack & Interoperability Labs</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+                  </div>  
+
+                </div>
+              </div>
+              
+              <!-- Time Slot 6 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">5:30 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Dinner</span>
+                    </div>
+                    <h4>Gala Dinner</h4>
+                    <!-- <p>Formal dinner with keynote reflections, entertainment and networking. Guest Speaker TBC</p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 2 -->
+
+          <!-- Day 3 Schedule -->
+          <div class="tab-pane fade" id="schedule-day3">
+            
+            <!-- Track Headers 
+            <div class="track-headers">
+              <div class="track-header development" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-code-slash"></i> 
+                <span>Development Track</span>
+              </div>
+              <div class="track-header design" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-palette"></i> 
+                <span>Design Track</span>
+              </div>
+              <div class="track-header business" style="background: var(--primary-green);">
+                <!-- <i class="bi bi-briefcase"></i> 
+                <span>Business Track</span>
+              </div>
+            </div> -->
+
+            <div class="schedule-timeline">
+
+              <!-- Time Slot 1 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">7:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Breakfast</span>
+                    </div>
+                    <h4>Software Advisory Council Breakfast</h4>
+                    <!-- <p>Private breakfast for advisory council, government and partners to finalize recommendations and commitments. </p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 2 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">8:30 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">                  
+
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Plenary</span>
+                    </div>
+                    <h4>Startup Support — Funding the Ecosystem</h4>
+                    <p>Discussions on venture funding, financing instruments, growth-stage support and public sector interventions to catalyze scale-ups. </p>
+
+                    
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    <p>Financing models</p>                
+                    
+
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4>Investors, DFIs, corporates and accelerators</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Panelists TBC</h5>
+                                <span>Panelists Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Panelists TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Panelists TBC</h5>
+                                <span>Panelists Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Panelists TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Panelists TBC</h5>
+                                <span>Panelists Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Panelists TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Panelists TBC</h5>
+                                <span>Panelists Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Panelists TBC</div>
+                        </div>
+                    </div>
+
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">10:45 AM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Networking</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 3 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">11:00 AM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">                  
+
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4>Software Global Export — Market Access & Standards</h4>
+                    <p>Practical steps to increase export competitiveness, compliance, and market-entry strategies for Kenyan software firms. </p>
+
+                    
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    <p>Export readiness & trade opportunities </p>                
+                    
+
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4>Regulators, export promotion agencies, exporters</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              
+              <!-- Time Slot 4 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">12:15 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Hackathon</span>
+                    </div>
+                    <h4>Hackathon Finals & Awards</h4>
+                    <p>Finalist pitches, judges' deliberation and announcement of winners; prizes and follow-on support details. </p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lunch -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">1:00 PM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-fork-knife"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Lunch Break</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Slot 5 -->
+              <div class="time-slot">
+                <div class="time-label">
+                  <span class="time">2:00 PM</span>
+                  <!-- <span class="duration">45 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card keynote" colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Closing</span>
+                    </div>
+                    <h4>Closing keynote & reflections</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    <!-- <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                  <div class="session-card keynote"  colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Panel</span>
+                    </div>
+                    <h4> Discussion — "TBC"</h4>
+                    <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
+                    <div class="panelists-container">
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                        <div class="panelist-card">                        
+                            <div class="speaker">
+                              <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                              <div class="speaker-details">
+                                <h5>Speaker TBC</h5>
+                                <span>Speaker Title TBC</span>
+                              </div>
+                            </div>
+                            <div class="panelist-role">TBC</div>
+                            <div class="panelist-name">Speaker TBC</div>
+                        </div>
+                    </div>
+                  </div>  
+                  <div class="session-card keynote" colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Call to Action</span>
+                    </div>
+                    <h4>Addresses</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker Title TBC</span>
+                      </div>
+                    </div>
+                    <p>Signing of Call to Action and public commitments.</p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                  <div class="session-card keynote" colspan="0">
+                    <div class="session-type">
+                      <!-- <i class="bi bi-megaphone"></i> -->
+                      <span>Closing</span>
+                    </div>
+                    <h4>Official Closing Ceremony</h4>
+                    <div class="speaker">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="speaker-image">
+                      <div class="speaker-details">
+                        <h5>Speaker TBC</h5>
+                        <span>Speaker TBC</span>
+                      </div>
+                    </div>
+                    <p>Closing ceremony & press conference. </p>
+                    <div class="session-meta">
+                      <span class="venue">Main Hall</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Break -->
+              <div class="time-slot break-slot">
+                <div class="time-label">
+                  <span class="time">4:45 PM</span>
+                  <!-- <span class="duration">30 min</span> -->
+                </div>
+                <div class="sessions-row">
+                  <div class="session-card break">
+                    <div class="session-type">
+                      <i class="bi bi-cup-hot"></i>
+                      <span>Break</span>
+                    </div>
+                    <h4>Coffee Break &amp; Guests Depart</h4>
+                    <div class="session-meta">
+                      <span class="venue">Main Lobby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Day 3 -->
+
+        </div>
+
+        <!-- Download CTA
+        <div class="text-center">
+          <div class="download-cta">
+            <h4>Get the Complete Schedule</h4>
+            <p>Download the full agenda as PDF or add events to your calendar</p>
+            <div class="cta-buttons">
+              <a href="#" class="btn btn-primary">
+                <i class="bi bi-download"></i>
+                Download PDF
+              </a>
+              <a href="#" class="btn btn-outline-primary">
+                <i class="bi bi-calendar-plus"></i>
+                Add to Calendar
+              </a>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
 
     </section><!-- /Schedule Section -->
 
