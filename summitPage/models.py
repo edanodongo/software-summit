@@ -1,4 +1,3 @@
-# registrations/models.py
 from django.db import models
 import uuid
 
@@ -32,7 +31,7 @@ class Registrant(models.Model):
         ("others", "Others"),
     ]
 
-    # New fields
+    # ==== Fields ====
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100)
@@ -56,14 +55,20 @@ class Registrant(models.Model):
 
     # ==== Display helpers ====
     def display_org_type(self):
-        if self.organization_type == "other" and self.other_organization_type:
-            return self.other_organization_type
-        return self.get_organization_type_display()
+        """
+        Always merge dropdown + textbox if textbox is filled.
+        Example: 'Private Company - Safaricom'
+        """
+        base_label = self.get_organization_type_display()
+        if self.other_organization_type:
+            return f"{base_label} - {self.other_organization_type}"
+        return base_label
 
     def display_interests(self):
+        """Return interests as labels, merging 'Others' with custom text if provided."""
         items = []
         for i in self.interests:
-            if i == "other" and self.other_interest:
+            if i in ["other", "others"] and self.other_interest:
                 items.append(self.other_interest)
             else:
                 items.append(dict(self.INTEREST_CHOICES).get(i, i))

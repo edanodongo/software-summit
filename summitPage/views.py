@@ -232,29 +232,23 @@ def export_registrants_pdf(request):
 
 from django.db.models import Count
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
 from .models import Registrant
 
 
 def print_registrants(request):
     registrants = Registrant.objects.all().order_by("created_at")
 
-    # Breakdown by organization_type
-    org_type_counts = (
-        registrants.values("organization_type")
-        .annotate(count=Count("id"))
-        .order_by("organization_type")
-    )
+    # Build merged org_type counts manually (instead of raw DB field)
+    org_type_counts = {}
+    for reg in registrants:
+        label = reg.display_org_type()
+        org_type_counts[label] = org_type_counts.get(label, 0) + 1
 
     return render(request, "summit/print_registrants.html", {
         "registrants": registrants,
-        "org_type_counts": list(org_type_counts),
+        "org_type_counts": org_type_counts.items(),
     })
-
-
-from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Count
-from django.shortcuts import render
-from .models import Registrant
 
 
 @staff_member_required
@@ -262,7 +256,7 @@ def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    registrants = Registrant.objects.all().order_by('-created_at')
+    registrants = Registrant.objects.all().order_by('-created_at')  # newest first
 
     context = {
         "total_users": total_users,
