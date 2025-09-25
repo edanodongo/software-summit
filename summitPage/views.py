@@ -320,6 +320,6 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 
-def agenda(request):
-    return render(request, 'summit/agenda.html')
+def index(request):
+    return render(request, 'summit/index.html')
 
