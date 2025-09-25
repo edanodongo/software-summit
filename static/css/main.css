@@ -5572,8 +5572,8 @@ section,
 }
 
 #partners .partner-logo {
-    max-height: 150px;            
-    max-width: 240px;              
+    max-height: 200px;            
+    max-width: 280px;              
     object-fit: contain;
     transition: all 0.3s ease;
 }
@@ -5874,4 +5874,12 @@ section,
     .labs-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+.gtranslate_wrapper {
+  display: inline-flex !important;   /* keep it inline */
+  align-items: center;              /* vertically align content */
+  margin: 0 !important;             /* remove default spacing */
+  padding: 0 !important;
 }
