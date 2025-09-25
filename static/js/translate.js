@@ -1,0 +1,1 @@
+window.gtranslateSettings = {"default_language":"en","wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"right","switcher_vertical_position":"top","flag_style":"3d"}

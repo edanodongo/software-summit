@@ -34,7 +34,7 @@
             <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
             <div class="logo-divider mx-2"></div>
 
-        <img alt="Court of Arms" src="{% static 'images/summit_logo_light.png' %}" >
+        <img alt="Summit Logo" src="{% static 'images/summit_logo_light.png' %}" >
       </a>
 
 
@@ -69,18 +69,7 @@
                 <li><a href="#featured-speakers">SPEAKERS</a></li>
                 <li><a href="#features">FEATURES</a></li>
                 <!-- <li><a href="venue.html">VENUE</a></li> -->
-                <li class="dropdown"><a href="#"><span>MORE</span> <i
-                        class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <li><a href="#gallery">Gallery</a></li>
-                        <!-- <li><a href="speaker-details.html">Speaker Details</a></li>
-                        <li><a href="tickets.html">Tickets</a></li>
-                        <li><a href="buy-tickets.html">Buy Tickets</a></li>
-                        <li><a href="terms.html">Terms</a></li>
-                        <li><a href="privacy.html">Privacy</a></li>
-                        <li><a href="404.html">404</a></li> -->
-                    </ul>
-                </li>
+                
                 <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                   <ul>
                     <li><a href="#">Dropdown 1</a></li>
@@ -101,10 +90,13 @@
                 <li><a href="#footer">CONTACT</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
             <!-- <button id="themeToggle" class="btn btn-sm theme-toggle-btn" title="Toggle dark/light mode">
                 <i id="themeToggleIcon" class="fas fa-moon"></i>
             </button> -->
         </nav>
+
+       <div class="gtranslate_wrapper"></div>
 
         <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
 
@@ -195,11 +187,11 @@
                     <p class="sponsors-label">Proudly supported by industry leaders</p>
 
                     <div class="sponsors-logos">
-                        <img src="{% static 'images/partners/odpc_logot.png' %}" alt="Partner Logo"
+                        <img src="{% static 'images/partners/odpc_logot.png' %}" alt="ODPC Logo"
                              class="sponsor-logo">
-                        <img src="{% static 'images/partners/icta_logot.png' %}" alt="Partner Logo"
+                        <img src="{% static 'images/partners/icta_logot.png' %}" alt="ICTA Logo"
                              class="sponsor-logo">
-                        <img src="{% static 'images/partners/konza_logot.png' %}" alt="Partner Logo"
+                        <img src="{% static 'images/partners/konza_logot.png' %}" alt="Konza Logo"
                              class="sponsor-logo">
                         <!-- <img src="{% static 'images/partners/itu_logot.png' %}" alt="Partner Logo" class="sponsor-logo"> -->
                     </div>
@@ -638,7 +630,7 @@
                             <!-- Organization Type -->
                             <div class="row g-3 mt-3">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold dark">Organization Type</label>
+                                    <label for="id_organization_type" class="form-label fw-semibold dark">Organization Type</label>
                                     {{ form.organization_type }}
                                 </div>
                                 <div class="col-md-6" id="other-org-type" style="display:none;">
@@ -655,7 +647,7 @@
 
                             <!-- Interests -->
                             <div class="mt-3">
-                                <label for="interests" class="form-label fw-semibold dark">Areas of Interest</label>
+                                <label for="id_interests_1" class="form-label fw-semibold dark">Areas of Interest</label>
                                 <div id="id_interests" class="d-flex flex-wrap gap-3">
                                     {% for checkbox in form.interests %}
                                         <div class="form-check">
@@ -972,6 +964,8 @@
     <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
     <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+    <script src="{% static 'js/translate.js' %}" ></script>
+    <script src="{% static 'js/translater.js' %}" defer></script>
 
 
 
