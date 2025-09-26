@@ -16,6 +16,9 @@ from django.utils.timezone import now
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.views import LoginView
 import os
+from django.http import JsonResponse
+
+
 
 
 def home(request):
@@ -25,26 +28,29 @@ def home(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # Save interests cleanly
+            # Save interests properly
             interests = form.cleaned_data.get("interests", [])
-            if "other" in interests and form.cleaned_data.get("other_interest"):
-                interests = [i for i in interests if i != "other"]
-                interests.append("other")
-                registrant.other_interest = form.cleaned_data["other_interest"]
+            other_interest = form.cleaned_data.get("other_interest")
+
+            if "others" in interests and other_interest:
+                registrant.other_interest = other_interest
 
             registrant.interests = interests
             registrant.save()
 
-            # send email
+            # Send confirmation email (safe handling)
             try:
-                send_confirmation_email(registrant)
+                send_confirmation_email(registrant)  # make sure you implement this
             except Exception as e:
                 print("Email Send error:", e)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"success": False, "message": "Registration saved but email could not be sent."}, status=500)
+                        {"success": False, "message": "Registration saved but email could not be sent."}, 
+                        status=500
+                    )
                 messages.warning(request, "Registered, but confirmation email failed.")
 
+            # AJAX response
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
 
@@ -52,6 +58,7 @@ def home(request):
             return redirect('home')
 
         else:
+            # Return errors if AJAX
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
@@ -63,6 +70,7 @@ def home(request):
         'form': form,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
+
 
 
 def unsubscribe_view(request, token):
