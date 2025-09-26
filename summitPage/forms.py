@@ -1,6 +1,6 @@
-# forms.py
 from django import forms
 from .models import Registrant
+
 
 class QuickRegistrationForm(forms.ModelForm):
     interests = forms.MultipleChoiceField(
@@ -12,18 +12,16 @@ class QuickRegistrationForm(forms.ModelForm):
 
     other_organization_type = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control mt-2',
             'placeholder': 'Please specify...',
-            'rows': 3  # optional: controls height
         })
     )
     other_interest = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control mt-2',
             'placeholder': 'Please specify...',
-            'rows': 3  # optional: controls height
         })
     )
 
@@ -55,15 +53,15 @@ class QuickRegistrationForm(forms.ModelForm):
         interests = cleaned_data.get("interests") or []
         other_interest = cleaned_data.get("other_interest")
 
-        # If any organization_type is chosen, require textbox
-        if organization_type and not other_organization_type:
+        # Require other org type only when "other" is selected
+        if organization_type == "other" and not other_organization_type:
             self.add_error(
                 "other_organization_type",
                 "Please specify your organization type."
             )
 
-        # If "Others" is in interests, require textbox
-        if "Others" in interests and not other_interest:
+        # Require other interest only when "others" is selected
+        if "others" in interests and not other_interest:
             self.add_error(
                 "other_interest",
                 "Please specify your interest."
