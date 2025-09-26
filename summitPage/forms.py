@@ -6,19 +6,16 @@ class QuickRegistrationForm(forms.ModelForm):
     interests = forms.MultipleChoiceField(
         choices=Registrant.INTEREST_CHOICES,
         widget=forms.CheckboxSelectMultiple,
-        required=False,
     )
     updates_opt_in = forms.BooleanField(required=False)
 
     other_organization_type = forms.CharField(
-        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control mt-2',
             'placeholder': 'Please specify...',
         })
     )
     other_interest = forms.CharField(
-        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control mt-2',
             'placeholder': 'Please specify...',
