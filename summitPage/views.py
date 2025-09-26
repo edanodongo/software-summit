@@ -19,6 +19,10 @@ import os
 from django.http import JsonResponse
 
 
+from django.db.models import Count
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+from .models import Registrant
 
 
 def home(request):
@@ -73,6 +77,7 @@ def home(request):
 
 
 
+@staff_member_required
 def unsubscribe_view(request, token):
     try:
         registrant = Registrant.objects.get(unsubscribe_token=token)
@@ -86,6 +91,7 @@ def unsubscribe_view(request, token):
 
 
 
+@staff_member_required
 @api_view(['GET'])
 def dashboard_stats(request):
     total = Registrant.objects.count()
@@ -121,6 +127,7 @@ def dashboard_stats(request):
     })
 
 # === Excel Export ===
+@staff_member_required
 def export_registrants_excel(request):
     wb = Workbook()
     ws = wb.active
@@ -155,8 +162,7 @@ def export_registrants_excel(request):
 # === PDF Export in Landscape ===
 # === PDF Export in Landscape with Logo, Header & Footer ===
 
-
-
+@staff_member_required
 def export_registrants_pdf(request):
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = 'attachment; filename="registrants.pdf"'
@@ -238,12 +244,9 @@ def export_registrants_pdf(request):
 
     return response
 
-from django.db.models import Count
-from django.shortcuts import render
-from django.contrib.admin.views.decorators import staff_member_required
-from .models import Registrant
 
 
+@staff_member_required
 def print_registrants(request):
     registrants = Registrant.objects.all().order_by("created_at")
 
@@ -306,10 +309,12 @@ class SummitLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
+@staff_member_required
 def about(request):
     return render(request, 'summit/samples/about.html')
 
 
+@staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
 

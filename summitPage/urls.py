@@ -3,7 +3,6 @@ from django.urls import path, include
 from . import views
 from .views import SummitLoginView, SummitLogoutView
 
-
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
