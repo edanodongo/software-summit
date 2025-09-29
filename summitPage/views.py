@@ -16,13 +16,14 @@ from django.utils.timezone import now
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.views import LoginView
 import os
-from django.http import JsonResponse
-
 
 from django.db.models import Count
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Registrant
+
+from django.http import JsonResponse, Http404
+from django.views.decorators.http import require_POST
 
 
 def home(request):
@@ -301,10 +302,6 @@ def dashboard_data(request):
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
-
-
-
-
 class SummitLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
@@ -317,4 +314,20 @@ def about(request):
 @staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
+
+
+
+
+
+@staff_member_required
+@require_POST
+def delete_registrant(request, pk):
+    try:
+        registrant = Registrant.objects.get(pk=pk)
+        registrant.delete()
+        return JsonResponse({"success": True})
+    except Registrant.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Registrant not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=400)
 
