@@ -3,15 +3,15 @@
 function setTheme(dark) {
     const toggleIcon = document.getElementById('themeToggle').querySelector('i');
 
-    if (dark) {
-        document.body.classList.add('dark-theme');
-        toggleIcon.className = 'fas fa-sun'; // white sun icon
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.body.classList.remove('dark-theme');
-        toggleIcon.className = 'fas fa-moon'; // white moon icon
-        localStorage.setItem('theme', 'light');
-    }
+    // if (dark) {
+    //     document.body.classList.add('dark-theme');
+    //     toggleIcon.className = 'fas fa-sun'; // white sun icon
+    //     localStorage.setItem('theme', 'dark');
+    // } else {
+    //     document.body.classList.remove('dark-theme');
+    //     toggleIcon.className = 'fas fa-moon'; // white moon icon
+    //     localStorage.setItem('theme', 'light');
+    // }
 }
 
 
@@ -217,48 +217,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- AJAX Form Submit ---
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
 
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
+//   form.addEventListener("submit", function (e) {
+//     e.preventDefault();
 
-    fetch(form.action || window.location.href, {
-      method: "POST",
-      body: new FormData(form),
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+//     submitBtn.disabled = true;
+//     submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
-        if (data.success) {
-          showAlert(data.message, "success");
-          form.reset();
-          handleOrgTypeChange();
-          handleInterestChange();
-        } else if (data.errors) {
-          let errorList = Object.entries(data.errors)
-            .map(
-              ([field, errors]) =>
-                `<li><strong>${field}:</strong> ${errors.join(", ")}</li>`
-            )
-            .join("");
-          showAlert(`<ul>${errorList}</ul>`, "danger");
-        } else {
-          showAlert("Something went wrong. Please try again.", "danger");
-        }
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
-        showAlert("Server error. Please try again later.", "danger");
-      });
-  });
+//     fetch(form.action || window.location.href, {
+//       method: "POST",
+//       body: new FormData(form),
+//       headers: {
+//         "X-Requested-With": "XMLHttpRequest",
+//       },
+//     })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         submitBtn.disabled = false;
+//         submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+
+//         if (data.success) {
+//           showAlert(data.message, "success");
+//           form.reset();
+//           handleOrgTypeChange();
+//           handleInterestChange();
+//         } else if (data.errors) {
+//           let errorList = Object.entries(data.errors)
+//             .map(
+//               ([field, errors]) =>
+//                 `<li><strong>${field}:</strong> ${errors.join(", ")}</li>`
+//             )
+//             .join("");
+//           showAlert(`<ul>${errorList}</ul>`, "danger");
+//         } else {
+//           showAlert("Something went wrong. Please try again.", "danger");
+//         }
+//       })
+//       .catch((err) => {
+//         console.error("Error:", err);
+//         submitBtn.disabled = false;
+//         submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+//         showAlert("Server error. Please try again later.", "danger");
+//       });
+//   });
 });
 
 // Set footer year if needed
