@@ -5945,3 +5945,23 @@ section,
   font-style: normal !important;
 }
 
+
+
+/* ---- Privacy ---- */
+
+
+.privacy-link {
+  font-size: 0.9rem;
+  margin-top: 15px;
+}
+
+.privacy-link .privacy-anchor {
+  color: #6c757d; /* muted gray */
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.privacy-link .privacy-anchor:hover {
+  color: var(--primary-color); /* Bootstrap primary blue */
+  text-decoration: underline;
+}
