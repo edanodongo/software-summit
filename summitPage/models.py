@@ -74,5 +74,9 @@ class Registrant(models.Model):
                 items.append(dict(self.INTEREST_CHOICES).get(i, i))
         return ", ".join(items)
 
+    
+    def get_full_name(self):
+        return f"{self.title} {self.first_name} {self.second_name}".strip()
+
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"

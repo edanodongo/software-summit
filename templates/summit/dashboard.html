@@ -19,18 +19,16 @@
                 <div class="card-body">
                     <h5 class="card-title">Subscribed to Updates</h5>
                     <h5 class="card-title">Coming soon</h5>
-                    <!-- <p class="display-6 fw-bold"> {{ updates_count }}</p> -->
                 </div>
             </div>
         </div>
     </div>
 
-
-  <div class="d-flex justify-content-end mb-3 gap-2">
-    <a href="{% url 'export_print' %}" target="_blank" class="btn btn-sm btn-outline-danger">
-      <i class="fas fa-print"></i> Print View
-    </a>
-  </div>
+    <div class="d-flex justify-content-end mb-3 gap-2">
+        <a href="{% url 'export_print' %}" target="_blank" class="btn btn-sm btn-outline-danger">
+            <i class="fas fa-print"></i> Print View
+        </a>
+    </div>
 
     <h4 class="mt-4">Recent Registrations</h4>
     <div class="table-responsive mt-3">
@@ -44,11 +42,12 @@
                     <th>Job Title</th>
                     <th>Interests</th>
                     <th>Registered At</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for registrant in registrants %}
-                <tr>
+                <tr id="row-{{ registrant.id }}">
                     <td>{{ registrant.title }} {{ registrant.first_name }} {{ registrant.second_name }}</td>
                     <td>{{ registrant.email }}</td>
                     <td>{{ registrant.phone }}</td>
@@ -56,10 +55,18 @@
                     <td>{{ registrant.job_title|default:"—" }}</td>
                     <td>{{ registrant.display_interests|default:"—" }}</td>
                     <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                        <button 
+                            class="btn btn-sm btn-danger delete-btn" 
+                            data-url="{% url 'delete_registrant' registrant.id %}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
+
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center">No registrations yet.</td>
+                    <td colspan="8" class="text-center">No registrations yet.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -82,7 +89,7 @@
 
 <script>
 $(document).ready(function() {
-  $('#registrants-table').DataTable({
+  const table = $('#registrants-table').DataTable({
     dom: 'Bfrtip',
     buttons: [
       { extend: 'copy', text: '📋 Copy' },
@@ -90,8 +97,35 @@ $(document).ready(function() {
       { extend: 'excel', text: '📊 Excel' },
       { extend: 'pdf', text: '📑 PDF' }
     ],
-    order: [[ 6, 'desc' ]] // sort by registration date (newest first)
+    order: [[ 6, 'desc' ]]
+  });
+
+  // AJAX delete handler
+  $('#registrants-table').on('click', '.delete-btn', function() {
+    const url = $(this).data('url');
+    const row = $(this).closest("tr");
+
+    if (!confirm("Are you sure you want to delete this registrant?")) return;
+
+    $.ajax({
+      url: url,
+      type: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      success: function(response) {
+        if (response.success) {
+          row.fadeOut(400, function() {
+            table.row(row).remove().draw();
+          });
+        } else {
+          alert("Error: " + (response.error || "Could not delete."));
+        }
+      },
+      error: function(xhr) {
+        alert("An error occurred: " + xhr.status + " " + xhr.statusText);
+      }
+    });
   });
 });
 </script>
+
 {% endblock %}
