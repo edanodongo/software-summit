@@ -63,12 +63,54 @@
   /**
    * Preloader
    */
-  const preloader = document.querySelector('#preloader');
-  if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove();
+  document.addEventListener("DOMContentLoaded", function () {
+  const preloader = document.getElementById("preloader");
+  const content = document.getElementById("content");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function applyTheme(theme) {
+    document.body.classList.remove("light-mode", "dark-mode");
+    document.body.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  // Init theme (system default or saved)
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    applyTheme(prefersDark.matches ? "dark-mode" : "light-mode");
+  }
+
+  // Listen for system theme change if no manual override
+  prefersDark.addEventListener("change", (e) => {
+    if (!localStorage.getItem("theme")) {
+      applyTheme(e.matches ? "dark-mode" : "light-mode");
+    }
+  });
+
+  // Manual toggle button
+  const toggleBtn = document.getElementById("theme-toggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      if (document.body.classList.contains("dark-mode")) {
+        applyTheme("light-mode");
+      } else {
+        applyTheme("dark-mode");
+      }
     });
   }
+
+  // Preloader fade-out after page loads
+  window.addEventListener("load", function () {
+    setTimeout(() => {
+      if (preloader) preloader.classList.add("fade-out");
+      if (content) content.style.display = "block";
+    }, 800);
+  });
+});
+
+  
 
   /**
    * Scroll top button

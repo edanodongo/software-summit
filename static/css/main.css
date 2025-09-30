@@ -169,7 +169,7 @@ h6 {
 }
 
 .header .logo img {
-  max-height: 70px;
+  max-height: 60px;
   margin-right: 8px;
 }
 
@@ -608,37 +608,62 @@ h6 {
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
+/* Default light mode */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #222;
+}
+
+/* Hide both logos by default */
+.light-logo, .dark-logo { display: none; }
+
+/* Theme-based logo visibility */
+body.light-mode .light-logo { display: block; }
+body.dark-mode .dark-logo { display: block; }
+
 #preloader {
   position: fixed;
-  inset: 0;
-  z-index: 999999;
-  overflow: hidden;
-  background: var(--background-color);
-  transition: all 0.6s ease-out;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-#preloader:before {
-  content: "";
-  position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  border: 6px solid #ffffff;
-  border-color: var(--accent-color) transparent var(--accent-color) transparent;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: animate-preloader 1.5s linear infinite;
+.logo-loader {
+  width: 120px;
+  height: auto;
+  animation: pulse 2s infinite ease-in-out;
+  margin-bottom: 15px;
 }
 
-@keyframes animate-preloader {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+@keyframes pulse {
+  0%   { transform: scale(1); filter: drop-shadow(0 0 0 var(--accent-color)); }
+  50%  { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--accent-color)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0 var(--accent-color)); }
 }
+
+#preloader p {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-color);
+}
+
+#preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
 
 /*--------------------------------------------------------------
 # Scroll Top Button
