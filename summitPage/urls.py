@@ -8,6 +8,8 @@ urlpatterns = [
     path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
+    path("privacy/", views.privacy, name="privacy"),
+    path("404/", views.not_found, name="not_found"),
 
     
     path("login/", SummitLoginView.as_view(), name="custom_login"),

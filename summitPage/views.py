@@ -331,3 +331,9 @@ def delete_registrant(request, pk):
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
+
+def privacy(request):
+    return render(request, "summit/privacy.html")
+
+def not_found(request):
+    return render(request, "summit/404.html")
