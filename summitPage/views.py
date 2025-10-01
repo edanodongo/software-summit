@@ -311,7 +311,6 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 
-@staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
 
@@ -337,3 +336,9 @@ def privacy(request):
 
 def not_found(request):
     return render(request, "summit/404.html")
+
+def speakers(request):
+    return render(request, "summit/speakers.html")
+
+def media(request):
+    return render(request, "summit/gallery.html")
