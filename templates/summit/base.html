@@ -20,55 +20,60 @@
     <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+     <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
 
     <!-- Main CSS File -->
     <link href="{% static 'css/dash.css' %}" rel="stylesheet">
 
 </head>
 <body>
-  <div class="container-fluid">
+<div class="container-fluid">
     <div class="row">
-      
-      <!-- Sidebar -->
-      <nav class="col-md-2 d-none d-md-block sidebar p-3">
-        <h4 class="text-white mb-4"><i class="fas fa-chart-line me-2"></i> Summit</h4>
-        <a href="{% url 'dashboard' %}"><i class="fas fa-home me-2"></i> Dashboard</a>
-        <a href="#"><i class="fas fa-users me-2"></i> Registrations</a>
 
-        <!-- Logout -->
-        <form method="post" action="{% url 'logout' %}" class="mt-2">
-          {% csrf_token %}
-          <button type="submit" class="btn w-100 text-start text-white" style="background:none; border:none; padding:10px 15px;">
-            <i class="fas fa-sign-out-alt me-2"></i> Logout
-          </button>
-        </form>
-      </nav>
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar p-3">
+            <h4 class="text-white mb-4"><i class="fas fa-chart-line me-2"></i> Summit</h4>
+            <a href="{% url 'dashboard' %}"><i class="fas fa-home me-2"></i> Dashboard</a>
+            <a href="{% url 'mailme' %}"><i class="fas fa-envelope me-2"></i> Email client</a>
+
+            <!-- Logout -->
+            <form method="post" action="{% url 'logout' %}" class="mt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn w-100 text-start text-white"
+                        style="background:none; border:none; padding:10px 15px;">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
+        </nav>
 
 
-      <!-- Main Content -->
-      <main class="col-md-10 ms-sm-auto content">
-        {% block content %}
-        <!-- Page-specific content goes here -->
-        {% endblock %}
-      </main>
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto content">
+            {% block content %}
+                <!-- Page-specific content goes here -->
+            {% endblock %}
+        </main>
 
     </div>
-  </div>
+</div>
 
-  <!-- Bootstrap JS -->
-    <!-- Scripts -->
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
-    <script src="{% static 'vendor/aos/aos.js' %}"></script>
-    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
-    <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
-    <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
-    <script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
-    <script src="{% static 'js/translate.js' %}" ></script>
-    <script src="{% static 'js/translater.js' %}" defer></script>
+<!-- Bootstrap JS -->
+<!-- Scripts -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'vendor/aos/aos.js' %}"></script>
+<script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+<script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+<script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+<script src="{% static 'js/translate.js' %}"></script>
+<script src="{% static 'js/translater.js' %}" defer></script>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/extra/external.js' %}"></script>
 
-  {% block scripts %}{% endblock %}
+{% block scripts %}{% endblock %}
 </body>
 </html>
