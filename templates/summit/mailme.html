@@ -1,0 +1,50 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Email our stakeholders and partners</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Recipient Emails</label>
+                        <select class="form-select" name="recipient_emails" id="email" multiple required>
+                            {% for email in emails %}
+                                <option value="{{ email }}">{{ email }}</option>
+                                {% empty %}
+                                <option disabled>No registrants found</option>
+                            {% endfor %}
+                         <option value="all">ALL EMAILS</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="8" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="attachment" class="form-label">Attachment (optional)</label>
+                        <input type="file" class="form-control" id="attachment" name="attachment">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Send Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
