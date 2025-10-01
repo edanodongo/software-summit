@@ -311,6 +311,7 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 
+@staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
 
