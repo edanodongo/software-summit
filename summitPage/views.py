@@ -341,6 +341,7 @@ def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "summit/mailme.html", {"emails": emails})
 
+
 def speakers(request):
     return render(request, "summit/speakers.html")
 
