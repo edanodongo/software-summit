@@ -1,409 +1,414 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Speakers - Evently Bootstrap Template</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Favicons -->
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
 
-  <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: Evently
-  * Template URL: https://bootstrapmade.com/evently-bootstrap-events-template/
-  * Updated: Jul 19 2025 with Bootstrap v5.3.7
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
-<body class="speakers-page">
+  <body class="speakers-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
-        <h1 class="sitename">Evently</h1>
-      </a>
+        <a href="#hero" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
+        </a>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="speakers.html" class="active">Speakers</a></li>
-          <li><a href="venue.html">Venue</a></li>
-          <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="speaker-details.html">Speaker Details</a></li>
-              <li><a href="tickets.html">Tickets</a></li>
-              <li><a href="buy-tickets.html">Buy Tickets</a></li>
-              <li><a href="gallery.html">Gallery</a></li>
-              <li><a href="terms.html">Terms</a></li>
-              <li><a href="privacy.html">Privacy</a></li>
-              <li><a href="404.html">404</a></li>
-            </ul>
-          </li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
 
-      <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}">ABOUT</a></li>
+            <li><a href="{% url 'home' %}">REGISTER</a></li>
+            <li><a href="{% url 'home' %}">AGENDA</a></li>
+            <li><a href="{% url 'home' %}">SPEAKERS</a></li>
+            <li><a href="{% url 'home' %}">FEATURES</a></li>
+            <li><a href="{% url 'home' %}">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#gallery">MEDIA</a></li>
+                <li><a href="{% url 'not_found' %}">VENUE</a></li>
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>  
+          </ul>
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 
-    </div>
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
+          </div>
+        </nav>
+
+
+        <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
+
+      </div>
   </header>
 
-  <main class="main">
+    <main class="main">
 
-    <!-- Page Title -->
-    <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
-      <div class="container position-relative">
-        <h1>Speakers</h1>
-        <p>Esse dolorum voluptatum ullam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias.</p>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Speakers</li>
-          </ol>
-        </nav>
-      </div>
-    </div><!-- End Page Title -->
+      <!-- Page Title -->
+      <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
+        <div class="container position-relative">
+          <h1>Speakers</h1>
+          <p>Featured speakers in the Kenya Software Summit 2025 Edition.</p>
+          <nav class="breadcrumbs">
+            <ol>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li class="current">Speakers</li>
+            </ol>
+          </nav>
+        </div>
+      </div><!-- End Page Title -->
 
-    <!-- Speakers Section -->
-    <section id="speakers" class="speakers section">
+      <!-- Speakers Section -->
+      <section id="speakers" class="speakers section">
 
-      <div class="container">
+        <div class="container">
 
-        <div class="speakers-list">
+          <div class="speakers-list">
 
-          <div class="row">
-
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-4.webp" alt="Speaker" class="img-fluid">
+            <div class="row">
+              <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}" alt="Speaker" class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>Hon. William Kabogo Gitau</h4>
+                      <span class="speaker-position">Cabinet Secretary</span>
+                      <span class="speaker-org">Ministry of ICT & Digital Economy (MICDE), Government of
+                                          the Republic of Kenya</span>
+                      <div class="speaker-track">Keynote Speaker</div>
+                    </div>
                   </div>
-                  <div class="speaker-info">
-                    <h4>Jennifer Walsh</h4>
-                    <span class="speaker-position">Senior Data Scientist</span>
-                    <span class="speaker-org">DataVision Labs</span>
-                    <div class="speaker-track">Machine Learning</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Advanced Neural Networks in Real-World Applications</span>
-                  </div>
-                  <p class="speaker-summary">Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit voluptate.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                  <div class="speaker-details">
+                    <!-- <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>Advanced Neural Networks in Real-World Applications</span>
+                    </div> -->
+                    <p class="speaker-summary">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, </p>
+                    <div class="speaker-actions">
+                      <a href="#"
+                        class="profile-btn"
+                        data-name="Hon. William Kabogo Gitau"
+                        data-position="Cabinet Secretary"
+                        data-org="Ministry of ICT & Digital Economy (MICDE), Government of
+                                          the Republic of Kenya"
+                        data-photo="{% static 'images/speakers/william_kabogo_gitau.jpg' %}"
+                        data-bio="Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. While in Parliament, Hon. Kabogo was ranked fifth nationally for effective utilization of Constituency Development Fund (CDF) allocations. Hon. Kabogo holds a Bachelor of Commerce (B. Com) degree in Accounting and Finance from Punjab University in India. He has additional certifications in accounting and audit.">
+                        View Profile
+                      </a>
+
+                      <div class="speaker-social">
+                        <a href="https://ke.linkedin.com/in/william-kabogo-92537040" class="social-link"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://x.com/honkabogo" class="social-link"><i class="bi bi-twitter"></i></a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div><!-- End Speaker Entry -->
+              </div><!-- End Speaker Entry -->
 
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-1.webp" alt="Speaker" class="img-fluid">
+              <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}" alt="Speaker" class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>Eng John Tanui</h4>
+                      <span class="speaker-position">Principal Secretary</span>
+                      <span class="speaker-org">State Department of ICT and Digital Economy, Government
+                                          of Kenya</span>
+                      <div class="speaker-track">Keynote Speaker</div>
+                    </div>
                   </div>
-                  <div class="speaker-info">
-                    <h4>Marcus Thompson</h4>
-                    <span class="speaker-position">Blockchain Architect</span>
-                    <span class="speaker-org">CryptoTech Solutions</span>
-                    <div class="speaker-track">Technology</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Decentralized Finance: Building the Future</span>
-                  </div>
-                  <p class="speaker-summary">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                  <div class="speaker-details">
+                    <!-- <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>Decentralized Finance: Building the Future</span>
+                    </div> -->
+                    <p class="speaker-summary">I am an engineer with over 24 years of experience in the technology sector globally, </p>
+                    <div class="speaker-actions">
+                      <a href="#"
+                        class="profile-btn"
+                        data-name="Eng John Tanui"
+                        data-position="Principal Secretary"
+                        data-org="State Department of ICT and Digital Economy, Government
+                                          of Kenya"
+                        data-photo="{% static 'images/speakers/eng_john_tanui.jpg' %}"
+                        data-bio="I am an engineer with over 24 years of experience in the technology sector globally, keen on leveraging innovative technologies to solve the most pressing challenges facing economies. I am passionate about mentoring the next generation of technology and business leaders.">
+                        View Profile
+                      </a>
+
+                      <div class="speaker-social">
+                        <a href="https://ke.linkedin.com/in/johntanui" class="social-link"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://x.com/tanuijohn/" class="social-link"><i class="bi bi-twitter"></i></a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div><!-- End Speaker Entry -->
+              </div><!-- End Speaker Entry -->
 
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-5.webp" alt="Speaker" class="img-fluid">
+              <!-- <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>Kevin Park</h4>
+                      <span class="speaker-position">Digital Marketing Expert</span>
+                      <span class="speaker-org">Growth Agency Pro</span>
+                      <div class="speaker-track">Marketing</div>
+                    </div>
                   </div>
-                  <div class="speaker-info">
-                    <h4>Dr. Sophia Chen</h4>
-                    <span class="speaker-position">Innovation Director</span>
-                    <span class="speaker-org">FutureTech Institute</span>
-                    <div class="speaker-track">Innovation</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Sustainable Technology Solutions for Tomorrow</span>
-                  </div>
-                  <p class="speaker-summary">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                  <div class="speaker-details">
+                    <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>Next-Gen Marketing Automation Strategies</span>
+                    </div>
+                    <p class="speaker-summary">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae.</p>
+                    <div class="speaker-actions">
+                      <a href="#"
+                        class="profile-btn"
+                        data-name="Marcus Thompson"
+                        data-position="Blockchain Architect"
+                        data-org="CryptoTech Solutions"
+                        data-photo="{% static 'images/speakers/placeholder.jpg' %}"
+                        data-bio="Marcus Thompson is a Blockchain Architect at CryptoTech Solutions with 10+ years experience in building secure, scalable decentralized platforms. He has led multiple DeFi projects and contributes to open-source blockchain initiatives.">
+                        View Profile
+                      </a>
+
+                      <div class="speaker-social">
+                        <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div><!-- End Speaker Entry -->
+              </div><!-- End Speaker Entry -->
 
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-10.webp" alt="Speaker" class="img-fluid">
+              <!-- Example Speaker
+              <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Speaker" class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>Jennifer Walsh</h4>
+                      <span class="speaker-position">Senior Data Scientist</span>
+                      <span class="speaker-org">DataVision Labs</span>
+                      <div class="speaker-track">Machine Learning</div>
+                    </div>
                   </div>
-                  <div class="speaker-info">
-                    <h4>Robert Martinez</h4>
-                    <span class="speaker-position">UX Research Lead</span>
-                    <span class="speaker-org">Design Collective</span>
-                    <div class="speaker-track">Design</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Human-Centered Design in Digital Products</span>
-                  </div>
-                  <p class="speaker-summary">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                  <div class="speaker-details">
+                    <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>Advanced Neural Networks in Real-World Applications</span>
+                    </div>
+                    <p class="speaker-summary">Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="speaker-actions">
+                      <!-- View Profile button with data attributes 
+                      <a href="#"
+                        class="profile-btn"
+                        data-name="Jennifer Walsh"
+                        data-position="Senior Data Scientist"
+                        data-org="DataVision Labs"
+                        data-photo="{% static 'images/speakers/placeholder.jpg' %}"
+                        data-bio="Jennifer Walsh is a Senior Data Scientist at DataVision Labs with over 12 years of experience developing machine learning models for healthcare, finance, and e-commerce. She speaks internationally on AI ethics and fairness in data.">
+                        View Profile
+                      </a>
+                      <div class="speaker-social">
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div><!-- End Speaker Entry -->
+              </div><!-- End Speaker Entry -->
 
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-13.webp" alt="Speaker" class="img-fluid">
-                  </div>
-                  <div class="speaker-info">
-                    <h4>Amanda Foster</h4>
-                    <span class="speaker-position">Growth Strategist</span>
-                    <span class="speaker-org">ScaleUp Partners</span>
-                    <div class="speaker-track">Business</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Scaling Digital Businesses in 2024</span>
-                  </div>
-                  <p class="speaker-summary">Corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident similique sunt.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div><!-- End Speaker Entry -->
-
-            <div class="col-lg-6 speaker-entry">
-              <div class="speaker-profile">
-                <div class="speaker-meta">
-                  <div class="speaker-photo">
-                    <img src="assets/img/events/speaker-14.webp" alt="Speaker" class="img-fluid">
-                  </div>
-                  <div class="speaker-info">
-                    <h4>Kevin Park</h4>
-                    <span class="speaker-position">Digital Marketing Expert</span>
-                    <span class="speaker-org">Growth Agency Pro</span>
-                    <div class="speaker-track">Marketing</div>
-                  </div>
-                </div>
-                <div class="speaker-details">
-                  <div class="speaker-topic">
-                    <i class="bi bi-mic"></i>
-                    <span>Next-Gen Marketing Automation Strategies</span>
-                  </div>
-                  <p class="speaker-summary">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae.</p>
-                  <div class="speaker-actions">
-                    <a href="#" class="profile-btn">Full Biography</a>
-                    <div class="speaker-social">
-                      <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div><!-- End Speaker Entry -->
+            </div>
 
           </div>
 
         </div>
 
+      </section><!-- /Speakers Section -->
+
+    </main>
+
+
+
+  <!-- Biography Modal -->
+  <div id="bioModal" class="bio-modal">
+    <div class="bio-modal-content">
+      <span class="bio-close">&times;</span>
+      <div class="bio-header">
+        <img id="bioPhoto" src="" alt="Speaker Photo" class="bio-photo">
+        <div>
+          <h3 id="bioName"></h3>
+          <p id="bioPosition"></p>
+          <p id="bioOrg"></p>
+        </div>
       </div>
+      <div class="bio-body">
+        <p id="bioText"></p>
+      </div>
+    </div>
+  </div>
 
-    </section><!-- /Speakers Section -->
-
-  </main>
-
+    <!-- Footer -->
   <footer id="footer" class="footer position-relative dark-background">
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> Kenya Software Summit</span>
+                  </a>
 
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Evently</span>
-          </a>
-          <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
+                  </div>
+              </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'home' %}">About</a></li>
+              <li><a href="{% url 'home' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}">Agenda</a></li>
+              <li><a href="{% url 'home' %}">Register</a></li>
+            </ul>
           </div>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}">Features</a></li>
+              <li><a href="{% url 'home' %}">Partners</a></li>
+              <li><a href="{% url 'home' %}">Media</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
           </div>
-        </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
+          </div>
+      </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Hic solutasetp</h4>
-          <ul>
-            <li><a href="#">Molestiae accusamus iure</a></li>
-            <li><a href="#">Excepturi dignissimos</a></li>
-            <li><a href="#">Suscipit distinctio</a></li>
-            <li><a href="#">Dilecta</a></li>
-            <li><a href="#">Sit quas consectetur</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Nobis illum</h4>
-          <ul>
-            <li><a href="#">Ipsam</a></li>
-            <li><a href="#">Laudantium dolorum</a></li>
-            <li><a href="#">Dinera</a></li>
-            <li><a href="#">Trodelas</a></li>
-            <li><a href="#">Flexo</a></li>
-          </ul>
-        </div>
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
+              Software Summit. </strong> <span>All Rights Reserved. </span></p>
 
       </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">MyWebsite</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
 
   </footer>
 
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Preloader -->
-  <div id="preloader"></div>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <!-- Preloader -->
+    <div id="preloader">
+      <!-- Light mode logo -->
+      <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+      <!-- Dark mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+    </div>
+
+
+
+      <!-- Scripts -->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+      <script src="{% static 'vendor/aos/aos.js' %}"></script>
+      <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+      <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+      <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+      <script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+      <script src="{% static 'js/translate.js' %}" ></script>
+      <script src="{% static 'js/translater.js' %}" defer></script>
 
   <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
 
-</body>
+  <script src="{% static 'js/custom/main.js' %}"></script>
+
+  <script>
+    // modal
+    document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("bioModal");
+    const closeBtn = document.querySelector(".bio-close");
+
+    document.querySelectorAll(".profile-btn").forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.getElementById("bioName").textContent = this.dataset.name;
+        document.getElementById("bioPosition").textContent = this.dataset.position;
+        document.getElementById("bioOrg").textContent = this.dataset.org;
+        document.getElementById("bioPhoto").src = this.dataset.photo;
+        document.getElementById("bioText").textContent = this.dataset.bio;
+        modal.style.display = "flex";
+      });
+    });
+
+    // Close modal
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+  });
+  </script>
+
+  </body>
 
 </html>

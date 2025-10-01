@@ -11,6 +11,8 @@ urlpatterns = [
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),
     path("404/", views.not_found, name="not_found"),
+    path("speakers/", views.speakers, name="speakers"),
+    path("media/", views.media, name="media"),
 
     
     path("login/", SummitLoginView.as_view(), name="custom_login"),

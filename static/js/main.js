@@ -111,6 +111,11 @@
 });
 
   
+  // Initialize AOS
+  AOS.init({
+      duration: 800,
+      once: true
+  });
 
   /**
    * Scroll top button
@@ -367,4 +372,29 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+});
+
+
+// modal
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("bioModal");
+  const closeBtn = document.querySelector(".bio-close");
+
+  document.querySelectorAll(".profile-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("bioName").textContent = this.dataset.name;
+      document.getElementById("bioPosition").textContent = this.dataset.position;
+      document.getElementById("bioOrg").textContent = this.dataset.org;
+      document.getElementById("bioPhoto").src = this.dataset.photo;
+      document.getElementById("bioText").textContent = this.dataset.bio;
+      modal.style.display = "flex";
+    });
+  });
+
+  // Close modal
+  closeBtn.addEventListener("click", () => modal.style.display = "none");
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
 });

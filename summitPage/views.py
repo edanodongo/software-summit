@@ -311,7 +311,6 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 
-@staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
 
@@ -341,3 +340,9 @@ def not_found(request):
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "summit/mailme.html", {"emails": emails})
+
+def speakers(request):
+    return render(request, "summit/speakers.html")
+
+def media(request):
+    return render(request, "summit/gallery.html")
