@@ -337,3 +337,7 @@ def privacy(request):
 
 def not_found(request):
     return render(request, "summit/404.html")
+
+def mailme_view(request):
+    emails = Registrant.objects.values_list('email', flat=True)
+    return render(request, "summit/mailme.html", {"emails": emails})

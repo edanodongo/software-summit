@@ -5,6 +5,7 @@ from .views import SummitLoginView, SummitLogoutView
 
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
+    path("mailme/", views.mailme_view, name="mailme"),
     path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
