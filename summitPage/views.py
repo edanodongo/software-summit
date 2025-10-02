@@ -18,12 +18,15 @@ from django.contrib.auth.views import LoginView
 import os
 
 from django.db.models import Count
-from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Registrant
 
 from django.http import JsonResponse, Http404
 from django.views.decorators.http import require_POST
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import RegistrantForm
 
 
 def home(request):
@@ -87,9 +90,6 @@ def unsubscribe_view(request, token):
         return render(request, "summit/unsubscribe.html")
     except Registrant.DoesNotExist:
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
-
-
-
 
 
 @staff_member_required
@@ -277,6 +277,20 @@ def dashboard_view(request):
     }
     return render(request, "summit/dashboard.html", context)
 
+# @staff_member_required
+# def dashboard_view(request):
+#     total_users = Registration.objects.count()
+#     updates_count = Registration.objects.filter(updates_opt_in=True).count()
+
+#     registrants = Registration.objects.all().order_by('-created_at')  # newest first
+
+#     context = {
+#         "total_users": total_users,
+#         "updates_count": updates_count,
+#         "registrants": registrants,
+#     }
+#     return render(request, "summit/dashboard_new.html", context)
+
 
 # Endpoint for charts (AJAX/React)
 @staff_member_required
@@ -296,9 +310,6 @@ def dashboard_data(request):
     return JsonResponse(data)
 
 
-
-
-
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
@@ -311,19 +322,15 @@ def about(request):
     return render(request, 'summit/samples/about.html')
 
 
-@staff_member_required
 def index(request):
     return render(request, 'summit/index.html')
-
-
-
 
 
 @staff_member_required
 @require_POST
 def delete_registrant(request, pk):
     try:
-        registrant = Registrant.objects.get(pk=pk)
+        registrant = Registration.objects.get(pk=pk)
         registrant.delete()
         return JsonResponse({"success": True})
     except Registrant.DoesNotExist:
@@ -348,3 +355,156 @@ def speakers(request):
 
 def media(request):
     return render(request, "summit/gallery.html")
+
+
+
+
+# ---------------------------
+
+
+
+def register(request):
+    if request.method == "POST":
+        form = RegistrantForm(request.POST)
+
+        # 🔹 AJAX request → return JSON
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            if form.is_valid():
+                form.save()
+                return JsonResponse({
+                    "success": True,
+                    "message": "Registration successful! Thank you for registering."
+                })
+            else:
+                # Build errors dict: { field: [errors] }
+                errors = {
+                    field: [str(err) for err in errs]
+                    for field, errs in form.errors.items()
+                }
+                return JsonResponse({
+                    "success": False,
+                    "errors": errors
+                })
+
+        # 🔹 Non-AJAX fallback
+        if form.is_valid():
+            form.save()
+            messages.success(request, " Registration successful! Thank you for registering.")
+            return redirect("register")
+        else:
+            messages.error(request, "⚠️ Please correct the errors below and try again.")
+    else:
+        form = RegistrantForm()
+
+    return render(request, "summit/buy-tickets.html", {"form": form})
+
+
+
+
+
+from rest_framework import viewsets, permissions
+from .models import *
+from .serializers import *
+
+# All endpoints are PUBLIC for now (AllowAny)
+
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [permissions.AllowAny]
+
+class TrackViewSet(viewsets.ModelViewSet):
+    queryset = Track.objects.all()
+    serializer_class = TrackSerializer
+    permission_classes = [permissions.AllowAny]
+
+class SessionViewSet(viewsets.ModelViewSet):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = [permissions.AllowAny]
+
+class SpeakerViewSet(viewsets.ModelViewSet):
+    queryset = Speaker.objects.all()
+    serializer_class = SpeakerSerializer
+    permission_classes = [permissions.AllowAny]
+
+class ExhibitorViewSet(viewsets.ModelViewSet):
+    queryset = Exhibitor.objects.all()
+    serializer_class = ExhibitorSerializer
+    permission_classes = [permissions.AllowAny]
+
+class SponsorViewSet(viewsets.ModelViewSet):
+    queryset = Sponsor.objects.all()
+    serializer_class = SponsorSerializer
+    permission_classes = [permissions.AllowAny]
+
+class RegistrationViewSet(viewsets.ModelViewSet):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+    permission_classes = [permissions.AllowAny]
+
+class TicketViewSet(viewsets.ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+    permission_classes = [permissions.AllowAny]
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def perform_create(self, serializer):
+        order = serializer.save()
+        # Issue tickets automatically for each item in order
+        Ticket.objects.create(
+            order=order,
+            ticket_type=order.ticket_type,  # or from your serializer input
+            holder=order.registration
+        )
+
+    permission_classes = [permissions.AllowAny]
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.AllowAny]
+
+class ConnectionViewSet(viewsets.ModelViewSet):
+    queryset = ConnectionRequest.objects.all()
+    serializer_class = ConnectionSerializer
+    permission_classes = [permissions.AllowAny]
+
+class ChatMessageViewSet(viewsets.ModelViewSet):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+    permission_classes = [permissions.AllowAny]
+
+class PollViewSet(viewsets.ModelViewSet):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+    permission_classes = [permissions.AllowAny]
+
+class PollOptionViewSet(viewsets.ModelViewSet):
+    queryset = PollOption.objects.all()
+    serializer_class = PollOptionSerializer
+    permission_classes = [permissions.AllowAny]
+
+class PollVoteViewSet(viewsets.ModelViewSet):
+    queryset = PollResponse.objects.all()
+    serializer_class = PollVoteSerializer
+    permission_classes = [permissions.AllowAny]
+
+class QnAViewSet(viewsets.ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QnASerializer
+    permission_classes = [permissions.AllowAny]
+
+class FeedbackViewSet(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+    permission_classes = [permissions.AllowAny]
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.AllowAny]
+
