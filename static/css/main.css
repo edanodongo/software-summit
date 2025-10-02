@@ -1950,22 +1950,22 @@ section,
 .schedule .schedule-timeline .time-slot {
   display: grid;
   grid-template-columns: 120px 1fr;
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 30px;
+  margin-bottom: 30px;
   align-items: start;
 }
 
 .schedule .schedule-timeline .time-slot .time-label {
   text-align: right;
-  padding-top: 20px;
+  padding-top: 15px;
   position: sticky;
-  top: 100px;
+  top: 90px;
 }
 
 .schedule .schedule-timeline .time-slot .time-label .time {
   display: block;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 650;
   color: var(--heading-color);
 }
 
@@ -1973,19 +1973,19 @@ section,
   display: block;
   font-size: 14px;
   color: color-mix(in srgb, var(--default-color), transparent 40%);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .schedule .schedule-timeline .time-slot .sessions-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
+  gap: 15px;
 }
 
 .schedule .schedule-timeline .time-slot .sessions-row .session-card {
   background: var(--surface-color);
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px;
   box-shadow: 0 4px 20px color-mix(in srgb, var(--default-color), transparent 90%);
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
@@ -2070,7 +2070,7 @@ section,
 }
 
 .schedule .schedule-timeline .time-slot .sessions-row .session-card h4 {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--heading-color);
   margin-bottom: 8px;
