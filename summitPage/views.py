@@ -329,8 +329,9 @@ def index(request):
 @staff_member_required
 @require_POST
 def delete_registrant(request, pk):
+    print(f"Method: {request.method}, PK: {pk}")  # ← Debug log
     try:
-        registrant = Registration.objects.get(pk=pk)
+        registrant = Registrant.objects.get(pk=pk)
         registrant.delete()
         return JsonResponse({"success": True})
     except Registrant.DoesNotExist:
@@ -402,109 +403,109 @@ def register(request):
 
 
 
-from rest_framework import viewsets, permissions
-from .models import *
-from .serializers import *
+# from rest_framework import viewsets, permissions
+# from .models import *
+# from .serializers import *
 
-# All endpoints are PUBLIC for now (AllowAny)
+# # All endpoints are PUBLIC for now (AllowAny)
 
-class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-    permission_classes = [permissions.AllowAny]
+# class EventViewSet(viewsets.ModelViewSet):
+#     queryset = Event.objects.all()
+#     serializer_class = EventSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class TrackViewSet(viewsets.ModelViewSet):
-    queryset = Track.objects.all()
-    serializer_class = TrackSerializer
-    permission_classes = [permissions.AllowAny]
+# class TrackViewSet(viewsets.ModelViewSet):
+#     queryset = Track.objects.all()
+#     serializer_class = TrackSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class SessionViewSet(viewsets.ModelViewSet):
-    queryset = Session.objects.all()
-    serializer_class = SessionSerializer
-    permission_classes = [permissions.AllowAny]
+# class SessionViewSet(viewsets.ModelViewSet):
+#     queryset = Session.objects.all()
+#     serializer_class = SessionSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class SpeakerViewSet(viewsets.ModelViewSet):
-    queryset = Speaker.objects.all()
-    serializer_class = SpeakerSerializer
-    permission_classes = [permissions.AllowAny]
+# class SpeakerViewSet(viewsets.ModelViewSet):
+#     queryset = Speaker.objects.all()
+#     serializer_class = SpeakerSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class ExhibitorViewSet(viewsets.ModelViewSet):
-    queryset = Exhibitor.objects.all()
-    serializer_class = ExhibitorSerializer
-    permission_classes = [permissions.AllowAny]
+# class ExhibitorViewSet(viewsets.ModelViewSet):
+#     queryset = Exhibitor.objects.all()
+#     serializer_class = ExhibitorSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class SponsorViewSet(viewsets.ModelViewSet):
-    queryset = Sponsor.objects.all()
-    serializer_class = SponsorSerializer
-    permission_classes = [permissions.AllowAny]
+# class SponsorViewSet(viewsets.ModelViewSet):
+#     queryset = Sponsor.objects.all()
+#     serializer_class = SponsorSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class RegistrationViewSet(viewsets.ModelViewSet):
-    queryset = Registration.objects.all()
-    serializer_class = RegistrationSerializer
-    permission_classes = [permissions.AllowAny]
+# class RegistrationViewSet(viewsets.ModelViewSet):
+#     queryset = Registration.objects.all()
+#     serializer_class = RegistrationSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class TicketViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
-    permission_classes = [permissions.AllowAny]
+# class TicketViewSet(viewsets.ModelViewSet):
+#     queryset = Ticket.objects.all()
+#     serializer_class = TicketSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+# class OrderViewSet(viewsets.ModelViewSet):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
 
-    def perform_create(self, serializer):
-        order = serializer.save()
-        # Issue tickets automatically for each item in order
-        Ticket.objects.create(
-            order=order,
-            ticket_type=order.ticket_type,  # or from your serializer input
-            holder=order.registration
-        )
+#     def perform_create(self, serializer):
+#         order = serializer.save()
+#         # Issue tickets automatically for each item in order
+#         Ticket.objects.create(
+#             order=order,
+#             ticket_type=order.ticket_type,  # or from your serializer input
+#             holder=order.registration
+#         )
 
-    permission_classes = [permissions.AllowAny]
+#     permission_classes = [permissions.AllowAny]
 
-class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentSerializer
-    permission_classes = [permissions.AllowAny]
+# class PaymentViewSet(viewsets.ModelViewSet):
+#     queryset = Payment.objects.all()
+#     serializer_class = PaymentSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class ConnectionViewSet(viewsets.ModelViewSet):
-    queryset = ConnectionRequest.objects.all()
-    serializer_class = ConnectionSerializer
-    permission_classes = [permissions.AllowAny]
+# class ConnectionViewSet(viewsets.ModelViewSet):
+#     queryset = ConnectionRequest.objects.all()
+#     serializer_class = ConnectionSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class ChatMessageViewSet(viewsets.ModelViewSet):
-    queryset = ChatMessage.objects.all()
-    serializer_class = ChatMessageSerializer
-    permission_classes = [permissions.AllowAny]
+# class ChatMessageViewSet(viewsets.ModelViewSet):
+#     queryset = ChatMessage.objects.all()
+#     serializer_class = ChatMessageSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class PollViewSet(viewsets.ModelViewSet):
-    queryset = Poll.objects.all()
-    serializer_class = PollSerializer
-    permission_classes = [permissions.AllowAny]
+# class PollViewSet(viewsets.ModelViewSet):
+#     queryset = Poll.objects.all()
+#     serializer_class = PollSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class PollOptionViewSet(viewsets.ModelViewSet):
-    queryset = PollOption.objects.all()
-    serializer_class = PollOptionSerializer
-    permission_classes = [permissions.AllowAny]
+# class PollOptionViewSet(viewsets.ModelViewSet):
+#     queryset = PollOption.objects.all()
+#     serializer_class = PollOptionSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class PollVoteViewSet(viewsets.ModelViewSet):
-    queryset = PollResponse.objects.all()
-    serializer_class = PollVoteSerializer
-    permission_classes = [permissions.AllowAny]
+# class PollVoteViewSet(viewsets.ModelViewSet):
+#     queryset = PollResponse.objects.all()
+#     serializer_class = PollVoteSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class QnAViewSet(viewsets.ModelViewSet):
-    queryset = Question.objects.all()
-    serializer_class = QnASerializer
-    permission_classes = [permissions.AllowAny]
+# class QnAViewSet(viewsets.ModelViewSet):
+#     queryset = Question.objects.all()
+#     serializer_class = QnASerializer
+#     permission_classes = [permissions.AllowAny]
 
-class FeedbackViewSet(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-    permission_classes = [permissions.AllowAny]
+# class FeedbackViewSet(viewsets.ModelViewSet):
+#     queryset = Feedback.objects.all()
+#     serializer_class = FeedbackSerializer
+#     permission_classes = [permissions.AllowAny]
 
-class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
-    permission_classes = [permissions.AllowAny]
+# class NotificationViewSet(viewsets.ModelViewSet):
+#     queryset = Notification.objects.all()
+#     serializer_class = NotificationSerializer
+#     permission_classes = [permissions.AllowAny]
 
