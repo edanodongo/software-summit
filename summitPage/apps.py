@@ -1,18 +1,58 @@
+import os
+import json
 from django.apps import AppConfig
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_migrate
+from django.db import connection, ProgrammingError, OperationalError
+
+def load_config():
+    # Adjust the path to your config.json file as needed
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    config_path = os.path.join(base_dir, 'config.json')
+    try:
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"❌ Failed to load config.json: {e}")
+        return {}
+
+def table_exists(table_name):
+    """Check if a table exists in the database."""
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = %s
+            )
+        """, [table_name])
+        return cursor.fetchone()[0]
 
 def create_default_admin(sender, **kwargs):
-    User = get_user_model()
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@summit.com",
-            password="admin123"
-        )
-        # print("Default admin created: admin / admin123")
+    config = load_config()
+    username = config.get("DJANGO_ADMIN_USERNAME", "admin")
+    email = config.get("DJANGO_ADMIN_EMAIL", "softwaresummit@ict.go.ke")
+    password = config.get("DJANGO_ADMIN_PASSWORD", None)
 
-        
+    if not password:
+        print("⚠️ DJANGO_ADMIN_PASSWORD missing in config.json. Skipping default admin creation.")
+        return
+
+    try:
+        if table_exists('auth_user'):
+            User = get_user_model()
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_superuser(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+                print(f"✅ Default admin created: {username} / [hidden password]")
+            else:
+                print(f"ℹ️ Admin user '{username}' already exists.")
+    except (ProgrammingError, OperationalError) as e:
+        # Happens if DB isn't ready — just skip
+        print(f"⚠️ Skipping admin creation: {e}")
+
 class SummitpageConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'summitPage'
