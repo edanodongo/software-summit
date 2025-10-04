@@ -1567,11 +1567,14 @@
                                   {{ form.other_interest }}
                               </div>
                               
-                              <!-- Terms -->
-                              <div class="mt-3 form-label">
-                                <input type="checkbox" id="terms" name="terms" required>
-                                <label for="terms">I agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *</label>
-                              </div>
+                                <!-- Spacer -->
+                                <div class="mt-4"></div>
+                                <!-- Terms -->
+                                <div class="mt-3 text-center form-label fw-bold">
+                                  <label for="terms">
+                                    By registering you agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                                  </label>
+                                </div>
 
                               <!-- Submit -->
                               <div class="d-grid mt-4">
