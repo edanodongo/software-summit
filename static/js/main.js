@@ -303,49 +303,76 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>`;
   }
 
-  // --- AJAX Form Submit ---
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+// --- AJAX Form Submit ---
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
+  // Clear old errors
+  form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+  form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
-    fetch(form.action || window.location.href, {
-      method: "POST",
-      body: new FormData(form),
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
-        if (data.success) {
-          showAlert(data.message, "success");
-          form.reset();
-          handleOrgTypeChange();
-          handleInterestChange();
-        } else if (data.errors) {
-          let errorList = Object.entries(data.errors)
-            .map(
-              ([field, errors]) =>
-                `<li><strong>${field}:</strong> ${errors.join(", ")}</li>`
-            )
-            .join("");
-          showAlert(`<ul>${errorList}</ul>`, "danger");
-        } else {
-          showAlert("Something went wrong. Please try again.", "danger");
+  fetch(form.action || window.location.href, {
+    method: "POST",
+    body: new FormData(form),
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+
+      if (data.success) {
+        showAlert(data.message, "success");
+        form.reset();
+        handleOrgTypeChange();
+        handleInterestChange();
+      } else if (data.errors) {
+        let firstInvalidEl = null;
+
+        Object.entries(data.errors).forEach(([field, errors]) => {
+          const inputEl = form.querySelector(`#id_${field}`);
+          if (inputEl) {
+            // Add Bootstrap invalid class
+            inputEl.classList.add("is-invalid");
+
+            // Append inline error message
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "invalid-feedback";
+            errorDiv.innerText = errors.join(", ");
+            if (!inputEl.nextElementSibling || !inputEl.nextElementSibling.classList.contains("invalid-feedback")) {
+              inputEl.insertAdjacentElement("afterend", errorDiv);
+            }
+
+            // Track the first invalid element
+            if (!firstInvalidEl) {
+              firstInvalidEl = inputEl;
+            }
+          }
+        });
+
+        // 🔹 Scroll to first invalid field
+        if (firstInvalidEl) {
+          firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstInvalidEl.focus();
         }
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
-        showAlert("Server error. Please try again later.", "danger");
-      });
-  });
+      } else {
+        showAlert("Something went wrong. Please try again.", "danger");
+      }
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+      showAlert("Server error. Please try again later.", "danger");
+    });
+});
+
+
 });
 
 // Set footer year if needed
