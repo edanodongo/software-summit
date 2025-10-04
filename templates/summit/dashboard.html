@@ -24,6 +24,7 @@
         </a>
     </div>
 
+
     <!-- Registrants Table -->
     <h4 class="mt-4">Recent Registrations</h4>
     <div class="table-responsive mt-3">
@@ -34,6 +35,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Organization</th>
+                    <th>Org. Type</th> <!-- 🔹 New hidden filter column -->
                     <th>Job Title</th>
                     <th>Interests</th>
                     <th>Registered At</th>
@@ -47,6 +49,7 @@
                         <td>{{ registrant.email }}</td>
                         <td>{{ registrant.phone }}</td>
                         <td>{{ registrant.display_org_type }}</td>
+                        <td>{{ registrant.get_organization_type_display }}</td> <!-- raw field for filtering -->
                         <td>{{ registrant.job_title|default:"—" }}</td>
                         <td>{{ registrant.display_interests|default:"—" }}</td>
                         <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
@@ -59,11 +62,25 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="8" class="text-center">No registrations yet.</td>
+                        <td colspan="9" class="text-center">No registrations yet.</td>
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Organization</th>
+                    <th>Org. Type</th> <!-- footer for filtering -->
+                    <th>Job Title</th>
+                    <th>Interests</th>
+                    <th>Registered At</th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
+
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -85,16 +102,14 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- CSRF Token -->
-<meta name="csrf-token" content="{{ csrf_token }}">
-
-<!-- Styles -->
+{% block scripts %}
+<!-- ✅ DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
-<!-- Scripts: jQuery and DataTables (in correct order) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- ✅ DataTables & Buttons JS -->
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
@@ -102,70 +117,82 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-<!-- Optional: Other Static Scripts -->
-<script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
-<script src="{% static 'vendor/aos/aos.js' %}"></script>
-<script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
-<script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
-<script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
-<script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-<script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
-<script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
-<script src="{% static 'js/translate.js' %}"></script>
-<script src="{% static 'js/translater.js' %}" defer></script>
-<script src="https://kit.fontawesome.com/a2e0e9f6d4.js" crossorigin="anonymous"></script>
+<style>
+/* Ensure filters show up under headers */
+#registrants-table tfoot {
+    display: table-header-group;
+}
+</style>
 
-<!-- Custom Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const table = $('#registrants-table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                { extend: 'copy', text: '📋 Copy' },
-                { extend: 'csv', text: '⬇️ CSV' },
-                { extend: 'excel', text: '📊 Excel' },
-                { extend: 'pdf', text: '📑 PDF' },
-                { extend: 'print', text: '🖨️ Print' }
-            ],
-            order: [[6, 'desc']]
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("✅ Dashboard JS Loaded");
 
-        let deleteUrl = "";
-        let deleteRow = null;
-        const deleteModalEl = document.getElementById('deleteConfirmModal');
-        const deleteModal = new bootstrap.Modal(deleteModalEl);
-
-        $('#registrants-table').on('click', '.delete-btn', function (e) {
-            e.preventDefault();
-            deleteUrl = $(this).data('url');
-            deleteRow = $(this).closest('tr');
-            deleteModal.show();
-        });
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-            $.ajax({
-                url: deleteUrl,
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                success: function (response) {
-                    if (response.success) {
-                        deleteModal.hide();
-                        deleteRow.fadeOut(300, function () {
-                            table.row(deleteRow).remove().draw();
-                        });
-                    } else {
-                        alert("Error: " + (response.error || "Could not delete."));
-                    }
-                },
-                error: function (xhr) {
-                    alert("Error: " + xhr.status + " - " + xhr.statusText);
-                }
+    // --- Initialize DataTable ---
+    const table = $('#registrants-table').DataTable({
+        dom: '<"d-flex justify-content-between mb-2"fB>rtip',
+        buttons: [
+            { extend: 'copy', text: '<i class="fas fa-copy"></i> Copy' },
+            { extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV' },
+            { extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel' },
+            { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF' },
+            { extend: 'print', text: '<i class="fas fa-print"></i> Print' }
+        ],
+        order: [[6, 'desc']], // Registered At column
+        initComplete: function () {
+            // Dropdown filters for Organization, Job Title, Interests
+            this.api().columns([3, 4, 5]).every(function () {
+                var column = this;
+                var select = $('<select class="form-select form-select-sm"><option value="">Filter</option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+                column.data().unique().sort().each(function (d) {
+                    if (d) select.append('<option value="' + d + '">' + d + '</option>');
+                });
             });
+        }
+    });
+
+    // --- Delete Logic ---
+    let deleteUrl = "";
+    let deleteRow = null;
+    const deleteModalEl = document.getElementById('deleteConfirmModal');
+    const deleteModal = new bootstrap.Modal(deleteModalEl);
+
+    $('#registrants-table').on('click', '.delete-btn', function (e) {
+        e.preventDefault();
+        deleteUrl = $(this).data('url');
+        deleteRow = $(this).closest('tr');
+        console.log("🗑 Delete button clicked:", deleteUrl);
+        deleteModal.show();
+    });
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        $.ajax({
+            url: deleteUrl,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            success: function (response) {
+                if (response.success) {
+                    deleteModal.hide();
+                    deleteRow.fadeOut(300, function () {
+                        table.row(deleteRow).remove().draw();
+                    });
+                } else {
+                    alert("Error: " + (response.error || "Could not delete."));
+                }
+            },
+            error: function (xhr) {
+                alert("Error: " + xhr.status + " - " + xhr.statusText);
+            }
         });
     });
+});
 </script>
 {% endblock %}

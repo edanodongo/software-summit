@@ -32,3 +32,7 @@ body {
     border-color: #28a745 !important;
     color: #fff !important;
 }
+
+#registrants-table tfoot {
+    display: table-header-group; /* moves filters below headers */
+}

@@ -268,14 +268,16 @@ def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    registrants = Registrant.objects.all().order_by('-created_at')  # newest first
+    registrants = Registrant.objects.all().order_by('-created_at')
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants,
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # ✅ send choices
     }
     return render(request, "summit/dashboard.html", context)
+
 
 # @staff_member_required
 # def dashboard_view(request):
