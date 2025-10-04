@@ -10,7 +10,7 @@ def create_default_admin(sender, **kwargs):
             email="admin@summit.com",
             password="admin123"
         )
-        print("Default admin created: admin / admin123")
+        # print("Default admin created: admin / admin123")
 
         
 class SummitpageConfig(AppConfig):
