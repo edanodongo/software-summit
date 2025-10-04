@@ -1,32 +1,4 @@
 
-// Theme toggle logic
-function setTheme(dark) {
-    const toggleIcon = document.getElementById('themeToggle').querySelector('i');
-
-    // if (dark) {
-    //     document.body.classList.add('dark-theme');
-    //     toggleIcon.className = 'fas fa-sun'; // white sun icon
-    //     localStorage.setItem('theme', 'dark');
-    // } else {
-    //     document.body.classList.remove('dark-theme');
-    //     toggleIcon.className = 'fas fa-moon'; // white moon icon
-    //     localStorage.setItem('theme', 'light');
-    // }
-}
-
-
-document.getElementById('themeToggle').addEventListener('click', function () {
-    const isDark = !document.body.classList.contains('dark-theme');
-    setTheme(isDark);
-});
-
-// Apply saved theme on page load
-(function () {
-    const theme = localStorage.getItem('theme');
-    setTheme(theme === 'dark');
-})();
-
-
 // Minimal dark theme CSS
 const darkStyle = document.createElement('style');
 darkStyle.textContent = `
