@@ -360,9 +360,12 @@ form.addEventListener("submit", function (e) {
           firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
           firstInvalidEl.focus();
         }
+      } else if (data.message) {
+        showAlert(data.message, "warning");
       } else {
         showAlert("Something went wrong. Please try again.", "danger");
       }
+
     })
     .catch((err) => {
       console.error("Error:", err);
