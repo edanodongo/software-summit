@@ -50,7 +50,7 @@
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="#gallery">MEDIA</a></li>
-                <li><a href="{% url 'not_found' %}">VENUE</a></li>
+                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
               </ul>
             </li>  
@@ -78,7 +78,7 @@
     <main class="main">
 
       <!-- Page Title -->
-      <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
+      <div class="page-title dark-background"  loading="lazy"  style="background-image: url(assets/img/events/showcase-9.webp);">
         <div class="container position-relative">
           <h1>Speakers</h1>
           <p>Featured speakers in the Kenya Software Summit 2025 Edition.</p>
@@ -103,7 +103,7 @@
                 <div class="speaker-profile">
                   <div class="speaker-meta">
                     <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}" alt="Speaker" class="img-fluid">
+                      <img src="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}"  loading="lazy" alt="Speaker" class="img-fluid">
                     </div>
                     <div class="speaker-info">
                       <h4>Hon. William Kabogo Gitau</h4>
@@ -122,6 +122,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
+                         loading="lazy" 
                         data-name="Hon. William Kabogo Gitau"
                         data-position="Cabinet Secretary"
                         data-org="Ministry of ICT & Digital Economy (MICDE), Government of
@@ -144,7 +145,7 @@
                 <div class="speaker-profile">
                   <div class="speaker-meta">
                     <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/Eng_John_Tanui.webp' %}" alt="Speaker" class="img-fluid">
+                      <img src="{% static 'images/speakers/Eng_John_Tanui.webp' %}" loading="lazy"  alt="Speaker" class="img-fluid">
                     </div>
                     <div class="speaker-info">
                       <h4>Eng John Tanui</h4>
@@ -163,6 +164,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
+                         loading="lazy" 
                         data-name="Eng John Tanui"
                         data-position="Principal Secretary"
                         data-org="State Department of ICT and Digital Economy, Government
@@ -185,7 +187,7 @@
                 <div class="speaker-profile">
                   <div class="speaker-meta">
                     <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/placeholder.webp' %}" alt="Speaker" class="img-fluid">
+                      <img src="{% static 'images/speakers/placeholder.webp' %}" loading="lazy"  alt="Speaker" class="img-fluid">
                     </div>
                     <div class="speaker-info">
                       <h4>Kevin Park</h4>
@@ -203,6 +205,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
+                         loading="lazy" 
                         data-name="Marcus Thompson"
                         data-position="Blockchain Architect"
                         data-org="CryptoTech Solutions"
@@ -225,7 +228,7 @@
                 <div class="speaker-profile">
                   <div class="speaker-meta">
                     <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/placeholder.webp' %}" alt="Speaker" class="img-fluid">
+                      <img src="{% static 'images/speakers/placeholder.webp' %}" loading="lazy"  alt="Speaker" class="img-fluid">
                     </div>
                     <div class="speaker-info">
                       <h4>Jennifer Walsh</h4>
@@ -244,6 +247,7 @@
                       <!-- View Profile button with data attributes 
                       <a href="#"
                         class="profile-btn"
+                         loading="lazy" 
                         data-name="Jennifer Walsh"
                         data-position="Senior Data Scientist"
                         data-org="DataVision Labs"
@@ -358,9 +362,9 @@
     <!-- Preloader -->
     <div id="preloader">
       <!-- Light mode logo -->
-      <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+      <img src="{% static 'images/summit_logo_light.webp' %}" loading="lazy"  alt="Summit Logo" class="logo-loader light-logo">
       <!-- Dark mode logo -->
-      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+      <img src="{% static 'images/summit_logo_dark.webp' %}" loading="lazy"  alt="Summit Logo" class="logo-loader dark-logo">
     </div>
 
 
