@@ -152,7 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Handle Organization Type ---
   function handleOrgTypeChange() {
+    if (orgTypeSelect && orgTypeSelect.value) {
       toggleVisibility(otherOrgWrapper, otherOrgInput, true);
+    } else {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
+    }
   }
 
   // --- Handle Interests ---

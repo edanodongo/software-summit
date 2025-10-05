@@ -267,7 +267,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Handle Organization Type ---
   function handleOrgTypeChange() {
+    if (orgTypeSelect && orgTypeSelect.value) {
       toggleVisibility(otherOrgWrapper, otherOrgInput, true);
+    } else {
+      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
+    }
   }
 
   // --- Handle Interests ---
@@ -356,9 +360,12 @@ form.addEventListener("submit", function (e) {
           firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
           firstInvalidEl.focus();
         }
+      } else if (data.message) {
+        showAlert(data.message, "warning");
       } else {
         showAlert("Something went wrong. Please try again.", "danger");
       }
+
     })
     .catch((err) => {
       console.error("Error:", err);
