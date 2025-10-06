@@ -28,8 +28,193 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import RegistrantForm
 
+from django.http import HttpResponse, JsonResponse
+from django.templatetags.static import static
+from django.contrib.staticfiles import finders
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
+)
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+import os
+
 
 def home(request):
+    # 🟢 DOWNLOAD FEATURE – Full Agenda PDF with Cover, Logo, Header, Footer
+    if request.GET.get("download") == "schedule":
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Kenya_Software_Summit_Schedule.pdf"'
+
+        logo_url = static('images/summit_logo_dark.webp')
+        logo_path = finders.find('images/summit_logo_dark.webp') or logo_url
+
+        def add_header_footer(canvas_obj, doc):
+            width, height = A4
+            try:
+                if logo_path and os.path.exists(logo_path):
+                    canvas_obj.drawImage(
+                        logo_path,
+                        x=40, y=height - 60,
+                        width=70, height=30,
+                        preserveAspectRatio=True,
+                        mask='auto'
+                    )
+            except Exception as e:
+                print("Logo load error:", e)
+
+            canvas_obj.setFont("Helvetica-Bold", 9)
+            canvas_obj.setFillColor(colors.HexColor("#1E6B52"))
+            canvas_obj.drawRightString(width - 40, height - 45, "Kenya Software Summit 2025")
+
+            canvas_obj.setStrokeColor(colors.lightgrey)
+            canvas_obj.setLineWidth(0.5)
+            canvas_obj.line(40, 50, width - 40, 50)
+
+            canvas_obj.setFont("Helvetica", 8.5)
+            canvas_obj.setFillColor(colors.grey)
+            canvas_obj.drawString(40, 38, "Connecting minds, Shaping software, Driving growth")
+            canvas_obj.drawRightString(width - 40, 38, f"Page {doc.page}")
+
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=A4,
+            leftMargin=40,
+            rightMargin=40,
+            topMargin=90,
+            bottomMargin=50,
+        )
+
+        elements = []
+        styles = getSampleStyleSheet()
+
+        # Styles (smaller spacing, tighter layout)
+        title_style = ParagraphStyle(
+            name='TitleStyle',
+            parent=styles['Heading1'],
+            alignment=1,
+            textColor=colors.HexColor("#1E6B52"),
+            fontSize=20,
+            spaceAfter=10,
+        )
+        subtitle_style = ParagraphStyle(
+            name='Subtitle',
+            parent=styles['Heading2'],
+            textColor=colors.HexColor("#1E6B52"),
+            spaceBefore=6,
+            spaceAfter=6,
+        )
+        normal_center = ParagraphStyle(
+            name='NormalCenter',
+            parent=styles['Normal'],
+            alignment=1,
+            fontSize=11,
+            spaceAfter=8,
+        )
+
+        # 🟣 COVER PAGE (tighter spacing)
+        try:
+            if logo_path and os.path.exists(logo_path):
+                elements.append(Spacer(1, 100))
+                elements.append(Image(logo_path, width=100, height=50))
+            else:
+                elements.append(Spacer(1, 120))
+        except Exception:
+            elements.append(Spacer(1, 120))
+
+        elements.append(Spacer(1, 20))
+        elements.append(Paragraph("Kenya Software Summit 2025", title_style))
+        elements.append(Paragraph("Official 3-Day Agenda", normal_center))
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph("November 10 – 12, 2025 | Eldoret, Kenya", normal_center))
+        elements.append(Spacer(1, 200))
+        elements.append(PageBreak())
+
+        # 🔹 Compact table styling
+        def make_table(data):
+            t = Table(data, colWidths=[70, 170, 220])
+            t.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#1E6B52")),
+                ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+                ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+                ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0,0), (-1,0), 11),
+                ('TOPPADDING', (0,0), (-1,0), 4),
+                ('BOTTOMPADDING', (0,0), (-1,0), 4),
+                ('FONTSIZE', (0,1), (-1,-1), 9.5),
+                ('TOPPADDING', (0,1), (-1,-1), 2),
+                ('BOTTOMPADDING', (0,1), (-1,-1), 2),
+                ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
+                ('GRID', (0,0), (-1,-1), 0.25, colors.grey),
+            ]))
+            return t
+
+        # --- DAY 1 ---
+        elements.append(Paragraph("Day 1 – November 10", subtitle_style))
+        day1 = [
+            ["Time", "Session", "Details"],
+            ["All Day", "Exhibition", "Ongoing at Innovation Expo Area"],
+            ["7:30 AM", "Registration & Morning Networking", "Main Hall"],
+            ["8:30 AM", "Opening Ceremony", "Anthems, Welcoming Remarks, Keynote Address"],
+            ["9:50 AM", "Software Ecosystem Landscape", "Baseline Survey, Global Trends, Panel Discussion"],
+            ["10:45 AM", "Tea Break", ""],
+            ["11:15 AM", "Software Quality & IP", "Frameworks, Policies, Data Adequacy"],
+            ["12:15 PM", "Fireside Chat", "Industry Leaders' Insights"],
+            ["1:00 PM", "Lunch Break", "Main Lobby"],
+            ["2:00 PM", "Tech Labs", "Workshops & Partner Sessions"],
+            ["5:30 PM", "Business Matchmaking", "Networking Event"],
+        ]
+        elements.append(make_table(day1))
+        elements.append(Spacer(1, 10))
+
+        # --- DAY 2 ---
+        elements.append(Paragraph("Day 2 – November 11", subtitle_style))
+        day2 = [
+            ["Time", "Session", "Details"],
+            ["All Day", "Exhibition", "Open to all registered delegates"],
+            ["8:00 AM", "Registration & Networking", "Main Hall"],
+            ["8:30 AM", "Day 1 Recap & Highlights", ""],
+            ["9:00 AM", "Academia Panel", "Talent Strategies (Higher Ed & TVET)"],
+            ["10:00 AM", "Tea Break", ""],
+            ["10:30 AM", "Digital / Remote Work", "Future of Jobs, Labour Rights, Policy Directions"],
+            ["11:30 AM", "Blockchain Technology", "Virtual Assets, Legal Framework, Q&A"],
+            ["1:00 PM", "Lunch Break", "Main Lobby"],
+            ["2:00 PM", "Software Innovation Opportunities", "DevSecOps, Creative Economy, Accessibility"],
+            ["4:00 PM", "Gala Dinner & Recognition", "Main Hall"],
+        ]
+        elements.append(make_table(day2))
+        elements.append(Spacer(1, 10))
+
+        # --- DAY 3 ---
+        elements.append(Paragraph("Day 3 – November 12", subtitle_style))
+        day3 = [
+            ["Time", "Session", "Details"],
+            ["All Day", "Exhibition", "Innovation Expo"],
+            ["7:30 AM", "Software Advisory Council Breakfast", "Promoting Software Industry Dialogue"],
+            ["8:30 AM", "Startup Support Panel", "Next-Gen Developers & Startup Ecosystem"],
+            ["10:30 AM", "Tea Break", ""],
+            ["11:00 AM", "Software Global Export", "Panel: Building for Export Markets"],
+            ["12:15 PM", "Hackathon Finals & Awards", "Startup Showcase Presentations"],
+            ["1:00 PM", "Lunch Break", "Main Lobby"],
+            ["2:00 PM", "Closing Keynote & Ceremony", "Call to Action, Closing Remarks, Press Conference"],
+            ["4:00 PM", "Tea Break & Guest Departures", "Main Lobby"],
+        ]
+        elements.append(make_table(day3))
+        elements.append(Spacer(1, 12))
+        elements.append(Paragraph(
+            "© 2025 Kenya Software Summit – Visit the official website for updates.",
+            ParagraphStyle(name="FooterText", parent=styles["Normal"], fontSize=9, textColor=colors.grey)
+        ))
+
+        doc.build(elements, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
+        return response
+
+   # 🟢 END DOWNLOAD FEATURE
+
+
+    # 🔹 Existing registration logic (unchanged)
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST)
 
@@ -46,19 +231,18 @@ def home(request):
             registrant.interests = interests
             registrant.save()
 
-            # Send confirmation email (safe handling)
+            # Send confirmation email
             try:
-                send_confirmation_email(registrant)  # make sure you implement this
+                send_confirmation_email(registrant)
             except Exception as e:
                 print("Email Send error:", e)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"success": False, "message": "Registration saved but email could not be sent."}, 
+                        {"success": False, "message": "Registration saved but email could not be sent."},
                         status=500
                     )
                 messages.warning(request, "Registered, but confirmation email failed.")
 
-            # AJAX response
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
 
@@ -66,7 +250,6 @@ def home(request):
             return redirect('home')
 
         else:
-            # Return errors if AJAX
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
