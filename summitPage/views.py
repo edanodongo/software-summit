@@ -4,7 +4,6 @@ from openpyxl import Workbook
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models.functions import TruncDate
-from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import colors
 from reportlab.platypus import (
@@ -15,8 +14,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django.utils.timezone import now
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.views import LoginView
-import os
-
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Registrant
@@ -39,6 +36,7 @@ from reportlab.platypus import (
 )
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
+from django.http import JsonResponse
 import os
 
 
@@ -583,6 +581,26 @@ def register(request):
         form = RegistrantForm()
 
     return render(request, "summit/buy-tickets.html", {"form": form})
+
+
+def sendMail(request):
+    if request.method == "POST":
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        email = request.POST.get("email")
+
+        if not subject or not message or not email:
+            return JsonResponse({'status': 'error', 'message': 'All fields are required.'})
+
+        # Example logic (replace with actual email logic)
+        try:
+            return JsonResponse({'status': 'success', 'message': f'Email sent to {email} successfully!'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to send email: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
 
 
 

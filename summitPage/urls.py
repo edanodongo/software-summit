@@ -1,12 +1,8 @@
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter
 
-from django.urls import path, include
 from . import views
-from .views import SummitLoginView, SummitLogoutView
-
-from rest_framework.routers import DefaultRouter
-from .views import *
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 from .views import *
 
 # router = DefaultRouter()
@@ -42,7 +38,6 @@ urlpatterns = [
     path("media/", views.media, name="media"),
     # path("register/", views.register, name="register"),
 
-    
     path("login/", SummitLoginView.as_view(), name="custom_login"),
     path("logout/", SummitLogoutView.as_view(), name="logout"),
     path("export/print/", views.print_registrants, name="export_print"),
@@ -51,7 +46,7 @@ urlpatterns = [
     path("export/excel/", views.export_registrants_excel, name="export_excel"),
     path('', views.home, name='home'),
 
-
+    path('auth_send_mail/', views.sendMail, name='auth_send_mail'),
 
     # path("api/", include(router.urls)),
 ]
