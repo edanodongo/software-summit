@@ -5559,7 +5559,7 @@ section,
 --------------------------------------------------------------*/
 .feature-card {
     text-align: center;
-    padding: 40px 20px;
+    padding: 15px 20px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -5920,8 +5920,6 @@ section,
   position: absolute;
   top: 100%;   /* place below the globe */
   right: 0;    /* align to the right edge */
-  background: #fff;
-  border: 1px solid #ddd;
   border-radius: .5rem;
   padding: .5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -5930,7 +5928,7 @@ section,
 }
 
 /* Always visible on desktop (no popover) */
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .translate-popover {
     position: static;
     display: block !important;
@@ -5938,7 +5936,25 @@ section,
     box-shadow: none;
     padding: 0;
   }
+} */
+@media (max-width: 767px) {
+  .hide-on-small {
+    display: none !important;
+  }
 }
+
+/* Popover styles */
+.translate-pop {
+  position: absolute;
+  top: 100%;   /* place below the globe */
+  right: 0;    /* align to the right edge */
+  border-radius: .5rem;
+  padding: .5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2000;
+  min-width: 140px;
+}
+
 
 .gtranslate_wrapper,
 .gtranslate_wrapper * {

@@ -405,6 +405,31 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// Translate popover toggle for mobile globe icon
+document.querySelectorAll('.translate-toggle').forEach(function(globe) {
+  globe.addEventListener('click', function(e) {
+    // Only for mobile globe icon (d-xl-none)
+    if (this.classList.contains('d-xl-none')) {
+      e.stopPropagation();
+      const popover = document.querySelector('.translate-popover');
+      if (popover) {
+        popover.classList.toggle('d-none');
+      }
+    }
+  });
+});
+// Hide popover when clicking outside
+document.addEventListener('click', function(e) {
+  const popover = document.querySelector('.translate-popover');
+  if (popover && !popover.classList.contains('d-none')) {
+    // If click is outside popover and globe
+    if (!e.target.closest('.translate-popover') && !e.target.closest('.translate-toggle')) {
+      popover.classList.add('d-none');
+    }
+  }
+});
+
+
 // modal
 document.addEventListener("DOMContentLoaded", function () {
   const modal = document.getElementById("bioModal");
