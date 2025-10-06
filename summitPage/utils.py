@@ -39,7 +39,7 @@ def send_confirmation_email(registrant):
 
           <!-- Greeting -->
           <h2 style="color:#2c3e50; text-align:center; margin-bottom:10px;">
-            Welcome Aboard {registrant.title} {registrant.first_name} {registrant.second_name},
+            Welcome {registrant.title} {registrant.first_name} {registrant.second_name},
           </h2>
 
           <!-- Intro -->
@@ -49,7 +49,7 @@ def send_confirmation_email(registrant):
 
           <p style="color:#333; font-size:14px; margin-bottom:20px;">
             We are delighted to welcome you to this year’s Software Summit, taking place from 
-            10th November -12th November , 2025 at ******, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
+            10th November -12th November , 2025 at  Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
           </p>
 
           <p style="color:#333; font-size:14px; margin-bottom:20px;">
