@@ -244,9 +244,9 @@ def home(request):
                 messages.warning(request, "Registered, but confirmation email failed.")
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse({"success": True, "message": "Registration successful!"})
+                return JsonResponse({"success": True, "message": "Registration successful"})
 
-            messages.success(request, "Registration successful!")
+            messages.success(request, "Registration successful")
             return redirect('home')
 
         else:
@@ -261,6 +261,130 @@ def home(request):
         'form': form,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
+
+
+
+
+
+
+
+
+
+
+import qrcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+from io import BytesIO
+from django.http import FileResponse, Http404
+from django.contrib.admin.views.decorators import staff_member_required
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import landscape, A7
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from .models import Registrant
+import os
+
+
+@staff_member_required
+def generate_badge(request, registrant_id):
+    try:
+        registrant = Registrant.objects.get(pk=registrant_id)
+    except Registrant.DoesNotExist:
+        raise Http404("Registrant not found")
+
+    # --- Data prep ---
+    full_name = registrant.get_full_name() or ""
+    org_type = registrant.display_org_type() or ""
+    job_title = registrant.job_title or ""
+    interests = registrant.display_interests() or ""
+    email = registrant.email or ""
+    phone = registrant.phone or ""
+
+    # --- Generate QR Code ---
+    qr_data = (
+        f"Name: {full_name}\nEmail: {email}\nPhone: {phone}\n"
+        f"Organization: {org_type}\nJob Title: {job_title}\nInterests: {interests}"
+    )
+    qr_img = qrcode.make(qr_data)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+
+    # --- Generate Barcode ---
+    barcode_data = str(registrant.id)
+    barcode_buffer = BytesIO()
+    barcode = Code128(barcode_data, writer=ImageWriter())
+    barcode.write(barcode_buffer)
+    barcode_buffer.seek(0)
+
+    # --- Create Badge PDF ---
+    pdf_buffer = BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=landscape(A7))
+    width, height = landscape(A7)
+
+    # --- Background ---
+    c.setFillColorRGB(1, 1, 1)
+    c.rect(0, 0, width, height, fill=1)
+
+    # --- Header Bar ---
+    header_height = 40
+    c.setFillColorRGB(0.05, 0.2, 0.45)  # dark blue
+    c.rect(0, height - header_height, width, header_height, fill=1, stroke=0)
+
+    # --- Summit Logo ---
+    logo_path = os.path.join(os.getcwd(), "static", "images", "summit_logo_dark.webp")
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        logo_width, logo_height = 48, 24
+        logo_y = height - (header_height / 2 + logo_height / 2) + 2
+        c.drawImage(logo, 12, logo_y, width=logo_width, height=logo_height, mask='auto')
+
+    # --- Summit Title (aligned with logo center) ---
+    c.setFillColor(colors.whitesmoke)
+    c.setFont("Helvetica-Bold", 10)
+    title_y = height - (header_height / 2) + 3  # vertical alignment fix
+    c.drawString(80, title_y, "Kenya Software Summit 2025")
+
+    # --- Info Section ---
+    c.setFillColor(colors.black)
+    y_start = height - header_height - 15
+
+    c.setFont("Helvetica-Bold", 9)
+    c.drawCentredString(width / 2, y_start, full_name[:45])
+
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(width / 2, y_start - 12, org_type[:55])
+    c.drawCentredString(width / 2, y_start - 24, job_title[:55])
+
+    if interests:
+        c.setFont("Helvetica-Oblique", 7)
+        text = interests[:70] + ("..." if len(interests) > 70 else "")
+        c.drawCentredString(width / 2, y_start - 38, text)
+
+    # --- Divider Line ---
+    c.setStrokeColor(colors.lightgrey)
+    c.line(10, 40, width - 10, 40)
+
+    # --- QR & Barcode ---
+    qr_image = ImageReader(qr_buffer)
+    barcode_image = ImageReader(barcode_buffer)
+    c.drawImage(qr_image, 10, 15, width=55, height=55, mask='auto')
+    c.drawImage(barcode_image, width - 95, 20, width=85, height=35, mask='auto')
+
+    # --- Footer ---
+    c.setFont("Helvetica", 6)
+    c.setFillColor(colors.grey)
+    c.drawCentredString(width / 2, 10, "Scan QR or Barcode for summit check-in")
+
+    # --- Save ---
+    c.showPage()
+    c.save()
+    pdf_buffer.seek(0)
+
+    filename = f"{registrant.first_name}_{registrant.second_name}_Badge.pdf"
+    return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
+
+
 
 
 

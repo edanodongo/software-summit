@@ -53,5 +53,7 @@ urlpatterns = [
 
 
 
+    path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
+    
     # path("api/", include(router.urls)),
 ]

@@ -1,107 +1,156 @@
-from django.core.mail import send_mail
-from django.conf import settings
+import qrcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+from io import BytesIO
 from datetime import datetime
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage
 
 
 def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to = [registrant.email]
 
-    plain_message = (
-        f"Welcome {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
-        "Thank you for successfully registering for the Software Summit 2025.\n\n"
-        "We are delighted to welcome you to this year’s Software Summit, taking place from "
-        "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
-        "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
-        "Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. "
-        "To facilitate this, kindly carry a valid identification document. "
-        "You will then be issued with a badge, a delegate’s pack containing your conference guide, "
-        "and the full programme to help you easily navigate the conference activities.\n\n"
-        "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
-        "Karibu.\n\n"
-        "Best regards,\nThe Software Summit Team"
-    )
+    try:
+        # === Generate QR Code ===
+        qr_data = (
+            f"Name: {registrant.get_full_name()}\n"
+            f"Email: {registrant.email}\n"
+            f"Phone: {registrant.phone}\n"
+            f"Organization: {registrant.display_org_type()}\n"
+            f"Job Title: {registrant.job_title}"
+        )
+        qr_img = qrcode.make(qr_data)
+        qr_buffer = BytesIO()
+        qr_img.save(qr_buffer, format="PNG")
 
-    current_year = datetime.now().year
+        # === Generate Barcode ===
+        barcode_buffer = BytesIO()
+        Code128(str(registrant.id), writer=ImageWriter()).write(barcode_buffer)
 
-    html_message = f"""
-    <html>
-      <body style="font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px; margin:0;">
-        <div style="max-width:650px; margin:40px auto; background:#ffffff; border-radius:8px; padding:30px; border:1px solid #e0e0e0;">
-          <!-- Ministry Logo -->
-          <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png" alt="MINISTRY LOGO" style="height:70px;">
-          </div>
+        plain_message = (
+            f"Welcome {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
+            "Thank you for successfully registering for the Software Summit 2025.\n\n"
+            "We are delighted to welcome you to this year’s Software Summit, taking place from "
+            "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
+            "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
+            "Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. "
+            "To facilitate this, kindly carry a valid identification document. "
+            "You will then be issued with a badge, a delegate’s pack containing your conference guide, "
+            "and the full programme to help you easily navigate the conference activities.\n\n"
+            "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
+            "Karibu.\n\n"
+            "Best regards,\nThe Software Summit Team"
+        )
 
-          <!-- Summit Logo -->
-          <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png" alt="Summit Logo" style="height:60px;">
-          </div>
+        current_year = datetime.now().year
 
-          <!-- Greeting -->
-          <h2 style="color:#2c3e50; text-align:center; margin-bottom:10px;">
-            Welcome {registrant.title} {registrant.first_name} {registrant.second_name},
-          </h2>
+        # === HTML Email Body ===
+        html_message = f"""
+        <html>
+          <body style="font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px;">
+            <div style="max-width:650px; margin:40px auto; background:#ffffff; border-radius:8px;
+                        padding:30px; border:1px solid #e0e0e0;">
+              
+              <!-- Ministry Logo -->
+              <div style="text-align:center; margin-bottom:20px;">
+                <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png" alt="MINISTRY LOGO" style="height:70px;">
+              </div>
 
-          <!-- Intro -->
-          <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-            Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
-          </p>
+              <!-- Summit Logo -->
+              <div style="text-align:center; margin-bottom:20px;">
+                <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png"
+                     alt="Summit Logo" style="height:60px;">
+              </div>
 
-          <p style="color:#333; font-size:14px; margin-bottom:20px;">
-            We are delighted to welcome you to this year’s Software Summit, taking place from 
-            10th November -12th November , 2025 at  Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
-          </p>
+              <!-- Greeting -->
+              <h2 style="color:#2c3e50; text-align:center; margin-bottom:10px;">
+                Welcome {registrant.title} {registrant.first_name} {registrant.second_name},
+              </h2>
 
-          <p style="color:#333; font-size:14px; margin-bottom:20px;">
-            <em>Theme:</em> <strong>“Connecting Minds, Shaping Software, Driving Growth”</strong>
-          </p>
+              <!-- Intro -->
+              <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
+                Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
+              </p>
 
-          <p style="color:#333; font-size:14px; margin-bottom:20px;">
-            Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. 
-            To facilitate this, kindly carry a valid identification document. You will then receive 
-            a badge, a delegate’s pack containing your conference guide, and the programme for 
-            easier navigation of the conference activities.
-          </p>
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                We are delighted to welcome you to this year’s Software Summit, taking place from 
+                10th November -12th November , 2025 at Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
+              </p>
 
-          <p style="color:#333; font-size:14px; margin-bottom:20px;">
-            This experience has been thoughtfully tailored to meet your innovative needs and standards.
-          </p>
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                <em>Theme:</em> <strong>“Connecting Minds, Shaping Software, Driving Growth”</strong>
+              </p>
 
-          <p style="color:#333; font-size:14px; margin-bottom:20px;">
-            <strong>Karibu!</strong>
-          </p>
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. 
+                To facilitate this, kindly carry a valid identification document. You will then receive 
+                a badge, a delegate’s pack containing your conference guide, and the programme for 
+                easier navigation of the conference activities.
+              </p>
 
-          <!-- CTA button -->
-          <div style="margin:30px 0; text-align:center;">
-            <a href="https://softwaresummit.go.ke/" 
-               style="background-color:#007bff; color:#fff; padding:12px 25px; border-radius:4px; text-decoration:none; font-weight:bold; font-size:14px;">
-              Visit Summit Portal
-            </a>
-          </div>
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                This experience has been thoughtfully tailored to meet your innovative needs and standards.
+              </p>
 
-          <p style="margin-top:30px; color:#333; font-size:14px;">
-            Best regards,<br><strong>The Software Summit Team</strong>
-          </p>
-        </div>
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                <strong>Karibu!</strong>
+              </p>
 
-        <!-- Footer outside card -->
-        <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-          <p>&copy; {current_year} Kenya Software Summit.</p>
-          <p>The Ministry of Information, Communications and The Digital Economy</p>
-          <p>6th Floor, Bruce House, Standard Street</p>
-          <p>Email: softwaresummit@ict.go.ke</p>
-          <p>All rights reserved.</p>
-        </footer>
-      </body>
-    </html>
-    """
+              <div style="text-align:center; margin-top:20px;">
+                <h3 style="color:#007bff;">Your Check-in Codes</h3>
+                <p style="font-size:14px; color:#555;">Scan these upon arrival for quick badge printing</p>
+                <img src="cid:qr_code" style="height:120px; margin:10px;" alt="QR Code"><br>
+              </div>
 
-    send_mail(
-        subject,
-        plain_message,
-        settings.DEFAULT_FROM_EMAIL,
-        [registrant.email],
-        fail_silently=False,
-        html_message=html_message,
-    )
+              <p style="margin-top:30px; text-align:center;">
+                Best regards,<br><strong>The Software Summit Team</strong>
+              </p>
+            </div>
 
+            <!-- CTA button -->
+            <div style="margin:30px 0; text-align:center;">
+              <a href="https://softwaresummit.go.ke/" 
+                style="background-color:#007bff; color:#fff; padding:12px 25px; border-radius:4px; text-decoration:none; font-weight:bold; font-size:14px;">
+                Visit Summit Portal
+              </a>
+            </div>
+
+            <!-- Footer outside card -->
+            <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
+              <p>&copy; {current_year} Kenya Software Summit.</p>
+              <p>The Ministry of Information, Communications and The Digital Economy</p>
+              <p>6th Floor, Bruce House, Standard Street</p>
+              <p>Email: softwaresummit@ict.go.ke</p>
+              <p>All rights reserved.</p>
+            </footer>
+          </body>
+        </html>
+        """
+
+        # === Compose & Send ===
+        email = EmailMultiAlternatives(subject, plain_message, from_email, to)
+        email.attach_alternative(html_message, "text/html")
+
+        # Add QR and barcode as inline images (MIMEImage)
+        qr_img_mime = MIMEImage(qr_buffer.getvalue(), _subtype="png")
+        qr_img_mime.add_header("Content-ID", "<qr_code>")
+        qr_img_mime.add_header("Content-Disposition", "inline", filename="qr.png")
+        email.attach(qr_img_mime)
+
+        # barcode_img_mime = MIMEImage(barcode_buffer.getvalue(), _subtype="png")
+        # barcode_img_mime.add_header("Content-ID", "<barcode>")
+        # barcode_img_mime.add_header("Content-Disposition", "inline", filename="barcode.png")
+        # email.attach(barcode_img_mime)
+
+        email.mixed_subtype = "related"  # important for inline images
+        email.send(fail_silently=False)
+
+        print(f"✅ Email sent successfully to {registrant.email}")
+
+    except Exception as e:
+        import traceback
+        print("❌ Email sending failed:", str(e))
+        traceback.print_exc()
