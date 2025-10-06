@@ -54,10 +54,17 @@
                         <td>{{ registrant.display_interests|default:"—" }}</td>
                         <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
                         <td>
-                            <button class="btn btn-sm btn-danger delete-btn"
-                                    data-url="{% url 'delete_registrant' registrant.id %}">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <div class="btn-group">
+                                <a href="{% url 'generate_badge' registrant.id %}" 
+                                class="btn btn-sm btn-outline-primary" 
+                                target="_blank">
+                                    <i class="fas fa-id-badge"></i> Badge
+                                </a>
+                                <button class="btn btn-sm btn-danger delete-btn"
+                                        data-url="{% url 'delete_registrant' registrant.id %}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 {% empty %}
