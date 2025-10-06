@@ -822,7 +822,7 @@ section,
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image: url("/static/images/gallery/photo_2.jpg");
+  background-image: url("/static/images/gallery/photo_2.webp");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

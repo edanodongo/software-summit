@@ -29,7 +29,7 @@ def table_exists(table_name):
 
 def create_default_admin(sender, **kwargs):
     config = load_config()
-    username = config.get("DJANGO_ADMIN_USERNAME", "admin")
+    username = config.get("DJANGO_ADMIN_USERNAME", "summitAdmin")
     email = config.get("DJANGO_ADMIN_EMAIL", "softwaresummit@ict.go.ke")
     password = config.get("DJANGO_ADMIN_PASSWORD", None)
 
@@ -47,8 +47,8 @@ def create_default_admin(sender, **kwargs):
                     password=password
                 )
                 print(f"✅ Default admin created: {username} / [hidden password]")
-            else:
-                print(f"ℹ️ Admin user '{username}' already exists.")
+            # else:
+            #     print(f" Admin user '{username}' already exists.")
     except (ProgrammingError, OperationalError) as e:
         # Happens if DB isn't ready — just skip
         print(f"⚠️ Skipping admin creation: {e}")

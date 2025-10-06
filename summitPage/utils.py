@@ -7,10 +7,10 @@ def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
 
     plain_message = (
-        f"Welcome Aboard {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
+        f"Welcome {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
         "Thank you for successfully registering for the Software Summit 2025.\n\n"
         "We are delighted to welcome you to this year’s Software Summit, taking place from "
-        "10th November - 12th November , 2025 at ******, Eldoret City, Uasin Gishu County, Kenya.\n\n"
+        "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
         "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
         "Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. "
         "To facilitate this, kindly carry a valid identification document. "
@@ -39,7 +39,7 @@ def send_confirmation_email(registrant):
 
           <!-- Greeting -->
           <h2 style="color:#2c3e50; text-align:center; margin-bottom:10px;">
-            Welcome Aboard {registrant.title} {registrant.first_name} {registrant.second_name},
+            Welcome {registrant.title} {registrant.first_name} {registrant.second_name},
           </h2>
 
           <!-- Intro -->
@@ -49,7 +49,7 @@ def send_confirmation_email(registrant):
 
           <p style="color:#333; font-size:14px; margin-bottom:20px;">
             We are delighted to welcome you to this year’s Software Summit, taking place from 
-            10th November -12th November , 2025 at ******, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
+            10th November -12th November , 2025 at  Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
           </p>
 
           <p style="color:#333; font-size:14px; margin-bottom:20px;">
