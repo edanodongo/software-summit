@@ -91,25 +91,11 @@ window.addEventListener('scroll', function () {
     const navbar = document.querySelector('.navbar');
     const scrollTop = window.pageYOffset;
 
-    if (scrollTop > 50) {
-        navbar.style.background = 'rgba(28, 28, 24, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
-    } else {
-        navbar.style.background = 'rgba(28, 28, 24, 0.95)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-    }
 });
 
 // Scroll to top functionality
 const scrollToTopBtn = document.getElementById('scrollToTop');
 
-window.addEventListener('scroll', function () {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.classList.add('show');
-    } else {
-        scrollToTopBtn.classList.remove('show');
-    }
-});
 
 scrollToTopBtn.addEventListener('click', function () {
     window.scrollTo({
