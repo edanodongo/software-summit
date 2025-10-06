@@ -1,16 +1,55 @@
+from datetime import datetime
+from email.mime.image import MIMEImage
+from io import BytesIO
+
 import qrcode
 from barcode import Code128
 from barcode.writer import ImageWriter
-from io import BytesIO
-from datetime import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from email.mime.image import MIMEImage
+import traceback
 
+
+
+from_email = settings.EMAIL_HOST_USER
+current_year = datetime.now().year
+
+
+
+
+def sendmailer(subject, message, recipients):
+    """
+    Send email to one or more recipients.
+    - subject: Email subject
+    - message: Plain/HTML message body
+    - recipients: List of email addresses
+    """
+    plain_message = message
+    html_message = message
+
+    # ✅ Make sure recipients is a list
+    if isinstance(recipients, str):
+        recipients = [recipients]
+
+    try:
+        email_obj = EmailMultiAlternatives(
+            subject,
+            plain_message,
+            from_email,
+            recipients,  # list of emails
+        )
+        email_obj.attach_alternative(html_message, "text/html")
+        email_obj.mixed_subtype = "related"  # for inline HTML images
+        email_obj.send(fail_silently=False)
+
+        print(f"✅ Email sent successfully to: {', '.join(recipients)}")
+
+    except Exception as e:
+        print("❌ Email sending failed:", str(e))
+        traceback.print_exc()
 
 def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
-    from_email = settings.DEFAULT_FROM_EMAIL
     to = [registrant.email]
 
     try:
@@ -45,7 +84,6 @@ def send_confirmation_email(registrant):
             "Best regards,\nThe Software Summit Team"
         )
 
-        current_year = datetime.now().year
 
         # === HTML Email Body ===
         html_message = f"""

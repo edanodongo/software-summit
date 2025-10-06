@@ -1,43 +1,30 @@
-from .forms import QuickRegistrationForm
-from .utils import *
-from openpyxl import Workbook
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from django.contrib import messages
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from django.contrib.staticfiles import finders
+from django.db.models import Count
 from django.db.models.functions import TruncDate
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib import colors
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.templatetags.static import static
+from django.utils.timezone import now
+from django.views.decorators.http import require_POST
+from openpyxl import Workbook
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+     PageBreak
+)
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
     Image, Spacer
 )
-from reportlab.lib.styles import getSampleStyleSheet
-from django.utils.timezone import now
-from django.contrib.auth.views import LogoutView
-from django.contrib.auth.views import LoginView
-from django.db.models import Count
-from django.contrib.admin.views.decorators import staff_member_required
-from .models import Registrant
-
-from django.http import JsonResponse, Http404
-from django.views.decorators.http import require_POST
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .forms import QuickRegistrationForm
 from .forms import RegistrantForm
-
-from django.http import HttpResponse, JsonResponse
-from django.templatetags.static import static
-from django.contrib.staticfiles import finders
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
-)
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from django.http import JsonResponse
-import os
+from .utils import *
 
 
 def home(request):
@@ -134,18 +121,18 @@ def home(request):
         def make_table(data):
             t = Table(data, colWidths=[70, 170, 220])
             t.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#1E6B52")),
-                ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-                ('ALIGN', (0,0), (-1,-1), 'LEFT'),
-                ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0,0), (-1,0), 11),
-                ('TOPPADDING', (0,0), (-1,0), 4),
-                ('BOTTOMPADDING', (0,0), (-1,0), 4),
-                ('FONTSIZE', (0,1), (-1,-1), 9.5),
-                ('TOPPADDING', (0,1), (-1,-1), 2),
-                ('BOTTOMPADDING', (0,1), (-1,-1), 2),
-                ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
-                ('GRID', (0,0), (-1,-1), 0.25, colors.grey),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1E6B52")),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 11),
+                ('TOPPADDING', (0, 0), (-1, 0), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 4),
+                ('FONTSIZE', (0, 1), (-1, -1), 9.5),
+                ('TOPPADDING', (0, 1), (-1, -1), 2),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 2),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+                ('GRID', (0, 0), (-1, -1), 0.25, colors.grey),
             ]))
             return t
 
@@ -209,8 +196,7 @@ def home(request):
         doc.build(elements, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
         return response
 
-   # 🟢 END DOWNLOAD FEATURE
-
+    # 🟢 END DOWNLOAD FEATURE
 
     # 🔹 Existing registration logic (unchanged)
     if request.method == 'POST':
@@ -259,14 +245,6 @@ def home(request):
         'form': form,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
-
-
-
-
-
-
-
-
 
 
 import qrcode
@@ -383,9 +361,6 @@ def generate_badge(request, registrant_id):
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
 
-
-
-
 @staff_member_required
 def unsubscribe_view(request, token):
     try:
@@ -431,6 +406,7 @@ def dashboard_stats(request):
         "registrations_over_time": list(daily),
         "updates_percent": updates_percent,
     })
+
 
 # === Excel Export ===
 @staff_member_required
@@ -551,7 +527,6 @@ def export_registrants_pdf(request):
     return response
 
 
-
 @staff_member_required
 def print_registrants(request):
     registrants = Registrant.objects.all().order_by("created_at")
@@ -583,22 +558,6 @@ def dashboard_view(request):
     }
     return render(request, "summit/dashboard.html", context)
 
-
-# @staff_member_required
-# def dashboard_view(request):
-#     total_users = Registration.objects.count()
-#     updates_count = Registration.objects.filter(updates_opt_in=True).count()
-
-#     registrants = Registration.objects.all().order_by('-created_at')  # newest first
-
-#     context = {
-#         "total_users": total_users,
-#         "updates_count": updates_count,
-#         "registrants": registrants,
-#     }
-#     return render(request, "summit/dashboard_new.html", context)
-
-
 # Endpoint for charts (AJAX/React)
 @staff_member_required
 def dashboard_data(request):
@@ -620,9 +579,11 @@ def dashboard_data(request):
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
+
 class SummitLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
 
 @staff_member_required
 def about(request):
@@ -650,8 +611,10 @@ def delete_registrant(request, pk):
 def privacy(request):
     return render(request, "summit/privacy.html")
 
+
 def not_found(request):
     return render(request, "summit/404.html")
+
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
@@ -661,14 +624,12 @@ def mailme_view(request):
 def speakers(request):
     return render(request, "summit/speakers.html")
 
+
 def media(request):
     return render(request, "summit/gallery.html")
 
 
-
-
 # ---------------------------
-
 
 
 def register(request):
@@ -711,128 +672,37 @@ def sendMail(request):
     if request.method == "POST":
         subject = request.POST.get("subject")
         message = request.POST.get("message")
-        email = request.POST.get("email")
+        emails = request.POST.getlist("recipient_emails")
 
-        if not subject or not message or not email:
-            return JsonResponse({'status': 'error', 'message': 'All fields are required.'})
+        # Case 1: If getlist() found nothing (maybe input is a text field)
+        if not emails:
+            emails = request.POST.get("recipient_emails")
 
-        # Example logic (replace with actual email logic)
+        # Case 2: Handle "all"
+        if emails == "all" or (isinstance(emails, list) and "all" in emails):
+            emails = list(Registrant.objects.values_list('email', flat=True))
+
+        # Case 3: If it's a string, split it into a list (comma-separated)
+        elif isinstance(emails, str):
+            emails = [e.strip() for e in emails.split(",") if e.strip()]
+
+        # Case 4: Clean up any list input
+        else:
+            emails = [e.strip() for e in emails if e.strip()]
+
         try:
-            return JsonResponse({'status': 'success', 'message': f'Email sent to {email} successfully!'})
+            # Send to all recipients in one go
+            sendmailer(subject, message, emails)
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Email(s) sent successfully to {len(emails)} recipient(s).'
+            })
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Failed to send email: {str(e)}'})
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to send email: {str(e)}'
+            })
 
+    # Invalid request method
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
-
-
-
-
-
-
-
-# from rest_framework import viewsets, permissions
-# from .models import *
-# from .serializers import *
-
-# # All endpoints are PUBLIC for now (AllowAny)
-
-# class EventViewSet(viewsets.ModelViewSet):
-#     queryset = Event.objects.all()
-#     serializer_class = EventSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class TrackViewSet(viewsets.ModelViewSet):
-#     queryset = Track.objects.all()
-#     serializer_class = TrackSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class SessionViewSet(viewsets.ModelViewSet):
-#     queryset = Session.objects.all()
-#     serializer_class = SessionSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class SpeakerViewSet(viewsets.ModelViewSet):
-#     queryset = Speaker.objects.all()
-#     serializer_class = SpeakerSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class ExhibitorViewSet(viewsets.ModelViewSet):
-#     queryset = Exhibitor.objects.all()
-#     serializer_class = ExhibitorSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class SponsorViewSet(viewsets.ModelViewSet):
-#     queryset = Sponsor.objects.all()
-#     serializer_class = SponsorSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class RegistrationViewSet(viewsets.ModelViewSet):
-#     queryset = Registration.objects.all()
-#     serializer_class = RegistrationSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class TicketViewSet(viewsets.ModelViewSet):
-#     queryset = Ticket.objects.all()
-#     serializer_class = TicketSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class OrderViewSet(viewsets.ModelViewSet):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-
-#     def perform_create(self, serializer):
-#         order = serializer.save()
-#         # Issue tickets automatically for each item in order
-#         Ticket.objects.create(
-#             order=order,
-#             ticket_type=order.ticket_type,  # or from your serializer input
-#             holder=order.registration
-#         )
-
-#     permission_classes = [permissions.AllowAny]
-
-# class PaymentViewSet(viewsets.ModelViewSet):
-#     queryset = Payment.objects.all()
-#     serializer_class = PaymentSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class ConnectionViewSet(viewsets.ModelViewSet):
-#     queryset = ConnectionRequest.objects.all()
-#     serializer_class = ConnectionSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class ChatMessageViewSet(viewsets.ModelViewSet):
-#     queryset = ChatMessage.objects.all()
-#     serializer_class = ChatMessageSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class PollViewSet(viewsets.ModelViewSet):
-#     queryset = Poll.objects.all()
-#     serializer_class = PollSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class PollOptionViewSet(viewsets.ModelViewSet):
-#     queryset = PollOption.objects.all()
-#     serializer_class = PollOptionSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class PollVoteViewSet(viewsets.ModelViewSet):
-#     queryset = PollResponse.objects.all()
-#     serializer_class = PollVoteSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class QnAViewSet(viewsets.ModelViewSet):
-#     queryset = Question.objects.all()
-#     serializer_class = QnASerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class FeedbackViewSet(viewsets.ModelViewSet):
-#     queryset = Feedback.objects.all()
-#     serializer_class = FeedbackSerializer
-#     permission_classes = [permissions.AllowAny]
-
-# class NotificationViewSet(viewsets.ModelViewSet):
-#     queryset = Notification.objects.all()
-#     serializer_class = NotificationSerializer
-#     permission_classes = [permissions.AllowAny]
-

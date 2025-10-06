@@ -46,7 +46,7 @@ urlpatterns = [
     path("export/excel/", views.export_registrants_excel, name="export_excel"),
     path('', views.home, name='home'),
 
-    path('auth_send_mail/', views.sendMail, name='auth_send_mail'),
+    path('sendMail/', views.sendMail, name='sendMail'),
 
     path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
     
