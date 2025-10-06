@@ -28,52 +28,55 @@
 
 <body class="tickets-page">
 
-<header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="#hero" class="logo d-flex align-items-center">
-        <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
-          <div class="logo-divider mx-2"></div>
-        <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
-      </a>
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
+        </a>
 
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="#intro">ABOUT</a></li>
+            <li><a href="#register">REGISTER</a></li>
+            <li><a href="#schedule">AGENDA</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li><a href="#features">FEATURES</a></li>
+            <li><a href="#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#gallery">MEDIA</a></li>
+                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>  
+            <li class="d-none d-md-block">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-          <li><a href="{% url 'home' %}">ABOUT</a></li>
-          <li><a href="{% url 'home' %}">REGISTER</a></li>
-          <li><a href="{% url 'home' %}">AGENDA</a></li>
-          <li><a href="{% url 'home' %}">SPEAKERS</a></li>
-          <li><a href="{% url 'home' %}">FEATURES</a></li>
-          <li><a href="{% url 'home' %}">PARTNERS</a></li>
-          <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#gallery">MEDIA</a></li>
-              <li><a href="{% url 'not_found' %}">VENUE</a></li>
-              <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-            </ul>
-          </li>  
-        </ul>
-        <div class="nav-extras d-flex align-items-center gap-2">
-          <!-- Mobile nav toggle -->
-           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </ul>
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 
-          <!-- Translate Globe (mobile only) -->
-          <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
 
-          <!-- Translation widget (popover, hidden by default) -->
-          <div class="translate-popover d-none">
-            <div class="gtranslate_wrapper"></div>
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
+        <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
 
-      <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
-
-    </div>
-</header>
+      </div>
+  </header>
 
   <main class="main">
 
