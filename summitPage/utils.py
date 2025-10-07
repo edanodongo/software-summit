@@ -15,37 +15,53 @@ from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
 
 
-
-
 def sendmailer(subject, message, recipients):
     """
-    Send email to one or more recipients.
-    - subject: Email subject
-    - message: Plain/HTML message body
-    - recipients: List of email addresses
+    Send email to one or more recipients, with logos and formatted HTML.
     """
-    plain_message = message
-    html_message = message
-
-    # ✅ Make sure recipients is a list
     if isinstance(recipients, str):
         recipients = [recipients]
 
     try:
-        email_obj = EmailMultiAlternatives(
-            subject,
-            plain_message,
-            from_email,
-            recipients,  # list of emails
-        )
+        # --- Logos section ---
+        logo_section = """
+        <div style="text-align:center; margin-bottom:20px;">
+          <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png"
+               alt="MINISTRY LOGO" style="height:70px;"><br>
+          <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png"
+               alt="Summit Logo" style="height:60px;">
+        </div>
+        """
+
+        # --- Combine HTML ---
+        html_message = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            {logo_section}
+            <div style="margin: 20px auto; max-width: 600px;">
+                {message}
+            </div>
+            <hr style="margin-top: 40px;">
+            <p style="font-size: 13px; color: #777; text-align:center;">
+                This email was sent by the Software Summit Secretariat.
+            </p>
+        </body>
+        </html>
+        """
+
+        # --- Plain text fallback ---
+        plain_message = message
+
+        # --- Send email ---
+        email_obj = EmailMultiAlternatives(subject, plain_message, from_email, recipients)
         email_obj.attach_alternative(html_message, "text/html")
-        email_obj.mixed_subtype = "related"  # for inline HTML images
+        email_obj.mixed_subtype = "related"
         email_obj.send(fail_silently=False)
 
-        print(f"✅ Email sent successfully to: {', '.join(recipients)}")
+        print(f" Email sent successfully to: {', '.join(recipients)}")
 
     except Exception as e:
-        print("❌ Email sending failed:", str(e))
+        print(" Email sending failed:", str(e))
         traceback.print_exc()
 
 def send_confirmation_email(registrant):
