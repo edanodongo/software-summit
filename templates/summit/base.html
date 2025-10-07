@@ -38,6 +38,22 @@
             <h4 class="text-white mb-4"><i class="fas fa-chart-line me-2"></i> Summit</h4>
             <a href="{% url 'dashboard' %}"><i class="fas fa-home me-2"></i> Dashboard</a>
             <a href="{% url 'mailme' %}"><i class="fas fa-envelope me-2"></i> Email client</a>
+            <a href="{% url 'gallery_dashboard' %}">
+                <i class="fas fa-images me-2"></i> Gallery Dashboard
+            </a>
+
+            <a href="{% url 'partner_dashboard' %}">
+                <i class="fas fa-handshake me-2"></i> Partner Dashboard
+            </a>
+
+            <a href="{% url 'dashboard_home' %}">
+                <i class="fas fa-calendar-alt me-2"></i> Agenda Dashboard
+            </a>
+
+            <a href="{% url 'speaker_dashboard' %}">
+                <i class="fas fa-microphone me-2"></i> Speaker Dashboard
+            </a>
+
 
             <!-- Logout -->
             <form method="post" action="{% url 'logout' %}" class="mt-2">

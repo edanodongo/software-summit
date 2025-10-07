@@ -241,8 +241,18 @@ def home(request):
     else:
         form = QuickRegistrationForm()
 
+
+    
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by("date")
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
+
+
     return render(request, "summit/home.html", {
         'form': form,
+        'gallery_items': gallery_items,
+        'partners': partners,
+        'days': days,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
@@ -607,30 +617,24 @@ def delete_registrant(request, pk):
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
-
 def privacy(request):
     return render(request, "summit/privacy.html")
 
-
 def not_found(request):
     return render(request, "summit/404.html")
-
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "summit/mailme.html", {"emails": emails})
 
-
 def speakers(request):
-    return render(request, "summit/speakers.html")
-
+    speakers = SummitSpeaker.objects.all()
+    return render(request, "summit/speakers.html", {"speakers": speakers})
 
 def media(request):
     return render(request, "summit/gallery.html")
 
-
 # ---------------------------
-
 
 def register(request):
     if request.method == "POST":
@@ -706,3 +710,301 @@ def sendMail(request):
 
     # Invalid request method
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from .models import SummitGallery
+from .forms import GalleryForm
+
+def gallery_dashboard(request):
+    """Display all gallery images and allow adding new ones."""
+    gallery_items = SummitGallery.objects.all()
+    form = GalleryForm()
+
+    if request.method == 'POST':
+        form = GalleryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Gallery image added successfully!")
+            return redirect('gallery_dashboard')
+        else:
+            messages.error(request, "Error adding gallery image. Please check the form.")
+
+    return render(request, 'gallery/gallery_dashboard.html', {
+        'gallery_items': gallery_items,
+        'form': form,
+    })
+
+
+def gallery_edit(request, pk):
+    """Edit a specific gallery image."""
+    item = get_object_or_404(SummitGallery, pk=pk)
+    if request.method == 'POST':
+        form = GalleryForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Gallery image updated successfully!")
+            return redirect('gallery_dashboard')
+        else:
+            messages.error(request, "Error updating gallery image.")
+    else:
+        form = GalleryForm(instance=item)
+
+    return render(request, 'gallery/gallery_edit.html', {'form': form, 'item': item})
+
+
+@require_POST
+def gallery_delete(request, pk):
+    """Delete a gallery item."""
+    item = get_object_or_404(SummitGallery, pk=pk)
+    item.delete()
+    messages.success(request, "Gallery image deleted successfully!")
+    return redirect('gallery_dashboard')
+
+
+
+# Speaker
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import SummitSpeaker
+from .forms import SpeakerForm
+
+
+def speaker_dashboard(request):
+    """Speaker management dashboard."""
+    speakers = SummitSpeaker.objects.all().order_by('full_name')
+    form = SpeakerForm()
+
+    # ✅ Handle new speaker creation
+    if request.method == "POST":
+        form = SpeakerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✅ Speaker added successfully!")
+            return redirect("speaker_dashboard")
+        else:
+            messages.error(request, "⚠️ Please correct the errors below.")
+
+    context = {
+        "speakers": speakers,
+        "form": form
+    }
+    return render(request, "speaker/speaker_dashboard.html", context)
+
+def speaker_create(request):
+    if request.method == "POST":
+        form = SpeakerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Speaker added successfully!")
+            return redirect("speaker_dashboard")
+    else:
+        form = SpeakerForm()
+    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker"})
+
+def update_speaker(request, pk):
+    speaker = get_object_or_404(SummitSpeaker, pk=pk)
+    if request.method == "POST":
+        form = SpeakerForm(request.POST, request.FILES, instance=speaker)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Speaker details updated successfully!")
+            return redirect("speaker_dashboard")
+    else:
+        form = SpeakerForm(instance=speaker)
+    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"})
+
+def delete_speaker(request, pk):
+    speaker = get_object_or_404(SummitSpeaker, pk=pk)
+    if request.method == "POST":
+        speaker.delete()
+        messages.success(request, "Speaker deleted successfully!")
+        return redirect("speaker_dashboard")
+    return render(request, "speaker/confirm_delete.html", {"speaker": speaker})
+
+
+
+# Partner
+
+#---------------------------------
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import SummitPartner
+
+def partner_dashboard(request):
+    partners = SummitPartner.objects.all().order_by("order")
+    return render(request, "partner/partner_dashboard.html", {"partners": partners})
+
+
+def save_partner(request):
+    if request.method == "POST":
+        partner_id = request.POST.get("partner_id")
+        name = request.POST.get("name")
+        website = request.POST.get("website")
+        order = request.POST.get("order", 0)
+        is_active = request.POST.get("is_active") == "on"
+        logo = request.FILES.get("logo")
+
+        if partner_id:
+            partner = get_object_or_404(SummitPartner, pk=partner_id)
+            partner.name = name
+            partner.website = website
+            partner.order = order
+            partner.is_active = is_active
+            if logo:
+                partner.logo = logo
+            partner.save()
+            messages.success(request, "✅ Partner updated successfully!")
+        else:
+            if not logo:
+                messages.error(request, "Please upload a logo before saving.")
+                return redirect("partner_dashboard")
+
+            SummitPartner.objects.create(
+                name=name,
+                logo=logo,
+                website=website,
+                order=order,
+                is_active=is_active,
+            )
+            messages.success(request, "✅ Partner added successfully!")
+
+        return redirect("partner_dashboard")
+
+
+def delete_partner(request, partner_id):
+    if request.method == "POST":
+        partner = get_object_or_404(SummitPartner, pk=partner_id)
+        partner.delete()
+        messages.success(request, "🗑️ Partner deleted successfully!")
+        return redirect("partner_dashboard")
+
+
+
+
+# Agenda view
+  
+#--------------------------------------------
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
+from .forms import ScheduleDayForm, TimeSlotForm, SessionForm, PanelistForm
+from django.forms import inlineformset_factory
+
+PanelistFormSet = inlineformset_factory(
+    SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
+)
+
+@login_required
+def dashboard_home(request):
+    days = SummitScheduleDay.objects.all()
+    return render(request, "schedule/dashboard_home.html", {"days": days})
+
+
+# ---------------- DAY CRUD ----------------
+@login_required
+def add_day(request):
+    if request.method == "POST":
+        form = ScheduleDayForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✅ Day added successfully.")
+            return redirect("dashboard_home")
+    else:
+        form = ScheduleDayForm()
+    return render(request, "schedule/day_form.html", {"form": form})
+
+@login_required
+def edit_day(request, pk):
+    day = get_object_or_404(SummitScheduleDay, id=pk)
+    if request.method == "POST":
+        form = ScheduleDayForm(request.POST, instance=day)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✅ Day updated successfully.")
+            return redirect("dashboard_home")
+    else:
+        form = ScheduleDayForm(instance=day)
+    return render(request, "schedule/day_form.html", {"form": form, "day": day})
+
+@login_required
+def delete_day(request, pk):
+    day = get_object_or_404(SummitScheduleDay, id=pk)
+    day.delete()
+    messages.warning(request, "🗑️ Day deleted successfully.")
+    return redirect("dashboard_home")
+
+
+# ---------------- TIMESLOT CRUD ----------------
+@login_required
+def add_timeslot(request, day_id):
+    day = get_object_or_404(SummitScheduleDay, id=day_id)
+    if request.method == "POST":
+        form = TimeSlotForm(request.POST)
+        if form.is_valid():
+            timeslot = form.save(commit=False)
+            timeslot.day = day
+            timeslot.save()
+            messages.success(request, "✅ Time slot added successfully.")
+            return redirect("dashboard_home")
+    else:
+        form = TimeSlotForm(initial={"day": day})
+    return render(request, "schedule/timeslot_form.html", {"form": form, "day": day})
+
+
+# ---------------- SESSION CRUD (WITH PANELISTS) ----------------
+@login_required
+def add_session(request, timeslot_id):
+    timeslot = get_object_or_404(SummitTimeSlot, id=timeslot_id)
+    if request.method == "POST":
+        form = SessionForm(request.POST)
+        formset = PanelistFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            session = form.save(commit=False)
+            session.timeslot = timeslot
+            session.save()
+            formset.instance = session
+            formset.save()
+            messages.success(request, "✅ Session and panelists added.")
+            return redirect("dashboard_home")
+    else:
+        form = SessionForm()
+        formset = PanelistFormSet()
+    return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
+
+
+@login_required
+def edit_session(request, pk):
+    session = get_object_or_404(Session, id=pk)
+    if request.method == "POST":
+        form = SessionForm(request.POST, instance=session)
+        formset = PanelistFormSet(request.POST, instance=session)
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+            messages.success(request, "✅ Session updated successfully.")
+            return redirect("dashboard_home")
+    else:
+        form = SessionForm(instance=session)
+        formset = PanelistFormSet(instance=session)
+    return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
+
+
+@login_required
+def delete_session(request, pk):
+    session = get_object_or_404(SummitSession, id=pk)
+    session.delete()
+    messages.warning(request, "🗑️ Session deleted successfully.")
+    return redirect("dashboard_home")

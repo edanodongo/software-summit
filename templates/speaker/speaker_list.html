@@ -1,0 +1,34 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Speakers</h2>
+  <a href="{% url 'speaker_create' %}" class="btn btn-success mb-3">+ Add Speaker</a>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="row">
+    {% for speaker in speakers %}
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <img src="{{ speaker.photo_url }}" class="card-img-top" alt="{{ speaker.full_name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ speaker.full_name }}</h5>
+          <p class="card-text">{{ speaker.position }}<br>{{ speaker.organization }}</p>
+          <p><strong>Topic:</strong> {{ speaker.topic }}</p>
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'update_speaker' speaker.pk %}" class="btn btn-primary btn-sm">Edit</a>
+            <a href="{% url 'delete_speaker' speaker.pk %}" class="btn btn-danger btn-sm">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
