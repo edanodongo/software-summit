@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'summitPage',
     'rest_framework',
-    'ckeditor',
 ]
 
 

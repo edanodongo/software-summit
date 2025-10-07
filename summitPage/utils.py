@@ -1,3 +1,4 @@
+import traceback
 from datetime import datetime
 from email.mime.image import MIMEImage
 from io import BytesIO
@@ -7,9 +8,6 @@ from barcode import Code128
 from barcode.writer import ImageWriter
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-import traceback
-
-
 
 from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
@@ -28,37 +26,36 @@ def sendmailer(subject, message, recipients):
 
         # --- Logos section ---
         logo_section = """
-        <div style="text-align:center; margin-bottom:25px;">
-          <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png"
-               alt="MINISTRY LOGO" style="height:70px; display:block; margin:0 auto;">
-          <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png"
-               alt="Summit Logo" style="height:60px; display:block; margin:10px auto 0;">
-        </div>
-        """
+                <div style="text-align:center; margin-bottom:20px;">
+                  <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png"
+                       alt="MINISTRY LOGO" style="height:70px;"><br>
+                  <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png"
+                       alt="Summit Logo" style="height:60px;">
+                </div>
+                """
 
-        # --- Card-styled message ---
+        # --- Combine HTML ---
         html_message = f"""
-        <html>
-        <body style="background-color:#f7f9fb; padding:30px; font-family: Arial, sans-serif; color:#333;">
-          <div style="max-width:650px; margin:0 auto; background:#fff; border-radius:12px;
-                      box-shadow:0 2px 8px rgba(0,0,0,0.1); overflow:hidden;">
-            <div style="padding:30px;">
-              {logo_section}
-              <div style="font-size:15px; line-height:1.7;">
-                {message}
-              </div>
-            </div>
-          </div>
-          <footer style="text-align:center; font-size:12px; color:#888; margin-top:25px;">
-            <p>&copy; {current_year} Kenya Software Summit.</p>
-            <p>The Ministry of Information, Communications and The Digital Economy</p>
-            <p>6th Floor, Bruce House, Standard Street</p>
-            <p>Email: softwaresummit@ict.go.ke</p>
-            <p>All rights reserved.</p>
-          </footer>
-        </body>
-        </html>
-        """
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    {logo_section}
+                    <div style="margin: 20px auto; max-width: 600px;">
+                        {message}
+                    </div>
+                    <hr style="margin-top: 40px;">
+                    <p style="font-size: 13px; color: #777; text-align:center;">
+                        This email was sent by the Software Summit Secretariat.
+                    </p>
+                    <footer style="text-align:center; font-size:12px; color:#888; margin-top:25px;">
+                        <p>&copy; {current_year} Kenya Software Summit.</p>
+                        <p>The Ministry of Information, Communications and The Digital Economy</p>
+                        <p>6th Floor, Bruce House, Standard Street</p>
+                        <p>Email: softwaresummit@ict.go.ke</p>
+                        <p>All rights reserved.</p>
+                    </footer>
+                </body>
+                </html>
+                """
 
         # --- Plain text fallback ---
         plain_message = message
@@ -75,6 +72,7 @@ def sendmailer(subject, message, recipients):
     except Exception as e:
         print(" Email sending failed:", str(e))
         traceback.print_exc()
+
 
 def send_confirmation_email(registrant):
     subject = "Kenya Software Summit Registration"
@@ -111,7 +109,6 @@ def send_confirmation_email(registrant):
             "Karibu.\n\n"
             "Best regards,\nThe Software Summit Team"
         )
-
 
         # === HTML Email Body ===
         html_message = f"""

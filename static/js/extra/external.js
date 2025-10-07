@@ -4,9 +4,3 @@ $(document).ready(function() {
             width: '100%'
         });
     });
-
-
- document.addEventListener("DOMContentLoaded", function() {
-    ClassicEditor
-      .create(document.querySelector('#editor'))
-  });
