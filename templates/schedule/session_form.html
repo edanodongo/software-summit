@@ -1,0 +1,18 @@
+{% extends "summit/base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3>{{ day|default_if_none:"Add New" }} {{ title|default_if_none:"Item" }}</h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if formset %}
+      {{ formset.management_form }}
+      {% for subform in formset %}
+        {{ subform.as_p }}
+      {% endfor %}
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'dashboard_home' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

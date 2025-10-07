@@ -5597,7 +5597,7 @@ section,
 }
 
 #partners .partner-logo {
-    max-height: 200px;            
+    max-height: 180px;            
     max-width: 400px;              
     object-fit: contain;
     transition: all 0.3s ease;

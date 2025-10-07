@@ -1,0 +1,81 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4 text-center">Partner Management</h2>
+
+  <!-- ✅ Add Partner Form -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-header bg-primary text-white">Add New Partner</div>
+    <div class="card-body">
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-3 align-items-center">
+          <div class="col-md-3">
+            <label class="form-label">Partner Name</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Logo</label>
+            <input type="file" name="logo" accept="image/*" class="form-control" required>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Website (optional)</label>
+            <input type="url" name="website" class="form-control">
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Order</label>
+            <input type="number" name="order" value="0" min="0" class="form-control">
+          </div>
+
+          <div class="col-md-1 text-center">
+            <label class="form-label">Active</label>
+            <input type="checkbox" name="is_active" class="form-check-input" checked>
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add Partner
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ✅ Partner List -->
+  <div class="row g-4">
+    {% for partner in partners %}
+    <div class="col-lg-3 col-md-4 col-sm-6 text-center">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="p-3">
+          <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="img-fluid" style="height:120px; object-fit:contain;">
+        </div>
+        <div class="card-body">
+          <h6 class="fw-bold">{{ partner.name }}</h6>
+          {% if partner.website %}
+          <a href="{{ partner.website }}" target="_blank" class="small text-muted text-decoration-none">
+            Visit Site
+          </a>
+          {% endif %}
+        </div>
+        <div class="card-footer bg-white border-0">
+          <form action="{% url 'delete_partner' partner.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete {{ partner.name }}?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No partners added yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

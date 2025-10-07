@@ -1356,7 +1356,7 @@
 
           </div>
 
-          Download CTA
+           <!-- Download CTA -->
           <div class="text-center">
             <div class="download-cta">
               <h4>Get the Complete Schedule</h4>
@@ -1380,7 +1380,124 @@
 
         </div>
 
+
+        <div class="container">
+
+          <!-- Day Selector -->
+          <div class="schedule-tabs">
+            <ul class="nav nav-pills justify-content-center mb-5">
+              {% for day in days %}
+                <li class="nav-item">
+                  <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="pill"
+                    data-bs-target="#schedule-day{{ day.id }}">
+                    {{ day.title }}
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Schedule Content -->
+          <div class="tab-content schedule-content">
+            {% for day in days %}
+              <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="schedule-day{{ day.id }}">
+                <div class="schedule-timeline">
+
+                  {% for slot in day.timeslots.all %}
+                    <div class="time-slot {% if slot.label|lower == 'break' %}break-slot{% endif %}">
+                      <div class="time-label">
+                        <span class="time">
+                          {% if slot.label %}
+                            {{ slot.label }}
+                          {% else %}
+                            {{ slot.start_time|time:"g:i A" }}
+                          {% endif %}
+                        </span>
+                        {% if slot.duration %}
+                          <span class="duration">{{ slot.duration }}</span>
+                        {% endif %}
+                      </div>
+
+                      <div class="sessions-row">
+                        {% for session in slot.sessions.all %}
+                          <div class="session-card {{ session.session_type|lower }}" colspan="0">
+                            {% if not session.is_break %}
+                              {% if session.session_type %}
+                                <div class="session-type">
+                                  <span>{{ session.get_session_type_display }}</span>
+                                </div>
+                              {% endif %}
+                              <h4>{{ session.title }}</h4>
+                              {% if session.description %}
+                                <p>{{ session.description }}</p>
+                              {% endif %}
+
+                              <div class="session-meta">
+                                {% if session.venue %}
+                                  <span class="venue">{{ session.venue }}</span>
+                                {% endif %}
+                              </div>
+
+                              {% if session.panelists.all %}
+                                <div class="panelists-container">
+                                  {% for panelist in session.panelists.all %}
+                                    <div class="panelist-card">
+                                      {% if panelist.role %}
+                                        <div class="panelist-role">{{ panelist.role }}</div>
+                                      {% endif %}
+                                      {% if panelist.name %}
+                                        <div class="panelist-name">{{ panelist.name }}</div>
+                                      {% endif %}
+                                    </div>
+                                  {% endfor %}
+                                </div>
+                              {% endif %}
+                            {% else %}
+                              <div class="session-type">
+                                <i class="bi bi-cup-hot"></i>
+                                <span>Break</span>
+                              </div>
+                              <h4>{{ session.title }}</h4>
+                            {% endif %}
+                          </div>
+                        {% empty %}
+                          <div class="session-card">
+                            <!-- <h4>No sessions scheduled for this time slot.</h4> -->
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% empty %}
+                    <!-- <p>No time slots added for this day yet.</p> -->
+                  {% endfor %}
+
+                </div>
+              </div><!-- End Day Tab -->
+            {% empty %}
+              <!-- <div class="text-center text-muted py-5">
+                <p>No schedule data available yet.</p>
+              </div> -->
+            {% endfor %}
+          </div>
+
+          <!-- Download CTA
+          <div class="text-center">
+            <div class="download-cta">
+              <h4>Get the Complete Schedule</h4>
+              <p>Download the full agenda as PDF or add events to your calendar</p>
+              <div class="cta-buttons">
+                <a href="?download=schedule" class="btn btn-primary">
+                  <i class="bi bi-download"></i> Download Full Schedule (PDF)
+                </a>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+
       </section><!-- /Schedule Section -->
+
+
 
 
       <!-- Features Section -->
@@ -1620,11 +1737,36 @@
                           class="partner-logo">
                   </div>
                   <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/afralti_logo.png' %}" loading="lazy" alt="AFRALTI" class="partner-logo">
+                      <img src="{% static 'images/partners/atu_logo.png' %}" loading="lazy" alt="ATU" class="partner-logo">
+                  </div>
+                  <div class="partner-logo-container">
+                      <img src="{% static 'images/partners/itu_logo.png' %}" loading="lazy" alt="ITU" class="partner-logo">
                   </div>
                   <div class="partner-logo-container">
                       <img src="{% static 'images/partners/kaist_logo.png' %}" loading="lazy" alt="KAIST" class="partner-logo">
                   </div>
+
+                  {% for partner in partners %}
+                      {% if partner.is_active %}
+                          <div class="partner-logo-container">
+                              {% if partner.website %}
+                                  <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer">
+                                      <img src="{{ partner.logo.url }}" 
+                                          alt="{{ partner.name }}" 
+                                          class="partner-logo"
+                                          loading="lazy">
+                                  </a>
+                              {% else %}
+                                  <img src="{{ partner.logo.url }}" 
+                                      alt="{{ partner.name }}" 
+                                      class="partner-logo"
+                                      loading="lazy">
+                              {% endif %}
+                          </div>
+                      {% endif %}
+                  {% empty %}
+                      <!-- <p class="text-muted">No partners available yet.</p> -->
+                  {% endfor %}
               </div>
           </div>
       </section>
@@ -1731,6 +1873,35 @@
                           </div>
                       </div>
                   </div><!-- End Gallery Item -->
+
+
+                  {% for item in gallery_items %}
+                    {% if item.is_active %}
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="gallery-item h-100">
+                          <img 
+                            src="{{ item.image.url }}" 
+                            loading="lazy" 
+                            class="img-fluid rounded shadow-sm" 
+                            alt="{{ item.title|default:'Event Image' }}"
+                          >
+                          <div class="gallery-links d-flex align-items-center justify-content-center">
+                            <a 
+                              href="{{ item.image.url }}" 
+                              class="glightbox preview-link" 
+                              title="{{ item.title|default:'Event Photo' }}"
+                            >
+                              <i class="bi bi-arrows-angle-expand"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% empty %}
+                    <!-- <div class="col-12 text-center">
+                      <p class="text-muted mt-3">No event highlights available yet. Please check back soon!</p>
+                    </div> -->
+                  {% endfor %}
 
               </div>
 

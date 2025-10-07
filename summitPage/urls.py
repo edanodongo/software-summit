@@ -51,4 +51,41 @@ urlpatterns = [
     path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
     
     # path("api/", include(router.urls)),
+
+
+
+
+    #SHEDULE 
+
+    path("schedule/home", views.dashboard_home, name="dashboard_home"),       
+    # Day CRUD
+    path("day/add/", views.add_day, name="add_day"),
+    path("day/<int:pk>/edit/", views.edit_day, name="edit_day"),
+    path("day/<int:pk>/delete/", views.delete_day, name="delete_day"),
+    # Timeslot CRUD
+    path("timeslot/add/<int:day_id>/", views.add_timeslot, name="add_timeslot"),
+    # Session CRUD (with panelists)
+    path("session/add/<int:timeslot_id>/", views.add_session, name="add_session"),
+    path("session/<int:pk>/edit/", views.edit_session, name="edit_session"),
+    path("session/<int:pk>/delete/", views.delete_session, name="delete_session"),
+
+
+    #SPEAKERS
+
+    path("dashboard/speakers/", views.speaker_dashboard, name="speaker_dashboard"),
+    path("speakers/add/", views.speaker_create, name="speaker_create"),
+    path("dashboard/speakers/<uuid:pk>/edit/", views.update_speaker, name="update_speaker"),
+    path("dashboard/speakers/<uuid:pk>/delete/", views.delete_speaker, name="delete_speaker"),
+
+    #PARTNERS
+
+    path("partners/dashboard/", views.partner_dashboard, name="partner_dashboard"),
+    path("partners/save/", views.save_partner, name="save_partner"),
+    path("partners/delete/<uuid:partner_id>/", views.delete_partner, name="delete_partner"),
+
+    #GALLERY
+
+    path('gallery-dashboard/', views.gallery_dashboard, name='gallery_dashboard'),
+    path('gallery/edit/<int:pk>/', views.gallery_edit, name='gallery_edit'),
+    path('gallery/delete/<int:pk>/', views.gallery_delete, name='gallery_delete'),
 ]
