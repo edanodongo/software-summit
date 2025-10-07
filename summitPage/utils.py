@@ -17,7 +17,7 @@ current_year = datetime.now().year
 
 def sendmailer(subject, message, recipients):
     """
-    Send email to one or more recipients, with logos and formatted HTML.
+    Send a styled email with logos and message card.
     """
     if isinstance(recipients, str):
         recipients = [recipients]
@@ -25,26 +25,38 @@ def sendmailer(subject, message, recipients):
     try:
         # --- Logos section ---
         logo_section = """
-        <div style="text-align:center; margin-bottom:20px;">
+        <div style="text-align:center; margin-bottom:25px;">
           <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png"
-               alt="MINISTRY LOGO" style="height:70px;"><br>
+               alt="MINISTRY LOGO" style="height:70px; display:block; margin:0 auto;">
           <img src="https://Sylvester976.github.io/geoclock/static/images/summit_logo.png"
-               alt="Summit Logo" style="height:60px;">
+               alt="Summit Logo" style="height:60px; display:block; margin:10px auto 0;">
         </div>
         """
 
-        # --- Combine HTML ---
+        # --- Card-styled message ---
         html_message = f"""
         <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-            {logo_section}
-            <div style="margin: 20px auto; max-width: 600px;">
+        <body style="background-color:#f7f9fb; padding:30px; font-family: Arial, sans-serif; color:#333;">
+          <div style="max-width:650px; margin:0 auto; background:#fff; border-radius:12px;
+                      box-shadow:0 2px 8px rgba(0,0,0,0.1); overflow:hidden;">
+            <div style="padding:30px;">
+              {logo_section}
+              <div style="font-size:15px; line-height:1.7;">
                 {message}
+              </div>
             </div>
-            <hr style="margin-top: 40px;">
-            <p style="font-size: 13px; color: #777; text-align:center;">
-                This email was sent by the Software Summit Secretariat.
-            </p>
+          </div>
+          <p style="text-align:center; font-size:12px; color:#777; margin-top:25px;">
+            This email was sent by the <strong>Software Summit Secretariat</strong>.<br>
+          </p>
+          <!-- Footer outside card -->
+            <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
+              <p>&copy; {current_year} Kenya Software Summit.</p>
+              <p>The Ministry of Information, Communications and The Digital Economy</p>
+              <p>6th Floor, Bruce House, Standard Street</p>
+              <p>Email: softwaresummit@ict.go.ke</p>
+              <p>All rights reserved.</p>
+            </footer>
         </body>
         </html>
         """
@@ -52,7 +64,7 @@ def sendmailer(subject, message, recipients):
         # --- Plain text fallback ---
         plain_message = message
 
-        # --- Send email ---
+        # --- Compose & send ---
         email_obj = EmailMultiAlternatives(subject, plain_message, from_email, recipients)
         email_obj.attach_alternative(html_message, "text/html")
         email_obj.mixed_subtype = "related"
