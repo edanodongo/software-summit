@@ -36,3 +36,7 @@ body {
 #registrants-table tfoot {
     display: table-header-group; /* moves filters below headers */
 }
+
+.ck-editor__editable {
+  min-height: 300px;
+}

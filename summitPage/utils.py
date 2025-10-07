@@ -18,11 +18,14 @@ current_year = datetime.now().year
 def sendmailer(subject, message, recipients):
     """
     Send a styled email with logos and message card.
+    All recipients are hidden using BCC.
     """
     if isinstance(recipients, str):
         recipients = [recipients]
 
     try:
+        current_year = datetime.now().year
+
         # --- Logos section ---
         logo_section = """
         <div style="text-align:center; margin-bottom:25px;">
@@ -46,17 +49,13 @@ def sendmailer(subject, message, recipients):
               </div>
             </div>
           </div>
-          <p style="text-align:center; font-size:12px; color:#777; margin-top:25px;">
-            This email was sent by the <strong>Software Summit Secretariat</strong>.<br>
-          </p>
-          <!-- Footer outside card -->
-            <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-              <p>&copy; {current_year} Kenya Software Summit.</p>
-              <p>The Ministry of Information, Communications and The Digital Economy</p>
-              <p>6th Floor, Bruce House, Standard Street</p>
-              <p>Email: softwaresummit@ict.go.ke</p>
-              <p>All rights reserved.</p>
-            </footer>
+          <footer style="text-align:center; font-size:12px; color:#888; margin-top:25px;">
+            <p>&copy; {current_year} Kenya Software Summit.</p>
+            <p>The Ministry of Information, Communications and The Digital Economy</p>
+            <p>6th Floor, Bruce House, Standard Street</p>
+            <p>Email: softwaresummit@ict.go.ke</p>
+            <p>All rights reserved.</p>
+          </footer>
         </body>
         </html>
         """
@@ -65,12 +64,13 @@ def sendmailer(subject, message, recipients):
         plain_message = message
 
         # --- Compose & send ---
-        email_obj = EmailMultiAlternatives(subject, plain_message, from_email, recipients)
+        # Send to yourself in "To" field, hide recipients in BCC
+        email_obj = EmailMultiAlternatives(subject, plain_message, from_email, [from_email], bcc=recipients)
         email_obj.attach_alternative(html_message, "text/html")
         email_obj.mixed_subtype = "related"
         email_obj.send(fail_silently=False)
 
-        print(f" Email sent successfully to: {', '.join(recipients)}")
+        print(f" Email sent successfully to {len(recipients)} recipients (hidden).")
 
     except Exception as e:
         print(" Email sending failed:", str(e))
