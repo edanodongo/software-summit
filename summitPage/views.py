@@ -25,6 +25,8 @@ from rest_framework.response import Response
 from .forms import QuickRegistrationForm
 from .forms import RegistrantForm
 from .utils import *
+from .serializers_new import serialize_registrant
+from .decorators import require_api_key
 
 
 def home(request):
@@ -1008,3 +1010,20 @@ def delete_session(request, pk):
     session.delete()
     messages.warning(request, "🗑️ Session deleted successfully.")
     return redirect("dashboard_home")
+
+
+# registration API function
+@require_api_key
+def get_registrants(request):
+    """
+    GET /reg-service/registrations/
+    Returns a list of registered participants for Patherways Technologies
+    """
+    if request.method != "GET":
+        return JsonResponse({"detail": "Method not allowed."}, status=405)
+
+    registrants = Registrant.objects.all().order_by("-created_at")
+
+    data = [serialize_registrant(r) for r in registrants]
+
+    return JsonResponse({"count": len(data), "registrants": data}, safe=False)
