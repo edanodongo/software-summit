@@ -55,3 +55,4 @@ _pycache_/
 django.txt
 *.sqlite3
 backup/*
+uploads/

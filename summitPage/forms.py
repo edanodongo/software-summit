@@ -1,9 +1,30 @@
 from django import forms
 from .models import Registrant
-from .models import Registration
+from django.core.exceptions import ValidationError
 
 
 class QuickRegistrationForm(forms.ModelForm):
+    # Enforce required fields
+    national_id_number = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'National ID Number',
+        })
+    )
+
+    national_id_scan = forms.FileField(
+        required=True,
+        widget=forms.FileInput(attrs={'class': 'form-control'}),
+        label="Upload Scanned National ID (JPG/PDF)"
+    )
+
+    passport_photo = forms.FileField(
+        required=True,
+        widget=forms.FileInput(attrs={'class': 'form-control'}),
+        label="Upload Passport Photo (JPG/PDF)"
+    )
+
     interests = forms.MultipleChoiceField(
         choices=Registrant.INTEREST_CHOICES,
         widget=forms.CheckboxSelectMultiple,
@@ -45,6 +66,45 @@ class QuickRegistrationForm(forms.ModelForm):
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'accessibility_needs': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
         }
+
+    # ✅ File validation helper
+    def validate_file(self, file, allowed_extensions):
+        if not file:
+            return
+        max_size_mb = 5
+        if file.size > max_size_mb * 1024 * 1024:
+            raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
+
+        ext = file.name.split('.')[-1].lower()
+        if ext not in allowed_extensions:
+            allowed = ", ".join(allowed_extensions)
+            raise ValidationError(f"Unsupported file format. Allowed types: {allowed}")
+
+    # Individual field validators
+    def clean_national_id_scan(self):
+        file = self.cleaned_data.get("national_id_scan")
+        if not file:
+            raise ValidationError("Please upload your scanned national ID.")
+        self.validate_file(file, allowed_extensions=["jpg", "jpeg", "png", "pdf"])
+        return file
+
+    def clean_passport_photo(self):
+        file = self.cleaned_data.get("passport_photo")
+        if not file:
+            raise ValidationError("Please upload your passport photo.")
+        self.validate_file(file, allowed_extensions=["jpg", "jpeg", "png", "pdf"])
+        return file
+
+    def clean_national_id_number(self):
+        id_number = self.cleaned_data.get('national_id_number', '').strip()
+        if not id_number:
+            raise ValidationError("Please enter your National ID number.")
+        if not id_number.isdigit():
+            raise ValidationError("National ID number must contain only digits.")
+        if len(id_number) < 6:
+            raise ValidationError("Please enter a valid National ID number.")
+        return id_number
+
 
     def clean(self):
         cleaned_data = super().clean()

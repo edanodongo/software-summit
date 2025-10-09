@@ -325,27 +325,38 @@ def generate_badge(request, registrant_id):
         logo_y = height - (header_height / 2 + logo_height / 2) + 2
         c.drawImage(logo, 12, logo_y, width=logo_width, height=logo_height, mask='auto')
 
-    # --- Summit Title (aligned with logo center) ---
+    # --- Summit Title ---
     c.setFillColor(colors.whitesmoke)
     c.setFont("Helvetica-Bold", 10)
-    title_y = height - (header_height / 2) + 3  # vertical alignment fix
+    title_y = height - (header_height / 2) + 3
     c.drawString(80, title_y, "Kenya Software Summit 2025")
+
+    # --- Add Passport Photo (if available) ---
+    if registrant.passport_photo and hasattr(registrant.passport_photo, 'path'):
+        try:
+            photo_path = registrant.passport_photo.path
+            photo = ImageReader(photo_path)
+            photo_width, photo_height = 50, 50
+            c.drawImage(photo, width - 65, height - header_height - photo_height - 5,
+                        width=photo_width, height=photo_height, mask='auto')
+        except Exception as e:
+            print("❌ Error loading passport photo:", e)
 
     # --- Info Section ---
     c.setFillColor(colors.black)
     y_start = height - header_height - 15
 
     c.setFont("Helvetica-Bold", 9)
-    c.drawCentredString(width / 2, y_start, full_name[:45])
+    c.drawCentredString(width / 2 - 10, y_start, full_name[:45])
 
     c.setFont("Helvetica", 8)
-    c.drawCentredString(width / 2, y_start - 12, org_type[:55])
-    c.drawCentredString(width / 2, y_start - 24, job_title[:55])
+    c.drawCentredString(width / 2 - 10, y_start - 12, org_type[:55])
+    c.drawCentredString(width / 2 - 10, y_start - 24, job_title[:55])
 
     if interests:
         c.setFont("Helvetica-Oblique", 7)
         text = interests[:70] + ("..." if len(interests) > 70 else "")
-        c.drawCentredString(width / 2, y_start - 38, text)
+        c.drawCentredString(width / 2 - 10, y_start - 38, text)
 
     # --- Divider Line ---
     c.setStrokeColor(colors.lightgrey)
