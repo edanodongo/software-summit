@@ -232,207 +232,208 @@
 })();
 
 
-
-// Form submission with AJAX
 document.addEventListener("DOMContentLoaded", () => {
+  // =====================================================
+  // 🔹 ELEMENT REFERENCES
+  // =====================================================
   const form = document.getElementById("registration-form");
   const submitBtn = document.getElementById("submit-btn");
   const alertContainer = document.getElementById("alert-container");
 
-  // --- Get wrapper divs ---
-  const otherOrgWrapper = document.getElementById("other-org-type");
   const otherInterestWrapper = document.getElementById("other-interest");
-
-  // --- Get form elements ---
   const orgTypeSelect = document.getElementById("id_organization_type");
   const otherOrgInput = document.getElementById("id_other_organization_type");
 
-  const interestCheckboxes = document.querySelectorAll(
-    "#id_interests input[type=checkbox]"
-  );
+  const interestCheckboxes = document.querySelectorAll("#id_interests input[type=checkbox]");
   const otherInterestInput = document.getElementById("id_other_interest");
 
-  // --- Utility to toggle visibility ---
-  function toggleVisibility(wrapper, input, show) {
+  // =====================================================
+  // 🔹 UTILITY FUNCTIONS
+  // =====================================================
+  const toggleVisibility = (wrapper, input, show) => {
     if (!wrapper || !input) return;
-    if (show) {
-      wrapper.style.display = "block";
-      input.setAttribute("required", "required");
-    } else {
-      wrapper.style.display = "none";
-      input.removeAttribute("required");
-      input.value = ""; // clear hidden field
-    }
-  }
+    wrapper.style.display = show ? "block" : "none";
+    show ? input.setAttribute("required", "required") : input.removeAttribute("required");
+    if (!show) input.value = "";
+  };
 
-  // --- Handle Organization Type ---
-  function handleOrgTypeChange() {
-    if (orgTypeSelect && orgTypeSelect.value) {
-      toggleVisibility(otherOrgWrapper, otherOrgInput, true);
-    } else {
-      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
-    }
-  }
-
-  // --- Handle Interests ---
-  function handleInterestChange() {
-    let othersChecked = Array.from(interestCheckboxes).some(
-      (cb) => cb.checked && cb.value.toLowerCase() === "others"
-    );
-    toggleVisibility(otherInterestWrapper, otherInterestInput, othersChecked);
-  }
-
-  // --- Event listeners ---
-  if (orgTypeSelect) {
-    orgTypeSelect.addEventListener("change", handleOrgTypeChange);
-  }
-  interestCheckboxes.forEach((cb) =>
-    cb.addEventListener("change", handleInterestChange)
-  );
-
-  // --- Run on page load (restore state if editing form) ---
-  handleOrgTypeChange();
-  handleInterestChange();
-
-  // --- Alerts ---
-  function showAlert(message, type = "success") {
+  const showAlert = (message, type = "success") => {
     alertContainer.innerHTML = `
-      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert" id="autoDismissAlert">
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>`;
-  }
 
-// --- AJAX Form Submit ---
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+    // Auto fade out after 4 seconds
+    const alertBox = document.getElementById("autoDismissAlert");
+    if (alertBox) {
+      setTimeout(() => {
+        alertBox.classList.add("fade");
+        alertBox.classList.remove("show");
+        setTimeout(() => alertBox.remove(), 500); // remove after fade
+      }, 8000);
+    }
+  };
 
-  // Clear old errors
-  form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
-  form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
+  // =====================================================
+  // 🔹 FIELD BEHAVIOR
+  // =====================================================
+  const handleInterestChange = () => {
+    const othersChecked = Array.from(interestCheckboxes).some(
+      (cb) => cb.checked && cb.value.toLowerCase() === "others"
+    );
+    toggleVisibility(otherInterestWrapper, otherInterestInput, othersChecked);
+  };
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
+  interestCheckboxes.forEach((cb) => cb.addEventListener("change", handleInterestChange));
+  handleInterestChange();
 
-  fetch(form.action || window.location.href, {
-    method: "POST",
-    body: new FormData(form),
-    headers: {
-      "X-Requested-With": "XMLHttpRequest",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+  // =====================================================
+  // 🔹 AJAX FORM SUBMISSION
+  // =====================================================
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-      if (data.success) {
-        showAlert(data.message, "success");
-        form.reset();
-        handleOrgTypeChange();
-        handleInterestChange();
-      } else if (data.errors) {
-        let firstInvalidEl = null;
+    // Clear old validation errors
+    form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+    form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
-        Object.entries(data.errors).forEach(([field, errors]) => {
-          const inputEl = form.querySelector(`#id_${field}`);
-          if (inputEl) {
-            // Add Bootstrap invalid class
-            inputEl.classList.add("is-invalid");
+    // Disable button and show spinner
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
-            // Append inline error message
-            const errorDiv = document.createElement("div");
-            errorDiv.className = "invalid-feedback";
-            errorDiv.innerText = errors.join(", ");
-            if (!inputEl.nextElementSibling || !inputEl.nextElementSibling.classList.contains("invalid-feedback")) {
-              inputEl.insertAdjacentElement("afterend", errorDiv);
+    // Send form via fetch
+    fetch(form.action || window.location.href, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+
+        if (data.success) {
+          showAlert(data.message, "success");
+
+          // ✅ Reset only non-file fields
+          form.querySelectorAll("input:not([type='file']), textarea, select").forEach((el) => (el.value = ""));
+          handleInterestChange();
+
+          // ✅ Clear file previews
+          ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
+            const input = document.getElementById(id);
+            const preview = document.getElementById(
+              id === "id_national_id_scan" ? "id_scan_preview" : "passport_preview"
+            );
+            if (input) input.value = "";
+            if (preview) preview.innerHTML = "";
+          });
+        } else if (data.errors) {
+          let firstInvalidEl = null;
+
+          Object.entries(data.errors).forEach(([field, errors]) => {
+            const inputEl = form.querySelector(`#id_${field}`);
+            if (inputEl) {
+              inputEl.classList.add("is-invalid");
+              const errorDiv = document.createElement("div");
+              errorDiv.className = "invalid-feedback";
+              errorDiv.innerText = errors.join(", ");
+              if (!inputEl.nextElementSibling?.classList.contains("invalid-feedback")) {
+                inputEl.insertAdjacentElement("afterend", errorDiv);
+              }
+              if (!firstInvalidEl) firstInvalidEl = inputEl;
             }
+          });
 
-            // Track the first invalid element
-            if (!firstInvalidEl) {
-              firstInvalidEl = inputEl;
-            }
+          // Scroll to first invalid input
+          if (firstInvalidEl) {
+            firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstInvalidEl.focus();
           }
-        });
-
-        // 🔹 Scroll to first invalid field
-        if (firstInvalidEl) {
-          firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
-          firstInvalidEl.focus();
+        } else if (data.message) {
+          showAlert(data.message, "warning");
+        } else {
+          showAlert("Something went wrong. Please try again.", "danger");
         }
-      } else if (data.message) {
-        showAlert(data.message, "warning");
-      } else {
-        showAlert("Something went wrong. Please try again.", "danger");
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
+        showAlert("Server error. Please try again later.", "danger");
+      });
+  });
+
+  // =====================================================
+  // 🔹 FILE PREVIEW HANDLER
+  // =====================================================
+  const handlePreview = (inputId, previewId, isImageOnly = true) => {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    if (!input || !preview) return;
+
+    input.addEventListener("change", function () {
+      preview.innerHTML = "";
+      const file = this.files[0];
+      if (!file) return;
+
+      // File size limit (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        preview.innerHTML = `<p class="text-danger">❌ File too large. Max size is 5MB.</p>`;
+        this.value = "";
+        return;
       }
 
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
-      showAlert("Server error. Please try again later.", "danger");
+      const ext = file.name.split(".").pop().toLowerCase();
+      const validExts = isImageOnly ? ["jpg", "jpeg", "png"] : ["jpg", "jpeg", "png", "pdf"];
+
+      if (!validExts.includes(ext)) {
+        preview.innerHTML = `<p class="text-danger">❌ Invalid file type. Allowed: ${validExts.join(", ")}</p>`;
+        this.value = "";
+        return;
+      }
+
+      // Create preview container
+      const container = document.createElement("div");
+      container.classList.add("d-flex", "align-items-center", "gap-3", "mt-2");
+
+      // Generate preview
+      if (ext === "pdf") {
+        container.innerHTML = `<span>📄 <strong>${file.name}</strong> uploaded successfully.</span>`;
+      } else {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.classList.add("img-thumbnail");
+        img.style.maxWidth = "200px";
+        img.style.height = "auto";
+        container.appendChild(img);
+      }
+
+      // Add remove button
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn btn-sm btn-outline-danger";
+      removeBtn.textContent = "Remove file";
+      removeBtn.addEventListener("click", () => {
+        input.value = "";
+        preview.innerHTML = "";
+      });
+      container.appendChild(removeBtn);
+
+      // Append everything
+      preview.appendChild(container);
+      preview.insertAdjacentHTML(
+        "beforeend",
+        `<p class="small text-muted mt-1">✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>`
+      );
     });
+  };
+
+  // Initialize previews
+  handlePreview("id_national_id_scan", "id_scan_preview", false);
+  handlePreview("id_passport_photo", "passport_preview", true);
 });
-
-
-});
-
-  // --- File Preview + Validation ---
-  const idScanInput = document.getElementById("id_national_id_scan");
-  const passportPhotoInput = document.getElementById("id_passport_photo");
-
-  const idScanPreview = document.createElement("div");
-  const passportPreview = document.createElement("div");
-
-  idScanPreview.className = "mt-2 text-muted small";
-  passportPreview.className = "mt-2 text-muted small";
-
-  idScanInput?.insertAdjacentElement("afterend", idScanPreview);
-  passportPhotoInput?.insertAdjacentElement("afterend", passportPreview);
-
-  const MAX_FILE_SIZE_MB = 2;
-  const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
-
-  function handleFilePreview(input, previewContainer, label) {
-    const file = input.files[0];
-    previewContainer.innerHTML = "";
-
-    if (!file) return;
-
-    // --- Validate file type ---
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      previewContainer.innerHTML = `<span class="text-danger">⚠️ Invalid file type. Please upload JPG or PDF only.</span>`;
-      input.value = "";
-      return;
-    }
-
-    // --- Validate file size ---
-    const fileSizeMB = file.size / 1024 / 1024;
-    if (fileSizeMB > MAX_FILE_SIZE_MB) {
-      previewContainer.innerHTML = `<span class="text-danger">⚠️ File too large (${fileSizeMB.toFixed(1)} MB). Max size is ${MAX_FILE_SIZE_MB} MB.</span>`;
-      input.value = "";
-      return;
-    }
-
-    // --- Preview for image ---
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        previewContainer.innerHTML = `
-          <div class="mt-2">
-            <img src="${e.target.result}" alt="${label}" style="max-width: 150px; border-radius: 8px; box-shadow: 0 0 4px rgba(0,0,0,0.2);">
-            <p class="small text-muted mb-0 mt-1">✅ ${file.name} (${fileSizeMB.toFixed(1)} MB)</p>
-          </div>`;
-      };
-      reader.readAsDataURL(file);
-    } else {
-      previewContainer.innerHTML = `<span class="text-success">✅ ${file.name} (${fileSizeMB.toFixed(1)} MB) uploaded.</span>`;
-    }
-  }
-
-  idScanInput?.addEventListener("change", () => handleFilePreview(idScanInput, idScanPreview, "National ID"));
-  passportPhotoInput?.addEventListener("change", () => handleFilePreview(passportPhotoInput, passportPreview, "Passport Photo"));
 
 
 // Set footer year if needed
@@ -509,49 +510,4 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    function handlePreview(inputId, previewId, isImageOnly = true) {
-        const input = document.getElementById(inputId);
-        const preview = document.getElementById(previewId);
-
-        if (!input) return;
-
-        input.addEventListener("change", function() {
-            preview.innerHTML = ""; // Clear previous preview
-            const file = this.files[0];
-            if (!file) return;
-
-            // ✅ File size check (5MB max)
-            if (file.size > 5 * 1024 * 1024) {
-                preview.innerHTML = `<p class="text-danger">❌ File too large. Max size is 5MB.</p>`;
-                this.value = "";
-                return;
-            }
-
-            const ext = file.name.split('.').pop().toLowerCase();
-            const validExts = isImageOnly ? ["jpg", "jpeg", "png"] : ["jpg", "jpeg", "png", "pdf"];
-
-            if (!validExts.includes(ext)) {
-                preview.innerHTML = `<p class="text-danger">❌ Invalid file type. Allowed: ${validExts.join(", ")}</p>`;
-                this.value = "";
-                return;
-            }
-
-            if (ext === "pdf") {
-                preview.innerHTML = `<p>📄 <strong>${file.name}</strong> uploaded successfully.</p>`;
-            } else {
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(file);
-                img.classList.add("img-thumbnail", "mt-2");
-                img.style.maxWidth = "200px";
-                img.style.height = "auto";
-                preview.appendChild(img);
-            }
-        });
-    }
-
-    handlePreview("id_national_id_scan", "id_scan_preview", false);
-    handlePreview("id_passport_photo", "passport_preview", true);
 });

@@ -219,7 +219,7 @@ def home(request):
 
     # 🔹 Existing registration logic (unchanged)
     if request.method == 'POST':
-        form = QuickRegistrationForm(request.POST)
+        form = QuickRegistrationForm(request.POST, request.FILES)
 
         if form.is_valid():
             registrant = form.save(commit=False)
