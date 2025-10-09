@@ -1,20 +1,31 @@
+import os
+
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.contrib.staticfiles import finders
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+from django.forms import inlineformset_factory
+from django.http import FileResponse, Http404
 from django.http import HttpResponse
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.templatetags.static import static
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
 from openpyxl import Workbook
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import landscape, A7
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.utils import ImageReader
+from reportlab.pdfgen import canvas
 from reportlab.platypus import (
-     PageBreak
+    PageBreak
 )
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
@@ -22,11 +33,17 @@ from reportlab.platypus import (
 )
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .forms import QuickRegistrationForm
-from .forms import RegistrantForm
-from .utils import *
-from .serializers_new import serialize_registrant
+
 from .decorators import require_api_key
+from .forms import GalleryForm, QuickRegistrationForm, RegistrantForm, ScheduleDayForm, TimeSlotForm, SessionForm, \
+    PanelistForm, SpeakerForm
+from .models import *
+from .serializers_new import serialize_registrant
+from .utils import *
+
+PanelistFormSet = inlineformset_factory(
+    SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
+)
 
 
 def home(request):
@@ -243,12 +260,9 @@ def home(request):
     else:
         form = QuickRegistrationForm()
 
-
-    
     days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by("date")
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
-
 
     return render(request, "summit/home.html", {
         'form': form,
@@ -257,20 +271,6 @@ def home(request):
         'days': days,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
-
-
-import qrcode
-from barcode import Code128
-from barcode.writer import ImageWriter
-from io import BytesIO
-from django.http import FileResponse, Http404
-from django.contrib.admin.views.decorators import staff_member_required
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import landscape, A7
-from reportlab.lib.utils import ImageReader
-from reportlab.lib import colors
-from .models import Registrant
-import os
 
 
 @staff_member_required
@@ -581,6 +581,7 @@ def dashboard_view(request):
     }
     return render(request, "summit/dashboard.html", context)
 
+
 # Endpoint for charts (AJAX/React)
 @staff_member_required
 def dashboard_data(request):
@@ -630,22 +631,28 @@ def delete_registrant(request, pk):
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
+
 def privacy(request):
     return render(request, "summit/privacy.html")
 
+
 def not_found(request):
     return render(request, "summit/404.html")
+
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "summit/mailme.html", {"emails": emails})
 
+
 def speakers(request):
     speakers = SummitSpeaker.objects.all()
     return render(request, "summit/speakers.html", {"speakers": speakers})
 
+
 def media(request):
     return render(request, "summit/gallery.html")
+
 
 # ---------------------------
 
@@ -725,17 +732,6 @@ def sendMail(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 
-
-
-
-
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from django.views.decorators.http import require_POST
-from .models import SummitGallery
-from .forms import GalleryForm
-
 def gallery_dashboard(request):
     """Display all gallery images and allow adding new ones."""
     gallery_items = SummitGallery.objects.all()
@@ -782,15 +778,6 @@ def gallery_delete(request, pk):
     return redirect('gallery_dashboard')
 
 
-
-# Speaker
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from .models import SummitSpeaker
-from .forms import SpeakerForm
-
-
 def speaker_dashboard(request):
     """Speaker management dashboard."""
     speakers = SummitSpeaker.objects.all().order_by('full_name')
@@ -812,6 +799,7 @@ def speaker_dashboard(request):
     }
     return render(request, "speaker/speaker_dashboard.html", context)
 
+
 def speaker_create(request):
     if request.method == "POST":
         form = SpeakerForm(request.POST, request.FILES)
@@ -822,6 +810,7 @@ def speaker_create(request):
     else:
         form = SpeakerForm()
     return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker"})
+
 
 def update_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
@@ -835,6 +824,7 @@ def update_speaker(request, pk):
         form = SpeakerForm(instance=speaker)
     return render(request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"})
 
+
 def delete_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
     if request.method == "POST":
@@ -844,13 +834,8 @@ def delete_speaker(request, pk):
     return render(request, "speaker/confirm_delete.html", {"speaker": speaker})
 
 
-
 # Partner
 
-#---------------------------------
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import SummitPartner
 
 def partner_dashboard(request):
     partners = SummitPartner.objects.all().order_by("order")
@@ -901,24 +886,10 @@ def delete_partner(request, partner_id):
         return redirect("partner_dashboard")
 
 
-
-
 # Agenda view
-  
-#--------------------------------------------
 
+# --------------------------------------------
 
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
-from .forms import ScheduleDayForm, TimeSlotForm, SessionForm, PanelistForm
-from django.forms import inlineformset_factory
-
-PanelistFormSet = inlineformset_factory(
-    SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
-)
 
 @login_required
 def dashboard_home(request):
@@ -939,6 +910,7 @@ def add_day(request):
         form = ScheduleDayForm()
     return render(request, "schedule/day_form.html", {"form": form})
 
+
 @login_required
 def edit_day(request, pk):
     day = get_object_or_404(SummitScheduleDay, id=pk)
@@ -951,6 +923,7 @@ def edit_day(request, pk):
     else:
         form = ScheduleDayForm(instance=day)
     return render(request, "schedule/day_form.html", {"form": form, "day": day})
+
 
 @login_required
 def delete_day(request, pk):
@@ -1023,18 +996,63 @@ def delete_session(request, pk):
     return redirect("dashboard_home")
 
 
-# registration API function
 @require_api_key
 def get_registrants(request):
     """
     GET /reg-service/registrations/
-    Returns a list of registered participants for Patherways Technologies
+    Returns a paginated list of registered participants for Pathways Technologies.
+
+    Query Parameters:
+        page (int): The page number to retrieve. Default = 1.
+        limit (int): Number of records per page. Default = 50.
+        sort (str): Sorting order, either 'asc' or 'desc'. Default = 'desc'.
+
+    Response:
+        {
+            "count": 230,
+            "total_pages": 5,
+            "current_page": 1,
+            "page_size": 50,
+            "sort_order": "asc",
+            "next_page": 2,
+            "previous_page": null,
+            "registrants": [ ... ]
+        }
     """
     if request.method != "GET":
         return JsonResponse({"detail": "Method not allowed."}, status=405)
 
-    registrants = Registrant.objects.all().order_by("-created_at")
+    # --- Get pagination parameters ---
+    try:
+        page = int(request.GET.get("page", 1))
+        limit = int(request.GET.get("limit", 50))
+    except ValueError:
+        return JsonResponse({"detail": "Invalid pagination parameters."}, status=400)
 
-    data = [serialize_registrant(r) for r in registrants]
+    # --- Get sorting order ---
+    sort_order = request.GET.get("sort", "desc").lower()
+    if sort_order not in ["asc", "desc"]:
+        return JsonResponse({"detail": "Invalid sort order. Use 'asc' or 'desc'."}, status=400)
 
-    return JsonResponse({"count": len(data), "registrants": data}, safe=False)
+    # --- Apply ordering ---
+    order_field = "created_at" if sort_order == "asc" else "-created_at"
+
+    # --- Query and paginate ---
+    registrants = Registrant.objects.all().order_by(order_field)
+    paginator = Paginator(registrants, limit)
+    current_page = paginator.get_page(page)
+
+    # --- Serialize paginated results ---
+    data = [serialize_registrant(r) for r in current_page]
+
+    # --- Return JSON response ---
+    return JsonResponse({
+        "count": paginator.count,
+        "total_pages": paginator.num_pages,
+        "current_page": current_page.number,
+        "page_size": limit,
+        "sort_order": sort_order,
+        "next_page": current_page.next_page_number() if current_page.has_next() else None,
+        "previous_page": current_page.previous_page_number() if current_page.has_previous() else None,
+        "registrants": data
+    }, status=200)
