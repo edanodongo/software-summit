@@ -6052,3 +6052,8 @@ section,
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+
+#id_organization_type,
+#id_other_organization_type {
+  min-height: 42px; /* Matches Bootstrap input height */
+}

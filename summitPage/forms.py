@@ -63,6 +63,7 @@ class QuickRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
+            "other_organization_type": forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'accessibility_needs': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
         }
