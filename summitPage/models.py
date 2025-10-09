@@ -357,4 +357,19 @@ class SummitSpeaker(models.Model):
         return "/static/images/default-speaker.png"
 
 
+class ApiAccessLog(models.Model):
+    api_key = models.CharField(max_length=100, blank=True, null=True)
+    endpoint = models.CharField(max_length=255)
+    method = models.CharField(max_length=10)
+    ip_address = models.GenericIPAddressField()
+    status_code = models.PositiveSmallIntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.method} {self.endpoint} - {self.status_code}"
+
+
 

@@ -23,6 +23,11 @@ ALLOWED_HOSTS = config['ALLOWED_HOSTS']
 # API KEY FOR REG SERVICE
 REG_SERVICE_API_KEY = config['REG_SERVICE_API_KEY']
 
+# === Rate Limit Settings ===
+RATE_LIMIT_REQUESTS = 60      # Max number of requests allowed
+RATE_LIMIT_PERIOD = 60        # In seconds (1 minute)
+
+
 
 # Application definition
 
