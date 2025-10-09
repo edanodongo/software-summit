@@ -49,7 +49,9 @@ urlpatterns = [
     path('sendMail/', views.sendMail, name='sendMail'),
 
     path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
-    
+
+    # Registration API
+    path('reg-service/registrations/', views.get_registrants, name='get_registrants'),
     # path("api/", include(router.urls)),
 
 
