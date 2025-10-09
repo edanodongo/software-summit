@@ -378,6 +378,63 @@ form.addEventListener("submit", function (e) {
 
 });
 
+  // --- File Preview + Validation ---
+  const idScanInput = document.getElementById("id_national_id_scan");
+  const passportPhotoInput = document.getElementById("id_passport_photo");
+
+  const idScanPreview = document.createElement("div");
+  const passportPreview = document.createElement("div");
+
+  idScanPreview.className = "mt-2 text-muted small";
+  passportPreview.className = "mt-2 text-muted small";
+
+  idScanInput?.insertAdjacentElement("afterend", idScanPreview);
+  passportPhotoInput?.insertAdjacentElement("afterend", passportPreview);
+
+  const MAX_FILE_SIZE_MB = 2;
+  const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
+
+  function handleFilePreview(input, previewContainer, label) {
+    const file = input.files[0];
+    previewContainer.innerHTML = "";
+
+    if (!file) return;
+
+    // --- Validate file type ---
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      previewContainer.innerHTML = `<span class="text-danger">⚠️ Invalid file type. Please upload JPG or PDF only.</span>`;
+      input.value = "";
+      return;
+    }
+
+    // --- Validate file size ---
+    const fileSizeMB = file.size / 1024 / 1024;
+    if (fileSizeMB > MAX_FILE_SIZE_MB) {
+      previewContainer.innerHTML = `<span class="text-danger">⚠️ File too large (${fileSizeMB.toFixed(1)} MB). Max size is ${MAX_FILE_SIZE_MB} MB.</span>`;
+      input.value = "";
+      return;
+    }
+
+    // --- Preview for image ---
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewContainer.innerHTML = `
+          <div class="mt-2">
+            <img src="${e.target.result}" alt="${label}" style="max-width: 150px; border-radius: 8px; box-shadow: 0 0 4px rgba(0,0,0,0.2);">
+            <p class="small text-muted mb-0 mt-1">✅ ${file.name} (${fileSizeMB.toFixed(1)} MB)</p>
+          </div>`;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewContainer.innerHTML = `<span class="text-success">✅ ${file.name} (${fileSizeMB.toFixed(1)} MB) uploaded.</span>`;
+    }
+  }
+
+  idScanInput?.addEventListener("change", () => handleFilePreview(idScanInput, idScanPreview, "National ID"));
+  passportPhotoInput?.addEventListener("change", () => handleFilePreview(passportPhotoInput, passportPreview, "Passport Photo"));
+
+
 // Set footer year if needed
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -452,4 +509,49 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    function handlePreview(inputId, previewId, isImageOnly = true) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+
+        if (!input) return;
+
+        input.addEventListener("change", function() {
+            preview.innerHTML = ""; // Clear previous preview
+            const file = this.files[0];
+            if (!file) return;
+
+            // ✅ File size check (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                preview.innerHTML = `<p class="text-danger">❌ File too large. Max size is 5MB.</p>`;
+                this.value = "";
+                return;
+            }
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            const validExts = isImageOnly ? ["jpg", "jpeg", "png"] : ["jpg", "jpeg", "png", "pdf"];
+
+            if (!validExts.includes(ext)) {
+                preview.innerHTML = `<p class="text-danger">❌ Invalid file type. Allowed: ${validExts.join(", ")}</p>`;
+                this.value = "";
+                return;
+            }
+
+            if (ext === "pdf") {
+                preview.innerHTML = `<p>📄 <strong>${file.name}</strong> uploaded successfully.</p>`;
+            } else {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.classList.add("img-thumbnail", "mt-2");
+                img.style.maxWidth = "200px";
+                img.style.height = "auto";
+                preview.appendChild(img);
+            }
+        });
+    }
+
+    handlePreview("id_national_id_scan", "id_scan_preview", false);
+    handlePreview("id_passport_photo", "passport_preview", true);
 });

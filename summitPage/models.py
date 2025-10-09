@@ -4,7 +4,7 @@ import uuid
 
 # ---------------------------
 # Initial Registration model
-# --------------------------- 
+# ---------------------------
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
@@ -57,6 +57,28 @@ class Registrant(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    national_id_number = models.CharField(
+        max_length=20,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="National ID Number"
+    )
+
+    national_id_scan = models.FileField(
+        upload_to="uploads/id_scans/",
+        blank=True,
+        null=True,
+        verbose_name="Scanned National ID (JPG/PDF)"
+    )
+
+    passport_photo = models.FileField(
+        upload_to="uploads/passport_photos/",
+        blank=True,
+        null=True,
+        verbose_name="Passport Photo (JPG/PDF)"
+    )
 
     # ==== Display helpers ====
     def display_org_type(self):
