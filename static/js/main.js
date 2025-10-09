@@ -241,11 +241,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const alertContainer = document.getElementById("alert-container");
 
   const otherInterestWrapper = document.getElementById("other-interest");
-  const orgTypeSelect = document.getElementById("id_organization_type");
-  const otherOrgInput = document.getElementById("id_other_organization_type");
-
   const interestCheckboxes = document.querySelectorAll("#id_interests input[type=checkbox]");
   const otherInterestInput = document.getElementById("id_other_interest");
+
+  // =====================================================
+  // 🔹 CSRF TOKEN HELPER
+  // =====================================================
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie("csrftoken");
 
   // =====================================================
   // 🔹 UTILITY FUNCTIONS
@@ -264,13 +280,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>`;
 
-    // Auto fade out after 4 seconds
+    // Auto fade out after 8 seconds
     const alertBox = document.getElementById("autoDismissAlert");
     if (alertBox) {
       setTimeout(() => {
         alertBox.classList.add("fade");
         alertBox.classList.remove("show");
-        setTimeout(() => alertBox.remove(), 500); // remove after fade
+        setTimeout(() => alertBox.remove(), 500);
       }, 8000);
     }
   };
@@ -306,7 +322,10 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(form.action || window.location.href, {
       method: "POST",
       body: new FormData(form),
-      headers: { "X-Requested-With": "XMLHttpRequest" },
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": csrftoken, // ✅ CSRF fix
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -318,7 +337,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // ✅ Reset only non-file fields
           form.querySelectorAll("input:not([type='file']), textarea, select").forEach((el) => (el.value = ""));
+
+          // ✅ Uncheck all interests checkboxes
+          interestCheckboxes.forEach((cb) => (cb.checked = false));
+
+          // ✅ Clear "Other Interest" input field
+          if (otherInterestInput) otherInterestInput.value = "";
+
+          // ✅ Hide "Other Interest" field again
           handleInterestChange();
+
 
           // ✅ Clear file previews
           ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
@@ -378,7 +406,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = this.files[0];
       if (!file) return;
 
-      // File size limit (5MB)
       if (file.size > 5 * 1024 * 1024) {
         preview.innerHTML = `<p class="text-danger">❌ File too large. Max size is 5MB.</p>`;
         this.value = "";
@@ -394,11 +421,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Create preview container
       const container = document.createElement("div");
       container.classList.add("d-flex", "align-items-center", "gap-3", "mt-2");
 
-      // Generate preview
       if (ext === "pdf") {
         container.innerHTML = `<span>📄 <strong>${file.name}</strong> uploaded successfully.</span>`;
       } else {
@@ -410,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(img);
       }
 
-      // Add remove button
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
       removeBtn.className = "btn btn-sm btn-outline-danger";
@@ -421,7 +445,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       container.appendChild(removeBtn);
 
-      // Append everything
       preview.appendChild(container);
       preview.insertAdjacentHTML(
         "beforeend",
