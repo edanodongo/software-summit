@@ -46,7 +46,16 @@ PanelistFormSet = inlineformset_factory(
 )
 
 
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib import messages
+from .models import Registrant, SummitGallery, SummitPartner, SummitScheduleDay
+from .forms import QuickRegistrationForm
+from .utils import send_confirmation_email  # assuming this is your helper
+
 def home(request):
+
     # 🟢 DOWNLOAD FEATURE – Full Agenda PDF with Cover, Logo, Header, Footer
     if request.GET.get("download") == "schedule":
         response = HttpResponse(content_type='application/pdf')
@@ -217,21 +226,25 @@ def home(request):
 
     # 🟢 END DOWNLOAD FEATURE
 
-    # 🔹 Existing registration logic (unchanged)
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
 
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # Save interests properly
+            # ✅ Explicitly assign file fields
+            if request.FILES.get("passport_photo"):
+                registrant.passport_photo = request.FILES["passport_photo"]
+            if request.FILES.get("national_id_scan"):
+                registrant.national_id_scan = request.FILES["national_id_scan"]
+
+            # Interests handling
             interests = form.cleaned_data.get("interests", [])
             other_interest = form.cleaned_data.get("other_interest")
-
             if "others" in interests and other_interest:
                 registrant.other_interest = other_interest
-
             registrant.interests = interests
+
             registrant.save()
 
             # Send confirmation email
@@ -241,15 +254,15 @@ def home(request):
                 print("Email Send error:", e)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"success": False, "message": "Registration saved but email could not be sent."},
-                        status=500
+                        {"success": True, "message": "Registration saved, but email failed."},
+                        status=200
                     )
                 messages.warning(request, "Registered, but confirmation email failed.")
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse({"success": True, "message": "Registration successful"})
+                return JsonResponse({"success": True, "message": "Registration successful!"})
 
-            messages.success(request, "Registration successful")
+            messages.success(request, "Registration successful!")
             return redirect('home')
 
         else:
@@ -257,6 +270,7 @@ def home(request):
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
             messages.error(request, "There was a problem with your registration.")
+
     else:
         form = QuickRegistrationForm()
 
@@ -271,6 +285,21 @@ def home(request):
         'days': days,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
+
+
+import qrcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+from io import BytesIO
+from django.http import FileResponse, Http404
+from django.contrib.admin.views.decorators import staff_member_required
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import landscape, A7
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from django.conf import settings
+from .models import Registrant
+import os
 
 
 @staff_member_required
@@ -334,13 +363,28 @@ def generate_badge(request, registrant_id):
     c.drawString(80, title_y, "Kenya Software Summit 2025")
 
     # --- Add Passport Photo (if available) ---
-    if registrant.passport_photo and hasattr(registrant.passport_photo, 'path'):
+    if registrant.passport_photo:
         try:
-            photo_path = registrant.passport_photo.path
-            photo = ImageReader(photo_path)
-            photo_width, photo_height = 50, 50
-            c.drawImage(photo, width - 65, height - header_height - photo_height - 5,
-                        width=photo_width, height=photo_height, mask='auto')
+            # ✅ Safe absolute path
+            photo_path = os.path.join(settings.MEDIA_ROOT, registrant.passport_photo.name)
+
+            # ✅ Debug info
+            print("📸 Passport photo path:", photo_path)
+            print("📸 Exists:", os.path.exists(photo_path))
+
+            if os.path.exists(photo_path):
+                photo = ImageReader(photo_path)
+                photo_width, photo_height = 50, 50
+                c.drawImage(
+                    photo,
+                    width - 65,
+                    height - header_height - photo_height - 5,
+                    width=photo_width,
+                    height=photo_height,
+                    mask='auto'
+                )
+            else:
+                print("⚠️ Passport photo file not found on disk.")
         except Exception as e:
             print("❌ Error loading passport photo:", e)
 
