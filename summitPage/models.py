@@ -1,10 +1,8 @@
+# models.py
 from django.db import models
-import uuid
+import uuid, os
+from django.conf import settings
 
-
-# ---------------------------
-# Initial Registration model
-# ---------------------------
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
@@ -36,7 +34,6 @@ class Registrant(models.Model):
         ("others", "Others"),
     ]
 
-    # ==== Fields ====
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100)
@@ -80,19 +77,13 @@ class Registrant(models.Model):
         verbose_name="Passport Photo (JPG/PDF)"
     )
 
-    # ==== Display helpers ====
     def display_org_type(self):
-        """
-        Always merge dropdown + textbox if textbox is filled.
-        Example: 'Private Company - Safaricom'
-        """
         base_label = self.get_organization_type_display()
         if self.other_organization_type:
             return f"{base_label} - {self.other_organization_type}"
         return base_label
 
     def display_interests(self):
-        """Return interests as labels, merging 'Others' with custom text if provided."""
         items = []
         for i in self.interests:
             if i in ["other", "others"] and self.other_interest:
@@ -101,15 +92,21 @@ class Registrant(models.Model):
                 items.append(dict(self.INTEREST_CHOICES).get(i, i))
         return ", ".join(items)
 
-    
     def get_full_name(self):
         return f"{self.title} {self.first_name} {self.second_name}".strip()
 
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"
 
-
-
+    # ✅ Automatically ensure upload folders exist
+    def save(self, *args, **kwargs):
+        upload_dirs = [
+            os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
+        ]
+        for path in upload_dirs:
+            os.makedirs(path, exist_ok=True)
+        super().save(*args, **kwargs)
 
 
 

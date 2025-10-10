@@ -270,7 +270,6 @@ from reportlab.lib import colors
 from .models import Registrant
 import os
 
-
 @staff_member_required
 def generate_badge(request, registrant_id):
     try:
@@ -278,7 +277,14 @@ def generate_badge(request, registrant_id):
     except Registrant.DoesNotExist:
         raise Http404("Registrant not found")
 
-    # --- Data prep ---
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import A7
+    from reportlab.lib.utils import ImageReader
+    from reportlab.lib import colors
+    import qrcode
+    from io import BytesIO
+    import os
+
     full_name = registrant.get_full_name() or ""
     org_type = registrant.display_org_type() or ""
     job_title = registrant.job_title or ""
@@ -296,84 +302,80 @@ def generate_badge(request, registrant_id):
     qr_img.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
 
-    # --- Generate Barcode ---
-    barcode_data = str(registrant.id)
-    barcode_buffer = BytesIO()
-    barcode = Code128(barcode_data, writer=ImageWriter())
-    barcode.write(barcode_buffer)
-    barcode_buffer.seek(0)
-
     # --- Create Badge PDF ---
     pdf_buffer = BytesIO()
-    c = canvas.Canvas(pdf_buffer, pagesize=landscape(A7))
-    width, height = landscape(A7)
+    c = canvas.Canvas(pdf_buffer, pagesize=A7)
+    width, height = A7
 
-    # --- Background ---
+    # Background
     c.setFillColorRGB(1, 1, 1)
     c.rect(0, 0, width, height, fill=1)
 
-    # --- Header Bar ---
+    # Header
     header_height = 40
-    c.setFillColorRGB(0.05, 0.2, 0.45)  # dark blue
+    c.setFillColorRGB(0.05, 0.2, 0.45)
     c.rect(0, height - header_height, width, header_height, fill=1, stroke=0)
 
-    # --- Summit Logo ---
+    # Summit Title
+    c.setFillColor(colors.whitesmoke)
+    c.setFont("Helvetica-Bold", 10)
+    c.drawCentredString(width / 2, height - 25, "Kenya Software Summit 2025")
+
+    # Summit Logo (optional)
     logo_path = os.path.join(os.getcwd(), "static", "images", "summit_logo_dark.webp")
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
-        logo_width, logo_height = 48, 24
-        logo_y = height - (header_height / 2 + logo_height / 2) + 2
-        c.drawImage(logo, 12, logo_y, width=logo_width, height=logo_height, mask='auto')
+        c.drawImage(logo, (width - 45) / 2, height - header_height + 5, width=45, height=20, mask='auto')
 
-    # --- Summit Title ---
-    c.setFillColor(colors.whitesmoke)
-    c.setFont("Helvetica-Bold", 10)
-    title_y = height - (header_height / 2) + 3
-    c.drawString(80, title_y, "Kenya Software Summit 2025")
+    # Passport photo
+    photo_w, photo_h = 65, 65
+    photo_x = (width - photo_w) / 2
+    photo_y = height - header_height - photo_h - 5
 
-    # --- Add Passport Photo (if available) ---
     if registrant.passport_photo and hasattr(registrant.passport_photo, 'path'):
         try:
-            photo_path = registrant.passport_photo.path
-            photo = ImageReader(photo_path)
-            photo_width, photo_height = 50, 50
-            c.drawImage(photo, width - 65, height - header_height - photo_height - 5,
-                        width=photo_width, height=photo_height, mask='auto')
+            photo = ImageReader(registrant.passport_photo.path)
+            c.drawImage(photo, photo_x, photo_y, width=photo_w, height=photo_h, mask='auto')
         except Exception as e:
             print("❌ Error loading passport photo:", e)
+            c.setStrokeColor(colors.lightgrey)
+            c.rect(photo_x, photo_y, photo_w, photo_h)
+    else:
+        c.setStrokeColor(colors.lightgrey)
+        c.rect(photo_x, photo_y, photo_w, photo_h)
 
-    # --- Info Section ---
+    # Text Info
+    text_y = photo_y - 15
     c.setFillColor(colors.black)
-    y_start = height - header_height - 15
 
     c.setFont("Helvetica-Bold", 9)
-    c.drawCentredString(width / 2 - 10, y_start, full_name[:45])
+    c.drawCentredString(width / 2, text_y, full_name[:40])
 
     c.setFont("Helvetica", 8)
-    c.drawCentredString(width / 2 - 10, y_start - 12, org_type[:55])
-    c.drawCentredString(width / 2 - 10, y_start - 24, job_title[:55])
+    c.drawCentredString(width / 2, text_y - 12, job_title[:45])
+    c.drawCentredString(width / 2, text_y - 24, org_type[:45])
 
     if interests:
         c.setFont("Helvetica-Oblique", 7)
-        text = interests[:70] + ("..." if len(interests) > 70 else "")
-        c.drawCentredString(width / 2 - 10, y_start - 38, text)
+        c.drawCentredString(width / 2, text_y - 36, interests[:60] + ("..." if len(interests) > 60 else ""))
 
-    # --- Divider Line ---
+    # Divider line
     c.setStrokeColor(colors.lightgrey)
-    c.line(10, 40, width - 10, 40)
+    c.line(10, 65, width - 10, 65)
 
-    # --- QR & Barcode ---
+    # QR Code
     qr_image = ImageReader(qr_buffer)
-    barcode_image = ImageReader(barcode_buffer)
-    c.drawImage(qr_image, 10, 15, width=55, height=55, mask='auto')
-    c.drawImage(barcode_image, width - 95, 20, width=85, height=35, mask='auto')
+    qr_size = 65
+    qr_x = (width - qr_size) / 2
+    qr_y = 5
+    c.drawImage(qr_image, qr_x, qr_y, width=qr_size, height=qr_size, mask='auto')
 
-    # --- Footer ---
+    # Footer note
     c.setFont("Helvetica", 6)
     c.setFillColor(colors.grey)
-    c.drawCentredString(width / 2, 10, "Scan QR or Barcode for summit check-in")
+    c.drawCentredString(width / 2, qr_y - 2, "Scan QR for summit check-in")
 
-    # --- Save ---
+    # Save
     c.showPage()
     c.save()
     pdf_buffer.seek(0)
