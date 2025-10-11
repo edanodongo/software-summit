@@ -74,9 +74,26 @@ def sendmailer(subject, message, recipients):
         traceback.print_exc()
 
 
-def send_confirmation_email(registrant):
+import time
+import traceback
+from io import BytesIO
+from datetime import datetime
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage
+from django.utils import timezone
+import qrcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+from .models import EmailLog  # ✅ import model
+
+def send_confirmation_email(registrant, retries=3, delay=3):
     subject = "Kenya Software Summit Registration"
+    from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
+    current_year = datetime.now().year
+    error_message = None
+    success = False
+    attempt_count = 0
 
     try:
         # === Generate QR Code ===
@@ -94,6 +111,9 @@ def send_confirmation_email(registrant):
         # === Generate Barcode ===
         barcode_buffer = BytesIO()
         Code128(str(registrant.id), writer=ImageWriter()).write(barcode_buffer)
+
+        # === HTML Body ===
+        # === Plaintext Message ===
 
         plain_message = (
             f"Welcome {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
@@ -116,7 +136,7 @@ def send_confirmation_email(registrant):
           <body style="font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px;">
             <div style="max-width:650px; margin:40px auto; background:#ffffff; border-radius:8px;
                         padding:30px; border:1px solid #e0e0e0;">
-              
+
               <!-- Ministry Logo -->
               <div style="text-align:center; margin-bottom:20px;">
                 <img src="https://Sylvester976.github.io/geoclock/static/images/banner-logo.png" alt="MINISTRY LOGO" style="height:70px;">
@@ -193,27 +213,44 @@ def send_confirmation_email(registrant):
         </html>
         """
 
-        # === Compose & Send ===
+        # === Compose Email ===
         email = EmailMultiAlternatives(subject, plain_message, from_email, to)
         email.attach_alternative(html_message, "text/html")
 
-        # Add QR and barcode as inline images (MIMEImage)
         qr_img_mime = MIMEImage(qr_buffer.getvalue(), _subtype="png")
         qr_img_mime.add_header("Content-ID", "<qr_code>")
         qr_img_mime.add_header("Content-Disposition", "inline", filename="qr.png")
         email.attach(qr_img_mime)
+        email.mixed_subtype = "related"
 
-        # barcode_img_mime = MIMEImage(barcode_buffer.getvalue(), _subtype="png")
-        # barcode_img_mime.add_header("Content-ID", "<barcode>")
-        # barcode_img_mime.add_header("Content-Disposition", "inline", filename="barcode.png")
-        # email.attach(barcode_img_mime)
-
-        email.mixed_subtype = "related"  # important for inline images
-        email.send(fail_silently=False)
-
-        print(f"✅ Email sent successfully to {registrant.email}")
+        # === Retry sending ===
+        for attempt in range(1, retries + 1):
+            attempt_count = attempt
+            try:
+                email.send(fail_silently=False)
+                print(f"✅ Email sent successfully to {registrant.email} (attempt {attempt})")
+                success = True
+                break
+            except Exception as send_error:
+                error_message = str(send_error)
+                print(f"⚠️ Attempt {attempt} failed: {error_message}")
+                traceback.print_exc()
+                if attempt < retries:
+                    print(f"⏳ Retrying in {delay} seconds...")
+                    time.sleep(delay)
 
     except Exception as e:
-        import traceback
-        print("❌ Email sending failed:", str(e))
+        error_message = f"Email preparation failed: {e}"
         traceback.print_exc()
+
+    finally:
+        # === Log outcome ===
+        EmailLog.objects.create(
+            registrant=registrant,
+            recipient=registrant.email,
+            subject=subject,
+            status="success" if success else "failed",
+            error_message=error_message,
+            attempts=attempt_count,
+            sent_at=timezone.now(),
+        )

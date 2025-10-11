@@ -386,3 +386,30 @@ class ApiAccessLog(models.Model):
 
 
 
+from django.db import models
+from django.utils import timezone
+
+class EmailLog(models.Model):
+    STATUS_CHOICES = [
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+        ('pending', 'Pending'),
+    ]
+
+    registrant = models.ForeignKey('Registrant', on_delete=models.CASCADE, related_name='emaillog')
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    sent_at = models.DateTimeField(null=False, blank=False)
+    attempts = models.IntegerField(default=0)
+    error_message = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # ✅ Automatically set sent_at if not provided
+        if not self.sent_at:
+            self.sent_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+

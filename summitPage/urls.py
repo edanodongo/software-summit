@@ -29,7 +29,6 @@ from .views import *
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("mailme/", views.mailme_view, name="mailme"),
-    path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),
@@ -58,6 +57,8 @@ urlpatterns = [
 
     path("register", views.reg, name="register"),
     path('calendar/add/', views.add_to_calendar, name='add_to_calendar'),
+    path('resend-email/<int:registrant_id>/', views.resend_confirmation_email, name='resend_confirmation_email'),
+    path('dashboard/data/', views.dashboard_data, name='dashboard_data'),
 
     #SHEDULE 
 
