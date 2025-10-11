@@ -33,6 +33,13 @@ class Registrant(models.Model):
         ("business", "Business and Career Growth"),
         ("others", "Others"),
     ]
+    CATEGORY_CHOICES = [
+        ('', 'Select Category'),
+        ('exhibitor', 'Exhibitor'),
+        ('delegate', 'Delegate'),
+        ('speaker', 'Speaker'),
+        ('student', 'Student'),
+    ]
 
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
@@ -49,33 +56,20 @@ class Registrant(models.Model):
     interests = models.JSONField(default=list, blank=True)
     other_interest = models.CharField(max_length=255, blank=True, null=True)
 
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=False, verbose_name="Registration Category")
+    privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
+
     accessibility_needs = models.TextField(blank=True, null=True)
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
-    national_id_number = models.CharField(
-        max_length=20,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name="National ID Number"
-    )
+    national_id_number = models.CharField(max_length=20, unique=True, blank=True, null=True, verbose_name="National ID Number")
 
-    national_id_scan = models.FileField(
-        upload_to="uploads/id_scans/",
-        blank=True,
-        null=True,
-        verbose_name="Scanned National ID (JPG/PDF)"
-    )
+    national_id_scan = models.FileField(upload_to="uploads/id_scans/", blank=True, null=True, verbose_name="Scanned National ID (JPG/PDF)")
 
-    passport_photo = models.FileField(
-        upload_to="uploads/passport_photos/",
-        blank=True,
-        null=True,
-        verbose_name="Passport Photo (JPG/PDF)"
-    )
+    passport_photo = models.FileField(upload_to="uploads/passport_photos/", blank=True, null=True, verbose_name="Passport Photo (JPG/PDF)")
 
     def display_org_type(self):
         base_label = self.get_organization_type_display()

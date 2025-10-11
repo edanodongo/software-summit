@@ -56,176 +56,71 @@ from .utils import send_confirmation_email  # assuming this is your helper
 
 def home(request):
 
-    # 🟢 DOWNLOAD FEATURE – Full Agenda PDF with Cover, Logo, Header, Footer
-    if request.GET.get("download") == "schedule":
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="Kenya_Software_Summit_Schedule.pdf"'
+    if request.method == 'POST':
+        form = QuickRegistrationForm(request.POST, request.FILES)
 
-        logo_url = static('images/summit_logo_dark.webp')
-        logo_path = finders.find('images/summit_logo_dark.webp') or logo_url
+        if form.is_valid():
+            registrant = form.save(commit=False)
 
-        def add_header_footer(canvas_obj, doc):
-            width, height = A4
+            # ✅ Explicitly assign file fields
+            if request.FILES.get("passport_photo"):
+                registrant.passport_photo = request.FILES["passport_photo"]
+            if request.FILES.get("national_id_scan"):
+                registrant.national_id_scan = request.FILES["national_id_scan"]
+
+            # Interests handling
+            interests = form.cleaned_data.get("interests", [])
+            other_interest = form.cleaned_data.get("other_interest")
+            if "others" in interests and other_interest:
+                registrant.other_interest = other_interest
+            registrant.interests = interests
+
+            registrant.save()
+
+            # Send confirmation email
             try:
-                if logo_path and os.path.exists(logo_path):
-                    canvas_obj.drawImage(
-                        logo_path,
-                        x=40, y=height - 60,
-                        width=70, height=30,
-                        preserveAspectRatio=True,
-                        mask='auto'
-                    )
+                send_confirmation_email(registrant)
             except Exception as e:
-                print("Logo load error:", e)
+                print("Email Send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse(
+                        {"success": True, "message": "Registration saved, but email failed."},
+                        status=200
+                    )
+                messages.warning(request, "Registered, but confirmation email failed.")
 
-            canvas_obj.setFont("Helvetica-Bold", 9)
-            canvas_obj.setFillColor(colors.HexColor("#1E6B52"))
-            canvas_obj.drawRightString(width - 40, height - 45, "Kenya Software Summit 2025")
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "message": "Registration successful!"})
 
-            canvas_obj.setStrokeColor(colors.lightgrey)
-            canvas_obj.setLineWidth(0.5)
-            canvas_obj.line(40, 50, width - 40, 50)
+            messages.success(request, "Registration successful!")
+            return redirect('home')
 
-            canvas_obj.setFont("Helvetica", 8.5)
-            canvas_obj.setFillColor(colors.grey)
-            canvas_obj.drawString(40, 38, "Connecting minds, Shaping software, Driving growth")
-            canvas_obj.drawRightString(width - 40, 38, f"Page {doc.page}")
+        else:
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
-        doc = SimpleDocTemplate(
-            response,
-            pagesize=A4,
-            leftMargin=40,
-            rightMargin=40,
-            topMargin=90,
-            bottomMargin=50,
-        )
+            messages.error(request, "There was a problem with your registration.")
 
-        elements = []
-        styles = getSampleStyleSheet()
+    else:
+        form = QuickRegistrationForm()
 
-        # Styles (smaller spacing, tighter layout)
-        title_style = ParagraphStyle(
-            name='TitleStyle',
-            parent=styles['Heading1'],
-            alignment=1,
-            textColor=colors.HexColor("#1E6B52"),
-            fontSize=20,
-            spaceAfter=10,
-        )
-        subtitle_style = ParagraphStyle(
-            name='Subtitle',
-            parent=styles['Heading2'],
-            textColor=colors.HexColor("#1E6B52"),
-            spaceBefore=6,
-            spaceAfter=6,
-        )
-        normal_center = ParagraphStyle(
-            name='NormalCenter',
-            parent=styles['Normal'],
-            alignment=1,
-            fontSize=11,
-            spaceAfter=8,
-        )
+    days = SummitScheduleDay.objects.prefetch_related(
+        "timeslots__sessions__panelists"
+    ).order_by("date")
 
-        # 🟣 COVER PAGE (tighter spacing)
-        try:
-            if logo_path and os.path.exists(logo_path):
-                elements.append(Spacer(1, 100))
-                elements.append(Image(logo_path, width=100, height=50))
-            else:
-                elements.append(Spacer(1, 120))
-        except Exception:
-            elements.append(Spacer(1, 120))
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
-        elements.append(Spacer(1, 20))
-        elements.append(Paragraph("Kenya Software Summit 2025", title_style))
-        elements.append(Paragraph("Official 3-Day Agenda", normal_center))
-        elements.append(Spacer(1, 10))
-        elements.append(Paragraph("November 10 – 12, 2025 | Eldoret, Kenya", normal_center))
-        elements.append(Spacer(1, 200))
-        elements.append(PageBreak())
+    return render(request, "summit/home.html", {
+        'form': form,
+        'gallery_items': gallery_items,
+        'partners': partners,
+        'days': days,
+        'interest_choices': Registrant.INTEREST_CHOICES,
+    })
 
-        # 🔹 Compact table styling
-        def make_table(data):
-            t = Table(data, colWidths=[70, 170, 220])
-            t.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1E6B52")),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 11),
-                ('TOPPADDING', (0, 0), (-1, 0), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 4),
-                ('FONTSIZE', (0, 1), (-1, -1), 9.5),
-                ('TOPPADDING', (0, 1), (-1, -1), 2),
-                ('BOTTOMPADDING', (0, 1), (-1, -1), 2),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
-                ('GRID', (0, 0), (-1, -1), 0.25, colors.grey),
-            ]))
-            return t
 
-        # --- DAY 1 ---
-        elements.append(Paragraph("Day 1 – November 10", subtitle_style))
-        day1 = [
-            ["Time", "Session", "Details"],
-            ["All Day", "Exhibition", "Ongoing at Innovation Expo Area"],
-            ["7:30 AM", "Registration & Morning Networking", "Main Hall"],
-            ["8:30 AM", "Opening Ceremony", "Anthems, Welcoming Remarks, Keynote Address"],
-            ["9:50 AM", "Software Ecosystem Landscape", "Baseline Survey, Global Trends, Panel Discussion"],
-            ["10:45 AM", "Tea Break", ""],
-            ["11:15 AM", "Software Quality & IP", "Frameworks, Policies, Data Adequacy"],
-            ["12:15 PM", "Fireside Chat", "Industry Leaders' Insights"],
-            ["1:00 PM", "Lunch Break", "Main Lobby"],
-            ["2:00 PM", "Tech Labs", "Workshops & Partner Sessions"],
-            ["5:30 PM", "Business Matchmaking", "Networking Event"],
-        ]
-        elements.append(make_table(day1))
-        elements.append(Spacer(1, 10))
-
-        # --- DAY 2 ---
-        elements.append(Paragraph("Day 2 – November 11", subtitle_style))
-        day2 = [
-            ["Time", "Session", "Details"],
-            ["All Day", "Exhibition", "Open to all registered delegates"],
-            ["8:00 AM", "Registration & Networking", "Main Hall"],
-            ["8:30 AM", "Day 1 Recap & Highlights", ""],
-            ["9:00 AM", "Academia Panel", "Talent Strategies (Higher Ed & TVET)"],
-            ["10:00 AM", "Tea Break", ""],
-            ["10:30 AM", "Digital / Remote Work", "Future of Jobs, Labour Rights, Policy Directions"],
-            ["11:30 AM", "Blockchain Technology", "Virtual Assets, Legal Framework, Q&A"],
-            ["1:00 PM", "Lunch Break", "Main Lobby"],
-            ["2:00 PM", "Software Innovation Opportunities", "DevSecOps, Creative Economy, Accessibility"],
-            ["4:00 PM", "Gala Dinner & Recognition", "Main Hall"],
-        ]
-        elements.append(make_table(day2))
-        elements.append(Spacer(1, 10))
-
-        # --- DAY 3 ---
-        elements.append(Paragraph("Day 3 – November 12", subtitle_style))
-        day3 = [
-            ["Time", "Session", "Details"],
-            ["All Day", "Exhibition", "Innovation Expo"],
-            ["7:30 AM", "Software Advisory Council Breakfast", "Promoting Software Industry Dialogue"],
-            ["8:30 AM", "Startup Support Panel", "Next-Gen Developers & Startup Ecosystem"],
-            ["10:30 AM", "Tea Break", ""],
-            ["11:00 AM", "Software Global Export", "Panel: Building for Export Markets"],
-            ["12:15 PM", "Hackathon Finals & Awards", "Startup Showcase Presentations"],
-            ["1:00 PM", "Lunch Break", "Main Lobby"],
-            ["2:00 PM", "Closing Keynote & Ceremony", "Call to Action, Closing Remarks, Press Conference"],
-            ["4:00 PM", "Tea Break & Guest Departures", "Main Lobby"],
-        ]
-        elements.append(make_table(day3))
-        elements.append(Spacer(1, 12))
-        elements.append(Paragraph(
-            "© 2025 Kenya Software Summit – Visit the official website for updates.",
-            ParagraphStyle(name="FooterText", parent=styles["Normal"], fontSize=9, textColor=colors.grey)
-        ))
-
-        doc.build(elements, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
-        return response
-
-    # 🟢 END DOWNLOAD FEATURE
-
+def reg(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
 
@@ -278,7 +173,7 @@ def home(request):
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
-    return render(request, "summit/home.html", {
+    return render(request, "summit/reg.html", {
         'form': form,
         'gallery_items': gallery_items,
         'partners': partners,
@@ -288,18 +183,24 @@ def home(request):
 
 
 import qrcode
-from barcode import Code128
-from barcode.writer import ImageWriter
 from io import BytesIO
 from django.http import FileResponse, Http404
 from django.contrib.admin.views.decorators import staff_member_required
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import landscape, A7
+from reportlab.lib.pagesizes import A7, portrait
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
 from django.conf import settings
 from .models import Registrant
 import os
+
+
+def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold"):
+    """Dynamically adjust font size so text fits within the given width."""
+    font_size = start_font_size
+    while c.stringWidth(text, font_name, font_size) > max_width and font_size > 5:
+        font_size -= 0.5
+    return font_size
 
 
 @staff_member_required
@@ -309,123 +210,157 @@ def generate_badge(request, registrant_id):
     except Registrant.DoesNotExist:
         raise Http404("Registrant not found")
 
-    # --- Data prep ---
+    # --- Data ---
     full_name = registrant.get_full_name() or ""
     org_type = registrant.display_org_type() or ""
     job_title = registrant.job_title or ""
     interests = registrant.display_interests() or ""
-    email = registrant.email or ""
-    phone = registrant.phone or ""
 
     # --- Generate QR Code ---
     qr_data = (
-        f"Name: {full_name}\nEmail: {email}\nPhone: {phone}\n"
-        f"Organization: {org_type}\nJob Title: {job_title}\nInterests: {interests}"
+        f"Name: {full_name}\n"
+        f"Organization: {org_type}\n"
+        f"Job Title: {job_title}\n"
+        f"Interests: {interests}"
     )
     qr_img = qrcode.make(qr_data)
     qr_buffer = BytesIO()
     qr_img.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
 
-    # --- Generate Barcode ---
-    barcode_data = str(registrant.id)
-    barcode_buffer = BytesIO()
-    barcode = Code128(barcode_data, writer=ImageWriter())
-    barcode.write(barcode_buffer)
-    barcode_buffer.seek(0)
-
-    # --- Create Badge PDF ---
+    # --- PDF Setup ---
     pdf_buffer = BytesIO()
-    c = canvas.Canvas(pdf_buffer, pagesize=landscape(A7))
-    width, height = landscape(A7)
+    c = canvas.Canvas(pdf_buffer, pagesize=portrait(A7))
+    width, height = portrait(A7)
+
+    # --- Colors ---
+    accent_color = colors.HexColor("#004aad")  # deep blue accent
+    light_accent = colors.HexColor("#e6ecf7")  # soft blue-grey
 
     # --- Background ---
-    c.setFillColorRGB(1, 1, 1)
-    c.rect(0, 0, width, height, fill=1)
+    c.setFillColor(light_accent)
+    c.rect(0, 0, width, height, fill=1, stroke=0)
+    c.setFillColor(colors.white)
+    c.roundRect(6, 6, width - 12, height - 12, 10, fill=1, stroke=0)
 
-    # --- Header Bar ---
-    header_height = 40
-    c.setFillColorRGB(0.05, 0.2, 0.45)  # dark blue
-    c.rect(0, height - header_height, width, header_height, fill=1, stroke=0)
+    # --- Header ---
+    header_h = 32
+    header_y = height - header_h - 6
+    c.setFillColor(colors.white)
+    c.roundRect(6, header_y, width - 12, header_h, 8, fill=1, stroke=0)
 
-    # --- Summit Logo ---
-    logo_path = os.path.join(os.getcwd(), "static", "images", "summit_logo_dark.webp")
+    # --- Logo with white background ---
+    logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo_dark.webp")
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
-        logo_width, logo_height = 48, 24
-        logo_y = height - (header_height / 2 + logo_height / 2) + 2
-        c.drawImage(logo, 12, logo_y, width=logo_width, height=logo_height, mask='auto')
+        logo_w, logo_h = 80, 34  # increased size
+        logo_x = (width - logo_w) / 2
+        logo_y = header_y + (header_h - logo_h) / 2 - 3
+
+        # white background box for logo
+        # c.setFillColor(colors.white)
+        # c.roundRect(logo_x - 4, logo_y - 2, logo_w + 8, logo_h + 4, 4, fill=1, stroke=0)
+
+        c.drawImage(
+            logo,
+            logo_x,
+            logo_y,
+            width=logo_w,
+            height=logo_h,
+            preserveAspectRatio=True,
+            mask="auto",
+        )
 
     # --- Summit Title ---
-    c.setFillColor(colors.whitesmoke)
-    c.setFont("Helvetica-Bold", 10)
-    title_y = height - (header_height / 2) + 3
-    c.drawString(80, title_y, "Kenya Software Summit 2025")
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 8.5)
+    c.drawCentredString(width / 2, header_y - 9, "Kenya Software Summit 2025")
 
-    # --- Add Passport Photo (if available) ---
+    # --- Passport Photo ---
+    photo_w, photo_h = 60, 60
+    photo_x = (width - photo_w) / 2
+    photo_y = header_y - photo_h - 20
+
+    c.setFillColor(light_accent)
+    c.roundRect(photo_x - 3, photo_y - 3, photo_w + 6, photo_h + 6, 8, fill=1, stroke=0)
+
+    def draw_placeholder():
+        c.setFillColor(colors.lightgrey)
+        c.roundRect(photo_x, photo_y, photo_w, photo_h, 6, fill=1, stroke=0)
+        c.setFillColor(colors.darkgrey)
+        c.setFont("Helvetica", 7)
+        c.drawCentredString(width / 2, photo_y + photo_h / 2 - 3, "No Photo")
+
     if registrant.passport_photo:
-        try:
-            # ✅ Safe absolute path
-            photo_path = os.path.join(settings.MEDIA_ROOT, registrant.passport_photo.name)
+        photo_path = os.path.join(settings.MEDIA_ROOT, registrant.passport_photo.name)
+        if os.path.exists(photo_path):
+            c.drawImage(
+                photo_path,
+                photo_x,
+                photo_y,
+                width=photo_w,
+                height=photo_h,
+                preserveAspectRatio=True,
+                mask="auto",
+            )
+        else:
+            draw_placeholder()
+    else:
+        draw_placeholder()
 
-            # ✅ Debug info
-            print("📸 Passport photo path:", photo_path)
-            print("📸 Exists:", os.path.exists(photo_path))
-
-            if os.path.exists(photo_path):
-                photo = ImageReader(photo_path)
-                photo_width, photo_height = 50, 50
-                c.drawImage(
-                    photo,
-                    width - 65,
-                    height - header_height - photo_height - 5,
-                    width=photo_width,
-                    height=photo_height,
-                    mask='auto'
-                )
-            else:
-                print("⚠️ Passport photo file not found on disk.")
-        except Exception as e:
-            print("❌ Error loading passport photo:", e)
-
-    # --- Info Section ---
+    # --- Registrant Info ---
+    info_y = photo_y - 12
     c.setFillColor(colors.black)
-    y_start = height - header_height - 15
 
-    c.setFont("Helvetica-Bold", 9)
-    c.drawCentredString(width / 2 - 10, y_start, full_name[:45])
+    # Full Name
+    name_font_size = _fit_text(c, full_name, width - 20, 10)
+    c.setFont("Helvetica-Bold", name_font_size)
+    c.drawCentredString(width / 2, info_y, full_name[:40])
 
+    # Job Title
+    c.setFillColor(colors.darkgray)
     c.setFont("Helvetica", 8)
-    c.drawCentredString(width / 2 - 10, y_start - 12, org_type[:55])
-    c.drawCentredString(width / 2 - 10, y_start - 24, job_title[:55])
+    c.drawCentredString(width / 2, info_y - 11, job_title[:45])
 
+    # Organization
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 8)
+    c.drawCentredString(width / 2, info_y - 21, org_type[:45])
+
+    # Interests
     if interests:
         c.setFont("Helvetica-Oblique", 7)
-        text = interests[:70] + ("..." if len(interests) > 70 else "")
-        c.drawCentredString(width / 2 - 10, y_start - 38, text)
+        c.setFillColor(colors.gray)
+        c.drawCentredString(
+            width / 2,
+            info_y - 31,
+            interests[:55] + ("..." if len(interests) > 55 else ""),
+        )
 
-    # --- Divider Line ---
-    c.setStrokeColor(colors.lightgrey)
-    c.line(10, 40, width - 10, 40)
-
-    # --- QR & Barcode ---
-    qr_image = ImageReader(qr_buffer)
-    barcode_image = ImageReader(barcode_buffer)
-    c.drawImage(qr_image, 10, 15, width=55, height=55, mask='auto')
-    c.drawImage(barcode_image, width - 95, 20, width=85, height=35, mask='auto')
+    # --- QR Code ---
+    qr_size = 52
+    qr_x = (width - qr_size) / 2
+    qr_y = info_y - 33 - qr_size + 1  # adjusted upward (removed bottom gap)
+    qr_img_reader = ImageReader(qr_buffer)
+    c.drawImage(qr_img_reader, qr_x, qr_y, width=qr_size, height=qr_size, mask="auto")
 
     # --- Footer ---
-    c.setFont("Helvetica", 6)
-    c.setFillColor(colors.grey)
-    c.drawCentredString(width / 2, 10, "Scan QR or Barcode for summit check-in")
+    c.setStrokeColor(accent_color)
+    c.setLineWidth(0.8)
+    c.line(12, qr_y - 3, width - 12, qr_y - 3)
 
-    # --- Save ---
+    c.setFillColor(colors.grey)
+    c.setFont("Helvetica-Oblique", 6.3)
+    c.drawCentredString(width / 2, qr_y - 10, "Scan QR for Summit Check-in")
+
+    # --- Finalize ---
     c.showPage()
     c.save()
     pdf_buffer.seek(0)
 
     filename = f"{registrant.first_name}_{registrant.second_name}_Badge.pdf"
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
+
 
 
 @staff_member_required
@@ -1100,3 +1035,31 @@ def get_registrants(request):
         "previous_page": current_page.previous_page_number() if current_page.has_previous() else None,
         "registrants": data
     }, status=200)
+
+
+from django.http import HttpResponse
+from datetime import datetime
+
+def add_to_calendar(request):
+    ics_content = """BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kenya Software Summit 2025//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:kenya-software-summit-2025@ict.go.ke
+DTSTAMP:{timestamp}
+DTSTART;VALUE=DATE:20251110
+DTEND;VALUE=DATE:20251113
+SUMMARY:Kenya Software Summit 2025
+DESCRIPTION:Join Kenya's premier national software innovation event.\\nRegister to participate: https://softwaresummit.go.ke/register
+LOCATION:Eldoret City
+ORGANIZER;CN=Ministry of ICT and the Digital Economy:MAILTO:softwaresummit@ict.go.ke
+END:VEVENT
+END:VCALENDAR
+""".format(timestamp=datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"))
+
+    response = HttpResponse(ics_content, content_type="text/calendar; charset=utf-8")
+    response["Content-Disposition"] = "attachment; filename=KenyaSoftwareSummit2025.ics"
+    return response
+

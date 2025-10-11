@@ -24,7 +24,6 @@
         </a>
     </div>
 
-
     <!-- Registrants Table -->
     <h4 class="mt-4">Recent Registrations</h4>
     <div class="table-responsive mt-3">
@@ -35,8 +34,10 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Organization</th>
-                    <th>Org. Type</th> <!-- 🔹 New hidden filter column -->
                     <th>Job Title</th>
+                    <th>National ID No.</th>
+                    <th>ID Scan</th>
+                    <th>Passport Photo</th>
                     <th>Interests</th>
                     <th>Registered At</th>
                     <th>Action</th>
@@ -49,15 +50,33 @@
                         <td>{{ registrant.email }}</td>
                         <td>{{ registrant.phone }}</td>
                         <td>{{ registrant.display_org_type }}</td>
-                        <td>{{ registrant.get_organization_type_display }}</td> <!-- raw field for filtering -->
                         <td>{{ registrant.job_title|default:"—" }}</td>
+                        <td>{{ registrant.national_id_number|default:"—" }}</td>
+
+                        <td>
+                            {% if registrant.national_id_scan %}
+                                <a href="{{ registrant.national_id_scan.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if registrant.passport_photo %}
+                                <a href="{{ registrant.passport_photo.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
                         <td>{{ registrant.display_interests|default:"—" }}</td>
                         <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
+
                         <td>
                             <div class="btn-group">
-                                <a href="{% url 'generate_badge' registrant.id %}" 
-                                class="btn btn-sm btn-outline-primary" 
-                                target="_blank">
+                                <a href="{% url 'generate_badge' registrant.id %}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   target="_blank">
                                     <i class="fas fa-id-badge"></i> Badge
                                 </a>
                                 <button class="btn btn-sm btn-danger delete-btn"
@@ -69,25 +88,27 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="9" class="text-center">No registrations yet.</td>
+                        <td colspan="11" class="text-center">No registrations yet.</td>
                     </tr>
                 {% endfor %}
             </tbody>
+
             <tfoot>
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Organization</th>
-                    <th>Org. Type</th> <!-- footer for filtering -->
                     <th>Job Title</th>
+                    <th>National ID No.</th>
+                    <th>ID Scan</th>
+                    <th>Passport Photo</th>
                     <th>Interests</th>
                     <th>Registered At</th>
                     <th></th>
                 </tr>
             </tfoot>
         </table>
-
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -111,6 +132,7 @@
 </div>
 {% endblock %}
 
+
 {% block scripts %}
 <!-- ✅ DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -126,9 +148,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
 <style>
-/* Ensure filters show up under headers */
+/* ✅ Ensure filters show up under headers */
 #registrants-table tfoot {
     display: table-header-group;
+}
+
+#registrants-table tfoot input,
+#registrants-table tfoot select {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
 }
 </style>
 
@@ -146,20 +175,30 @@ document.addEventListener('DOMContentLoaded', function () {
             { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF' },
             { extend: 'print', text: '<i class="fas fa-print"></i> Print' }
         ],
-        order: [[6, 'desc']], // Registered At column
+        order: [[9, 'desc']], // Registered At column
         initComplete: function () {
-            // Dropdown filters for Organization, Job Title, Interests
-            this.api().columns([3, 4, 5]).every(function () {
-                var column = this;
-                var select = $('<select class="form-select form-select-sm"><option value="">Filter</option></select>')
+            // 🔹 Dropdown filters for Organization (3), Job Title (4), Interests (8)
+            this.api().columns([3, 4, 8]).every(function () {
+                const column = this;
+                const select = $('<select class="form-select form-select-sm"><option value="">Filter</option></select>')
                     .appendTo($(column.footer()).empty())
                     .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        const val = $.fn.dataTable.util.escapeRegex($(this).val());
                         column.search(val ? '^' + val + '$' : '', true, false).draw();
                     });
                 column.data().unique().sort().each(function (d) {
                     if (d) select.append('<option value="' + d + '">' + d + '</option>');
                 });
+            });
+
+            // 🔹 Text search for National ID Number (column index 5)
+            this.api().columns(5).every(function () {
+                const column = this;
+                const input = $('<input type="text" class="form-control form-control-sm" placeholder="Search ID..."/>')
+                    .appendTo($(column.footer()).empty())
+                    .on('keyup change', function () {
+                        column.search(this.value).draw();
+                    });
             });
         }
     });
