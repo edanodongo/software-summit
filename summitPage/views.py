@@ -544,19 +544,27 @@ def print_registrants(request):
         "org_type_counts": org_type_counts.items(),
     })
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render
+from django.db.models import Count, Max
 
 @staff_member_required
 def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    registrants = Registrant.objects.all().order_by('-created_at')
+    # Annotate registrants with email log info
+    registrants = Registrant.objects.all().order_by('-created_at').annotate(
+        email_attempts=Count('emaillog'),
+        email_status=Max('emaillog__status'),
+        email_last_sent=Max('emaillog__sent_at')
+    )
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants,
-        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # ✅ send choices
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
     }
     return render(request, "summit/dashboard.html", context)
 
@@ -1063,3 +1071,61 @@ END:VCALENDAR
     response["Content-Disposition"] = "attachment; filename=KenyaSoftwareSummit2025.ics"
     return response
 
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from .models import Registrant, EmailLog
+from .utils import send_confirmation_email  # your email sending function
+
+@require_POST
+def resend_confirmation_email(request, registrant_id):
+    registrant = get_object_or_404(Registrant, id=registrant_id)
+
+    try:
+        # Attempt to send the email
+        send_confirmation_email(registrant)
+
+        # Update or create EmailLog
+        log, created = EmailLog.objects.get_or_create(
+            registrant=registrant,
+            recipient=registrant.email,
+            subject="Confirmation Email",
+            defaults={'status': 'success'}
+        )
+        log.attempts += 1
+        log.status = 'success'
+        log.sent_at = timezone.now()
+        log.error_message = ''
+        log.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": f"Email resent to {registrant.email} successfully.",
+            "attempts": log.attempts,
+            "status": log.status,
+            "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
+        })
+
+    except Exception as e:
+        # Log the failure in EmailLog
+        log, _ = EmailLog.objects.get_or_create(
+            registrant=registrant,
+            recipient=registrant.email,
+            subject="Confirmation Email",
+            defaults={'status': 'failed'}
+        )
+        log.attempts += 1
+        log.status = 'failed'
+        log.error_message = str(e)
+        log.sent_at = timezone.now()
+        log.save()
+
+        return JsonResponse({
+            "success": False,
+            "error": str(e),
+            "attempts": log.attempts,
+            "status": log.status,
+            "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
+        }, status=500)
