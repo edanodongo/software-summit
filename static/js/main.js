@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const csrftoken = getCookie("csrftoken");
 
   // =====================================================
-  // 🔹 UTILITY FUNCTIONS
+  // 🔹 UTILITIES
   // =====================================================
   const toggleVisibility = (wrapper, input, show) => {
     if (!wrapper || !input) return;
@@ -274,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>`;
-
     setTimeout(() => {
       const alertBox = document.getElementById("autoDismissAlert");
       if (alertBox) {
@@ -286,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // =====================================================
-  // 🔹 FIELD BEHAVIOR
+  // 🔹 INTEREST FIELD TOGGLE
   // =====================================================
   const handleInterestChange = () => {
     const othersChecked = Array.from(interestCheckboxes).some(
@@ -310,9 +309,28 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
+    const formData = new FormData(form);
+
+    // 🔍 Log for debugging
+    console.log("🧾 Submitting Form Data:");
+    for (let [key, val] of formData.entries()) {
+      console.log(`${key}:`, val);
+    }
+
+    // ✅ Ensure national_id_number exists
+    if (!formData.get("national_id_number")) {
+      const idField = document.getElementById("id_national_id_number");
+      if (idField && idField.value.trim()) {
+        formData.set("national_id_number", idField.value.trim());
+        console.log("✅ Added missing national_id_number:", idField.value.trim());
+      } else {
+        console.warn("⚠️ No national_id_number found before submission");
+      }
+    }
+
     fetch(form.action || window.location.href, {
       method: "POST",
-      body: new FormData(form),
+      body: formData,
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "X-CSRFToken": csrftoken,
@@ -323,14 +341,18 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
 
-        if (data.success) {
-          showAlert(data.message, "success");
+        console.log("🧩 Server response:", data);
 
+        if (data.success) {
+          showAlert(data.message || "Registration successful!", "success");
+
+          // Reset form
           form.querySelectorAll("input:not([type='file']), textarea, select").forEach((el) => (el.value = ""));
           interestCheckboxes.forEach((cb) => (cb.checked = false));
           if (otherInterestInput) otherInterestInput.value = "";
           handleInterestChange();
 
+          // Reset previews
           ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
             const input = document.getElementById(id);
             const preview = document.getElementById(
@@ -340,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (preview) preview.innerHTML = "";
           });
         } else if (data.errors) {
+          // Show validation errors
           let firstInvalidEl = null;
           Object.entries(data.errors).forEach(([field, errors]) => {
             const inputEl = form.querySelector(`#id_${field}`);
@@ -365,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch((err) => {
-        console.error("Error:", err);
+        console.error("❌ AJAX error:", err);
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa fa-paper-plane me-2"></i> Submit Registration`;
         showAlert("Server error. Please try again later.", "danger");
@@ -373,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =====================================================
-  // 🔹 FILE PREVIEW HANDLER (Cleaned + Patched)
+  // 🔹 FILE PREVIEW HANDLER
   // =====================================================
   const handlePreview = (inputId, previewId, isImageOnly = true) => {
     const input = document.getElementById(inputId);

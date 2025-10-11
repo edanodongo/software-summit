@@ -56,6 +56,8 @@ urlpatterns = [
 
 
 
+    path("register", views.reg, name="register"),
+    path('calendar/add/', views.add_to_calendar, name='add_to_calendar'),
 
     #SHEDULE 
 

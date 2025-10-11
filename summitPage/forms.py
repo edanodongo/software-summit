@@ -1,10 +1,12 @@
 from django import forms
-from .models import Registrant
 from django.core.exceptions import ValidationError
+from .models import Registrant
 
 
 class QuickRegistrationForm(forms.ModelForm):
-    # Enforce required fields
+    # =====================================================
+    # 🔹 Custom Field Definitions
+    # =====================================================
     national_id_number = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={
@@ -29,32 +31,56 @@ class QuickRegistrationForm(forms.ModelForm):
         choices=Registrant.INTEREST_CHOICES,
         widget=forms.CheckboxSelectMultiple,
     )
+
     updates_opt_in = forms.BooleanField(required=False)
 
     other_organization_type = forms.CharField(
-    required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
-            'placeholder': 'Please specify...',
-        })
-    )
-    other_interest = forms.CharField(
-    required=False,
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control mt-2',
             'placeholder': 'Please specify...',
         })
     )
 
+    other_interest = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Please specify...',
+        })
+    )
+
+    category = forms.ChoiceField(
+        choices=Registrant.CATEGORY_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Registration Category"
+    )
+
+    privacy_agreed = forms.BooleanField(
+        required=True,
+        label='I have read and agree to the Privacy Policy',
+        error_messages={'required': 'You must agree to the Privacy Policy to register.'},
+    )
+
+    # =====================================================
+    # 🔹 Meta Configuration
+    # =====================================================
     class Meta:
         model = Registrant
         fields = [
             'title', 'first_name', 'second_name',
             'email', 'phone',
             'organization_type', 'other_organization_type',
-            'job_title',
+            'job_title', 'category',
             'interests', 'other_interest',
-            'accessibility_needs', 'updates_opt_in'
+            'accessibility_needs', 'updates_opt_in',
+            'privacy_agreed',
+
+            # ✅ Added fields that were missing before
+            'national_id_number',
+            'national_id_scan',
+            'passport_photo',
         ]
         widgets = {
             'title': forms.Select(attrs={'class': 'form-select'}),
@@ -63,13 +89,23 @@ class QuickRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            "other_organization_type": forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
+            'other_organization_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Institution name'
+            }),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
-            'accessibility_needs': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
+            'accessibility_needs': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Accessibility/Dietary Needs (optional)'
+            }),
         }
 
-    # ✅ File validation helper
+    # =====================================================
+    # 🔹 Validation Helpers
+    # =====================================================
     def validate_file(self, file, allowed_extensions):
+        """Generic file validation utility."""
         if not file:
             return
         max_size_mb = 5
@@ -81,19 +117,18 @@ class QuickRegistrationForm(forms.ModelForm):
             allowed = ", ".join(allowed_extensions)
             raise ValidationError(f"Unsupported file format. Allowed types: {allowed}")
 
-    # Individual field validators
     def clean_national_id_scan(self):
         file = self.cleaned_data.get("national_id_scan")
         if not file:
-            raise ValidationError("Please upload your scanned national ID.")
-        self.validate_file(file, allowed_extensions=["jpg", "jpeg", "png", "pdf"])
+            raise ValidationError("Please upload your scanned National ID.")
+        self.validate_file(file, ["jpg", "jpeg", "png", "pdf"])
         return file
 
     def clean_passport_photo(self):
         file = self.cleaned_data.get("passport_photo")
         if not file:
             raise ValidationError("Please upload your passport photo.")
-        self.validate_file(file, allowed_extensions=["jpg", "jpeg", "png", "pdf"])
+        self.validate_file(file, ["jpg", "jpeg", "png", "pdf"])
         return file
 
     def clean_national_id_number(self):
@@ -106,7 +141,9 @@ class QuickRegistrationForm(forms.ModelForm):
             raise ValidationError("Please enter a valid National ID number.")
         return id_number
 
-
+    # =====================================================
+    # 🔹 Cross-field Validation
+    # =====================================================
     def clean(self):
         cleaned_data = super().clean()
         organization_type = cleaned_data.get("organization_type")
@@ -114,21 +151,20 @@ class QuickRegistrationForm(forms.ModelForm):
         interests = cleaned_data.get("interests") or []
         other_interest = cleaned_data.get("other_interest")
 
-        # Require other org type only when "other" is selected
+        # Require "other organization" details when selected
         if organization_type == "other" and not other_organization_type:
-            self.add_error(
-                "other_organization_type",
-                "Please specify your organization type."
-            )
+            self.add_error("other_organization_type", "Please specify your organization type.")
 
-        # Require other interest only when "others" is selected
+        # Require "other interest" details when selected
         if "others" in interests and not other_interest:
-            self.add_error(
-                "other_interest",
-                "Please specify your interest."
-            )
+            self.add_error("other_interest", "Please specify your interest.")
+
+        # Ensure Privacy Policy is agreed to
+        if not cleaned_data.get("privacy_agreed"):
+            self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
 
         return cleaned_data
+
 
 from django import forms
 from .models import Registration

@@ -40,7 +40,7 @@
           <ul>
             <li><a href="{% url 'home' %}" class="active">HOME</a></li>
             <li><a href="#intro">ABOUT</a></li>
-            <li><a href="#register">REGISTER</a></li>
+            <li><a href="{% url 'register' %}">REGISTER</a></li>
             <li><a href="#schedule">AGENDA</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
             <li><a href="#features">FEATURES</a></li>
@@ -1362,18 +1362,14 @@
               <h4>Get the Complete Schedule</h4>
               <p>Download the full agenda as PDF or add events to your calendar</p>
               <div class="cta-buttons">
-                <!-- <a href="#" class="btn btn-primary">
-                  <i class="bi bi-download"></i>
-                  Download PDF
-                </a> -->
-                <a href="?download=schedule" class="btn btn-primary">
+                <a href="{% static 'files/schedule.pdf' %}" class="btn btn-primary" download>
                   <i class="bi bi-download"></i> Download Full Schedule (PDF)
                 </a>
 
-                <!-- <a href="#" class="btn btn-outline-primary">
-                  <i class="bi bi-calendar-plus"></i>
-                  Add to Calendar
-                </a> -->
+                <a href="{% url 'add_to_calendar' %}" class="btn btn-outline-primary">
+                  <i class="bi bi-calendar-plus"></i> Add to Calendar
+                </a>
+
               </div>
             </div>
           </div>
@@ -1663,6 +1659,15 @@
                                 {{ form.job_title }}
                               </div>
 
+                              <!-- Category -->
+                              <div class="mt-2 mb-2">
+                                <label for="id_category" class="form-label fw-semibold dark mb-1">Category</label>
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                  <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                                {% endif %}
+                              </div>
+
                               <!-- Interests -->
                               <div class="mt-2 mb-2">
                                 <label for="id_interests_1" class="form-label fw-semibold dark mb-1">Areas of Interest</label>
@@ -1713,11 +1718,15 @@
                                 <div id="passport_preview" class="mt-3"></div>
                               </div>
 
-                              <!-- Terms -->
-                              <div class="mt-2 text-center form-label fw-bold">
-                                <label for="terms">
-                                  By registering you agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                              <!-- Privacy Agreement -->
+                              <div class="mt-3 mb-2 form-check text-center">
+                                {{ form.privacy_agreed }}
+                                <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
+                                  I have read and agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
                                 </label>
+                                {% if form.privacy_agreed.errors %}
+                                  <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
+                                {% endif %}
                               </div>
 
                               <!-- Submit -->
@@ -1727,7 +1736,7 @@
                                   <i class="fa fa-paper-plane me-2"></i> Register Now
                                 </button>
                               </div>
-                          </form>
+                            </form>
 
                         <!-- Alerts -->
                         <div id="alert-container" class="mt-2"></div>
@@ -1990,7 +1999,7 @@
               <li><a href="#intro">About</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
               <li><a href="#schedule">Agenda</a></li>
-              <li><a href="#register">Register</a></li>
+              <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
           </div>
 
