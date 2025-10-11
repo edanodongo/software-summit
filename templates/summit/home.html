@@ -1668,31 +1668,29 @@
                                 {% endif %}
                               </div>
 
-                              <!-- Interests -->
-                              <div class="mt-2 mb-2">
-                                <label for="id_interests_1" class="form-label fw-semibold dark mb-1">Areas of Interest</label>
-                                <div id="id_interests" class="d-flex flex-wrap gap-2">
-                                  {% for checkbox in form.interests %}
-                                    <div class="form-check mb-1">
-                                      <input type="checkbox"
-                                        name="{{ checkbox.data.name }}"
-                                        value="{{ checkbox.data.value }}"
-                                        {% if checkbox.data.selected %}checked{% endif %}
-                                        class="form-check-input"
-                                        id="id_interests_{{ forloop.counter }}">
-                                      <label class="form-check-label" for="id_interests_{{ forloop.counter }}">
-                                        {{ checkbox.choice_label }}
-                                      </label>
-                                    </div>
-                                  {% endfor %}
+                            <!-- Interests -->
+                              <div class="mt-4 mb-2">
+                                  <label class="form-label fw-semibold dark mb-1">Areas of Interest</label>
+                                  <div id="id_interests" class="d-flex flex-wrap gap-2">
+                                    {% for checkbox in form.interests %}
+                                      <div class="form-check mb-1">
+                                        {{ checkbox.tag }}  <!-- ✅ Let Django render the correct value -->
+                                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                          {{ checkbox.choice_label }}
+                                        </label>
+                                      </div>
+                                    {% endfor %}
+                                  </div>
                                 </div>
-                              </div>
 
-                              <!-- Other Interest -->
-                              <div class="mt-2 mb-2" id="other-interest" style="display:none;">
-                                <label for="id_other_interest" class="form-label fw-semibold dark mb-1">Please specify</label>
-                                {{ form.other_interest }}
-                              </div>
+                                <!-- Other Interest -->
+                                <div class="mt-2 mb-2" id="other-interest" style="display:none;">
+                                  <label for="id_other_interest" class="form-label fw-semibold dark mb-1">Please specify</label>
+                                  {{ form.other_interest }}
+                                </div>
+
+
+
 
                               <!-- National ID and Passport -->
                               <div class="mt-3 mb-3">
@@ -1720,14 +1718,27 @@
 
                               <!-- Privacy Agreement -->
                               <div class="mt-3 mb-2 form-check text-center">
-                                {{ form.privacy_agreed }}
-                                <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
-                                  I have read and agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
-                                </label>
-                                {% if form.privacy_agreed.errors %}
-                                  <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
-                                {% endif %}
-                              </div>
+                                  <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    name="{{ form.privacy_agreed.name }}"
+                                    id="id_privacy_agreed"
+                                    value="true"
+                                    {% if form.privacy_agreed.value %}checked{% endif %}
+                                    required
+                                  >
+                                  <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
+                                    I have read and agree to the
+                                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                                  </label>
+
+                                  {% if form.privacy_agreed.errors %}
+                                    <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
+                                  {% endif %}
+                                </div>
+
+
+
 
                               <!-- Submit -->
                               <div class="d-grid mt-3">

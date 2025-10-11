@@ -231,6 +231,7 @@
 
 })();
 
+
 document.addEventListener("DOMContentLoaded", () => {
   // =====================================================
   // 🔹 ELEMENT REFERENCES
@@ -303,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    // Clear any previous errors
     form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
     form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
@@ -311,23 +313,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData(form);
 
-    // 🔍 Log for debugging
+    // =====================================================
+    // ✅ FIX 1: Ensure interests are sent as multiple values
+    // =====================================================
+    formData.delete("interests");
+    interestCheckboxes.forEach((cb) => {
+      if (cb.checked) formData.append("interests", cb.value);
+    });
+
+    // =====================================================
+    // ✅ FIX 2: Ensure privacy checkbox sends proper boolean
+    // =====================================================
+    const privacyCb = form.querySelector("[name='privacy_agreed']");
+    if (privacyCb) {
+      formData.delete("privacy_agreed");
+      if (privacyCb.checked) formData.append("privacy_agreed", "true");
+    }
+
+    // =====================================================
+    // ✅ FIX 3: Ensure updates_opt_in sends correct value
+    // =====================================================
+    const updatesCb = form.querySelector("[name='updates_opt_in']");
+    if (updatesCb) {
+      formData.delete("updates_opt_in");
+      if (updatesCb.checked) formData.append("updates_opt_in", "true");
+    }
+
+    // Debugging output
     console.log("🧾 Submitting Form Data:");
-    for (let [key, val] of formData.entries()) {
-      console.log(`${key}:`, val);
-    }
+    for (let [key, val] of formData.entries()) console.log(`${key}:`, val);
 
-    // ✅ Ensure national_id_number exists
-    if (!formData.get("national_id_number")) {
-      const idField = document.getElementById("id_national_id_number");
-      if (idField && idField.value.trim()) {
-        formData.set("national_id_number", idField.value.trim());
-        console.log("✅ Added missing national_id_number:", idField.value.trim());
-      } else {
-        console.warn("⚠️ No national_id_number found before submission");
-      }
-    }
-
+    // =====================================================
+    // 🔹 AJAX SUBMIT
+    // =====================================================
     fetch(form.action || window.location.href, {
       method: "POST",
       body: formData,
@@ -346,13 +364,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
           showAlert(data.message || "Registration successful!", "success");
 
-          // Reset form
-          form.querySelectorAll("input:not([type='file']), textarea, select").forEach((el) => (el.value = ""));
-          interestCheckboxes.forEach((cb) => (cb.checked = false));
-          if (otherInterestInput) otherInterestInput.value = "";
+          // ✅ Use form.reset() to properly clear all fields
+          form.reset();
           handleInterestChange();
 
-          // Reset previews
+          // ✅ Clear file previews (if any)
           ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
             const input = document.getElementById(id);
             const preview = document.getElementById(
@@ -362,7 +378,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (preview) preview.innerHTML = "";
           });
         } else if (data.errors) {
-          // Show validation errors
           let firstInvalidEl = null;
           Object.entries(data.errors).forEach(([field, errors]) => {
             const inputEl = form.querySelector(`#id_${field}`);
@@ -456,7 +471,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // =====================================================
-  // 🔹 INIT PREVIEWS
+  // 🔹 INIT FILE PREVIEWS
   // =====================================================
   handlePreview("id_national_id_scan", "id_scan_preview", false);
   handlePreview("id_passport_photo", "passport_preview", true);
