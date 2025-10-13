@@ -6057,3 +6057,7 @@ section,
 #id_other_organization_type {
   min-height: 42px; /* Matches Bootstrap input height */
 }
+
+html {
+  scroll-behavior: smooth;
+}

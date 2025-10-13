@@ -1129,3 +1129,10 @@ def resend_confirmation_email(request, registrant_id):
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
         }, status=500)
+
+
+def gallery(request):
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    return render(request, "summit/gallery.html", {
+        'gallery_items': gallery_items,
+    })
