@@ -38,7 +38,7 @@ class QuickRegistrationForm(forms.ModelForm):
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Please enter organization/institution',
+            'placeholder': 'Please enter organization/institution name',
         })
     )
 

@@ -629,7 +629,7 @@ def not_found(request):
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
-    return render(request, "summit/mailme.html", {"emails": emails})
+    return render(request, "setup/mailme.html", {"emails": emails})
 
 
 def speakers(request):
@@ -1129,3 +1129,43 @@ def resend_confirmation_email(request, registrant_id):
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
         }, status=500)
+
+
+def guest_category(request):
+    category = Category.objects.all().order_by('name')
+    category = {"category": category}
+
+    return render(request, "setup/add_category.html", category)
+
+
+def categories_create(request):
+    return render(request, "setup/category_form.html")
+
+def save_category(request):
+    if request.method == "POST":
+        category_name = request.POST.get("category")
+        description = request.POST.get("description")
+
+        try:
+            # Save category in DB
+            Category.objects.create(
+                name=category_name,
+                description=description
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Category "{category_name}" successfully saved.'
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to save details: {str(e)}'
+            })
+
+    # Invalid request method
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method.'
+    })

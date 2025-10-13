@@ -2,7 +2,7 @@
 from django.db import models
 import uuid, os
 from django.conf import settings
-
+from django.utils import timezone
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
@@ -108,10 +108,6 @@ class Registrant(models.Model):
 # New registration model for applications on IOS & Android
 # --------------------------- 
 
-from django.db import models
-import uuid
-
-
 class Registration(models.Model):
     TITLE_CHOICES = [
         ('', 'Select Title'),
@@ -200,10 +196,6 @@ class Registration(models.Model):
 
 #---------------------------
 # gallery model
-
-from django.db import models
-from django.utils import timezone
-
 class SummitGallery(models.Model):
     """Model for managing event gallery images shown in the gallery section."""
     title = models.CharField(max_length=150)
@@ -223,10 +215,6 @@ class SummitGallery(models.Model):
 
 #--------------------------------
 
-
-# Partners
-from django.db import models
-import uuid
 
 class SummitPartner(models.Model):
     """Represents a sponsor or partner displayed on the website."""
@@ -251,10 +239,7 @@ class SummitPartner(models.Model):
 
 
 #------------------------------------------------
-# Schedule model 
-
-from django.db import models
-from django.utils import timezone
+# Schedule model
 
 class SummitScheduleDay(models.Model):
     """Represents each summit day (e.g., Day 1, Day 2, Day 3)."""
@@ -338,8 +323,6 @@ class SummitPanelist(models.Model):
 
 #--------------------------------
 # speaker model
-from django.db import models
-import uuid
 
 class SummitSpeaker(models.Model):
     """Model for Summit Speakers."""
@@ -384,11 +367,6 @@ class ApiAccessLog(models.Model):
     def __str__(self):
         return f"{self.method} {self.endpoint} - {self.status_code}"
 
-
-
-from django.db import models
-from django.utils import timezone
-
 class EmailLog(models.Model):
     STATUS_CHOICES = [
         ('success', 'Success'),
@@ -412,4 +390,13 @@ class EmailLog(models.Model):
 
     def __str__(self):
         return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
