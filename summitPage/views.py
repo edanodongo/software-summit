@@ -560,10 +560,15 @@ def dashboard_view(request):
         email_last_sent=Max('emaillog__sent_at')
     )
 
+    registrants_with_names = []
+    for regNames in registrants:
+        regNames.category_name = get_category_name_from_id(regNames.category)
+        registrants_with_names.append(regNames)
+
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants,
+        "registrants": registrants_with_names,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
     }
     return render(request, "summit/dashboard.html", context)
