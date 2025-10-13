@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Registrant
+from .models import Registrant,get_category_choices
 
 
 class QuickRegistrationForm(forms.ModelForm):
@@ -37,21 +37,22 @@ class QuickRegistrationForm(forms.ModelForm):
     other_organization_type = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
-            'placeholder': 'Please specify...',
+            'class': 'form-control',
+            'placeholder': 'Please enter organization/institution name',
         })
     )
 
     other_interest = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
+        widget=forms.Textarea(attrs={
+            'rows': 3,
+            'class': 'form-control',
             'placeholder': 'Please specify...',
         })
     )
 
     category = forms.ChoiceField(
-        choices=Registrant.CATEGORY_CHOICES,
+        choices=get_category_choices,
         required=True,
         widget=forms.Select(attrs={'class': 'form-select'}),
         label="Registration Category"
@@ -108,7 +109,7 @@ class QuickRegistrationForm(forms.ModelForm):
         """Generic file validation utility."""
         if not file:
             return
-        max_size_mb = 5
+        max_size_mb = 2
         if file.size > max_size_mb * 1024 * 1024:
             raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
 

@@ -1,34 +1,20 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
-from rest_framework.routers import DefaultRouter
-
 from . import views
 from .views import *
-
-# router = DefaultRouter()
-# router.register(r'events', EventViewSet)
-# router.register(r'tracks', TrackViewSet)
-# router.register(r'sessions', SessionViewSet)
-# router.register(r'speakers', SpeakerViewSet)
-# router.register(r'exhibitors', ExhibitorViewSet)
-# router.register(r'sponsors', SponsorViewSet)
-# router.register(r'registrations', RegistrationViewSet)
-# router.register(r'tickets', TicketViewSet)
-# router.register(r'orders', OrderViewSet)
-# router.register(r'payments', PaymentViewSet)
-# router.register(r'connections', ConnectionViewSet)
-# router.register(r'chat', ChatMessageViewSet)
-# router.register(r'polls', PollViewSet)
-# router.register(r'poll-options', PollOptionViewSet)
-# router.register(r'poll-votes', PollVoteViewSet)
-# router.register(r'qna', QnAViewSet)
-# router.register(r'feedback', FeedbackViewSet)
-# router.register(r'notifications', NotificationViewSet)
-
 
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("mailme/", views.mailme_view, name="mailme"),
+
+    #category setup
+    path("categories/", views.guest_category, name="categories"),
+    path("categories/add/", views.categories_create, name="categories_create"),
+    path('categories/saveCategory/', views.save_category, name='saveCategory'),
+    path("categories/<int:pk>/edit", views.update_category, name="update_category"),
+    path("categories/<int:pk>/delete/", views.delete_category, name="delete_category"),
+    path('categories/editCategory/', views.edit_category, name='editCategory'),
+
+
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),
@@ -53,16 +39,14 @@ urlpatterns = [
     path('reg-service/registrations/', views.get_registrants, name='get_registrants'),
     # path("api/", include(router.urls)),
 
-
-
     path("register", views.reg, name="register"),
     path('calendar/add/', views.add_to_calendar, name='add_to_calendar'),
     path('resend-email/<int:registrant_id>/', views.resend_confirmation_email, name='resend_confirmation_email'),
     path('dashboard/data/', views.dashboard_data, name='dashboard_data'),
 
-    #SHEDULE 
+    # SHEDULE
 
-    path("schedule/home", views.dashboard_home, name="dashboard_home"),       
+    path("schedule/home", views.dashboard_home, name="dashboard_home"),
     # Day CRUD
     path("day/add/", views.add_day, name="add_day"),
     path("day/<int:pk>/edit/", views.edit_day, name="edit_day"),
@@ -74,21 +58,20 @@ urlpatterns = [
     path("session/<int:pk>/edit/", views.edit_session, name="edit_session"),
     path("session/<int:pk>/delete/", views.delete_session, name="delete_session"),
 
-
-    #SPEAKERS
+    # SPEAKERS
 
     path("dashboard/speakers/", views.speaker_dashboard, name="speaker_dashboard"),
     path("speakers/add/", views.speaker_create, name="speaker_create"),
     path("dashboard/speakers/<uuid:pk>/edit/", views.update_speaker, name="update_speaker"),
     path("dashboard/speakers/<uuid:pk>/delete/", views.delete_speaker, name="delete_speaker"),
 
-    #PARTNERS
+    # PARTNERS
 
     path("partners/dashboard/", views.partner_dashboard, name="partner_dashboard"),
     path("partners/save/", views.save_partner, name="save_partner"),
     path("partners/delete/<uuid:partner_id>/", views.delete_partner, name="delete_partner"),
 
-    #GALLERY
+    # GALLERY
 
     path('gallery-dashboard/', views.gallery_dashboard, name='gallery_dashboard'),
     path('gallery/edit/<int:pk>/', views.gallery_edit, name='gallery_edit'),

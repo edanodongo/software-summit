@@ -1,0 +1,69 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="mb-4">List of Guest Categories</h2>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{% url 'categories_create' %}" class="btn btn-primary">➕ Add New Category</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for categories in category %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ categories.name }}</td>
+                        <td>{{ categories.description }}</td>
+                        <td>
+                            <a href="{% url 'update_category' categories.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="#" class="btn btn-sm btn-danger" onclick="deleteCategory('{{ categories.id }}')">
+                                Delete
+                            </a>
+
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No categories added yet.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function deleteCategory(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                fetch(`/categories/${categoryId}/delete/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            notyf.success(data.message);
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            notyf.error(data.message);
+                        }
+                    })
+                    .catch(() => {
+                        notyf.error("Something went wrong while deleting.");
+                    });
+            }
+        }
+    </script>
+{% endblock %}

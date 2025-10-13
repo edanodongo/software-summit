@@ -560,10 +560,15 @@ def dashboard_view(request):
         email_last_sent=Max('emaillog__sent_at')
     )
 
+    registrants_with_names = []
+    for regNames in registrants:
+        regNames.category_name = get_category_name_from_id(regNames.category)
+        registrants_with_names.append(regNames)
+
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants,
+        "registrants": registrants_with_names,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
     }
     return render(request, "summit/dashboard.html", context)
@@ -629,7 +634,7 @@ def not_found(request):
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
-    return render(request, "summit/mailme.html", {"emails": emails})
+    return render(request, "setup/mailme.html", {"emails": emails})
 
 
 def speakers(request):
@@ -1131,6 +1136,99 @@ def resend_confirmation_email(request, registrant_id):
         }, status=500)
 
 
+def guest_category(request):
+    category = Category.objects.all().order_by('name')
+    category = {"category": category}
+
+    return render(request, "setup/add_category.html", category)
+
+
+def categories_create(request):
+    return render(request, "setup/category_form.html")
+
+def save_category(request):
+    if request.method == "POST":
+        category_name = request.POST.get("category")
+        description = request.POST.get("description")
+
+        try:
+            # Save category in DB
+            Category.objects.create(
+                name=category_name,
+                description=description
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Category "{category_name}" successfully saved.'
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to save details: {str(e)}'
+            })
+
+    # Invalid request method
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method.'
+    })
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    if request.method == "POST":
+        try:
+            category_name = category.name  # store before deletion for feedback
+            category.delete()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Category "{category_name}" deleted successfully!'
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to delete category: {str(e)}'
+            })
+
+    # If not POST, return an error
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method. Use POST to delete.'
+    })
+
+def update_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    context = {
+        "category": category
+    }
+
+    return render(request, "setup/edit_category_form.html", context)
+
+def edit_category(request):
+    if request.method == "POST":
+        category_id = request.POST.get("id")
+        name = request.POST.get("category")
+        description = request.POST.get("description")
+
+        try:
+            # Update existing record
+            category = Category.objects.get(pk=category_id)
+            category.name = name
+            category.description = description
+            category.save()
+            message = f'Category "{name}" successfully updated.'
+
+            return JsonResponse({'status': 'success', 'message': message})
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 def gallery(request):
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     return render(request, "summit/gallery.html", {

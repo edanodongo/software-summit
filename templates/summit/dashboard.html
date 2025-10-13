@@ -68,7 +68,7 @@
                             <td>{{ registrant.display_org_type }}</td>
                             <td>{{ registrant.get_organization_type_display }}</td>
                             <td class="truncate">{{ registrant.job_title|default:"—" }}</td>
-                            <td>{{ registrant.get_category_display|default:"—" }}</td>
+                            <td>{{ registrant.category_name|default:"—" }}</td>
                             <td>{{ registrant.national_id_number|default:"—" }}</td>
                             <td>
                                 {% if registrant.national_id_scan %}

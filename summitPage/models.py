@@ -2,6 +2,27 @@
 from django.db import models
 import uuid, os
 from django.conf import settings
+from django.utils import timezone
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+def get_category_choices():
+    choices = [('', 'Select Category')]
+    choices += [(c.id, c.name) for c in Category.objects.all()]
+    return choices
+
+def get_category_id():
+
+    choices = [('', 'Select Category')]  # Placeholder
+    choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
+    return choices
+
+
 
 
 class Registrant(models.Model):
@@ -33,13 +54,7 @@ class Registrant(models.Model):
         ("business", "Business and Career Growth"),
         ("others", "Others"),
     ]
-    CATEGORY_CHOICES = [
-        ('', 'Select Category'),
-        ('exhibitor', 'Exhibitor'),
-        ('delegate', 'Delegate'),
-        ('speaker', 'Speaker'),
-        ('student', 'Student'),
-    ]
+
 
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
@@ -54,9 +69,9 @@ class Registrant(models.Model):
     job_title = models.CharField(max_length=255, blank=True)
 
     interests = models.JSONField(default=list, blank=True)
-    other_interest = models.CharField(max_length=255, blank=True, null=True)
+    other_interest = models.TextField(blank=True, null=True)
 
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=False, verbose_name="Registration Category")
+    category = models.CharField(max_length=50, choices=get_category_id, blank=False, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
     accessibility_needs = models.TextField(blank=True, null=True)
@@ -107,10 +122,6 @@ class Registrant(models.Model):
 # ---------------------------
 # New registration model for applications on IOS & Android
 # --------------------------- 
-
-from django.db import models
-import uuid
-
 
 class Registration(models.Model):
     TITLE_CHOICES = [
@@ -200,10 +211,6 @@ class Registration(models.Model):
 
 #---------------------------
 # gallery model
-
-from django.db import models
-from django.utils import timezone
-
 class SummitGallery(models.Model):
     """Model for managing event gallery images shown in the gallery section."""
     title = models.CharField(max_length=150)
@@ -223,10 +230,6 @@ class SummitGallery(models.Model):
 
 #--------------------------------
 
-
-# Partners
-from django.db import models
-import uuid
 
 class SummitPartner(models.Model):
     """Represents a sponsor or partner displayed on the website."""
@@ -251,10 +254,7 @@ class SummitPartner(models.Model):
 
 
 #------------------------------------------------
-# Schedule model 
-
-from django.db import models
-from django.utils import timezone
+# Schedule model
 
 class SummitScheduleDay(models.Model):
     """Represents each summit day (e.g., Day 1, Day 2, Day 3)."""
@@ -338,8 +338,6 @@ class SummitPanelist(models.Model):
 
 #--------------------------------
 # speaker model
-from django.db import models
-import uuid
 
 class SummitSpeaker(models.Model):
     """Model for Summit Speakers."""
@@ -384,11 +382,6 @@ class ApiAccessLog(models.Model):
     def __str__(self):
         return f"{self.method} {self.endpoint} - {self.status_code}"
 
-
-
-from django.db import models
-from django.utils import timezone
-
 class EmailLog(models.Model):
     STATUS_CHOICES = [
         ('success', 'Success'),
@@ -412,4 +405,7 @@ class EmailLog(models.Model):
 
     def __str__(self):
         return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+
 
