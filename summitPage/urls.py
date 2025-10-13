@@ -76,4 +76,6 @@ urlpatterns = [
     path('gallery-dashboard/', views.gallery_dashboard, name='gallery_dashboard'),
     path('gallery/edit/<int:pk>/', views.gallery_edit, name='gallery_edit'),
     path('gallery/delete/<int:pk>/', views.gallery_delete, name='gallery_delete'),
+
+    path("gallery/", views.gallery, name="gallery"),
 ]

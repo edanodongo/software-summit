@@ -1229,3 +1229,8 @@ def edit_category(request):
             return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+def gallery(request):
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    return render(request, "summit/gallery.html", {
+        'gallery_items': gallery_items,
+    })
