@@ -12,9 +12,18 @@ class Category(models.Model):
         return self.name
 
 def get_category_choices():
-    choices = [('', 'Select Category')]  # 👈 placeholder option
+    choices = [('', 'Select Category')]
     choices += [(c.id, c.name) for c in Category.objects.all()]
     return choices
+
+def get_category_id():
+
+    choices = [('', 'Select Category')]  # Placeholder
+    choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
+    return choices
+
+
+
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
@@ -46,6 +55,7 @@ class Registrant(models.Model):
         ("others", "Others"),
     ]
 
+
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100)
@@ -61,7 +71,7 @@ class Registrant(models.Model):
     interests = models.JSONField(default=list, blank=True)
     other_interest = models.TextField(blank=True, null=True)
 
-    category = models.CharField(max_length=50, choices=get_category_choices, blank=False, verbose_name="Registration Category")
+    category = models.CharField(max_length=50, choices=get_category_id, blank=False, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
     accessibility_needs = models.TextField(blank=True, null=True)

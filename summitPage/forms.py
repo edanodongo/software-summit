@@ -109,7 +109,7 @@ class QuickRegistrationForm(forms.ModelForm):
         """Generic file validation utility."""
         if not file:
             return
-        max_size_mb = 5
+        max_size_mb = 2
         if file.size > max_size_mb * 1024 * 1024:
             raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
 
