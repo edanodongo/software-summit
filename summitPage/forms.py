@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Registrant
+from .models import Registrant,get_category_choices
 
 
 class QuickRegistrationForm(forms.ModelForm):
@@ -52,7 +52,7 @@ class QuickRegistrationForm(forms.ModelForm):
     )
 
     category = forms.ChoiceField(
-        choices=Registrant.CATEGORY_CHOICES,
+        choices=get_category_choices,
         required=True,
         widget=forms.Select(attrs={'class': 'form-select'}),
         label="Registration Category"

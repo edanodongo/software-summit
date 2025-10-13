@@ -4,6 +4,18 @@ import uuid, os
 from django.conf import settings
 from django.utils import timezone
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+def get_category_choices():
+    choices = [('', 'Select Category')]  # 👈 placeholder option
+    choices += [(c.id, c.name) for c in Category.objects.all()]
+    return choices
+
 class Registrant(models.Model):
     TITLE_CHOICES = [
         ('', 'Select Title'),
@@ -33,13 +45,6 @@ class Registrant(models.Model):
         ("business", "Business and Career Growth"),
         ("others", "Others"),
     ]
-    CATEGORY_CHOICES = [
-        ('', 'Select Category'),
-        ('exhibitor', 'Exhibitor'),
-        ('delegate', 'Delegate'),
-        ('speaker', 'Speaker'),
-        ('student', 'Student'),
-    ]
 
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
@@ -56,7 +61,7 @@ class Registrant(models.Model):
     interests = models.JSONField(default=list, blank=True)
     other_interest = models.TextField(blank=True, null=True)
 
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=False, verbose_name="Registration Category")
+    category = models.CharField(max_length=50, choices=get_category_choices, blank=False, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
     accessibility_needs = models.TextField(blank=True, null=True)
@@ -393,10 +398,4 @@ class EmailLog(models.Model):
 
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
