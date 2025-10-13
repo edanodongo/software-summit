@@ -54,7 +54,7 @@ class Registrant(models.Model):
     job_title = models.CharField(max_length=255, blank=True)
 
     interests = models.JSONField(default=list, blank=True)
-    other_interest = models.CharField(max_length=255, blank=True, null=True)
+    other_interest = models.TextField(blank=True, null=True)
 
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=False, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")

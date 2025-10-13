@@ -37,15 +37,16 @@ class QuickRegistrationForm(forms.ModelForm):
     other_organization_type = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
-            'placeholder': 'Please specify...',
+            'class': 'form-control',
+            'placeholder': 'Please enter organization/institution',
         })
     )
 
     other_interest = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
+        widget=forms.Textarea(attrs={
+            'rows': 3,
+            'class': 'form-control',
             'placeholder': 'Please specify...',
         })
     )
