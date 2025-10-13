@@ -5,9 +5,16 @@ from .views import *
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("mailme/", views.mailme_view, name="mailme"),
+
+    #category setup
     path("categories/", views.guest_category, name="categories"),
     path("categories/add/", views.categories_create, name="categories_create"),
     path('categories/saveCategory/', views.save_category, name='saveCategory'),
+    path("categories/<int:pk>/edit", views.update_category, name="update_category"),
+    path("categories/<int:pk>/delete/", views.delete_category, name="delete_category"),
+    path('categories/editCategory/', views.edit_category, name='editCategory'),
+
+
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),

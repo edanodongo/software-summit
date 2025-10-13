@@ -1169,3 +1169,58 @@ def save_category(request):
         'status': 'error',
         'message': 'Invalid request method.'
     })
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    if request.method == "POST":
+        try:
+            category_name = category.name  # store before deletion for feedback
+            category.delete()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Category "{category_name}" deleted successfully!'
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to delete category: {str(e)}'
+            })
+
+    # If not POST, return an error
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method. Use POST to delete.'
+    })
+
+def update_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    context = {
+        "category": category
+    }
+
+    return render(request, "setup/edit_category_form.html", context)
+
+def edit_category(request):
+    if request.method == "POST":
+        category_id = request.POST.get("id")
+        name = request.POST.get("category")
+        description = request.POST.get("description")
+
+        try:
+            # Update existing record
+            category = Category.objects.get(pk=category_id)
+            category.name = name
+            category.description = description
+            category.save()
+            message = f'Category "{name}" successfully updated.'
+
+            return JsonResponse({'status': 'success', 'message': message})
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
