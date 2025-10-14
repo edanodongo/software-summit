@@ -332,3 +332,51 @@ class SpeakerForm(forms.ModelForm):
             "linkedin_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "LinkedIn profile URL"}),
             "twitter_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "Twitter profile URL"}),
         }
+
+
+# exhibitors/forms.py
+from django import forms
+from .models import Exhibitor, Booth, ExhibitionSection
+from django import forms
+from .models import Exhibitor, Booth, ExhibitionSection
+
+class ExhibitorRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Exhibitor
+        fields = [
+            'title', 'first_name', 'second_name', 'email', 'phone',
+            'organization_type', 'job_title', 'category',
+            'section', 'booth', 'product_description',
+            'national_id_number', 'national_id_scan', 'passport_photo',
+            'privacy_agreed',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Add Bootstrap classes
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.NumberInput, forms.Textarea, forms.FileInput)):
+                field.widget.attrs.update({'class': 'form-control'})
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'form-select'})
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({'class': 'form-check-input'})
+
+        # Only show available booths
+        self.fields['booth'].queryset = Booth.objects.filter(is_booked=False)
+        # Show all sections
+        self.fields['section'].queryset = ExhibitionSection.objects.all()
+
+
+
+class BoothForm(forms.ModelForm):
+    class Meta:
+        model = Booth
+        fields = ["section", "booth_number", "booth_type", "size", "price", "is_booked"]
+
+
+class ExhibitionSectionForm(forms.ModelForm):
+    class Meta:
+        model = ExhibitionSection
+        fields = ["name", "description"]

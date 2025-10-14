@@ -16,12 +16,21 @@ def get_category_choices():
     choices += [(c.id, c.name) for c in Category.objects.all()]
     return choices
 
+# def get_category_id():
+#
+#     choices = [('', 'Select Category')]  # Placeholder
+#     choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
+#     return choices
+
 def get_category_id():
-
-    choices = [('', 'Select Category')]  # Placeholder
-    choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
-    return choices
-
+    """Safely return category choices, even when the DB isn't ready."""
+    try:
+        return [('', 'Select Category')] + [
+            (str(c.id), str(c.id)) for c in Category.objects.all()
+        ]
+    except Exception:
+        # Happens before migrations or when DB is unavailable
+        return [('', 'Select Category')]
 
 
 
@@ -409,3 +418,142 @@ class EmailLog(models.Model):
 
 
 
+
+from django.db import models
+from django.utils import timezone
+
+class EmailLogs(models.Model):
+    STATUS_CHOICES = [
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+        ('pending', 'Pending'),
+    ]
+
+    exhibitor = models.ForeignKey('Exhibitor', on_delete=models.CASCADE, related_name='emaillog')
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    sent_at = models.DateTimeField(null=False, blank=False)
+    attempts = models.IntegerField(default=0)
+    error_message = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # ✅ Automatically set sent_at if not provided
+        if not self.sent_at:
+            self.sent_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+# exhibitors/models.py
+from django.db import models
+from django.utils import timezone
+import uuid
+
+
+class ExhibitionSection(models.Model):
+    """Sections within the exhibition hall (e.g., Innovation, Corporate, Startups)."""
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def available_booths(self):
+        """Return only unbooked booths."""
+        return self.booths.filter(is_booked=False)
+
+
+class Booth(models.Model):
+    BOOTH_TYPE_CHOICES = [
+        ('standard', 'Standard Booth'),
+        ('premium', 'Premium Booth'),
+        ('custom', 'Custom Booth'),
+    ]
+
+    section = models.ForeignKey(ExhibitionSection, on_delete=models.CASCADE, related_name="booths")
+    booth_number = models.CharField(max_length=20, unique=True)
+    booth_type = models.CharField(max_length=20, choices=BOOTH_TYPE_CHOICES, default='standard')
+    size = models.CharField(max_length=50, help_text="e.g., 3m x 3m")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_booked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.booth_number} - {self.get_booth_type_display()}"
+
+    def mark_booked(self):
+        self.is_booked = True
+        self.save(update_fields=['is_booked'])
+
+    def mark_available(self):
+        self.is_booked = False
+        self.save(update_fields=['is_booked'])
+
+
+class BoothBooking(models.Model):
+    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="bookings")
+    booth = models.OneToOneField(Booth, on_delete=models.CASCADE, related_name="booking")
+    booked_at = models.DateTimeField(default=timezone.now)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.exhibitor.organization_type} → {self.booth.booth_number}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Auto mark the booth as booked
+        self.booth.mark_booked()
+
+    def delete(self, *args, **kwargs):
+        # Free up booth on deletion
+        self.booth.mark_available()
+        super().delete(*args, **kwargs)
+
+
+class Exhibitor(models.Model):
+    """Main exhibitor registration details"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=10, choices=[
+        ("Prof", "Prof."),
+        ("Dr", "Dr."),
+        ("Mr", "Mr."),
+        ("Mrs", "Mrs."),
+        ("Ms", "Ms."),
+    ])
+    first_name = models.CharField(max_length=100)
+    second_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+
+    organization_type = models.CharField(max_length=200)
+    job_title = models.CharField(max_length=200)
+    category = models.CharField(max_length=50, choices=[
+        ('startup', 'Startup'),
+        ('corporate', 'Corporate'),
+        ('government', 'Government Agency'),
+        ('academic', 'Academic Institution'),
+        ('ngo', 'NGO'),
+        ('other', 'Other'),
+    ])
+
+    product_description = models.TextField(blank=True, null=True)
+
+    booth = models.ForeignKey(Booth, on_delete=models.SET_NULL, null=True, blank=True)
+    section = models.ForeignKey(ExhibitionSection, on_delete=models.SET_NULL, null=True, blank=True)
+
+    national_id_number = models.CharField(max_length=50)
+    national_id_scan = models.FileField(upload_to="exhibitors/id_scans/")
+    passport_photo = models.ImageField(upload_to="exhibitors/photos/")
+
+    privacy_agreed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def get_full_name(self):
+        return f"{self.title} {self.first_name} {self.second_name}".strip()
+
+    def __str__(self):
+        return f"{self.first_name} {self.second_name or ''} - {self.organization_type}"

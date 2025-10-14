@@ -1,0 +1,194 @@
+{% extends "summit/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid mt-4 px-4">
+  <h2 class="fw-bold text-primary mb-4">
+      Exhibitions Dashboard
+  </h2>
+
+
+  <div class="d-flex justify-content-between mb-3">
+    <a href="{% url 'add_section' %}" class="btn btn-primary">+ Add Section</a>
+    <a href="{% url 'add_booth' %}" class="btn btn-success">+ Add Booth</a>
+  </div>
+
+  <h4>Exhibition Sections</h4>
+  <ul class="list-group mb-4">
+    {% for section in sections %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ section.name }}</span>
+        <small class="text-muted">{{ section.description }}</small>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">No sections yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Booths</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Booth Number</th>
+        <th>Section</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booth in booths %}
+      <tr>
+        <td>{{ booth.booth_number }}</td>
+        <td>{{ booth.section.name }}</td>
+        <td>{{ booth.booth_type }}</td>
+        <td>{{ booth.size }}</td>
+        <td>KES {{ booth.price }}</td>
+        <td>
+          {% if booth.is_booked %}
+            <span class="badge bg-danger">Booked</span>
+          {% else %}
+            <span class="badge bg-success">Available</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'delete_booth' booth.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="text-center text-muted">No booths available</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+        <h6 class="text-muted mb-1">Total Exhibitors</h6>
+        <h3 class="fw-bold text-primary">{{ total_exhibitors }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+        <h6 class="text-muted mb-1">Total Booths</h6>
+        <h3 class="fw-bold text-primary">{{ total_booths }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+        <h6 class="text-muted mb-1">Booked Booths</h6>
+        <h3 class="fw-bold text-danger">{{ booked_booths }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+        <h6 class="text-muted mb-1">Pending Approvals</h6>
+        <h3 class="fw-bold text-warning">{{ pending_approvals }}</h3>
+      </div>
+    </div>
+  </div>
+
+    <!-- filters -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-3">
+     <div class="card shadow-sm border-0 rounded-4 mb-3">
+      <div class="card-body">
+        <form method="GET" class="row g-3 align-items-center">
+          <div class="col-md-4">
+            <input
+              type="text"
+              name="q"
+              class="form-control"
+              placeholder="Search by name, email, phone, or organization..."
+              value="{{ query }}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <select name="category" class="form-select">
+              <option value="">Filter by Category</option>
+              {% for value, label in categories %}
+                <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <select name="section" class="form-select">
+              <option value="">Filter by Section</option>
+              {% for s in sections %}
+                <option value="{{ s.id }}" {% if section_filter|add:'' == s.id|add:'' %}selected{% endif %}>{{ s.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-filter me-1"></i> Apply
+            </button>
+          </div>
+
+          <div class="col-md-2 d-grid">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">
+              <i class="fas fa-undo me-1"></i> Reset
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+
+  <!-- Recent Exhibitors -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-primary text-white fw-semibold">
+      <i class="fas fa-users me-2"></i>Recent Exhibitors
+    </div>
+    <div class="card-body">
+      <table class="table table-hover align-middle">
+       <thead class="table-primary">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Organization</th>
+            <th>Job Title</th> <!-- NEW -->
+            <th>Category</th> <!-- NEW -->
+            <th>Booth</th>
+            <th>Section</th>
+            <th>Date Registered</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in exhibitors %}
+          <tr>
+            <td>{{ e.get_full_name }}</td>
+            <td>{{ e.email }}</td>
+            <td>{{ e.phone }}</td>
+            <td>{{ e.organization_type }}</td>
+            <td>{{ e.job_title|default:"—" }}</td> <!-- NEW -->
+            <td>{{ e.get_category_display|default:"—" }}</td> <!-- NEW -->
+            <td>{{ e.booth.booth_number|default:"—" }}</td>
+            <td>{{ e.section.name|default:"—" }}</td>
+            <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
+            <td>
+              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="10" class="text-center text-muted py-3">No exhibitors registered.</td></tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
