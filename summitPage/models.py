@@ -122,20 +122,20 @@ class Registrant(models.Model):
 
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"
-    #
-    # # ✅ Automatically ensure upload folders exist
-    # def save(self, *args, **kwargs):
-    #     upload_dirs = [
-    #         os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
-    #         os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
-    #         os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/id_scans/"),
-    #         os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/photos/"),
-    #         os.path.join(settings.MEDIA_ROOT, "uploads/partners/logos/"),
-    #     ]
-    #     for path in upload_dirs:
-    #         os.makedirs(path, exist_ok=True)
-    #     super().save(*args, **kwargs)
-    #
+
+    # ✅ Automatically ensure upload folders exist
+    def save(self, *args, **kwargs):
+        upload_dirs = [
+            os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/id_scans/"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/photos/"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/partners/logos/"),
+        ]
+        for path in upload_dirs:
+            os.makedirs(path, exist_ok=True)
+        super().save(*args, **kwargs)
+
 
 
 # ---------------------------
@@ -253,7 +253,7 @@ class SummitPartner(models.Model):
     """Represents a sponsor or partner displayed on the website."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=150, help_text="Official name of the partner or sponsor")
-    logo = models.ImageField(upload_to="partners/logos/", help_text="Upload the partner's logo image")
+    logo = models.ImageField(upload_to="uploads/partners/logos/", help_text="Upload the partner's logo image")
     website = models.URLField(blank=True, null=True, help_text="Optional: Link to partner website")
     order = models.PositiveIntegerField(default=0, help_text="Order of display on the sponsors section")
     is_active = models.BooleanField(default=True, help_text="Show or hide this partner on the site")
