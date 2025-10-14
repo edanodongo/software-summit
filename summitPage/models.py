@@ -122,20 +122,20 @@ class Registrant(models.Model):
 
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"
-
-    # ✅ Automatically ensure upload folders exist
-    def save(self, *args, **kwargs):
-        upload_dirs = [
-            os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
-            os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
-            os.path.join(settings.MEDIA_ROOT, "exhibitors/id_scans/"),
-            os.path.join(settings.MEDIA_ROOT, "exhibitors/photos/"),
-            os.path.join(settings.MEDIA_ROOT, "partners/logos/"),
-        ]
-        for path in upload_dirs:
-            os.makedirs(path, exist_ok=True)
-        super().save(*args, **kwargs)
-
+    #
+    # # ✅ Automatically ensure upload folders exist
+    # def save(self, *args, **kwargs):
+    #     upload_dirs = [
+    #         os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
+    #         os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
+    #         os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/id_scans/"),
+    #         os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/photos/"),
+    #         os.path.join(settings.MEDIA_ROOT, "uploads/partners/logos/"),
+    #     ]
+    #     for path in upload_dirs:
+    #         os.makedirs(path, exist_ok=True)
+    #     super().save(*args, **kwargs)
+    #
 
 
 # ---------------------------
@@ -375,7 +375,7 @@ class SummitSpeaker(models.Model):
     topic = models.CharField(max_length=255)
     summary = models.TextField(blank=True)
     bio = models.TextField(blank=True)
-    photo = models.ImageField(upload_to="speakers/", blank=True, null=True)
+    photo = models.ImageField(upload_to="uploads/speakers/", blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
     twitter_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -391,7 +391,7 @@ class SummitSpeaker(models.Model):
         """Returns photo URL safely for templates."""
         if self.photo:
             return self.photo.url
-        return "/static/images/default-speaker.png"
+        return "static/images/speakers/placeholder.webp"
 
 
 # --------------------------------------------
@@ -576,8 +576,8 @@ class Exhibitor(models.Model):
     section = models.ForeignKey(ExhibitionSection, on_delete=models.SET_NULL, null=True, blank=True)
 
     national_id_number = models.CharField(max_length=50)
-    national_id_scan = models.FileField(upload_to="exhibitors/id_scans/")
-    passport_photo = models.ImageField(upload_to="exhibitors/photos/")
+    national_id_scan = models.FileField(upload_to="uploads/exhibitors/id_scans/")
+    passport_photo = models.ImageField(upload_to="uploads/exhibitors/photos/")
 
     privacy_agreed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
