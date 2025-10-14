@@ -1,0 +1,72 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <!-- Profile Photo -->
+        <div class="col-md-3 text-center">
+          {% if exhibitor.passport_photo %}
+            <img src="{{ exhibitor.passport_photo.url }}" class="rounded-circle shadow-sm mb-3"
+                 style="width: 150px; height: 150px; object-fit: cover;" alt="Exhibitor Photo">
+          {% else %}
+            <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle shadow-sm mb-3"
+                 style="width: 150px; height: 150px; object-fit: cover;" alt="Default Photo">
+          {% endif %}
+          <h5 class="fw-bold">{{ exhibitor.get_full_name }}</h5>
+          <p class="text-muted mb-0">{{ exhibitor.job_title|default:"—" }}</p>
+          <p class="text-muted">{{ exhibitor.organization_type|default:"—" }}</p>
+        </div>
+
+        <!-- Info Section -->
+        <div class="col-md-9">
+          <h4 class="mb-3 text-primary fw-bold">Exhibitor Details</h4>
+          <div class="row">
+            <div class="col-md-6 mb-2"><strong>Email:</strong> {{ exhibitor.email }}</div>
+            <div class="col-md-6 mb-2"><strong>Phone:</strong> {{ exhibitor.phone }}</div>
+            <div class="col-md-6 mb-2"><strong>Category:</strong> {{ exhibitor.get_category_display }}</div>
+            <div class="col-md-6 mb-2"><strong>Section:</strong> {{ exhibitor.section.name|default:"—" }}</div>
+            <div class="col-md-6 mb-2"><strong>Booth Number:</strong> {{ exhibitor.booth.booth_number|default:"Unassigned" }}</div>
+            <div class="col-md-6 mb-2"><strong>Booth Type:</strong> {{ exhibitor.booth.get_booth_type_display|default:"—" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="fw-bold text-secondary mb-3">Product Description</h5>
+      <p>{{ exhibitor.product_description|default:"No description provided." }}</p>
+
+      <h5 class="fw-bold text-secondary mt-4 mb-3">Uploaded Documents</h5>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>National ID:</strong> {{ exhibitor.national_id_number }}
+          {% if exhibitor.national_id_scan %}
+            <a href="{{ exhibitor.national_id_scan.url }}" target="_blank" class="btn btn-sm btn-outline-primary float-end">View</a>
+          {% endif %}
+        </li>
+        <li class="list-group-item">
+          <strong>Passport Photo:</strong>
+          {% if exhibitor.passport_photo %}
+            <a href="{{ exhibitor.passport_photo.url }}" target="_blank" class="btn btn-sm btn-outline-primary float-end">View</a>
+          {% endif %}
+        </li>
+      </ul>
+
+      {% if booking %}
+      <div class="alert mt-4 {% if booking.approved %}alert-success{% else %}alert-warning{% endif %}">
+        <strong>Booking Status:</strong>
+        {{ booking.approved|yesno:"Approved,Pending Approval" }}<br>
+        <small>Booked at: {{ booking.booked_at|date:"M d, Y H:i" }}</small>
+      </div>
+      {% else %}
+      <div class="alert alert-info mt-4">
+        <strong>No booth booking found.</strong> You can contact the summit admin for booth allocation.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

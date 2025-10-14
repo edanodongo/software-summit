@@ -1234,3 +1234,231 @@ def gallery(request):
     return render(request, "summit/gallery.html", {
         'gallery_items': gallery_items,
     })
+
+
+
+
+
+
+# exhibitors/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from django.http import JsonResponse
+from .models import Exhibitor, Booth, BoothBooking, ExhibitionSection
+from .forms import ExhibitorRegistrationForm, BoothForm, ExhibitionSectionForm
+from .utils import send_confirmation_mail
+
+
+# ===========================
+# ✅ Exhibitor Registration
+# ===========================
+def exhibitor(request):
+    if request.method == "POST":
+        form = ExhibitorRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            exhibitor = form.save(commit=False)
+
+            if request.FILES.get("passport_photo"):
+                exhibitor.passport_photo = request.FILES["passport_photo"]
+            if request.FILES.get("national_id_scan"):
+                exhibitor.national_id_scan = request.FILES["national_id_scan"]
+
+            booth = form.cleaned_data.get("booth")
+            section = form.cleaned_data.get("section")
+
+            if booth and booth.is_booked:
+                msg = f"The booth {booth.booth_number} is already booked."
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({"success": False, "errors": {"booth": [msg]}}, status=400)
+                messages.error(request, msg)
+                return render(request, "summit/exhibitor.html", {"form": form})
+
+            exhibitor.section = section
+            exhibitor.booth = booth
+            exhibitor.save()
+
+            if booth:
+                BoothBooking.objects.create(
+                    exhibitor=exhibitor,
+                    booth=booth,
+                    booked_at=timezone.now(),
+                    approved=False,
+                )
+                booth.is_booked = True
+                booth.save()
+
+            # send email
+            try:
+                send_confirmation_mail(exhibitor)
+            except Exception as e:
+                print("❌ Email send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({
+                        "success": True,
+                        "message": "Registration successful, but confirmation email failed."
+                    })
+                messages.warning(request, "Registration saved, but email could not be sent.")
+
+            # success response
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "message": "Registration successful!"})
+            messages.success(request, "Registration successful!")
+            return redirect("home")
+
+        # form invalid
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"success": False, "errors": form.errors}, status=400)
+        messages.error(request, "Please correct the errors.")
+    else:
+        form = ExhibitorRegistrationForm()
+
+    form.fields["booth"].queryset = Booth.objects.filter(is_booked=False)
+    return render(request, "summit/exhibitor.html", {"form": form})
+
+
+# ===========================
+# ✅ Exhibitor Dashboard & Management
+# ===========================
+from django.db.models import Q
+from django.shortcuts import render
+from .models import ExhibitionSection, Booth, Exhibitor
+
+def admin_dashboard(request):
+    # --- Base data for the dashboard ---
+    sections = ExhibitionSection.objects.all()
+    booths = Booth.objects.all()
+
+    # --- Handle search and filters ---
+    query = request.GET.get("q", "")
+    category_filter = request.GET.get("category", "")
+    section_filter = request.GET.get("section", "")
+
+    exhibitors = Exhibitor.objects.all().order_by("-created_at")
+
+    if query:
+        exhibitors = exhibitors.filter(
+            Q(first_name__icontains=query)
+            | Q(second_name__icontains=query)
+            | Q(email__icontains=query)
+            | Q(phone__icontains=query)
+            | Q(organization_type__icontains=query)
+            | Q(job_title__icontains=query)
+        )
+
+    if category_filter:
+        exhibitors = exhibitors.filter(category=category_filter)
+
+    if section_filter:
+        exhibitors = exhibitors.filter(section__id=section_filter)
+
+    # --- Pass choices and current filters to template ---
+    categories = Exhibitor._meta.get_field("category").choices
+
+    context = {
+        "sections": sections,
+        "booths": booths,
+        "exhibitors": exhibitors,
+        "query": query,
+        "category_filter": category_filter,
+        "section_filter": section_filter,
+        "categories": categories,
+    }
+    return render(request, "exhibitor/admin_dashboard.html", context)
+
+
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import Exhibitor
+
+def admin_exhibitor_delete(request, pk):
+    exhibitor = get_object_or_404(Exhibitor, pk=pk)
+    if request.method == "POST":
+        exhibitor.delete()
+        messages.success(request, "Exhibitor deleted successfully.")
+        return redirect("admin_dashboard")
+    return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor})
+
+
+# --- Section Management ---
+def admin_sections(request):
+    sections = ExhibitionSection.objects.all()
+    return render(request, "exhibitor/admin_sections.html", {"sections": sections})
+
+
+def admin_add_section(request):
+    if request.method == "POST":
+        form = ExhibitionSectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Section added successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = ExhibitionSectionForm()
+    return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Add Section"})
+
+
+def admin_edit_section(request, pk):
+    section = get_object_or_404(ExhibitionSection, pk=pk)
+    if request.method == "POST":
+        form = ExhibitionSectionForm(request.POST, instance=section)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Section updated successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = ExhibitionSectionForm(instance=section)
+    return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Edit Section"})
+
+
+def admin_delete_section(request, pk):
+    section = get_object_or_404(ExhibitionSection, pk=pk)
+    if request.method == "POST":
+        section.delete()
+        messages.success(request, "Section deleted successfully.")
+        return redirect("admin_dashboard")
+    return render(request, "exhibitor/admin_confirm_delete.html", {"object": section, "type": "Section"})
+
+
+# --- Booth Management ---
+def admin_booths(request):
+    booths = Booth.objects.all()
+    return render(request, "exhibitor/admin_booths.html", {"booths": booths})
+
+
+def admin_add_booth(request):
+    if request.method == "POST":
+        form = BoothForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Booth added successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = BoothForm()
+    return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"})
+
+
+def admin_edit_booth(request, pk):
+    booth = get_object_or_404(Booth, pk=pk)
+    if request.method == "POST":
+        form = BoothForm(request.POST, instance=booth)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Booth updated successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = BoothForm(instance=booth)
+    return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Edit Booth"})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Booth
+
+def admin_delete_booth(request, pk):
+    booth = get_object_or_404(Booth, pk=pk)
+    if request.method == "POST":
+        booth.delete()
+        messages.success(request, "Booth deleted successfully.")
+        return redirect("admin_dashboard")
+    return render(request, "exhibitor/admin_confirm_delete.html", {"object": booth, "type": "Booth"})

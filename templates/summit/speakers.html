@@ -40,19 +40,19 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-            <li><a href="{% url 'home' %}">ABOUT</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
             <li><a href="{% url 'register' %}">REGISTER</a></li>
-            <li><a href="{% url 'home' %}">AGENDA</a></li>
+            <li><a href="{% url 'home' %}#schedule">AGENDA</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
-            <li><a href="{% url 'home' %}">FEATURES</a></li>
-            <li><a href="{% url 'home' %}">PARTNERS</a></li>
+            <li><a href="{% url 'home' %}#features">FEATURES</a></li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="{% url 'home' %}">MEDIA</a></li>
+                <li><a href="{% url 'home' %}#gallery">MEDIA</a></li>
                 <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
               </ul>
-            </li>  
+            </li>
             <li class="d-none d-md-block">
               <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
             </li>
@@ -124,7 +124,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
-                         loading="lazy" 
+                         loading="lazy"
                         data-name="Hon. William Kabogo Gitau"
                         data-position="Cabinet Secretary"
                         data-org="Ministry of ICT & Digital Economy (MICDE), Government of
@@ -166,7 +166,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
-                         loading="lazy" 
+                         loading="lazy"
                         data-name="Eng John Tanui"
                         data-position="Principal Secretary"
                         data-org="State Department of ICT and Digital Economy, Government
@@ -191,10 +191,10 @@
                 <div class="speaker-profile">
                   <div class="speaker-meta">
                     <div class="speaker-photo">
-                      <img 
-                        src="{{ speaker.photo_url }}" 
-                        loading="lazy" 
-                        alt="{{ speaker.full_name }}" 
+                      <img
+                        src="{{ speaker.photo_url }}"
+                        loading="lazy"
+                        alt="{{ speaker.full_name }}"
                         class="img-fluid">
                     </div>
                     <div class="speaker-info">
@@ -276,7 +276,7 @@
                     <div class="speaker-actions">
                       <a href="#"
                         class="profile-btn"
-                         loading="lazy" 
+                         loading="lazy"
                         data-name="Marcus Thompson"
                         data-position="Blockchain Architect"
                         data-org="CryptoTech Solutions"
@@ -315,10 +315,10 @@
                     </div>
                     <p class="speaker-summary">Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                     <div class="speaker-actions">
-                      <!-- View Profile button with data attributes 
+                      <!-- View Profile button with data attributes
                       <a href="#"
                         class="profile-btn"
-                         loading="lazy" 
+                         loading="lazy"
                         data-name="Jennifer Walsh"
                         data-position="Senior Data Scientist"
                         data-org="DataVision Labs"
@@ -399,9 +399,9 @@
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="{% url 'home' %}">About</a></li>
+              <li><a href="{% url 'home' %}#intro">About</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
-              <li><a href="{% url 'home' %}">Agenda</a></li>
+              <li><a href="{% url 'home' %}#schedule">Agenda</a></li>
               <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
           </div>
@@ -409,9 +409,9 @@
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Resources</h4>
             <ul>
-              <li><a href="{% url 'home' %}">Features</a></li>
-              <li><a href="{% url 'home' %}">Partners</a></li>
-              <li><a href="{% url 'home' %}">Media</a></li>
+              <li><a href="{% url 'home' %}#features">Features</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="#">Media</a></li>
               <li><a href="{% url 'privacy' %}">Privacy</a></li>
             </ul>
           </div>

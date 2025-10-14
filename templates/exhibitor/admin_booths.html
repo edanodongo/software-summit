@@ -1,0 +1,59 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-4 px-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold text-primary"><i class="fas fa-cubes me-2"></i>Manage Booths</h2>
+    <a href="{% url 'admin_booth_add' %}" class="btn btn-primary">
+      <i class="fas fa-plus me-1"></i>Add Booth
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <table class="table table-hover align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th>Booth No.</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Section</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in booths %}
+          <tr>
+            <td>{{ b.booth_number }}</td>
+            <td>{{ b.get_booth_type_display }}</td>
+            <td>{{ b.size }}</td>
+            <td>{{ b.price }}</td>
+            <td>{{ b.section.name }}</td>
+            <td>
+              {% if b.is_booked %}
+                <span class="badge bg-danger">Booked</span>
+              {% else %}
+                <span class="badge bg-success">Available</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'admin_booth_edit' b.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a href="{% url 'admin_booth_delete' b.id %}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="text-center text-muted py-3">No booths available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "summit/base.html" %}
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg rounded-4 border-0">
+    <div class="card-body">
+      <h4 class="fw-bold text-primary mb-4">{{ title }}</h4>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
