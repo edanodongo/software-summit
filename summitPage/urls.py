@@ -14,7 +14,6 @@ urlpatterns = [
     path("categories/<int:pk>/delete/", views.delete_category, name="delete_category"),
     path('categories/editCategory/', views.edit_category, name='editCategory'),
 
-
     path("index/", views.index, name="index"),
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),

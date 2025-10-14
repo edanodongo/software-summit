@@ -11,6 +11,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
 from .models import EmailLog, Category
+from .models import EmailLogs
 
 from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
@@ -76,6 +77,8 @@ def sendmailer(subject, message, recipients):
         print(" Email sending failed:", str(e))
         traceback.print_exc()
 
+
+# --------------------------------------------
 
 def send_confirmation_email(registrant, retries=3, delay=3):
     subject = "Kenya Software Summit Registration"
@@ -241,6 +244,7 @@ def send_confirmation_email(registrant, retries=3, delay=3):
         )
 
 
+# --------------------------------------------
 
 def get_category_name_from_id(category_id):
     try:
@@ -250,18 +254,7 @@ def get_category_name_from_id(category_id):
         return "Unknown"
 
 
-
-import time
-import traceback
-from io import BytesIO
-from datetime import datetime
-from django.core.mail import EmailMultiAlternatives
-from email.mime.image import MIMEImage
-from django.utils import timezone
-import qrcode
-from barcode import Code128
-from barcode.writer import ImageWriter
-from .models import EmailLogs  # ✅ import model
+# --------------------------------------------
 
 def send_confirmation_mail(exhibitor, retries=3, delay=3):
     subject = "Kenya Software Summit Registration"

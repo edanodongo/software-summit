@@ -41,7 +41,12 @@
           <ul>
             <li><a href="{% url 'home' %}" class="active">HOME</a></li>
             <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
-            <li><a href="{% url 'register' %}">REGISTER</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                <li><a href="#">EXHIBITOR</a></li>
+              </ul>
+            </li>
             <li><a href="{% url 'home' %}#schedule">AGENDA</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
             <li><a href="{% url 'home' %}#features">FEATURES</a></li>
@@ -296,7 +301,7 @@
               <li><a href="{% url 'home' %}#intro">About</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
               <li><a href="{% url 'home' %}#schedule">Agenda</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
+              <li><a href="#">Register</a></li>
             </ul>
           </div>
 
