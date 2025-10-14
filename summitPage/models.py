@@ -19,6 +19,7 @@ def get_category_choices():
     choices += [(c.id, c.name) for c in Category.objects.all()]
     return choices
 
+# --------------------------------------------
 # def get_category_id():
 #
 #     choices = [('', 'Select Category')]  # Placeholder
@@ -545,6 +546,7 @@ class Exhibitor(models.Model):
     """Main exhibitor registration details"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=10, choices=[
+        ('', 'Select Title'),
         ("Prof", "Prof."),
         ("Dr", "Dr."),
         ("Mr", "Mr."),
@@ -559,6 +561,7 @@ class Exhibitor(models.Model):
     organization_type = models.CharField(max_length=200)
     job_title = models.CharField(max_length=200)
     category = models.CharField(max_length=50, choices=[
+        ('', 'Select Category'),
         ('startup', 'Startup'),
         ('corporate', 'Corporate'),
         ('government', 'Government Agency'),
