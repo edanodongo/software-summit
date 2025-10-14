@@ -1,32 +1,14 @@
-import os
-
-from django.contrib import messages
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
-from django.contrib.staticfiles import finders
 from django.core.paginator import Paginator
-from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.forms import inlineformset_factory
-from django.http import FileResponse, Http404
-from django.http import HttpResponse
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.templatetags.static import static
 from django.utils.timezone import now
-from django.views.decorators.http import require_POST
 from openpyxl import Workbook
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.pagesizes import landscape, A7
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.utils import ImageReader
-from reportlab.pdfgen import canvas
-from reportlab.platypus import (
-    PageBreak
-)
+from reportlab.lib.pagesizes import landscape
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
     Image, Spacer
@@ -35,7 +17,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .decorators import require_api_key
-from .forms import GalleryForm, QuickRegistrationForm, RegistrantForm, ScheduleDayForm, TimeSlotForm, SessionForm, \
+from .forms import GalleryForm, RegistrantForm, ScheduleDayForm, TimeSlotForm, SessionForm, \
     PanelistForm, SpeakerForm
 from .models import *
 from .serializers_new import serialize_registrant
@@ -45,14 +27,38 @@ PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
 
-
-
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.contrib import messages
-from .models import Registrant, SummitGallery, SummitPartner, SummitScheduleDay
+from .models import SummitGallery, SummitPartner, SummitScheduleDay
 from .forms import QuickRegistrationForm
-from .utils import send_confirmation_email  # assuming this is your helper
+
+import qrcode
+from io import BytesIO
+from django.http import FileResponse, Http404
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A7, portrait
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from django.conf import settings
+import os
+
+from django.views.decorators.http import require_POST
+from .models import Registrant, EmailLog
+from .utils import send_confirmation_email, send_confirmation_mail #  email sending function
+
+from django.utils import timezone
+from django.http import JsonResponse
+from .models import BoothBooking
+from .forms import ExhibitorRegistrationForm, BoothForm, ExhibitionSectionForm
+
+from django.http import HttpResponse
+from datetime import datetime
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count, Max
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Booth
+
 
 def home(request):
 
@@ -120,6 +126,9 @@ def home(request):
     })
 
 
+# --------------------------------------------
+
+
 def reg(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
@@ -182,18 +191,6 @@ def reg(request):
     })
 
 
-import qrcode
-from io import BytesIO
-from django.http import FileResponse, Http404
-from django.contrib.admin.views.decorators import staff_member_required
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A7, portrait
-from reportlab.lib.utils import ImageReader
-from reportlab.lib import colors
-from django.conf import settings
-from .models import Registrant
-import os
-
 
 def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold"):
     """Dynamically adjust font size so text fits within the given width."""
@@ -201,6 +198,9 @@ def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold")
     while c.stringWidth(text, font_name, font_size) > max_width and font_size > 5:
         font_size -= 0.5
     return font_size
+
+
+# --------------------------------------------
 
 
 @staff_member_required
@@ -363,6 +363,8 @@ def generate_badge(request, registrant_id):
 
 
 
+# --------------------------------------------
+
 @staff_member_required
 def unsubscribe_view(request, token):
     try:
@@ -372,6 +374,9 @@ def unsubscribe_view(request, token):
         return render(request, "summit/unsubscribe.html")
     except Registrant.DoesNotExist:
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
+
+
+# --------------------------------------------
 
 
 @staff_member_required
@@ -410,7 +415,9 @@ def dashboard_stats(request):
     })
 
 
+# --------------------------------------------
 # === Excel Export ===
+# --------------------------------------------
 @staff_member_required
 def export_registrants_excel(request):
     wb = Workbook()
@@ -443,8 +450,10 @@ def export_registrants_excel(request):
     return response
 
 
+# --------------------------------------------
 # === PDF Export in Landscape ===
 # === PDF Export in Landscape with Logo, Header & Footer ===
+# --------------------------------------------
 
 @staff_member_required
 def export_registrants_pdf(request):
@@ -529,6 +538,8 @@ def export_registrants_pdf(request):
     return response
 
 
+# --------------------------------------------
+
 @staff_member_required
 def print_registrants(request):
     registrants = Registrant.objects.all().order_by("created_at")
@@ -544,9 +555,8 @@ def print_registrants(request):
         "org_type_counts": org_type_counts.items(),
     })
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
-from django.db.models import Count, Max
+
+# --------------------------------------------
 
 @staff_member_required
 def dashboard_view(request):
@@ -573,6 +583,8 @@ def dashboard_view(request):
     }
     return render(request, "summit/dashboard.html", context)
 
+
+# --------------------------------------------
 
 # Endpoint for charts (AJAX/React)
 @staff_member_required
@@ -601,6 +613,8 @@ class SummitLogoutView(LogoutView):
         return self.post(request, *args, **kwargs)
 
 
+# --------------------------------------------
+
 @staff_member_required
 def about(request):
     return render(request, 'summit/samples/about.html')
@@ -609,6 +623,8 @@ def about(request):
 def index(request):
     return render(request, 'summit/index.html')
 
+
+# --------------------------------------------
 
 @staff_member_required
 @require_POST
@@ -624,29 +640,39 @@ def delete_registrant(request, pk):
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
 
+# --------------------------------------------
+
 def privacy(request):
     return render(request, "summit/privacy.html")
 
 
+# --------------------------------------------
+
 def not_found(request):
     return render(request, "summit/404.html")
 
+
+# --------------------------------------------
 
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "setup/mailme.html", {"emails": emails})
 
 
+# --------------------------------------------
+
 def speakers(request):
     speakers = SummitSpeaker.objects.all()
     return render(request, "summit/speakers.html", {"speakers": speakers})
 
 
+# --------------------------------------------
+
 def media(request):
     return render(request, "summit/gallery.html")
 
 
-# ---------------------------
+# --------------------------------------------
 
 def register(request):
     if request.method == "POST":
@@ -683,6 +709,8 @@ def register(request):
 
     return render(request, "summit/buy-tickets.html", {"form": form})
 
+
+# --------------------------------------------
 
 def sendMail(request):
     if request.method == "POST":
@@ -724,6 +752,8 @@ def sendMail(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 
+# --------------------------------------------
+
 def gallery_dashboard(request):
     """Display all gallery images and allow adding new ones."""
     gallery_items = SummitGallery.objects.all()
@@ -744,6 +774,8 @@ def gallery_dashboard(request):
     })
 
 
+# --------------------------------------------
+
 def gallery_edit(request, pk):
     """Edit a specific gallery image."""
     item = get_object_or_404(SummitGallery, pk=pk)
@@ -761,6 +793,8 @@ def gallery_edit(request, pk):
     return render(request, 'gallery/gallery_edit.html', {'form': form, 'item': item})
 
 
+# --------------------------------------------
+
 @require_POST
 def gallery_delete(request, pk):
     """Delete a gallery item."""
@@ -769,6 +803,8 @@ def gallery_delete(request, pk):
     messages.success(request, "Gallery image deleted successfully!")
     return redirect('gallery_dashboard')
 
+
+# --------------------------------------------
 
 def speaker_dashboard(request):
     """Speaker management dashboard."""
@@ -792,6 +828,8 @@ def speaker_dashboard(request):
     return render(request, "speaker/speaker_dashboard.html", context)
 
 
+# --------------------------------------------
+
 def speaker_create(request):
     if request.method == "POST":
         form = SpeakerForm(request.POST, request.FILES)
@@ -803,6 +841,8 @@ def speaker_create(request):
         form = SpeakerForm()
     return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker"})
 
+
+# --------------------------------------------
 
 def update_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
@@ -817,6 +857,8 @@ def update_speaker(request, pk):
     return render(request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"})
 
 
+# --------------------------------------------
+
 def delete_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
     if request.method == "POST":
@@ -826,13 +868,16 @@ def delete_speaker(request, pk):
     return render(request, "speaker/confirm_delete.html", {"speaker": speaker})
 
 
-# Partner
+# --------------------------------------------
 
+# Partner
 
 def partner_dashboard(request):
     partners = SummitPartner.objects.all().order_by("order")
     return render(request, "partner/partner_dashboard.html", {"partners": partners})
 
+
+# --------------------------------------------
 
 def save_partner(request):
     if request.method == "POST":
@@ -870,6 +915,8 @@ def save_partner(request):
         return redirect("partner_dashboard")
 
 
+# --------------------------------------------
+
 def delete_partner(request, partner_id):
     if request.method == "POST":
         partner = get_object_or_404(SummitPartner, pk=partner_id)
@@ -878,10 +925,10 @@ def delete_partner(request, partner_id):
         return redirect("partner_dashboard")
 
 
-# Agenda view
 
 # --------------------------------------------
-
+# Agenda view
+# --------------------------------------------
 
 @login_required
 def dashboard_home(request):
@@ -925,7 +972,9 @@ def delete_day(request, pk):
     return redirect("dashboard_home")
 
 
-# ---------------- TIMESLOT CRUD ----------------
+# --------------------------------------------
+# -TIMESLOT CRUD -
+# --------------------------------------------
 @login_required
 def add_timeslot(request, day_id):
     day = get_object_or_404(SummitScheduleDay, id=day_id)
@@ -942,7 +991,9 @@ def add_timeslot(request, day_id):
     return render(request, "schedule/timeslot_form.html", {"form": form, "day": day})
 
 
-# ---------------- SESSION CRUD (WITH PANELISTS) ----------------
+# --------------------------------------------
+# -- SESSION CRUD (WITH PANELISTS) --
+# --------------------------------------------
 @login_required
 def add_session(request, timeslot_id):
     timeslot = get_object_or_404(SummitTimeSlot, id=timeslot_id)
@@ -963,9 +1014,11 @@ def add_session(request, timeslot_id):
     return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
 
 
+# --------------------------------------------
+
 @login_required
 def edit_session(request, pk):
-    session = get_object_or_404(Session, id=pk)
+    session = get_object_or_404(SummitSession, id=pk)
     if request.method == "POST":
         form = SessionForm(request.POST, instance=session)
         formset = PanelistFormSet(request.POST, instance=session)
@@ -980,6 +1033,8 @@ def edit_session(request, pk):
     return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
 
 
+# --------------------------------------------
+
 @login_required
 def delete_session(request, pk):
     session = get_object_or_404(SummitSession, id=pk)
@@ -987,6 +1042,8 @@ def delete_session(request, pk):
     messages.warning(request, "🗑️ Session deleted successfully.")
     return redirect("dashboard_home")
 
+
+# --------------------------------------------
 
 @require_api_key
 def get_registrants(request):
@@ -1050,8 +1107,7 @@ def get_registrants(request):
     }, status=200)
 
 
-from django.http import HttpResponse
-from datetime import datetime
+# --------------------------------------------
 
 def add_to_calendar(request):
     ics_content = """BEGIN:VCALENDAR
@@ -1077,12 +1133,7 @@ END:VCALENDAR
     return response
 
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from .models import Registrant, EmailLog
-from .utils import send_confirmation_email  # your email sending function
+# --------------------------------------------
 
 @require_POST
 def resend_confirmation_email(request, registrant_id):
@@ -1136,6 +1187,8 @@ def resend_confirmation_email(request, registrant_id):
         }, status=500)
 
 
+# --------------------------------------------
+
 def guest_category(request):
     category = Category.objects.all().order_by('name')
     category = {"category": category}
@@ -1143,8 +1196,13 @@ def guest_category(request):
     return render(request, "setup/add_category.html", category)
 
 
+# --------------------------------------------
+
 def categories_create(request):
     return render(request, "setup/category_form.html")
+
+
+# --------------------------------------------
 
 def save_category(request):
     if request.method == "POST":
@@ -1175,6 +1233,8 @@ def save_category(request):
         'message': 'Invalid request method.'
     })
 
+# --------------------------------------------
+
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
@@ -1200,6 +1260,9 @@ def delete_category(request, pk):
         'message': 'Invalid request method. Use POST to delete.'
     })
 
+
+# --------------------------------------------
+
 def update_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
@@ -1208,6 +1271,9 @@ def update_category(request, pk):
     }
 
     return render(request, "setup/edit_category_form.html", context)
+
+
+# --------------------------------------------
 
 def edit_category(request):
     if request.method == "POST":
@@ -1229,6 +1295,10 @@ def edit_category(request):
             return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+# --------------------------------------------
+
 def gallery(request):
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     return render(request, "summit/gallery.html", {
@@ -1238,21 +1308,9 @@ def gallery(request):
 
 
 
-
-
-# exhibitors/views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.utils import timezone
-from django.http import JsonResponse
-from .models import Exhibitor, Booth, BoothBooking, ExhibitionSection
-from .forms import ExhibitorRegistrationForm, BoothForm, ExhibitionSectionForm
-from .utils import send_confirmation_mail
-
-
-# ===========================
+# --------------------------------------------
 # ✅ Exhibitor Registration
-# ===========================
+# --------------------------------------------
 def exhibitor(request):
     if request.method == "POST":
         form = ExhibitorRegistrationForm(request.POST, request.FILES)
@@ -1317,12 +1375,11 @@ def exhibitor(request):
     return render(request, "summit/exhibitor.html", {"form": form})
 
 
-# ===========================
+# --------------------------------------------
 # ✅ Exhibitor Dashboard & Management
-# ===========================
+# --------------------------------------------
 from django.db.models import Q
-from django.shortcuts import render
-from .models import ExhibitionSection, Booth, Exhibitor
+from .models import ExhibitionSection, Exhibitor
 
 def admin_dashboard(request):
     # --- Base data for the dashboard ---
@@ -1367,10 +1424,8 @@ def admin_dashboard(request):
     return render(request, "exhibitor/admin_dashboard.html", context)
 
 
-# views.py
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from .models import Exhibitor
+
+# --------------------------------------------
 
 def admin_exhibitor_delete(request, pk):
     exhibitor = get_object_or_404(Exhibitor, pk=pk)
@@ -1381,11 +1436,15 @@ def admin_exhibitor_delete(request, pk):
     return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor})
 
 
+# --------------------------------------------
+
 # --- Section Management ---
 def admin_sections(request):
     sections = ExhibitionSection.objects.all()
     return render(request, "exhibitor/admin_sections.html", {"sections": sections})
 
+
+# --------------------------------------------
 
 def admin_add_section(request):
     if request.method == "POST":
@@ -1398,6 +1457,8 @@ def admin_add_section(request):
         form = ExhibitionSectionForm()
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Add Section"})
 
+
+# --------------------------------------------
 
 def admin_edit_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
@@ -1412,6 +1473,8 @@ def admin_edit_section(request, pk):
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Edit Section"})
 
 
+# --------------------------------------------
+
 def admin_delete_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
     if request.method == "POST":
@@ -1421,11 +1484,15 @@ def admin_delete_section(request, pk):
     return render(request, "exhibitor/admin_confirm_delete.html", {"object": section, "type": "Section"})
 
 
+# --------------------------------------------
+
 # --- Booth Management ---
 def admin_booths(request):
     booths = Booth.objects.all()
     return render(request, "exhibitor/admin_booths.html", {"booths": booths})
 
+
+# --------------------------------------------
 
 def admin_add_booth(request):
     if request.method == "POST":
@@ -1439,6 +1506,8 @@ def admin_add_booth(request):
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"})
 
 
+# --------------------------------------------
+
 def admin_edit_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)
     if request.method == "POST":
@@ -1451,9 +1520,8 @@ def admin_edit_booth(request, pk):
         form = BoothForm(instance=booth)
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Edit Booth"})
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import Booth
+
+# --------------------------------------------
 
 def admin_delete_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)

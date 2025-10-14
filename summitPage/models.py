@@ -1,8 +1,11 @@
 # models.py
-from django.db import models
-import uuid, os
+import os
+import uuid
+
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -22,6 +25,8 @@ def get_category_choices():
 #     choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
 #     return choices
 
+# --------------------------------------------
+
 def get_category_id():
     """Safely return category choices, even when the DB isn't ready."""
     try:
@@ -33,6 +38,7 @@ def get_category_id():
         return [('', 'Select Category')]
 
 
+# --------------------------------------------
 
 class Registrant(models.Model):
     TITLE_CHOICES = [
@@ -121,6 +127,9 @@ class Registrant(models.Model):
         upload_dirs = [
             os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
             os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
+            os.path.join(settings.MEDIA_ROOT, "exhibitors/id_scans/"),
+            os.path.join(settings.MEDIA_ROOT, "exhibitors/photos/"),
+            os.path.join(settings.MEDIA_ROOT, "partners/logos/"),
         ]
         for path in upload_dirs:
             os.makedirs(path, exist_ok=True)
@@ -214,12 +223,11 @@ class Registration(models.Model):
 
 
 
-# All new models
 
-
-
-#---------------------------
+# --------------------------------------------
 # gallery model
+# --------------------------------------------
+
 class SummitGallery(models.Model):
     """Model for managing event gallery images shown in the gallery section."""
     title = models.CharField(max_length=150)
@@ -237,7 +245,7 @@ class SummitGallery(models.Model):
         return self.title
 
 
-#--------------------------------
+# --------------------------------------------
 
 
 class SummitPartner(models.Model):
@@ -262,8 +270,9 @@ class SummitPartner(models.Model):
 
 
 
-#------------------------------------------------
+# --------------------------------------------
 # Schedule model
+# --------------------------------------------
 
 class SummitScheduleDay(models.Model):
     """Represents each summit day (e.g., Day 1, Day 2, Day 3)."""
@@ -279,6 +288,8 @@ class SummitScheduleDay(models.Model):
     def __str__(self):
         return f"{self.title} ({self.date})"
 
+
+# --------------------------------------------
 
 class SummitTimeSlot(models.Model):
     """Represents a time slot block on a given day."""
@@ -296,6 +307,8 @@ class SummitTimeSlot(models.Model):
     def __str__(self):
         return f"{self.day.title} - {self.start_time.strftime('%I:%M %p')}"
 
+
+# --------------------------------------------
 
 class SummitSession(models.Model):
     """Represents each session or event in the schedule."""
@@ -328,6 +341,8 @@ class SummitSession(models.Model):
         return f"{self.title} ({self.session_type})"
 
 
+# --------------------------------------------
+
 class SummitPanelist(models.Model):
     """Panelists or presenters associated with a session."""
     session = models.ForeignKey(SummitSession, on_delete=models.CASCADE, related_name="panelists")
@@ -345,8 +360,9 @@ class SummitPanelist(models.Model):
         return f"{self.role}: {self.name or 'TBA'}"
 
 
-#--------------------------------
+# --------------------------------------------
 # speaker model
+# --------------------------------------------
 
 class SummitSpeaker(models.Model):
     """Model for Summit Speakers."""
@@ -377,6 +393,8 @@ class SummitSpeaker(models.Model):
         return "/static/images/default-speaker.png"
 
 
+# --------------------------------------------
+
 class ApiAccessLog(models.Model):
     api_key = models.CharField(max_length=100, blank=True, null=True)
     endpoint = models.CharField(max_length=255)
@@ -390,6 +408,9 @@ class ApiAccessLog(models.Model):
 
     def __str__(self):
         return f"{self.method} {self.endpoint} - {self.status_code}"
+
+
+# --------------------------------------------
 
 class EmailLog(models.Model):
     STATUS_CHOICES = [
@@ -419,8 +440,8 @@ class EmailLog(models.Model):
 
 
 
-from django.db import models
-from django.utils import timezone
+# --------------------------------------------
+
 
 class EmailLogs(models.Model):
     STATUS_CHOICES = [
@@ -447,11 +468,9 @@ class EmailLogs(models.Model):
         return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
 
 
-# exhibitors/models.py
-from django.db import models
-from django.utils import timezone
-import uuid
-
+# --------------------------------------------
+# exhibitors
+# --------------------------------------------
 
 class ExhibitionSection(models.Model):
     """Sections within the exhibition hall (e.g., Innovation, Corporate, Startups)."""
@@ -466,6 +485,9 @@ class ExhibitionSection(models.Model):
         """Return only unbooked booths."""
         return self.booths.filter(is_booked=False)
 
+
+
+# --------------------------------------------
 
 class Booth(models.Model):
     BOOTH_TYPE_CHOICES = [
@@ -493,6 +515,9 @@ class Booth(models.Model):
         self.save(update_fields=['is_booked'])
 
 
+
+# --------------------------------------------
+
 class BoothBooking(models.Model):
     exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="bookings")
     booth = models.OneToOneField(Booth, on_delete=models.CASCADE, related_name="booking")
@@ -512,6 +537,9 @@ class BoothBooking(models.Model):
         self.booth.mark_available()
         super().delete(*args, **kwargs)
 
+
+
+# --------------------------------------------
 
 class Exhibitor(models.Model):
     """Main exhibitor registration details"""
