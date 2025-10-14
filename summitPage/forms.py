@@ -1,6 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Registrant,get_category_choices
+from .models import Exhibitor, Booth, ExhibitionSection
+from .models import SummitSpeaker
+from .models import Registration
+from .models import SummitGallery
+from django import forms
+from .models import SummitPartner
 
 
 class QuickRegistrationForm(forms.ModelForm):
@@ -167,9 +173,7 @@ class QuickRegistrationForm(forms.ModelForm):
         return cleaned_data
 
 
-from django import forms
-from .models import Registration
-
+# --------------------------------------------
 
 class RegistrantForm(forms.ModelForm):
     interests = forms.MultipleChoiceField(
@@ -239,11 +243,9 @@ class RegistrantForm(forms.ModelForm):
 
 
 
+# --------------------------------------------
 # Gallery
-
-
-from django import forms
-from .models import SummitGallery
+# --------------------------------------------
 
 class GalleryForm(forms.ModelForm):
     class Meta:
@@ -256,10 +258,9 @@ class GalleryForm(forms.ModelForm):
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
+# --------------------------------------------
 # Partner
-
-from django import forms
-from .models import SummitPartner
+# --------------------------------------------
 
 class PartnerForm(forms.ModelForm):
     class Meta:
@@ -270,6 +271,7 @@ class PartnerForm(forms.ModelForm):
 
 #------------------------------------------
 # Schedule
+# --------------------------------------------
 
 from django import forms
 from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
@@ -300,11 +302,9 @@ class PanelistForm(forms.ModelForm):
         fields = ["role", "name", "organization", "order"]
 
 
-#------------------------------
+# --------------------------------------------
 # speakers
-
-from django import forms
-from .models import SummitSpeaker
+# --------------------------------------------
 
 class SpeakerForm(forms.ModelForm):
     class Meta:
@@ -334,11 +334,7 @@ class SpeakerForm(forms.ModelForm):
         }
 
 
-# exhibitors/forms.py
-from django import forms
-from .models import Exhibitor, Booth, ExhibitionSection
-from django import forms
-from .models import Exhibitor, Booth, ExhibitionSection
+# --------------------------------------------
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     class Meta:
@@ -354,7 +350,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Add Bootstrap classes
+        # Apply Bootstrap classes to all widgets
         for field_name, field in self.fields.items():
             if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.NumberInput, forms.Textarea, forms.FileInput)):
                 field.widget.attrs.update({'class': 'form-control'})
@@ -363,18 +359,34 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})
 
-        # Only show available booths
+        # Filter booths to only available ones
         self.fields['booth'].queryset = Booth.objects.filter(is_booked=False)
-        # Show all sections
         self.fields['section'].queryset = ExhibitionSection.objects.all()
 
+        # Add placeholders and empty labels
+        self.fields['title'].widget.attrs['placeholder'] = "e.g. Mr, Ms, Dr, Prof."
+        self.fields['first_name'].widget.attrs['placeholder'] = "Enter your first name"
+        self.fields['second_name'].widget.attrs['placeholder'] = "Enter your other names"
+        self.fields['email'].widget.attrs['placeholder'] = "Enter your email address"
+        self.fields['phone'].widget.attrs['placeholder'] = "Enter your phone number"
+        self.fields['organization_type'].widget.attrs['placeholder'] = "Enter your organization or institution name"
+        self.fields['job_title'].widget.attrs['placeholder'] = "Enter your job title or role"
+        self.fields['category'].empty_label = "Select exhibitor category"
+        self.fields['section'].empty_label = "Select exhibition section"
+        self.fields['booth'].empty_label = "Choose preferred booth"
+        self.fields['product_description'].widget.attrs['placeholder'] = "Briefly describe your product or service"
+        self.fields['national_id_number'].widget.attrs['placeholder'] = "Enter your National ID or Passport number"
 
+
+# --------------------------------------------
 
 class BoothForm(forms.ModelForm):
     class Meta:
         model = Booth
         fields = ["section", "booth_number", "booth_type", "size", "price", "is_booked"]
 
+
+# --------------------------------------------
 
 class ExhibitionSectionForm(forms.ModelForm):
     class Meta:
