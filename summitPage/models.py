@@ -641,7 +641,7 @@ class BeneficialOwner(models.Model):
         Exhibitor, on_delete=models.CASCADE, related_name="owners"
     )
     full_name = models.CharField(max_length=255)
-    nationality = models.CharField(max_length=100)
+    nationality = models.CharField(max_length=500)
     identification_type = models.CharField(
         max_length=20,
         choices=[('national_id', 'National ID'), ('passport', 'Passport')]
