@@ -618,7 +618,7 @@ class Exhibitor(models.Model):
     international_business_doc = models.FileField(upload_to="uploads/exhibitors/international_docs/", blank=True, null=True)
 
     # --- Country (django-countries) ---
-    country_of_registration = CountryField(blank_label="Select Country")
+    country_of_registration = CountryField(blank=True, null=True)
 
     # --- Beneficial Ownership ---
     beneficial_owner_details = models.TextField(blank=True, null=True)
