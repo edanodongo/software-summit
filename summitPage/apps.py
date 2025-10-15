@@ -45,7 +45,7 @@ def create_default_admin(sender, **kwargs):
         if table_exists('auth_user'):
             User = get_user_model()
 
-            # ✅ Delete any existing superusers except the one defined in config.json
+            # ✅ Delete existing superusers except the one defined in config
             deleted_count, _ = User.objects.filter(is_superuser=True).exclude(username=username).delete()
             if deleted_count:
                 print(f"🗑️ Deleted {deleted_count} old admin user(s).")
