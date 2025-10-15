@@ -41,6 +41,7 @@ htmlcov/
 
 
 venv/*
+slyenv/*
 env/*
 static_root/*
 media_root/*
