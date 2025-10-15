@@ -44,26 +44,14 @@ from django.views.decorators.http import require_POST
 from .models import Registrant, EmailLog
 from .utils import send_confirmation_email  #  email sending function
 
-from django.utils import timezone
-from django.http import JsonResponse
-
 from django.http import HttpResponse
 from datetime import datetime
 
 from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Count, Max
+from django.db.models import Max
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+from django.db.models import Count
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q, Count
-from django.db.models import Q
-from django.shortcuts import render
-
-from django.db.models import Q
-from django_countries import countries
-from django.db.models import Q
 from django_countries import countries
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -674,6 +662,7 @@ def not_found(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "setup/mailme.html", {"emails": emails})
@@ -732,6 +721,7 @@ def register(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def sendMail(request):
     if request.method == "POST":
         subject = request.POST.get("subject")
@@ -774,6 +764,7 @@ def sendMail(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def gallery_dashboard(request):
     """Display all gallery images and allow adding new ones."""
     gallery_items = SummitGallery.objects.all()
@@ -796,6 +787,7 @@ def gallery_dashboard(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def gallery_edit(request, pk):
     """Edit a specific gallery image."""
     item = get_object_or_404(SummitGallery, pk=pk)
@@ -815,6 +807,7 @@ def gallery_edit(request, pk):
 
 # --------------------------------------------
 
+@staff_member_required
 @require_POST
 def gallery_delete(request, pk):
     """Delete a gallery item."""
@@ -826,6 +819,7 @@ def gallery_delete(request, pk):
 
 # --------------------------------------------
 
+@staff_member_required
 def speaker_dashboard(request):
     """Speaker management dashboard."""
     speakers = SummitSpeaker.objects.all().order_by('full_name')
@@ -850,6 +844,7 @@ def speaker_dashboard(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def speaker_create(request):
     if request.method == "POST":
         form = SpeakerForm(request.POST, request.FILES)
@@ -864,6 +859,7 @@ def speaker_create(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def update_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
     if request.method == "POST":
@@ -879,6 +875,7 @@ def update_speaker(request, pk):
 
 # --------------------------------------------
 
+@staff_member_required
 def delete_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
     if request.method == "POST":
@@ -892,6 +889,7 @@ def delete_speaker(request, pk):
 
 # Partner
 
+@staff_member_required
 def partner_dashboard(request):
     partners = SummitPartner.objects.all().order_by("order")
     return render(request, "partner/partner_dashboard.html", {"partners": partners})
@@ -899,6 +897,7 @@ def partner_dashboard(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def save_partner(request):
     if request.method == "POST":
         partner_id = request.POST.get("partner_id")
@@ -937,6 +936,7 @@ def save_partner(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def delete_partner(request, partner_id):
     if request.method == "POST":
         partner = get_object_or_404(SummitPartner, pk=partner_id)
@@ -951,6 +951,7 @@ def delete_partner(request, partner_id):
 # --------------------------------------------
 
 @login_required
+@staff_member_required
 def dashboard_home(request):
     days = SummitScheduleDay.objects.all()
     return render(request, "schedule/dashboard_home.html", {"days": days})
@@ -958,6 +959,7 @@ def dashboard_home(request):
 
 # ---------------- DAY CRUD ----------------
 @login_required
+@staff_member_required
 def add_day(request):
     if request.method == "POST":
         form = ScheduleDayForm(request.POST)
@@ -971,6 +973,7 @@ def add_day(request):
 
 
 @login_required
+@staff_member_required
 def edit_day(request, pk):
     day = get_object_or_404(SummitScheduleDay, id=pk)
     if request.method == "POST":
@@ -985,6 +988,7 @@ def edit_day(request, pk):
 
 
 @login_required
+@staff_member_required
 def delete_day(request, pk):
     day = get_object_or_404(SummitScheduleDay, id=pk)
     day.delete()
@@ -996,6 +1000,7 @@ def delete_day(request, pk):
 # -TIMESLOT CRUD -
 # --------------------------------------------
 @login_required
+@staff_member_required
 def add_timeslot(request, day_id):
     day = get_object_or_404(SummitScheduleDay, id=day_id)
     if request.method == "POST":
@@ -1015,6 +1020,7 @@ def add_timeslot(request, day_id):
 # -- SESSION CRUD (WITH PANELISTS) --
 # --------------------------------------------
 @login_required
+@staff_member_required
 def add_session(request, timeslot_id):
     timeslot = get_object_or_404(SummitTimeSlot, id=timeslot_id)
     if request.method == "POST":
@@ -1037,6 +1043,7 @@ def add_session(request, timeslot_id):
 # --------------------------------------------
 
 @login_required
+@staff_member_required
 def edit_session(request, pk):
     session = get_object_or_404(SummitSession, id=pk)
     if request.method == "POST":
@@ -1056,6 +1063,7 @@ def edit_session(request, pk):
 # --------------------------------------------
 
 @login_required
+@staff_member_required
 def delete_session(request, pk):
     session = get_object_or_404(SummitSession, id=pk)
     session.delete()
@@ -1155,6 +1163,7 @@ END:VCALENDAR
 
 # --------------------------------------------
 
+@staff_member_required
 @require_POST
 def resend_confirmation_email(request, registrant_id):
     registrant = get_object_or_404(Registrant, id=registrant_id)
@@ -1209,6 +1218,7 @@ def resend_confirmation_email(request, registrant_id):
 
 # --------------------------------------------
 
+@staff_member_required
 def guest_category(request):
     category = Category.objects.all().order_by('name')
     category = {"category": category}
@@ -1218,12 +1228,14 @@ def guest_category(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def categories_create(request):
     return render(request, "setup/category_form.html")
 
 
 # --------------------------------------------
 
+@staff_member_required
 def save_category(request):
     if request.method == "POST":
         category_name = request.POST.get("category")
@@ -1255,6 +1267,7 @@ def save_category(request):
 
 # --------------------------------------------
 
+@staff_member_required
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
@@ -1283,6 +1296,7 @@ def delete_category(request, pk):
 
 # --------------------------------------------
 
+@staff_member_required
 def update_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
@@ -1295,6 +1309,7 @@ def update_category(request, pk):
 
 # --------------------------------------------
 
+@staff_member_required
 def edit_category(request):
     if request.method == "POST":
         category_id = request.POST.get("id")
@@ -1406,6 +1421,7 @@ def exhibitor(request):
 # ✅ Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
 
+@staff_member_required
 def admin_dashboard(request):
     sections = ExhibitionSection.objects.all()
     booths = Booth.objects.all()
@@ -1477,6 +1493,7 @@ def admin_dashboard(request):
 # --------------------------------------------
 # ✅ Delete Exhibitor
 # --------------------------------------------
+@staff_member_required
 def admin_exhibitor_delete(request, pk):
     exhibitor = get_object_or_404(Exhibitor, pk=pk)
     if request.method == "POST":
@@ -1489,11 +1506,13 @@ def admin_exhibitor_delete(request, pk):
 # --------------------------------------------
 # ✅ Section Management
 # --------------------------------------------
+@staff_member_required
 def admin_sections(request):
     sections = ExhibitionSection.objects.all()
     return redirect("admin_dashboard")
 
 
+@staff_member_required
 def admin_add_section(request):
     if request.method == "POST":
         form = ExhibitionSectionForm(request.POST)
@@ -1506,6 +1525,7 @@ def admin_add_section(request):
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Add Section"})
 
 
+@staff_member_required
 def admin_edit_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
     if request.method == "POST":
@@ -1519,6 +1539,7 @@ def admin_edit_section(request, pk):
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Edit Section"})
 
 
+@staff_member_required
 def admin_delete_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
     if request.method == "POST":
@@ -1531,11 +1552,13 @@ def admin_delete_section(request, pk):
 # --------------------------------------------
 # ✅ Booth Management
 # --------------------------------------------
+@staff_member_required
 def admin_booths(request):
     booths = Booth.objects.all()
     return render(request, "exhibitor/admin_booths.html", {"booths": booths})
 
 
+@staff_member_required
 def admin_add_booth(request):
     if request.method == "POST":
         form = BoothForm(request.POST)
@@ -1548,6 +1571,7 @@ def admin_add_booth(request):
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"})
 
 
+@staff_member_required
 def admin_edit_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)
     if request.method == "POST":
@@ -1561,6 +1585,7 @@ def admin_edit_booth(request, pk):
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Edit Booth"})
 
 
+@staff_member_required
 def admin_delete_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)
     if request.method == "POST":
