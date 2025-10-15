@@ -6061,3 +6061,47 @@ section,
 html {
   scroll-behavior: smooth;
 }
+
+
+/* Match dropdown with hero CTA styling */
+.dropdown-menu-cta {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.25rem 0;
+  margin-top: 8px;
+  min-width: 180px; /* Matches .hero .btn-cta */
+  background: rgba(255, 255, 255, 0.1); /* Transparent glass look */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: dropdownFade 0.25s ease forwards;
+}
+
+/* Dropdown items consistent with CTA text */
+.dropdown-menu-cta .dropdown-item {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 12px 24px;
+  color: #fff;
+  text-transform: uppercase;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect consistent with CTA hover */
+.dropdown-menu-cta .dropdown-item:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+/* Smooth dropdown fade animation */
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Keep the dropdown arrow neat */
+.btn-cta.dropdown-toggle::after {
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
