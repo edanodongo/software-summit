@@ -1,13 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Registrant,get_category_choices
+from .models import SummitSpeaker, Registration, SummitGallery, SummitPartner
+from django_countries.widgets import CountrySelectWidget
 from .models import Exhibitor, Booth, ExhibitionSection
-from .models import SummitSpeaker
-from .models import Registration
-from .models import SummitGallery
-from django import forms
-from .models import SummitPartner
 
+from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
 
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
@@ -273,8 +271,6 @@ class PartnerForm(forms.ModelForm):
 # Schedule
 # --------------------------------------------
 
-from django import forms
-from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
 
 class ScheduleDayForm(forms.ModelForm):
     class Meta:
@@ -334,7 +330,13 @@ class SpeakerForm(forms.ModelForm):
         }
 
 
+
+
+
 # --------------------------------------------
+# ✅ Exhibitor Registration Form
+# --------------------------------------------
+
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     class Meta:
@@ -343,52 +345,118 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             'title', 'first_name', 'second_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
             'section', 'booth', 'product_description',
+            'business_type', 'kra_pin', 'business_registration_doc',
+            'international_business_doc', 'country_of_registration',
+            'beneficial_owner_details', 'beneficial_owner_doc',
             'national_id_number', 'national_id_scan', 'passport_photo',
             'privacy_agreed',
         ]
+        widgets = {
+            'country_of_registration': CountrySelectWidget(attrs={'class': 'form-select'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Apply Bootstrap classes to all widgets
+        placeholders = {
+            'first_name': "Enter your first name",
+            'second_name': "Enter your other names (optional)",
+            'email': "Enter your email address",
+            'phone': "Enter your phone number",
+            'organization_type': "Enter your organization or institution name",
+            'job_title': "Enter your job title or role",
+            'product_description': "Briefly describe your product or service",
+            'kra_pin': "Enter your KRA PIN (if Kenyan)",
+            'beneficial_owner_details': "List owners/directors with ownership percentages",
+            'national_id_number': "Enter your National ID or Passport number",
+        }
+
         for field_name, field in self.fields.items():
-            if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.NumberInput, forms.Textarea, forms.FileInput)):
+            if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput)):
                 field.widget.attrs.update({'class': 'form-control'})
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({'class': 'form-select'})
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})
 
-        # Filter booths to only available ones
+            if field_name in placeholders:
+                field.widget.attrs['placeholder'] = placeholders[field_name]
+
+        required_fields = [
+            'title', 'first_name', 'email', 'phone',
+            'organization_type', 'job_title', 'category',
+            'section', 'booth', 'national_id_number',
+            'national_id_scan', 'passport_photo',
+            'country_of_registration', 'privacy_agreed'
+        ]
+        for f in required_fields:
+            self.fields[f].required = True
+
+        # Add frontend min length hints
+        self.fields['national_id_number'].widget.attrs['minlength'] = 8
+        self.fields['kra_pin'].widget.attrs['minlength'] = 11
+
         self.fields['booth'].queryset = Booth.objects.filter(is_booked=False)
         self.fields['section'].queryset = ExhibitionSection.objects.all()
 
-        # Add placeholders and empty labels
-        self.fields['title'].widget.attrs['placeholder'] = "e.g. Mr, Ms, Dr, Prof."
-        self.fields['first_name'].widget.attrs['placeholder'] = "Enter your first name"
-        self.fields['second_name'].widget.attrs['placeholder'] = "Enter your other names"
-        self.fields['email'].widget.attrs['placeholder'] = "Enter your email address"
-        self.fields['phone'].widget.attrs['placeholder'] = "Enter your phone number"
-        self.fields['organization_type'].widget.attrs['placeholder'] = "Enter your organization or institution name"
-        self.fields['job_title'].widget.attrs['placeholder'] = "Enter your job title or role"
         self.fields['category'].empty_label = "Select exhibitor category"
         self.fields['section'].empty_label = "Select exhibition section"
         self.fields['booth'].empty_label = "Choose preferred booth"
-        self.fields['product_description'].widget.attrs['placeholder'] = "Briefly describe your product or service"
-        self.fields['national_id_number'].widget.attrs['placeholder'] = "Enter your National ID or Passport number"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        business_type = cleaned_data.get('business_type')
+        kra_pin = cleaned_data.get('kra_pin')
+        id_number = cleaned_data.get('national_id_number')
+        country = cleaned_data.get('country_of_registration')
+
+        if not country:
+            self.add_error('country_of_registration', "Please select the country of registration.")
+
+        if id_number and len(id_number.strip()) < 8:
+            self.add_error('national_id_number', "National ID / Passport number must be at least 8 characters long.")
+
+        if business_type == 'local':
+            if not kra_pin:
+                self.add_error('kra_pin', "KRA PIN is required for Kenyan businesses.")
+            elif len(kra_pin.strip()) < 11:
+                self.add_error('kra_pin', "KRA PIN must be at least 11 characters long.")
+            if not cleaned_data.get('business_registration_doc'):
+                self.add_error('business_registration_doc', "Upload your Business Registration Certificate.")
+        elif business_type == 'international':
+            if not cleaned_data.get('international_business_doc'):
+                self.add_error('international_business_doc', "Upload your Trade License or Registration Document.")
+
+        return cleaned_data
 
 
 # --------------------------------------------
-
+# ✅ Booth Form
+# --------------------------------------------
 class BoothForm(forms.ModelForm):
     class Meta:
         model = Booth
         fields = ["section", "booth_number", "booth_type", "size", "price", "is_booked"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, (forms.TextInput, forms.NumberInput, forms.Select)):
+                field.widget.attrs.update({'class': 'form-control'})
+
 
 # --------------------------------------------
-
+# ✅ Exhibition Section Form
+# --------------------------------------------
 class ExhibitionSectionForm(forms.ModelForm):
     class Meta:
         model = ExhibitionSection
         fields = ["name", "description"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.TextInput):
+                field.widget.attrs.update({'class': 'form-control'})
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.update({'class': 'form-control', 'rows': 3})

@@ -1,10 +1,10 @@
 # models.py
 import os
-import uuid
-
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django_countries.fields import CountryField
+import uuid
 
 
 class Category(models.Model):
@@ -140,7 +140,7 @@ class Registrant(models.Model):
 
 # ---------------------------
 # New registration model for applications on IOS & Android
-# --------------------------- 
+# ---------------------------
 
 class Registration(models.Model):
     TITLE_CHOICES = [
@@ -469,10 +469,11 @@ class EmailLogs(models.Model):
         return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
 
 
-# --------------------------------------------
-# exhibitors
-# --------------------------------------------
 
+
+# --------------------------------------------
+# EXHIBITION SECTION
+# --------------------------------------------
 class ExhibitionSection(models.Model):
     """Sections within the exhibition hall (e.g., Innovation, Corporate, Startups)."""
     name = models.CharField(max_length=100, unique=True)
@@ -487,9 +488,9 @@ class ExhibitionSection(models.Model):
         return self.booths.filter(is_booked=False)
 
 
-
 # --------------------------------------------
-
+# BOOTH
+# --------------------------------------------
 class Booth(models.Model):
     BOOTH_TYPE_CHOICES = [
         ('standard', 'Standard Booth'),
@@ -497,9 +498,13 @@ class Booth(models.Model):
         ('custom', 'Custom Booth'),
     ]
 
-    section = models.ForeignKey(ExhibitionSection, on_delete=models.CASCADE, related_name="booths")
+    section = models.ForeignKey(
+        ExhibitionSection, on_delete=models.CASCADE, related_name="booths"
+    )
     booth_number = models.CharField(max_length=20, unique=True)
-    booth_type = models.CharField(max_length=20, choices=BOOTH_TYPE_CHOICES, default='standard')
+    booth_type = models.CharField(
+        max_length=20, choices=BOOTH_TYPE_CHOICES, default='standard'
+    )
     size = models.CharField(max_length=50, help_text="e.g., 3m x 3m")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_booked = models.BooleanField(default=False)
@@ -516,17 +521,21 @@ class Booth(models.Model):
         self.save(update_fields=['is_booked'])
 
 
-
 # --------------------------------------------
-
+# BOOTH BOOKING
+# --------------------------------------------
 class BoothBooking(models.Model):
-    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="bookings")
-    booth = models.OneToOneField(Booth, on_delete=models.CASCADE, related_name="booking")
+    exhibitor = models.ForeignKey(
+        "Exhibitor", on_delete=models.CASCADE, related_name="bookings"
+    )
+    booth = models.OneToOneField(
+        Booth, on_delete=models.CASCADE, related_name="booking"
+    )
     booked_at = models.DateTimeField(default=timezone.now)
     approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.exhibitor.organization_type} → {self.booth.booth_number}"
+        return f"{self.exhibitor.organization_name} → {self.booth.booth_number}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -539,52 +548,111 @@ class BoothBooking(models.Model):
         super().delete(*args, **kwargs)
 
 
-
+# --------------------------------------------
+# EXHIBITOR
 # --------------------------------------------
 
 class Exhibitor(models.Model):
-    """Main exhibitor registration details"""
+    """Main exhibitor registration details (local & international)."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=10, choices=[
-        ('', 'Select Title'),
-        ("Prof", "Prof."),
-        ("Dr", "Dr."),
-        ("Mr", "Mr."),
-        ("Mrs", "Mrs."),
-        ("Ms", "Ms."),
-    ])
+
+    # --- Personal Info ---
+    title = models.CharField(
+        max_length=10,
+        choices=[
+            ('', 'Select Title'),
+            ("Prof", "Prof."),
+            ("Dr", "Dr."),
+            ("Mr", "Mr."),
+            ("Mrs", "Mrs."),
+            ("Ms", "Ms."),
+        ],
+    )
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
 
+    # --- Organization Info ---
     organization_type = models.CharField(max_length=200)
     job_title = models.CharField(max_length=200)
-    category = models.CharField(max_length=50, choices=[
-        ('', 'Select Category'),
-        ('startup', 'Startup'),
-        ('corporate', 'Corporate'),
-        ('government', 'Government Agency'),
-        ('academic', 'Academic Institution'),
-        ('ngo', 'NGO'),
-        ('other', 'Other'),
-    ])
-
+    category = models.CharField(
+        max_length=50,
+        choices=[
+            ('', 'Select Category'),
+            ('startup', 'Startup'),
+            ('corporate', 'Corporate'),
+            ('government', 'Government Agency'),
+            ('academic', 'Academic Institution'),
+            ('ngo', 'NGO'),
+            ('other', 'Other'),
+        ],
+    )
     product_description = models.TextField(blank=True, null=True)
 
-    booth = models.ForeignKey(Booth, on_delete=models.SET_NULL, null=True, blank=True)
-    section = models.ForeignKey(ExhibitionSection, on_delete=models.SET_NULL, null=True, blank=True)
+    # --- Booth & Section ---
+    booth = models.ForeignKey("Booth", on_delete=models.SET_NULL, null=True, blank=True)
+    section = models.ForeignKey("ExhibitionSection", on_delete=models.SET_NULL, null=True, blank=True)
 
+    # --- Identity Verification ---
     national_id_number = models.CharField(max_length=50)
     national_id_scan = models.FileField(upload_to="uploads/exhibitors/id_scans/")
     passport_photo = models.ImageField(upload_to="uploads/exhibitors/photos/")
 
+    # --- Business Type Toggle ---
+    BUSINESS_TYPE_CHOICES = [
+        ('local', 'Local (Kenyan)'),
+        ('international', 'International'),
+    ]
+    business_type = models.CharField(
+        max_length=20,
+        choices=BUSINESS_TYPE_CHOICES,
+        default='local',
+        help_text="Select whether this is a local or international business",
+    )
+
+    # --- Business Documents ---
+    kra_pin = models.CharField(max_length=20, blank=True, null=True)
+    business_registration_doc = models.FileField(upload_to="uploads/exhibitors/business_docs/", blank=True, null=True)
+    international_business_doc = models.FileField(upload_to="uploads/exhibitors/international_docs/", blank=True, null=True)
+
+    # --- Country (django-countries) ---
+    country_of_registration = CountryField(blank_label="Select Country")
+
+    # --- Beneficial Ownership ---
+    beneficial_owner_details = models.TextField(blank=True, null=True)
+    beneficial_owner_doc = models.FileField(upload_to="uploads/exhibitors/owners_docs/", blank=True, null=True)
+
+    # --- Legal & Timestamps ---
     privacy_agreed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def get_full_name(self):
-        return f"{self.title} {self.first_name} {self.second_name}".strip()
+        return f"{self.title} {self.first_name} {self.second_name or ''}".strip()
 
     def __str__(self):
-        return f"{self.first_name} {self.second_name or ''} - {self.organization_type}"
+        return f"{self.get_full_name()} - {self.organization_type}"
+
+# --------------------------------------------
+
+class BeneficialOwner(models.Model):
+    exhibitor = models.ForeignKey(
+        Exhibitor, on_delete=models.CASCADE, related_name="owners"
+    )
+    full_name = models.CharField(max_length=255)
+    nationality = models.CharField(max_length=100)
+    identification_type = models.CharField(
+        max_length=20,
+        choices=[('national_id', 'National ID'), ('passport', 'Passport')]
+    )
+    id_number = models.CharField(max_length=50)
+    ownership_percentage = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    supporting_document = models.FileField(
+        upload_to="uploads/exhibitors/ownership_docs/", blank=True, null=True
+    )
+
+    def __str__(self):
+        return f"{self.full_name} ({self.ownership_percentage or 0}%)"

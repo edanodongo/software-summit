@@ -3,15 +3,18 @@
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-sm border-0 rounded-4 p-4">
-    <h4 class="fw-bold text-danger mb-3">
-      <i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete
+    <h4 class="fw-semibold text-danger mb-3">
+      Confirm Delete Exhibitor
     </h4>
-    <p>Are you sure you want to delete <strong>{{ exhibitor.get_full_name }}</strong> from <strong>{{ exhibitor.organization_type }}</strong>?</p>
-    <form method="POST" class="d-flex gap-2">
+    <p>Are you sure you want to delete <strong>{{ exhibitor.get_full_name }}</strong>?</p>
+    <form method="post">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i> Yes, Delete</button>
-      <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+      </div>
     </form>
   </div>
 </div>
 {% endblock %}
+
