@@ -102,6 +102,30 @@
 <script src="{% static 'js/extra/external.js' %}"></script>
 
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+{% if user.is_authenticated and AUTO_LOGOUT_TIMEOUT %}
+<script>
+(function() {
+  const AUTO_LOGOUT_TIMEOUT = {{ AUTO_LOGOUT_TIMEOUT }};
+  let lastActivity = Date.now();
+
+  // Track user interactions
+  ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+    document.addEventListener(event, () => lastActivity = Date.now());
+  });
+
+  // Check inactivity every 30 seconds
+  setInterval(() => {
+    const elapsed = (Date.now() - lastActivity) / 1000;
+    if (elapsed > AUTO_LOGOUT_TIMEOUT) {
+      console.log("Session expired due to inactivity.");
+      window.location.href = "{% url 'logout' %}";
+    }
+  }, 30000);
+})();
+</script>
+{% endif %}
+
+{% endblock %}
 </body>
 </html>

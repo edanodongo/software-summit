@@ -423,6 +423,7 @@ def dashboard_stats(request):
         "interests": interest_counts,
         "registrations_over_time": list(daily),
         "updates_percent": updates_percent,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     })
 
 
@@ -595,6 +596,7 @@ def dashboard_view(request):
         "updates_count": updates_count,
         "registrants": registrants_with_names,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     }
     return render(request, "summit/dashboard.html", context)
 
@@ -619,14 +621,44 @@ def dashboard_data(request):
     }
     return JsonResponse(data)
 
+from django.contrib.auth.views import LoginView
+from django.utils import timezone
+from datetime import timedelta
 
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
 
+    def form_valid(self, form):
+        # Log the user in using the parent method
+        response = super().form_valid(form)
+
+        # Handle "Remember me"
+        remember_me = self.request.POST.get('rememberMe')
+
+        if remember_me:
+            # Session will last 14 days
+            self.request.session.set_expiry(60 * 60 * 24 * 14)
+        else:
+            # Session expires when the browser is closed
+            self.request.session.set_expiry(0)
+
+        # Record last activity time for inactivity auto-logout
+        self.request.session['last_activity'] = timezone.now().isoformat()
+
+        return response
+
+from django.contrib.auth.views import LogoutView
+from django.contrib import messages
 
 class SummitLogoutView(LogoutView):
+    next_page = 'custom_login'
+
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        messages.success(request, "You have been logged out successfully.")
+        return super().post(request, *args, **kwargs)
 
 
 # --------------------------------------------
@@ -795,6 +827,7 @@ def gallery_dashboard(request):
     return render(request, 'gallery/gallery_dashboard.html', {
         'gallery_items': gallery_items,
         'form': form,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     })
 
 
@@ -853,7 +886,8 @@ def speaker_dashboard(request):
 
     context = {
         "speakers": speakers,
-        "form": form
+        "form": form,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     }
     return render(request, "speaker/speaker_dashboard.html", context)
 
@@ -871,7 +905,8 @@ def speaker_create(request):
             return redirect("speaker_dashboard")
     else:
         form = SpeakerForm()
-    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker"})
+    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker",
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------
@@ -912,7 +947,8 @@ def delete_speaker(request, pk):
 @staff_member_required
 def partner_dashboard(request):
     partners = SummitPartner.objects.all().order_by("order")
-    return render(request, "partner/partner_dashboard.html", {"partners": partners})
+    return render(request, "partner/partner_dashboard.html", {"partners": partners,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------
@@ -976,7 +1012,8 @@ def delete_partner(request, partner_id):
 @staff_member_required
 def dashboard_home(request):
     days = SummitScheduleDay.objects.all()
-    return render(request, "schedule/dashboard_home.html", {"days": days})
+    return render(request, "schedule/dashboard_home.html", {"days": days,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # ---------------- DAY CRUD ----------------
@@ -1035,7 +1072,7 @@ def add_timeslot(request, day_id):
             return redirect("dashboard_home")
     else:
         form = TimeSlotForm(initial={"day": day})
-    return render(request, "schedule/timeslot_form.html", {"form": form, "day": day})
+    return render(request, "schedule/timeslot_form.html", {"form": form, "day": day, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------
@@ -1059,7 +1096,8 @@ def add_session(request, timeslot_id):
     else:
         form = SessionForm()
         formset = PanelistFormSet()
-    return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
+    return render(request, "schedule/session_form.html", {"form": form, "formset": formset,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------
@@ -1079,7 +1117,7 @@ def edit_session(request, pk):
     else:
         form = SessionForm(instance=session)
         formset = PanelistFormSet(instance=session)
-    return render(request, "schedule/session_form.html", {"form": form, "formset": formset})
+    return render(request, "schedule/session_form.html", {"form": form, "formset": formset, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------
@@ -1516,7 +1554,8 @@ def admin_dashboard(request):
         "category_filter": category_filter,
         "section_filter": section_filter,
         "country_filter": country_filter,
-        "available_countries": available_countries,  # 👈 used in template
+        "available_countries": available_countries,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     })
 
 
@@ -1531,7 +1570,7 @@ def admin_exhibitor_delete(request, pk):
         exhibitor.delete()
         messages.success(request, f"Exhibitor '{exhibitor.get_full_name()}' deleted successfully.")
         return redirect("admin_dashboard")
-    return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor})
+    return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
 
 
 # --------------------------------------------

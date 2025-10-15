@@ -6063,20 +6063,43 @@ html {
 }
 
 
-/* Match dropdown with hero CTA styling */
+/* Match dropdown with .hero .btn-cta */
 .dropdown-menu-cta {
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   padding: 0.25rem 0;
   margin-top: 8px;
-  min-width: 180px; /* Matches .hero .btn-cta */
-  background: rgba(255, 255, 255, 0.1); /* Transparent glass look */
+  min-width: 180px; /* matches .hero .btn-cta */
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  animation: dropdownFade 0.25s ease forwards;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
-/* Dropdown items consistent with CTA text */
+/* Bootstrap adds .show when opened — animate only then */
+.dropdown-menu-cta.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  animation: dropdownFloat 0.35s ease forwards;
+}
+
+/* Smooth float + fade */
+@keyframes dropdownFloat {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dropdown items consistent with CTA */
 .dropdown-menu-cta .dropdown-item {
   font-size: 1.05rem;
   font-weight: 600;
@@ -6088,19 +6111,12 @@ html {
   transition: all 0.3s ease;
 }
 
-/* Hover effect consistent with CTA hover */
 .dropdown-menu-cta .dropdown-item:hover {
   background: var(--accent-color);
   color: var(--contrast-color);
 }
 
-/* Smooth dropdown fade animation */
-@keyframes dropdownFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Keep the dropdown arrow neat */
+/* Keep dropdown arrow aligned */
 .btn-cta.dropdown-toggle::after {
   margin-left: 0.4rem;
   vertical-align: middle;
