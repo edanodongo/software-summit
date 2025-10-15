@@ -231,8 +231,6 @@
 
 })();
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registration-form");
   const submitBtn = document.getElementById("submit-btn");
@@ -241,37 +239,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const orgSelect = document.getElementById("id_organization_type");
   const boothSelect = document.getElementById("id_booth");
 
-  // CSRF helper
+  // ----------------------------
+  // 🛡️ CSRF helper
+  // ----------------------------
   const getCookie = (name) => {
     const cookies = document.cookie ? document.cookie.split(";") : [];
     for (let cookie of cookies) {
       cookie = cookie.trim();
-      if (cookie.startsWith(name + "=")) return decodeURIComponent(cookie.substring(name.length + 1));
+      if (cookie.startsWith(name + "="))
+        return decodeURIComponent(cookie.substring(name.length + 1));
     }
     return null;
   };
   const csrftoken = getCookie("csrftoken");
 
-  // Alert function
+  // ----------------------------
+  // ⚠️ Alert handler
+  // ----------------------------
   const showAlert = (message, type = "success") => {
     alertContainer.innerHTML = `
       <div class="alert alert-${type} alert-dismissible fade show" role="alert">
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>`;
-    setTimeout(() => { alertContainer.innerHTML = ""; }, 8000);
+    setTimeout(() => {
+      alertContainer.innerHTML = "";
+    }, 8000);
   };
 
-  // Toggle other organization section visibility (no input)
+  // ----------------------------
+  // 🏢 Toggle “Other” organization type
+  // ----------------------------
   const toggleOtherOrg = () => {
     if (!otherOrgWrapper || !orgSelect) return;
-    const show = orgSelect.value.toLowerCase() === "other";
+    const show = orgSelect.value?.toLowerCase() === "other";
     otherOrgWrapper.style.display = show ? "block" : "none";
   };
   orgSelect?.addEventListener("change", toggleOtherOrg);
   toggleOtherOrg();
 
-  // File preview
+  // ----------------------------
+  // 📁 File preview handler
+  // ----------------------------
   const handlePreview = (inputId, previewId, imageOnly = true) => {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
@@ -282,36 +291,47 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = input.files[0];
       if (!file) return;
 
+      // Limit: 5MB
       if (file.size > 5 * 1024 * 1024) {
-        preview.innerHTML = `<p class="text-danger">❌ Max size 5MB</p>`;
+        preview.innerHTML = `<p class="text-danger">❌ File too large (max 5MB)</p>`;
         input.value = "";
         return;
       }
 
       const ext = file.name.split(".").pop().toLowerCase();
-      const validExts = imageOnly ? ["jpg", "jpeg", "png"] : ["jpg", "jpeg", "png", "pdf"];
+      const validExts = imageOnly
+        ? ["jpg", "jpeg", "png"]
+        : ["jpg", "jpeg", "png", "pdf"];
       if (!validExts.includes(ext)) {
-        preview.innerHTML = `<p class="text-danger">❌ Invalid type: ${validExts.join(", ")}</p>`;
+        preview.innerHTML = `<p class="text-danger">❌ Invalid type. Allowed: ${validExts.join(", ")}</p>`;
         input.value = "";
         return;
       }
 
-      if (!imageOnly || ext === "pdf") {
+      if (ext === "pdf") {
         preview.innerHTML = `<span>📄 ${file.name}</span>`;
       } else {
         const img = document.createElement("img");
         img.src = URL.createObjectURL(file);
         img.style.maxWidth = "200px";
-        img.classList.add("img-thumbnail");
+        img.classList.add("img-thumbnail", "mt-2");
         preview.appendChild(img);
       }
     });
   };
 
+  // ----------------------------
+  // 🖼️ Setup previews for all upload fields
+  // ----------------------------
   handlePreview("id_national_id_scan", "id_scan_preview", false);
   handlePreview("id_passport_photo", "passport_preview", true);
+  handlePreview("id_business_registration_doc", "business_doc_preview", false);
+  handlePreview("id_international_business_doc", "intl_doc_preview", false);
+  handlePreview("id_beneficial_owner_doc", "owner_doc_preview", false);
 
-  // Remove a booth from dropdown
+  // ----------------------------
+  // 🚫 Remove selected booth after submission
+  // ----------------------------
   const removeSelectedBooth = () => {
     if (!boothSelect) return;
     const selected = boothSelect.value;
@@ -329,63 +349,99 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Form submit
+  // ----------------------------
+  // 🌍 Auto-hint for country field
+  // ----------------------------
+  const countryField = document.getElementById("id_country_of_registration");
+  if (countryField) {
+    countryField.title = "Select the country where your business is officially registered";
+  }
+
+  // ----------------------------
+  // 💳 Auto-format KRA PIN
+  // ----------------------------
+  const kraField = document.getElementById("id_kra_pin");
+  if (kraField) {
+    kraField.addEventListener("input", () => {
+      kraField.value = kraField.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    });
+  }
+
+  // ----------------------------
+  // 🧾 Owner details input hint
+  // ----------------------------
+  const ownerDetails = document.getElementById("id_beneficial_owner_details");
+  if (ownerDetails) {
+    ownerDetails.placeholder =
+      "List registered directors or beneficial owners with ownership percentages.";
+  }
+
+  // ----------------------------
+  // 🚀 AJAX form submission
+  // ----------------------------
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
     // Clear previous errors
-    form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-    form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+    form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+    form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
     const formData = new FormData(form);
 
     fetch(form.action || window.location.href, {
       method: "POST",
-      headers: { "X-CSRFToken": csrftoken, "X-Requested-With": "XMLHttpRequest" },
-      body: formData
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: formData,
     })
-    .then(res => res.json())
-    .then(data => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `Register as Exhibitor`;
+      .then((res) => res.json())
+      .then((data) => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `Register as Exhibitor`;
 
-      if (data.success) {
-        showAlert(data.message || "Registration successful!", "success");
-        form.reset();
+        if (data.success) {
+          showAlert(data.message || "Registration successful!", "success");
+          form.reset();
 
-        // Clear file previews
-        ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
-          const input = document.getElementById(id);
-          const preview = document.getElementById(id === "id_national_id_scan" ? "id_scan_preview" : "passport_preview");
-          if (input) input.value = "";
-          if (preview) preview.innerHTML = "";
-        });
+          // Clear all previews
+          [
+            "id_scan_preview",
+            "passport_preview",
+            "business_doc_preview",
+            "intl_doc_preview",
+            "owner_doc_preview",
+          ].forEach((id) => {
+            const preview = document.getElementById(id);
+            if (preview) preview.innerHTML = "";
+          });
 
-        toggleOtherOrg();
-        removeSelectedBooth();
-      } else if (data.errors) {
-        Object.entries(data.errors).forEach(([field, errors]) => {
-          const el = form.querySelector(`#id_${field}`);
-          if (el) {
-            el.classList.add("is-invalid");
-            const errDiv = document.createElement("div");
-            errDiv.className = "invalid-feedback";
-            errDiv.innerText = errors.join(", ");
-            el.insertAdjacentElement("afterend", errDiv);
-          }
-        });
-      } else {
-        showAlert(data.message || "Something went wrong.", "danger");
-      }
-    })
-    .catch(err => {
-      console.error("AJAX error:", err);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `Register as Exhibitor`;
-      showAlert("Server error. Please try again.", "danger");
-    });
+          toggleOtherOrg();
+          removeSelectedBooth();
+        } else if (data.errors) {
+          Object.entries(data.errors).forEach(([field, errors]) => {
+            const el = form.querySelector(`#id_${field}`);
+            if (el) {
+              el.classList.add("is-invalid");
+              const errDiv = document.createElement("div");
+              errDiv.className = "invalid-feedback";
+              errDiv.innerText = errors.join(", ");
+              el.insertAdjacentElement("afterend", errDiv);
+            }
+          });
+        } else {
+          showAlert(data.message || "Something went wrong.", "danger");
+        }
+      })
+      .catch((err) => {
+        console.error("AJAX error:", err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `Register as Exhibitor`;
+        showAlert("Server error. Please try again.", "danger");
+      });
   });
 });
 

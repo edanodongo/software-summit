@@ -79,17 +79,17 @@ urlpatterns = [
     path("gallery/", views.gallery, name="gallery"),
     path("exhibitor/", views.exhibitor, name="exhibitor"),
 
-    # Exhibitors
+    # --- Exhibitors management ---
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
-    path("exhibitors/delete/<uuid:pk>/", views.admin_exhibitor_delete, name="admin_exhibitor_delete"),
+    path("admin-dashboard/exhibitors/delete/<uuid:pk>/", views.admin_exhibitor_delete, name="admin_exhibitor_delete"),
 
-    # === Sections Management ===
+    # --- Sections management ---
     path("admin-dashboard/sections/", views.admin_sections, name="admin_sections"),
     path("admin-dashboard/sections/add/", views.admin_add_section, name="add_section"),
     path("admin-dashboard/sections/<int:pk>/edit/", views.admin_edit_section, name="admin_edit_section"),
     path("admin-dashboard/sections/<int:pk>/delete/", views.admin_delete_section, name="admin_delete_section"),
 
-    # === Booths Management ===
+    # --- Booths management ---
     path("admin-dashboard/booths/", views.admin_booths, name="admin_booths"),
     path("admin-dashboard/booths/add/", views.admin_add_booth, name="add_booth"),
     path("admin-dashboard/booths/<int:pk>/edit/", views.admin_edit_booth, name="admin_edit_booth"),

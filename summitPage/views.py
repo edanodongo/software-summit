@@ -42,12 +42,10 @@ import os
 
 from django.views.decorators.http import require_POST
 from .models import Registrant, EmailLog
-from .utils import send_confirmation_email, send_confirmation_mail #  email sending function
+from .utils import send_confirmation_email  #  email sending function
 
 from django.utils import timezone
 from django.http import JsonResponse
-from .models import BoothBooking
-from .forms import ExhibitorRegistrationForm, BoothForm, ExhibitionSectionForm
 
 from django.http import HttpResponse
 from datetime import datetime
@@ -57,8 +55,30 @@ from django.db.models import Count, Max
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Booth
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q, Count
+from django.db.models import Q
+from django.shortcuts import render
+
+from django.db.models import Q
+from django_countries import countries
+from django.db.models import Q
+from django_countries import countries
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import JsonResponse
+from django.utils import timezone
+from django.db.models import Q
+
+from .models import (
+    ExhibitionSection, Booth, BoothBooking, Exhibitor
+)
+from .forms import (
+    ExhibitorRegistrationForm, ExhibitionSectionForm, BoothForm
+)
+from .utils import send_confirmation_mail
 
 def home(request):
 
@@ -1308,6 +1328,12 @@ def gallery(request):
 
 
 
+
+
+
+
+
+
 # --------------------------------------------
 # ✅ Exhibitor Registration
 # --------------------------------------------
@@ -1317,14 +1343,15 @@ def exhibitor(request):
         if form.is_valid():
             exhibitor = form.save(commit=False)
 
-            if request.FILES.get("passport_photo"):
-                exhibitor.passport_photo = request.FILES["passport_photo"]
-            if request.FILES.get("national_id_scan"):
-                exhibitor.national_id_scan = request.FILES["national_id_scan"]
+            # Handle uploads
+            for field in ["passport_photo", "national_id_scan", "registration_certificate", "kra_pin_document"]:
+                if request.FILES.get(field):
+                    setattr(exhibitor, field, request.FILES[field])
 
             booth = form.cleaned_data.get("booth")
             section = form.cleaned_data.get("section")
 
+            # Prevent double booking
             if booth and booth.is_booked:
                 msg = f"The booth {booth.booth_number} is already booked."
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -1336,6 +1363,7 @@ def exhibitor(request):
             exhibitor.booth = booth
             exhibitor.save()
 
+            # Link booth booking
             if booth:
                 BoothBooking.objects.create(
                     exhibitor=exhibitor,
@@ -1343,10 +1371,9 @@ def exhibitor(request):
                     booked_at=timezone.now(),
                     approved=False,
                 )
-                booth.is_booked = True
-                booth.save()
+                booth.mark_booked()
 
-            # send email
+            # Send confirmation email
             try:
                 send_confirmation_mail(exhibitor)
             except Exception as e:
@@ -1358,13 +1385,13 @@ def exhibitor(request):
                     })
                 messages.warning(request, "Registration saved, but email could not be sent.")
 
-            # success response
+            # ✅ Success response
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
             messages.success(request, "Registration successful!")
             return redirect("home")
 
-        # form invalid
+        # ❌ Form invalid
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({"success": False, "errors": form.errors}, status=400)
         messages.error(request, "Please correct the errors.")
@@ -1376,22 +1403,19 @@ def exhibitor(request):
 
 
 # --------------------------------------------
-# ✅ Exhibitor Dashboard & Management
+# ✅ Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
-from django.db.models import Q
-from .models import ExhibitionSection, Exhibitor
 
 def admin_dashboard(request):
-    # --- Base data for the dashboard ---
     sections = ExhibitionSection.objects.all()
     booths = Booth.objects.all()
+    exhibitors = Exhibitor.objects.all()
 
-    # --- Handle search and filters ---
-    query = request.GET.get("q", "")
+    # --- Search and Filtering ---
+    query = request.GET.get("q", "").strip()
     category_filter = request.GET.get("category", "")
     section_filter = request.GET.get("section", "")
-
-    exhibitors = Exhibitor.objects.all().order_by("-created_at")
+    country_filter = request.GET.get("country_of_registration", "")
 
     if query:
         exhibitors = exhibitors.filter(
@@ -1400,51 +1424,75 @@ def admin_dashboard(request):
             | Q(email__icontains=query)
             | Q(phone__icontains=query)
             | Q(organization_type__icontains=query)
-            | Q(job_title__icontains=query)
         )
 
     if category_filter:
         exhibitors = exhibitors.filter(category=category_filter)
 
     if section_filter:
-        exhibitors = exhibitors.filter(section__id=section_filter)
+        exhibitors = exhibitors.filter(section_id=section_filter)
 
-    # --- Pass choices and current filters to template ---
+    if country_filter:
+        exhibitors = exhibitors.filter(country_of_registration=country_filter)
+
+    # --- Stats ---
+    total_exhibitors = exhibitors.count()
+    total_booths = booths.count()
+    booked_booths = booths.filter(is_booked=True).count()
+    pending_approvals = exhibitors.filter(privacy_agreed=False).count()
+
     categories = Exhibitor._meta.get_field("category").choices
 
-    context = {
+    # --- Build available countries list (for dropdown) ---
+    used_countries = Exhibitor.objects.values_list("country_of_registration", flat=True).distinct()
+    available_countries = sorted(
+        [(code, dict(countries).get(code, code)) for code in used_countries if code],
+        key=lambda x: x[1]
+    )
+
+    # --- Add readable country display to each exhibitor ---
+    for exhibitor in exhibitors:
+        exhibitor.country_display = (
+            exhibitor.get_country_of_registration_display() if exhibitor.country_of_registration else "—"
+        )
+
+    # --- Render template ---
+    return render(request, "exhibitor/admin_dashboard.html", {
         "sections": sections,
         "booths": booths,
-        "exhibitors": exhibitors,
+        "exhibitors": exhibitors.order_by("-created_at")[:20],
+        "total_exhibitors": total_exhibitors,
+        "total_booths": total_booths,
+        "booked_booths": booked_booths,
+        "pending_approvals": pending_approvals,
+        "categories": categories,
         "query": query,
         "category_filter": category_filter,
         "section_filter": section_filter,
-        "categories": categories,
-    }
-    return render(request, "exhibitor/admin_dashboard.html", context)
-
+        "country_filter": country_filter,
+        "available_countries": available_countries,  # 👈 used in template
+    })
 
 
 # --------------------------------------------
-
+# ✅ Delete Exhibitor
+# --------------------------------------------
 def admin_exhibitor_delete(request, pk):
     exhibitor = get_object_or_404(Exhibitor, pk=pk)
     if request.method == "POST":
         exhibitor.delete()
-        messages.success(request, "Exhibitor deleted successfully.")
+        messages.success(request, f"Exhibitor '{exhibitor.get_full_name()}' deleted successfully.")
         return redirect("admin_dashboard")
     return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor})
 
 
 # --------------------------------------------
-
-# --- Section Management ---
+# ✅ Section Management
+# --------------------------------------------
 def admin_sections(request):
     sections = ExhibitionSection.objects.all()
-    return render(request, "exhibitor/admin_sections.html", {"sections": sections})
+    return redirect("admin_dashboard")
 
-
-# --------------------------------------------
 
 def admin_add_section(request):
     if request.method == "POST":
@@ -1452,13 +1500,11 @@ def admin_add_section(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Section added successfully.")
-            return redirect("admin_dashboard")
+            return redirect("admin_sections")
     else:
         form = ExhibitionSectionForm()
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Add Section"})
 
-
-# --------------------------------------------
 
 def admin_edit_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
@@ -1467,32 +1513,28 @@ def admin_edit_section(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Section updated successfully.")
-            return redirect("admin_dashboard")
+            return redirect("admin_sections")
     else:
         form = ExhibitionSectionForm(instance=section)
     return render(request, "exhibitor/admin_section_form.html", {"form": form, "title": "Edit Section"})
 
-
-# --------------------------------------------
 
 def admin_delete_section(request, pk):
     section = get_object_or_404(ExhibitionSection, pk=pk)
     if request.method == "POST":
         section.delete()
         messages.success(request, "Section deleted successfully.")
-        return redirect("admin_dashboard")
+        return redirect("admin_sections")
     return render(request, "exhibitor/admin_confirm_delete.html", {"object": section, "type": "Section"})
 
 
 # --------------------------------------------
-
-# --- Booth Management ---
+# ✅ Booth Management
+# --------------------------------------------
 def admin_booths(request):
     booths = Booth.objects.all()
     return render(request, "exhibitor/admin_booths.html", {"booths": booths})
 
-
-# --------------------------------------------
 
 def admin_add_booth(request):
     if request.method == "POST":
@@ -1500,13 +1542,11 @@ def admin_add_booth(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Booth added successfully.")
-            return redirect("admin_dashboard")
+            return redirect("admin_booths")
     else:
         form = BoothForm()
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"})
 
-
-# --------------------------------------------
 
 def admin_edit_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)
@@ -1515,18 +1555,16 @@ def admin_edit_booth(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Booth updated successfully.")
-            return redirect("admin_dashboard")
+            return redirect("admin_booths")
     else:
         form = BoothForm(instance=booth)
     return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Edit Booth"})
 
-
-# --------------------------------------------
 
 def admin_delete_booth(request, pk):
     booth = get_object_or_404(Booth, pk=pk)
     if request.method == "POST":
         booth.delete()
         messages.success(request, "Booth deleted successfully.")
-        return redirect("admin_dashboard")
+        return redirect("admin_booths")
     return render(request, "exhibitor/admin_confirm_delete.html", {"object": booth, "type": "Booth"})
