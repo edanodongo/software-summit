@@ -565,3 +565,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dropdowns = document.querySelectorAll('.drop-auto');
+  dropdowns.forEach(drop => {
+    const toggle = drop.querySelector('[data-bs-toggle="dropdown"]');
+    const menu = drop.querySelector('.dropdown-menu');
+
+    toggle.addEventListener('show.bs.dropdown', () => {
+      const rect = toggle.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      // If not enough space below, open upward
+      if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+        drop.classList.add('dropup');
+      } else {
+        drop.classList.remove('dropup');
+      }
+    });
+  });
+});

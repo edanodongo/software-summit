@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'summit.middleware.AutoLogoutMiddleware',
 ]
 
 ROOT_URLCONF = 'summit.urls'
@@ -154,3 +155,10 @@ EMAIL_HOST_USER = config['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
 DEFAULT_FROM_EMAIL = config['DEFAULT_FROM_EMAIL']
 
+
+# Auto logout after minutes of inactivity
+AUTO_LOGOUT_TIMEOUT = 60 * 1
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 14 days max
+SESSION_SAVE_EVERY_REQUEST = True        # resets expiry on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # for Remember Me on login page
