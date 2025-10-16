@@ -52,7 +52,7 @@
             <li><a href="#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#gallery">GALLERY</a></li>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
                 <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
               </ul>
@@ -1670,28 +1670,6 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  class="img-fluid" alt="">
-                          <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  title="Gallery 1"
-                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                          </div>
-                      </div>
-                  </div><!-- End Gallery Item -->
-
-                  <div class="col-xl-3 col-lg-4 col-md-6">
-                      <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  class="img-fluid" alt="">
-                          <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  title="Gallery 2"
-                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                          </div>
-                      </div>
-                  </div><!-- End Gallery Item -->
-
-                  <div class="col-xl-3 col-lg-4 col-md-6">
-                      <div class="gallery-item h-100">
                           <img src="{% static 'images/gallery/photo_1_2.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
                               <a href="{% static 'images/gallery/photo_1_2.webp' %}" loading="lazy"  title="Gallery 3"
@@ -1706,17 +1684,6 @@
                           <img src="{% static 'images/gallery/photo_4.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
                               <a href="{% static 'images/gallery/photo_4.webp' %}" loading="lazy"  title="Gallery 4"
-                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                          </div>
-                      </div>
-                  </div><!-- End Gallery Item -->
-
-                  <div class="col-xl-3 col-lg-4 col-md-6">
-                      <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  class="img-fluid" alt="">
-                          <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  title="Gallery 5"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1747,43 +1714,75 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  title="Gallery 8"
+                              <a href="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  title="Gallery 1"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
                       </div>
                   </div><!-- End Gallery Item -->
 
+                  <div class="col-xl-3 col-lg-4 col-md-6">
+                              <div class="gallery-item h-100">
+                                  <img src="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  class="img-fluid" alt="">
+                                  <div class="gallery-links d-flex align-items-center justify-content-center">
+                                      <a href="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  title="Gallery 2"
+                                        class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                                      <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                                  </div>
+                              </div>
+                          </div><!-- End Gallery Item -->
 
-                  {% for item in gallery_items %}
-                    {% if item.is_active %}
-                      <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="gallery-item h-100">
-                          <img 
-                            src="{{ item.image.url }}" 
-                            loading="lazy" 
-                            class="img-fluid rounded shadow-sm" 
-                            alt="{{ item.title|default:'Event Image' }}"
-                          >
+                  <div class="col-xl-3 col-lg-4 col-md-6">
+                              <div class="gallery-item h-100">
+                                  <img src="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  class="img-fluid" alt="">
+                                  <div class="gallery-links d-flex align-items-center justify-content-center">
+                                      <a href="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  title="Gallery 8"
+                                        class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                                      <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                                  </div>
+                              </div>
+                          </div><!-- End Gallery Item -->
+
+                  <div class="col-xl-3 col-lg-4 col-md-6">
+                      <div class="gallery-item h-100">
+                          <img src="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                            <a 
-                              href="{{ item.image.url }}" 
-                              class="glightbox preview-link" 
-                              title="{{ item.title|default:'Event Photo' }}"
-                            >
-                              <i class="bi bi-arrows-angle-expand"></i>
-                            </a>
+                              <a href="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  title="Gallery 5"
+                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
-                        </div>
                       </div>
-                    {% endif %}
-                  {% empty %}
-                    <!-- <div class="col-12 text-center">
-                      <p class="text-muted mt-3">No event highlights available yet. Please check back soon!</p>
-                    </div> -->
-                  {% endfor %}
+                  </div><!-- End Gallery Item -->
+
+<!--                  {% for item in gallery_items %}-->
+<!--                    {% if item.is_active %}-->
+<!--                      <div class="col-xl-3 col-lg-4 col-md-6">-->
+<!--                        <div class="gallery-item h-100">-->
+<!--                          <img -->
+<!--                            src="{{ item.image.url }}" -->
+<!--                            loading="lazy" -->
+<!--                            class="img-fluid rounded shadow-sm" -->
+<!--                            alt="{{ item.title|default:'Event Image' }}"-->
+<!--                          >-->
+<!--                          <div class="gallery-links d-flex align-items-center justify-content-center">-->
+<!--                            <a -->
+<!--                              href="{{ item.image.url }}" -->
+<!--                              class="glightbox preview-link" -->
+<!--                              title="{{ item.title|default:'Event Photo' }}"-->
+<!--                            >-->
+<!--                              <i class="bi bi-arrows-angle-expand"></i>-->
+<!--                            </a>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    {% endif %}-->
+<!--                  {% empty %}-->
+<!--                    &lt;!&ndash; <div class="col-12 text-center">-->
+<!--                      <p class="text-muted mt-3">No event highlights available yet. Please check back soon!</p>-->
+<!--                    </div> &ndash;&gt;-->
+<!--                  {% endfor %}-->
 
               </div>
 
@@ -1857,7 +1856,7 @@
             <ul>
               <li><a href="#features">Activities</a></li>
               <li><a href="#partners">Partners</a></li>
-              <li><a href="#gallery">Gallery</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
               <li><a href="{% url 'privacy' %}">Privacy</a></li>
             </ul>
           </div>
