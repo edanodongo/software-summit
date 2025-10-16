@@ -53,7 +53,7 @@
             <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="{% url 'gallery' %}#gallery">MEDIA</a></li>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
                 <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
                 <li><a href="#">PRIVACY</a></li>
               </ul>
@@ -268,6 +268,14 @@
               </div>
 
           <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
             <h4>Quick Links</h4>
             <ul>
               <li><a href="{% url 'home' %}#intro">About</a></li>
@@ -282,7 +290,7 @@
             <ul>
               <li><a href="{% url 'home' %}#features">Activities</a></li>
               <li><a href="{% url 'home' %}#partners">Partners</a></li>
-              <li><a href="{% url 'gallery' %}">Media</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
               <li><a href="#">Privacy</a></li>
             </ul>
           </div>
