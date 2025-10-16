@@ -28,52 +28,54 @@
 
 <body class="page-404">
 
-<header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="#hero" class="logo d-flex align-items-center">
-        <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
-          <div class="logo-divider mx-2"></div>
-        <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
-      </a>
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
+        </a>
 
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li><a href="{% url 'register' %}">REGISTER</a></li>
+            <li><a href="{% url 'home' %}#schedule">AGENDA</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li><a href="{% url 'home' %}#features">ACTIVITIES</a></li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
+                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>
+            <li class="d-none d-md-block">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-          <li><a href="{% url 'home' %}">ABOUT</a></li>
-          <li><a href="{% url 'home' %}">REGISTER</a></li>
-          <li><a href="{% url 'home' %}">AGENDA</a></li>
-          <li><a href="{% url 'home' %}">SPEAKERS</a></li>
-          <li><a href="{% url 'home' %}">FEATURES</a></li>
-          <li><a href="{% url 'home' %}">PARTNERS</a></li>
-          <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#gallery">MEDIA</a></li>
-              <li><a href="{% url 'not_found' %}">VENUE</a></li>
-              <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-            </ul>
-          </li>  
-        </ul>
-        <div class="nav-extras d-flex align-items-center gap-2">
-          <!-- Mobile nav toggle -->
-           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </ul>
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 
-          <!-- Translate Globe (mobile only) -->
-          <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
 
-          <!-- Translation widget (popover, hidden by default) -->
-          <div class="translate-popover d-none">
-            <div class="gtranslate_wrapper"></div>
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
+        <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
 
-      <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
-
-    </div>
-</header>
+      </div>
+  </header>
 
 
   <main class="main">
@@ -132,66 +134,75 @@
 
   </main>
 
-<footer id="footer" class="footer position-relative dark-background">
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative dark-background">
 
-    <div class="container footer-top">
-        <div class="row gy-4 justify-content-evenly">
-            <div class="col-lg-4 col-md-6 footer-about">
-                <a href="index.html" class="logo d-flex align-items-center">
-                    <span class="sitename"> Kenya Software Summit</span>
-                </a>
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> Kenya Software Summit</span>
+                  </a>
 
-                <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
-                    Africa’s digital economy through collaboration, talent development, and innovation.</p>
-                <div class="social-links d-flex mt-3">
-                    <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
-                        <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
-                        <i class="bi bi-facebook"></i>
-                    </a>
-                    <a aria-label="Connect with us on LinkedIn"
-                       href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
-                       target="_blank">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
-                       target="_blank">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
+                  </div>
+              </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">About</a></li>
-            <li><a href="{% url 'speakers' %}">Speakers</a></li>
-            <li><a href="{% url 'home' %}">Agenda</a></li>
-            <li><a href="{% url 'home' %}">Register</a></li>
-          </ul>
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+            </ul>
+          </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">Features</a></li>
-            <li><a href="{% url 'home' %}">Partners</a></li>
-            <li><a href="{% url 'media' %}">Media</a></li>
-            <li><a href="{% url 'privacy' %}">Privacy</a></li>
-          </ul>
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#intro">About</a></li>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Agenda</a></li>
+              <li><a href="{% url 'register' %}">Register</a></li>
+            </ul>
+          </div>
 
-        </div>
-    </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
+          </div>
 
-    <div class="container copyright text-center mt-4">
-        <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
-            Software Summit. </strong> <span>All Rights Reserved. </span></p>
+          </div>
+      </div>
 
-    </div>
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
+              Software Summit. </strong> <span>All Rights Reserved. </span></p>
 
-</footer>
+      </div>
+
+  </footer>
 
 <!-- Scroll Top -->
 <a id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
