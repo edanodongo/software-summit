@@ -291,7 +291,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             "We are delighted to welcome you to this year’s Software Summit, taking place from "
             "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
             "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
-            "Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. "
+            "Upon your arrival in Eldoret, our team will receive you and confirm your Exhibitor status. "
             "To facilitate this, kindly carry a valid identification document. "
             "You will then be issued with a badge, a delegate’s pack containing your conference guide, "
             "and the full programme to help you easily navigate the conference activities.\n\n"
