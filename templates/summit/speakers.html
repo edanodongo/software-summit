@@ -47,7 +47,7 @@
                 <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
               </ul>
             </li>
-            <li><a href="{% url 'home' %}#schedule">AGENDA</a></li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
             <li><a href="#">SPEAKERS</a></li>
             <li><a href="{% url 'home' %}#features">ACTIVITIES</a></li>
             <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
@@ -106,6 +106,49 @@
           <div class="speakers-list">
 
             <div class="row">
+              <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}"  loading="lazy" alt="Speaker" class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>Mr. John OMO</h4>
+                      <span class="speaker-position">Secretary-General</span>
+                      <span class="speaker-org">African Telecommunications Union</span>
+                      <div class="speaker-track">Keynote Speaker</div>
+                    </div>
+                  </div>
+                  <div class="speaker-details">
+                    <!-- <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>Advanced Neural Networks in Real-World Applications</span>
+                    </div> -->
+                    <p class="speaker-summary">Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries.</p>
+                    <div class="speaker-actions">
+                      <a href="#"
+                        class="profile-btn"
+                         loading="lazy"
+                        data-name="Mr. John OMO"
+                        data-position="Secretary-General"
+                        data-org="African Telecommunications Union"
+                        data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
+                        data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
+                          Mr. Omo has 31 years’ experience as a lawyer and has contributed immensely to the development of local and international policies, legislation, agreements and treaties in all areas of public service, but mainly in the area of ICTs.
+                          Prior to his election for his first term in 2018, he worked with the Communications Authority of Kenya, Kenya's ICT regulator, where he provided leadership over the Authority’s legal matters and strategies. Before that, he worked in the public/civil service.
+                          He holds a Master of Law degree in International and Commercial law from the University of Sheffield – UK; a Bachelor of Law from the University of Nairobi – Kenya; a Diploma in Human Rights Law from the UN Human Rights Centre, Geneva, and ILO Centre Turin and another diploma in Legal Practice and Ethics from the Kenya School of Law amongst other professional courses.">
+                        View Profile
+                      </a>
+
+                      <div class="speaker-social">
+<!--                        <a href="https://ke.linkedin.com/in/william-kabogo-92537040" class="social-link"><i class="bi bi-linkedin"></i></a>-->
+<!--                        <a href="https://x.com/honkabogo" class="social-link"><i class="bi bi-twitter"></i></a>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Speaker Entry -->
+
               <div class="col-lg-6 speaker-entry">
                 <div class="speaker-profile">
                   <div class="speaker-meta">
@@ -414,7 +457,7 @@
             <ul>
               <li><a href="{% url 'home' %}#intro">About</a></li>
               <li><a href="#">Speakers</a></li>
-              <li><a href="{% url 'home' %}#schedule">Agenda</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
               <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
           </div>

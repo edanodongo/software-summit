@@ -688,6 +688,11 @@ def privacy(request):
 
 # --------------------------------------------
 
+def places(request):
+    return render(request, "summit/venue.html")
+
+# --------------------------------------------
+
 def not_found(request):
     return render(request, "summit/404.html")
 
