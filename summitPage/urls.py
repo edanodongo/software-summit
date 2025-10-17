@@ -37,6 +37,7 @@ urlpatterns = [
     # Registration API
     path('reg-service/registrations/', views.get_registrants, name='get_registrants'),
     # path("api/", include(router.urls)),
+    path("dashboard-main/", views.main_dashboard_view, name="main_dashboard_view"),
 
     path("register", views.reg, name="register"),
     path('calendar/add/', views.add_to_calendar, name='add_to_calendar'),

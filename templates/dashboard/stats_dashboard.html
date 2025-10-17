@@ -1,0 +1,194 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block title %}Summit Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Summit Analytics Dashboard</h2>
+    <span class="text-muted">📅 {{ current_year }}</span>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+        <div class="card-title"><i class="fa fa-users text-success me-2"></i>Registrants</div>
+        <h4 class="fw-bold text-dark mb-0">{{ total_registrants }}</h4>
+        <small class="text-muted">+{{ new_registrants_month }} this month</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+        <div class="card-title"><i class="fa fa-building text-primary me-2"></i>Exhibitors</div>
+        <h4 class="fw-bold text-dark mb-0">{{ total_exhibitors }}</h4>
+        <small class="text-muted">+{{ new_exhibitors_month }} this month</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+        <div class="card-title"><i class="fa fa-handshake text-warning me-2"></i>Partners</div>
+        <h4 class="fw-bold text-dark mb-0">{{ total_partners }}</h4>
+        <small class="text-muted">{{ partners_active }} active</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+        <div class="card-title"><i class="fa fa-store text-danger me-2"></i>Booths</div>
+        <h4 class="fw-bold text-dark mb-0">{{ total_booths }}</h4>
+        <small class="text-muted">{{ booth_utilization }}% utilized</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS SECTION -->
+  <h5 class="fw-semibold text-primary mt-5 mb-3">Statistics Overview</h5>
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Monthly Registrations Trend</h6>
+        <canvas id="monthlyRegistrationsChart" height="300"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Booth Utilization</h6>
+        <canvas id="boothUtilizationChart" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Exhibitor Categories</h6>
+        <canvas id="exhibitorCategoryChart" height="300"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Registrant Organization Types</h6>
+        <canvas id="registrantOrgChart" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT ACTIVITY -->
+  <h5 class="fw-semibold text-primary mt-5 mb-3">Recent Activity</h5>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Recent Registrants</h6>
+        <table class="table table-sm align-middle">
+          {% for r in recent_registrants %}
+          <tr>
+            <td>{{ r.full_name }}</td>
+            <td><small class="text-muted">{{ r.created_at|date:"M d, H:i" }}</small></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" class="text-center text-muted">No recent registrants</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Recent Exhibitors</h6>
+        <table class="table table-sm align-middle">
+          {% for e in recent_exhibitors %}
+          <tr>
+            <td>{{ e.company_name }}</td>
+            <td><small class="text-muted">{{ e.created_at|date:"M d, H:i" }}</small></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" class="text-center text-muted">No recent exhibitors</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-bold mb-3">Recent Partners</h6>
+        <table class="table table-sm align-middle">
+          {% for p in recent_partners %}
+          <tr>
+            <td>{{ p.name }}</td>
+            <td><small class="text-muted">{{ p.created_at|date:"M d, H:i" }}</small></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" class="text-center text-muted">No recent partners</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Monthly Registrations
+  new Chart(document.getElementById('monthlyRegistrationsChart'), {
+    type: 'line',
+    data: {
+      labels: {{ monthly_labels|safe }},
+      datasets: [{
+        label: 'Registrations',
+        data: {{ monthly_counts|safe }},
+        borderColor: '#01873F',
+        backgroundColor: 'rgba(1,135,63,0.15)',
+        tension: 0.4,
+        fill: true,
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+
+  // Booth Utilization
+  new Chart(document.getElementById('boothUtilizationChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Active', 'Available'],
+      datasets: [{
+        data: [{{ active_booths }}, {{ available_booths }}],
+        backgroundColor: ['#01873F', '#e8e8e8']
+      }]
+    },
+    options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Exhibitor Categories
+  new Chart(document.getElementById('exhibitorCategoryChart'), {
+    type: 'bar',
+    data: {
+      labels: {{ exhibitor_labels|safe }},
+      datasets: [{
+        label: 'Exhibitors',
+        data: {{ exhibitor_counts|safe }},
+        backgroundColor: '#02344f'
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+
+  // Registrant Organization
+  new Chart(document.getElementById('registrantOrgChart'), {
+    type: 'pie',
+    data: {
+      labels: {{ org_labels|safe }},
+      datasets: [{
+        data: {{ org_counts|safe }},
+        backgroundColor: ['#02344f','#01873F','#CE171C','#F4C430','#1C1C18']
+      }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+  });
+</script>
+{% endblock %}
