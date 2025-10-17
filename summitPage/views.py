@@ -1653,21 +1653,6 @@ def admin_delete_booth(request, pk):
 
 # --------------------------------------------
 
-from django.db.models import Count
-from django.utils.timezone import now, timedelta
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
-from summitPage.models import (
-    Registrant,
-    Exhibitor,
-    SummitPartner,
-    SummitGallery,
-    Booth,
-    # Optional:
-    # EmailLog,
-    # ApiLog,
-)
 
 from django.db.models import Count
 from django.utils.timezone import now, timedelta
