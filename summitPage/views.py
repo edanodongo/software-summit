@@ -422,6 +422,7 @@ def dashboard_stats(request):
         "registrations_over_time": list(daily),
         "updates_percent": updates_percent,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
     })
 
 
@@ -591,6 +592,7 @@ def dashboard_view(request):
         "registrants": registrants_with_names,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
     }
     return render(request, "summit/dashboard.html", context)
 
@@ -820,6 +822,7 @@ def gallery_dashboard(request):
         'gallery_items': gallery_items,
         'form': form,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
     })
 
 
@@ -877,6 +880,7 @@ def speaker_dashboard(request):
         "speakers": speakers,
         "form": form,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
     }
     return render(request, "speaker/speaker_dashboard.html", context)
 
@@ -893,8 +897,11 @@ def speaker_create(request):
             return redirect("speaker_dashboard")
     else:
         form = SpeakerForm()
-    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Add Speaker",
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "speaker/speaker_form.html", {
+        "form": form,
+        "title": "Add Speaker",
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,})
 
 
 # --------------------------------------------
@@ -932,8 +939,10 @@ def delete_speaker(request, pk):
 @login_required
 def partner_dashboard(request):
     partners = SummitPartner.objects.all().order_by("order")
-    return render(request, "partner/partner_dashboard.html", {"partners": partners,
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "partner/partner_dashboard.html", {
+        "partners": partners,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,})
 
 
 # --------------------------------------------
@@ -994,8 +1003,10 @@ def delete_partner(request, partner_id):
 @login_required
 def dashboard_home(request):
     days = SummitScheduleDay.objects.all()
-    return render(request, "schedule/dashboard_home.html", {"days": days,
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "schedule/dashboard_home.html", {
+        "days": days,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,})
 
 
 # ---------------- DAY CRUD ----------------
@@ -1050,7 +1061,12 @@ def add_timeslot(request, day_id):
             return redirect("dashboard_home")
     else:
         form = TimeSlotForm(initial={"day": day})
-    return render(request, "schedule/timeslot_form.html", {"form": form, "day": day, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "schedule/timeslot_form.html", {
+        "form": form,
+        "day": day,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
+    })
 
 
 # --------------------------------------------
@@ -1073,8 +1089,11 @@ def add_session(request, timeslot_id):
     else:
         form = SessionForm()
         formset = PanelistFormSet()
-    return render(request, "schedule/session_form.html", {"form": form, "formset": formset,
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "schedule/session_form.html", {
+        "form": form, "formset": formset,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
+    })
 
 
 # --------------------------------------------
@@ -1093,7 +1112,12 @@ def edit_session(request, pk):
     else:
         form = SessionForm(instance=session)
         formset = PanelistFormSet(instance=session)
-    return render(request, "schedule/session_form.html", {"form": form, "formset": formset, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "schedule/session_form.html", {
+        "form": form,
+        "formset": formset,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
+    })
 
 
 # --------------------------------------------
@@ -1514,6 +1538,7 @@ def admin_dashboard(request):
         "section_filter": section_filter,
         "country_filter": country_filter,
         "available_countries": available_countries,
+        'current_year': timezone.now().year,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     })
 
@@ -1528,7 +1553,11 @@ def admin_exhibitor_delete(request, pk):
         exhibitor.delete()
         messages.success(request, f"Exhibitor '{exhibitor.get_full_name()}' deleted successfully.")
         return redirect("admin_dashboard")
-    return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {"exhibitor": exhibitor, "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,})
+    return render(request, "exhibitor/admin_exhibitor_confirm_delete.html", {
+        "exhibitor": exhibitor,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
+    })
 
 
 # --------------------------------------------
@@ -1621,3 +1650,177 @@ def admin_delete_booth(request, pk):
         messages.success(request, "Booth deleted successfully.")
         return redirect("admin_booths")
     return render(request, "exhibitor/admin_confirm_delete.html", {"object": booth, "type": "Booth"})
+
+# --------------------------------------------
+
+from django.db.models import Count
+from django.utils.timezone import now, timedelta
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from summitPage.models import (
+    Registrant,
+    Exhibitor,
+    SummitPartner,
+    SummitGallery,
+    Booth,
+    # Optional:
+    # EmailLog,
+    # ApiLog,
+)
+
+from django.db.models import Count
+from django.utils.timezone import now, timedelta
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.db.models.functions import TruncMonth
+
+from summitPage.models import (
+    Registrant,
+    Exhibitor,
+    SummitPartner,
+    SummitGallery,
+    Booth,
+)
+
+@login_required
+def main_dashboard_view(request):
+    today = now().date()
+    week_ago = today - timedelta(days=7)
+    month_ago = today - timedelta(days=30)
+    year_ago = today - timedelta(days=365)
+
+    # --- Base totals ---
+    total_registrants = Registrant.objects.count()
+    total_exhibitors = Exhibitor.objects.count()
+    total_partners = SummitPartner.objects.count()
+    total_gallery = SummitGallery.objects.count()
+    total_booths = Booth.objects.count()
+
+    # --- Growth comparisons ---
+    new_registrants_week = Registrant.objects.filter(created_at__gte=week_ago).count()
+    new_registrants_month = Registrant.objects.filter(created_at__gte=month_ago).count()
+    new_exhibitors_month = Exhibitor.objects.filter(created_at__gte=month_ago).count()
+    new_partners_month = SummitPartner.objects.filter(created_at__gte=month_ago).count()
+
+    # --- Verification & opt-in stats ---
+    verified_registrants = Registrant.objects.filter(privacy_agreed=True).count()
+    opted_in_registrants = Registrant.objects.filter(updates_opt_in=True).count()
+
+    # --- Booth stats ---
+    active_booths = Booth.objects.filter(is_booked=True).count()
+    available_booths = total_booths - active_booths
+    booth_utilization = (active_booths / total_booths * 100) if total_booths else 0
+
+    # --- Partner status ---
+    partners_active = SummitPartner.objects.filter(is_active=True).count()
+    partners_inactive = total_partners - partners_active
+
+    # --- 7-day registration trend ---
+    daily_labels, daily_counts = [], []
+    for i in range(7):
+        day = today - timedelta(days=i)
+        daily_labels.append(day.strftime("%a"))
+        daily_counts.append(Registrant.objects.filter(created_at__date=day).count())
+    daily_labels.reverse()
+    daily_counts.reverse()
+
+    # --- Monthly registration trend (last 6 months) ---
+    monthly_reg_data = (
+        Registrant.objects.filter(created_at__gte=year_ago)
+        .annotate(month=TruncMonth("created_at"))
+        .values("month")
+        .annotate(count=Count("id"))
+        .order_by("month")
+    )
+    monthly_labels = [r["month"].strftime("%b %Y") for r in monthly_reg_data]
+    monthly_counts = [r["count"] for r in monthly_reg_data]
+
+    # --- Exhibitor distribution by category ---
+    exhibitor_data = (
+        Exhibitor.objects.values("category")
+        .annotate(count=Count("id"))
+        .order_by("-count")
+    )
+    exhibitor_labels = [e["category"] or "Uncategorized" for e in exhibitor_data]
+    exhibitor_counts = [e["count"] for e in exhibitor_data]
+
+    # --- Registrant organization breakdown ---
+    org_data = (
+        Registrant.objects.values("organization_type")
+        .annotate(count=Count("id"))
+        .order_by("-count")
+    )
+    org_labels = [o["organization_type"] or "Other" for o in org_data]
+    org_counts = [o["count"] for o in org_data]
+
+    # --- Recent activity lists ---
+    recent_registrants = Registrant.objects.order_by("-created_at")[:5]
+    recent_exhibitors = Exhibitor.objects.order_by("-created_at")[:5]
+    recent_partners = SummitPartner.objects.order_by("-created_at")[:5]
+
+    # --- Engagement score (simple metric) ---
+    engagement_score = 0
+    if total_registrants:
+        engagement_score = ((opted_in_registrants + verified_registrants) / total_registrants) * 50
+    if total_exhibitors:
+        engagement_score += (new_exhibitors_month / total_exhibitors) * 50
+    engagement_score = round(min(100, engagement_score), 1)
+
+    # --- Optional API/email logs ---
+    emails_today = 0
+    try:
+        from summitPage.models import EmailLog
+        emails_today = EmailLog.objects.filter(sent_at__date=today).count()
+    except Exception:
+        pass
+
+    context = {
+        # Totals
+        "total_registrants": total_registrants,
+        "total_exhibitors": total_exhibitors,
+        "total_partners": total_partners,
+        "total_gallery": total_gallery,
+        "total_booths": total_booths,
+
+        # Growth & insights
+        "new_registrants_week": new_registrants_week,
+        "new_registrants_month": new_registrants_month,
+        "new_exhibitors_month": new_exhibitors_month,
+        "new_partners_month": new_partners_month,
+        "verified_registrants": verified_registrants,
+        "opted_in_registrants": opted_in_registrants,
+
+        # Booths
+        "active_booths": active_booths,
+        "available_booths": available_booths,
+        "booth_utilization": round(booth_utilization, 1),
+
+        # Partners
+        "partners_active": partners_active,
+        "partners_inactive": partners_inactive,
+
+        # Trends
+        "daily_labels": daily_labels,
+        "daily_counts": daily_counts,
+        "monthly_labels": monthly_labels,
+        "monthly_counts": monthly_counts,
+
+        # Charts
+        "exhibitor_labels": exhibitor_labels,
+        "exhibitor_counts": exhibitor_counts,
+        "org_labels": org_labels,
+        "org_counts": org_counts,
+
+        # Lists
+        "recent_registrants": recent_registrants,
+        "recent_exhibitors": recent_exhibitors,
+        "recent_partners": recent_partners,
+
+        # Others
+        "emails_today": emails_today,
+        "engagement_score": engagement_score,
+        'current_year': timezone.now().year,
+    }
+
+    return render(request, "dashboard/stats_dashboard.html", context)

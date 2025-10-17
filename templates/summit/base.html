@@ -1,86 +1,332 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenya Software Summit 2025 - Admin Dashboard</title>
 
-    <!-- Fontawesome -->
-    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+  <!-- Fontawesome -->
+  <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}">
 
-    <!-- Favicons -->
-    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
-    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <!-- Favicons -->
+  <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+  <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-    <!-- Vendor CSS Files -->
-    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
-    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
-    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/notyf.min.css' %}" rel="stylesheet">
+  <!-- Vendor CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/notyf.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/dash.css' %}" rel="stylesheet">
 
-    <!-- Main CSS File -->
-    <link href="{% static 'css/dash.css' %}" rel="stylesheet">
-    <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+
+  <style>
+    :root {
+      --primary-red: #CE171C;
+      --primary-green: #01873F;
+      --primary-blue: rgba(2, 52, 79, 0.9);
+      --primary-dark: #1C1C18;
+      --sidebar-bg: linear-gradient(180deg, #02344f 0%, #01873F 100%);
+      --sidebar-hover: rgba(255, 255, 255, 0.1);
+      --text-light: #f8f9fa;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f9fa;
+      color: var(--primary-dark);
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100vh;
+      background: var(--sidebar-bg);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      padding: 1.5rem 1rem;
+      border-right: 2px solid rgba(255, 255, 255, 0.1);
+      z-index: 1050;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      width: 80px;
+    }
+
+    .sidebar.collapsed h2 span,
+    .sidebar.collapsed a span,
+    .sidebar.collapsed form button span {
+      display: none;
+    }
+
+    .sidebar.collapsed a,
+    .sidebar.collapsed form button {
+      text-align: center;
+      padding: 12px;
+    }
+
+    .sidebar h2 {
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: var(--sidebar-hover);
+      transform: translateX(5px);
+    }
+
+    .sidebar a i {
+      width: 22px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    /* Logout */
+    .sidebar form button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-light);
+      font-weight: 500;
+      border-radius: 6px;
+      padding: 12px 14px;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar form button:hover {
+      background-color: var(--primary-red);
+      transform: translateX(4px);
+    }
+
+    /* Topbar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 280px;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 900;
+      transition: all 0.3s ease;
+    }
+
+    .topbar.shifted {
+      left: 80px;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--primary-blue);
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      color: var(--primary-blue);
+      font-size: 1.1rem;
+    }
+
+    .topbar img {
+      height: 40px;
+    }
+
+    /* Content */
+    .content {
+      margin-left: 280px;
+      margin-top: 70px;
+      padding: 2rem;
+      background: #fff;
+      min-height: calc(100vh - 70px);
+      transition: all 0.3s ease;
+    }
+
+    .content.shifted {
+      margin-left: 80px;
+    }
 
 
+
+    /* 🌫️ Glass Blur Overlay for Mobile */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 1040;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        left: -280px;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .topbar {
+        left: 0;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      footer {
+        left: 0;
+        width: 100%;
+      }
+
+      .sidebar h2 span,
+      .sidebar a span {
+        display: inline !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="container-fluid">
-    <div class="row">
+  <div class="container-fluid p-0">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <h2 class="my-4 text-center">
+<!--        <i class="fas fa-tachometer-alt me-2"></i>-->
+        <span>Summit Admin</span>
+      </h2>
 
-        <!-- Sidebar -->
-        <nav class="col-md-2 d-none d-md-block sidebar p-3">
-            <h4 class="text-white mb-4"><i class="fas fa-chart-line me-2"></i> Summit</h4>
-            <a href="{% url 'dashboard' %}"><i class="fas fa-home me-2"></i> Dashboard</a>
-            <a href="{% url 'mailme' %}"><i class="fas fa-envelope me-2"></i> Email client</a>
-            <a href="{% url 'gallery_dashboard' %}">
-                <i class="fas fa-images me-2"></i> Gallery Dashboard
-            </a>
 
-            <a href="{% url 'partner_dashboard' %}">
-                <i class="fas fa-handshake me-2"></i> Partner Dashboard
-            </a>
+      <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i><span> Delegate Dashboard</span></a>
+      <a href="{% url 'admin_dashboard' %}"><i class="fas fa-store"></i><span> Exhibitors Dashboard</span></a>
+      <a href="{% url 'main_dashboard_view' %}"><i class="fas fa-chart-pie"></i><span> Stats Dashboard</span></a>
+      <a href="{% url 'categories' %}"><i class="fas fa-user-check"></i><span> Guest Categories</span></a>
+      <a href="{% url 'gallery_dashboard' %}"><i class="fas fa-images"></i><span> Gallery Dashboard</span></a>
+      <a href="{% url 'partner_dashboard' %}"><i class="fas fa-handshake"></i><span> Partner Dashboard</span></a>
+      <a href="{% url 'dashboard_home' %}"><i class="fas fa-calendar-alt"></i><span> Agenda Dashboard</span></a>
+      <a href="{% url 'speaker_dashboard' %}"><i class="fas fa-microphone"></i><span> Speaker Dashboard</span></a>
+      <a href="{% url 'mailme' %}"><i class="fas fa-envelope"></i><span> Email Client</span></a>
 
-            <a href="{% url 'dashboard_home' %}">
-                <i class="fas fa-calendar-alt me-2"></i> Agenda Dashboard
-            </a>
+      <form method="post" action="{% url 'logout' %}" class="mt-3">
+        {% csrf_token %}
+        <button type="submit"><i class="fas fa-sign-out-alt"></i><span> Logout</span></button>
+      </form>
+    </nav>
 
-            <a href="{% url 'speaker_dashboard' %}">
-                <i class="fas fa-microphone me-2"></i> Speaker Dashboard
-            </a>
-            <a href="{% url 'categories' %}">
-                <i class="fas fa-user-check"></i> Guest Categories
-            </a>
+    <!-- 🌫️ Glass Overlay -->
+    <div class="overlay" id="overlay"></div>
 
-            <a href="{% url 'admin_dashboard' %}">
-                <i class="fas fa-store me-2"></i> Exhibitors Dashboard
-            </a>
+    <!-- Topbar -->
+    <header class="topbar" id="topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        <div class="brand">
+          <img src="{% static 'images/summit_logo.png' %}" alt="Summit Logo">
+          <span>Software Summit Admin</span>
+        </div>
+      </div>
 
-            <!-- Logout -->
-            <form method="post" action="{% url 'logout' %}" class="mt-2">
-                {% csrf_token %}
-                <button type="submit" class="btn w-100 text-start text-white"
-                        style="background:none; border:none; padding:10px 15px;">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </button>
+      <div class="dropdown user-dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-user-circle me-1"></i> {{ user.username }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+          <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+          <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i> Logout</button>
             </form>
-        </nav>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content" id="content">
+      {% block content %}
+      {% endblock %}
+    </main>
 
 
-        <!-- Main Content -->
-        <main class="col-md-10 ms-sm-auto content">
-            {% block content %}
-                <!-- Page-specific content goes here -->
-            {% endblock %}
-        </main>
+    <footer id="footer">
+      <div class="text-center mt-5 mb-4 ">
+          Software Summit Dashboard • &copy; {{ current_year }} . All rights reserved.
+        </div>
+    </footer>
+  <!-- FOOTER -->
 
-    </div>
-</div>
+
+  </div>
+
+  <!-- JS -->
 
 <!-- Bootstrap JS -->
 <!-- Scripts -->
@@ -100,32 +346,31 @@
 <script src="{% static 'js/notyf.min.js' %}"></script>
 <script src="{% static 'js/extra/notfy_setting.js' %}"></script>
 <script src="{% static 'js/extra/external.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    const toggleBtn = document.getElementById("toggleSidebar");
+    const sidebar = document.getElementById("sidebar");
+    const topbar = document.getElementById("topbar");
+    const content = document.getElementById("content");
+    const footer = document.getElementById("footer");
+    const overlay = document.getElementById("overlay");
 
+    toggleBtn.addEventListener("click", () => {
+      if (window.innerWidth <= 992) {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+      } else {
+        sidebar.classList.toggle("collapsed");
+        topbar.classList.toggle("shifted");
+        content.classList.toggle("shifted");
+        footer.classList.toggle("shifted");
+      }
+    });
 
-{% block scripts %}
-{% if user.is_authenticated and AUTO_LOGOUT_TIMEOUT %}
-<script>
-(function() {
-  const AUTO_LOGOUT_TIMEOUT = {{ AUTO_LOGOUT_TIMEOUT }};
-  let lastActivity = Date.now();
-
-  // Track user interactions
-  ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
-    document.addEventListener(event, () => lastActivity = Date.now());
-  });
-
-  // Check inactivity every 30 seconds
-  setInterval(() => {
-    const elapsed = (Date.now() - lastActivity) / 1000;
-    if (elapsed > AUTO_LOGOUT_TIMEOUT) {
-      console.log("Session expired due to inactivity.");
-      window.location.href = "{% url 'logout' %}";
-    }
-  }, 30000);
-})();
-</script>
-{% endif %}
-
-{% endblock %}
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  </script>
 </body>
 </html>
