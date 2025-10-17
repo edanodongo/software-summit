@@ -46,14 +46,13 @@
                 <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
               </ul>
             </li>
-            <li><a href="#schedule">AGENDA</a></li>
+            <li><a href="#schedule">PROGRAM</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
             <li><a href="#features">ACTIVITIES</a></li>
             <li><a href="#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
-                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
+                <li><a href="#gallery">GALLERY</a></li>
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
               </ul>
             </li>
@@ -76,7 +75,6 @@
           </div>
         </nav>
 
-        <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
 
       </div>
   </header>
@@ -105,10 +103,6 @@
                                   Shaping software.
                                   Driving growth
                               </p>
-                              <!-- <p class="hero-subtitle">
-                                Join Africa's premier software development conference where innovation meets opportunity.
-                                Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.
-                              </p> -->
 
                               <div class="event-details">
                                   <div class="detail-item">
@@ -175,12 +169,6 @@
                         </div>
 
 
-
-
-                              <!-- <p class="cta-note">Limited to 200 executive participants • Early bird pricing ends September 30th</p> -->
-
-                          </div>
-
                       </div><!-- End col-lg-10 -->
 
                   </div><!-- End row -->
@@ -213,42 +201,11 @@
                               fostering
                               the digital economy.</p>
 
-                          <!-- <div class="stats-grid">
-                            <div class="stat-item">
-                              <div class="stat-number">3</div>
-                              <div class="stat-label">Days</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">8</div>
-                              <div class="stat-label">Tracks</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">150+</div>
-                              <div class="stat-label">Speakers</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">3500+</div>
-                              <div class="stat-label">Attendees</div>
-                            </div>
-                          </div> -->
-
-                          <div class="cta-section">
-                              <a href="#schedule" class="btn btn-primary">View Full Agenda</a>
-                              <a href="#featured-speakers" class="btn btn-outline">Meet the Speakers</a>
-                          </div>
                       </div>
                   </div>
 
                   <div class="col-lg-6">
                       <div class="visual-section">
-                          <!-- <div class="image-wrapper">
-                              <img src="{% static 'images/gallery/photo_1_2.webp' %}" loading="lazy"  alt="Tech Summit" class="img-fluid">
-                              <!-- <div class="gradient-overlay"></div>
-                              <div class="floating-badge">
-                                  <i class="bi bi-calendar-event"></i>
-                                  <span>November 10-12 2025</span>
-                              </div>
-                          </div> -->
                           <div class="image-wrapper position-relative">
                               <div class="ratio ratio-16x9">
                                   <iframe
@@ -266,21 +223,6 @@
                               </div>
                           </div>
 
-
-                          <div class="highlight-cards">
-                              <div class="highlight-card">
-                                  <i class="bi bi-people-fill"></i>
-                                  <h4>Talent Networking</h4>
-                                  <p>Develop software and AI talent, providing direct linkages between Kenyan developers
-                                      and
-                                      global technology players.</p>
-                              </div>
-                              <div class="highlight-card">
-                                  <i class="bi bi-lightbulb-fill"></i>
-                                  <h4>Innovation Showcase</h4>
-                                  <p>Discover cutting-edge technologies and startups</p>
-                              </div>
-                          </div>
                       </div>
                   </div>
 
@@ -313,13 +255,55 @@
 
           <!-- Section Title -->
           <div class="container section-title">
-              <h2>Featured Speakers</h2>
-              <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
+              <h2>Event Host</h2>
           </div><!-- End Section Title -->
 
           <div class="container">
 
               <div class="row gy-4">
+
+                <!-- Featured Speaker 1 -->
+                <div class="col-lg-6">
+                    <div class="speaker-card featured">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="speaker-image">
+                                    <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}"
+                                        alt="Cabinet Secretary"  loading="lazy" class="img-fluid">
+<!--                                    <div class="speaker-social">-->
+<!--                                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>-->
+<!--                                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="speaker-content">
+                                    <span class="speaker-category">Keynote Speaker</span>
+                                    <h3 class="speaker-name">Mr. John OMO</h3>
+                                    <p class="speaker-title">Secretary-General</p>
+                                    <p class="speaker-company">African Telecommunications Union</p>
+                                    <!-- <div class="speaker-session">
+                                      <h4>Session: "The Future of AI in Business"</h4>
+                                    </div> -->
+
+                                    <a href="#"
+                                      class="btn-speaker"
+                                       loading="lazy"
+                                      data-name="Mr. John OMO"
+                                      data-position="Secretary-General"
+                                      data-org="African Telecommunications Union"
+                                      data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
+                                      data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
+                                      Mr. Omo has 31 years’ experience as a lawyer and has contributed immensely to the development of local and international policies, legislation, agreements and treaties in all areas of public service, but mainly in the area of ICTs.
+                                      Prior to his election for his first term in 2018, he worked with the Communications Authority of Kenya, Kenya's ICT regulator, where he provided leadership over the Authority’s legal matters and strategies. Before that, he worked in the public/civil service.
+                                      He holds a Master of Law degree in International and Commercial law from the University of Sheffield – UK; a Bachelor of Law from the University of Nairobi – Kenya; a Diploma in Human Rights Law from the UN Human Rights Centre, Geneva, and ILO Centre Turin and another diploma in Legal Practice and Ethics from the Kenya School of Law amongst other professional courses.">
+                                      View Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Featured Speaker 1 -->
 
                 <!-- Featured Speaker 1 -->
                 <div class="col-lg-6">
@@ -337,7 +321,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="speaker-content">
-                                    <span class="speaker-category">Keynote Speaker</span>
+                                    <span class="speaker-category">Host </span>
                                     <h3 class="speaker-name">H.E.Hon.William Kabogo Gitau</h3>
                                     <p class="speaker-title">Cabinet Secretary</p>
                                     <p class="speaker-company">Ministry of Information,Communication and The Digital Economy</p>
@@ -378,7 +362,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="speaker-content">
-                                    <span class="speaker-category">Keynote Speaker</span>
+                                    <span class="speaker-category">Host </span>
                                     <h3 class="speaker-name">Eng.John Tanui,CBS</h3>
                                     <p class="speaker-title">Principal Secretary</p>
                                     <p class="speaker-company">State Department of ICT and Digital Economy, Government
@@ -404,93 +388,8 @@
                     </div>
                 </div><!-- End Featured Speaker 2 -->
 
-          <!-- Additional Speakers Grid
-
-          <div class="row gy-4 mt-4">
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/Kerema_Mary.webp' %}" loading="lazy"  alt="Mary N. Kerema, OGW" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mary N. Kerema, OGW</h4>
-                  <p class="speaker-title">Secretary ICT, E-Government</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Design Thinking Workshop"</span>
-                </div>
               </div>
-            </div><!-- End Speaker
-
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/placeholder.webp' %}" loading="lazy"  alt="David Wilson" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mr. Washington Okoth</h4>
-                  <p class="speaker-title">Secretary ICT Infrastructure</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Big Data Analytics"</span>
-                </div>
-              </div>
-            </div><!-- End Speaker
-
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/placeholder.webp' %}" loading="lazy"  alt="Mr. Emmanuel Kata Kimeu" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mr. Emmanuel Kata Kimeu</h4>
-                  <p class="speaker-title">Secretary, ICT - Security and Audit Control</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Digital Marketing Trends"</span>
-
-                </div>
-              </div>
-            </div><!-- End Speaker -->
-
-            <!-- <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="assets/img/events/speaker-9.webp" loading="lazy"  alt="James Parker" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-
-                    </div>
-                  </div>End Speaker -->
-
-              </div>
-
-
           </div>
-
       </section><!-- /Featured Speakers Section -->
 
       <!-- Schedule Section -->
@@ -498,8 +397,8 @@
 
         <!-- Section Title -->
         <div class="container section-title">
-          <h2>Agenda</h2>
-          <p class="lead text-muted dark"><strong>Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. </strong></p>
+          <h2>Summit Program</h2>
+          <p class="lead text-muted dark"><strong>Explore a dynamic schedule packed with keynote address, panel Discussions, Technical workshops, and Business match making & Networking event. </strong></p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -525,21 +424,6 @@
             <!-- Day 1 Schedule -->
             <div class="tab-pane fade show active" id="schedule-day1">
 
-              <!-- Track Headers
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i>
-                  <span>Government Policy Frameworks & Enabling Ecosystem</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i>
-                  <span>Talent, Startups & Innovation Pipelines</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i>
-                  <span>Investment, Partnerships & Long-term Growth</span>
-                </div>
-              </div> -->
 
               <div class="schedule-timeline">
 
@@ -807,21 +691,6 @@
             <!-- Day 2 Schedule -->
             <div class="tab-pane fade" id="schedule-day2">
 
-              <!-- Track Headers
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i>
-                  <span>Development Track</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i>
-                  <span>Design Track</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i>
-                  <span>Business Track</span>
-                </div>
-              </div> -->
 
               <div class="schedule-timeline">
 
@@ -1096,21 +965,6 @@
             <!-- Day 3 Schedule -->
             <div class="tab-pane fade" id="schedule-day3">
 
-              <!-- Track Headers
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i>
-                  <span>Development Track</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i>
-                  <span>Design Track</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i>
-                  <span>Business Track</span>
-                </div>
-              </div> -->
 
               <div class="schedule-timeline">
 
@@ -1363,12 +1217,13 @@
            <!-- Download CTA -->
           <div class="text-center">
             <div class="download-cta">
-              <h4>Get the Complete Schedule</h4>
-              <p>Download the full agenda as PDF or add events to your calendar</p>
+              <h4>Download program and add event to calendar</h4>
+              <p>Download the program or add event to your calendar</p>
               <div class="cta-buttons">
 <!--                <a href="{% static 'files/schedule.pdf' %}" class="btn btn-primary" download>-->
-<!--                  <i class="bi bi-download"></i> Download Full Schedule (PDF)-->
-<!--                </a>-->
+                <a href="#" class="btn btn-primary" download>
+                  <i class="bi bi-download"></i> Download Full Schedule (PDF)
+                </a>
 
                 <a href="{% url 'add_to_calendar' %}" class="btn btn-outline-primary">
                   <i class="bi bi-calendar-plus"></i> Add to Calendar
@@ -1597,33 +1452,21 @@
       <!-- Partners Section  -->
       <section id="partners" class="section-padding ">
           <div class="container">
-              <h2 class="section-title fw-bold dark">
-                  Partners
-              </h2>
+              <!-- Section Title -->
+              <div class="container section-title">
+                  <h2>Supporting Partners</h2>
+              </div><!-- End Section Title -->
 
               <div class="partners-logos" data-aos="fade-up">
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/micde_logo.png' %}" loading="lazy" alt="Ministry of ICT" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/odpc_logo.png' %}" loading="lazy" alt="ODPC" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/icta_logo.png' %}" loading="lazy" alt="ICT Authority" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/konza_logo.png' %}" loading="lazy" alt="Konza Technopolis"
-                          class="partner-logo">
-                  </div>
                   <div class="partner-logo-container">
                       <img src="{% static 'images/partners/atu_logo.png' %}" loading="lazy" alt="ATU" class="partner-logo">
                   </div>
                   <div class="partner-logo-container">
                       <img src="{% static 'images/partners/itu_logo.png' %}" loading="lazy" alt="ITU" class="partner-logo">
                   </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/kaist_logo.png' %}" loading="lazy" alt="KAIST" class="partner-logo">
-                  </div>
+<!--                  <div class="partner-logo-container">-->
+<!--                      <img src="{% static 'images/partners/kaist_logo.png' %}" loading="lazy" alt="KAIST" class="partner-logo">-->
+<!--                  </div>-->
                   <div class="partner-logo-container">
                       <img src="{% static 'images/partners/moi_university_logo.webp' %}" loading="lazy" alt="Moi University" class="partner-logo">
                   </div>
@@ -1756,34 +1599,6 @@
                       </div>
                   </div><!-- End Gallery Item -->
 
-<!--                  {% for item in gallery_items %}-->
-<!--                    {% if item.is_active %}-->
-<!--                      <div class="col-xl-3 col-lg-4 col-md-6">-->
-<!--                        <div class="gallery-item h-100">-->
-<!--                          <img -->
-<!--                            src="{{ item.image.url }}" -->
-<!--                            loading="lazy" -->
-<!--                            class="img-fluid rounded shadow-sm" -->
-<!--                            alt="{{ item.title|default:'Event Image' }}"-->
-<!--                          >-->
-<!--                          <div class="gallery-links d-flex align-items-center justify-content-center">-->
-<!--                            <a -->
-<!--                              href="{{ item.image.url }}" -->
-<!--                              class="glightbox preview-link" -->
-<!--                              title="{{ item.title|default:'Event Photo' }}"-->
-<!--                            >-->
-<!--                              <i class="bi bi-arrows-angle-expand"></i>-->
-<!--                            </a>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    {% endif %}-->
-<!--                  {% empty %}-->
-<!--                    &lt;!&ndash; <div class="col-12 text-center">-->
-<!--                      <p class="text-muted mt-3">No event highlights available yet. Please check back soon!</p>-->
-<!--                    </div> &ndash;&gt;-->
-<!--                  {% endfor %}-->
-
               </div>
 
           </div>
@@ -1855,7 +1670,7 @@
             <ul>
               <li><a href="#intro">About</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
-              <li><a href="#schedule">Agenda</a></li>
+              <li><a href="#schedule">Program</a></li>
               <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
           </div>

@@ -20,7 +20,7 @@ urlpatterns = [
     path("404/", views.not_found, name="not_found"),
     path("speakers/", views.speakers, name="speakers"),
     path("media/", views.media, name="media"),
-    # path("register/", views.register, name="register"),
+    path("places/", views.places, name="places"),
 
     path("login/", SummitLoginView.as_view(), name="custom_login"),
     path("logout/", SummitLogoutView.as_view(), name="logout"),
