@@ -1,6 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate
 from django.forms import inlineformset_factory
@@ -47,7 +45,6 @@ from .utils import send_confirmation_email  #  email sending function
 from django.http import HttpResponse
 from datetime import datetime
 
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Max
 
 from django.db.models import Count
@@ -55,9 +52,7 @@ from django.db.models import Count
 from django_countries import countries
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from django.http import JsonResponse
-from django.utils import timezone
 from django.db.models import Q
 
 from .models import (
@@ -67,6 +62,12 @@ from .forms import (
     ExhibitorRegistrationForm, ExhibitionSectionForm, BoothForm
 )
 from .utils import send_confirmation_mail
+
+from django.contrib.auth.views import LogoutView
+from django.contrib import messages
+from django.contrib.auth.views import LoginView
+from django.utils import timezone
+
 
 def home(request):
 
@@ -613,9 +614,7 @@ def dashboard_data(request):
     }
     return JsonResponse(data)
 
-from django.contrib.auth.views import LoginView
-from django.utils import timezone
-from datetime import timedelta
+# --------------------------------------------
 
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
@@ -639,8 +638,7 @@ class SummitLoginView(LoginView):
 
         return response
 
-from django.contrib.auth.views import LogoutView
-from django.contrib import messages
+# --------------------------------------------
 
 class SummitLogoutView(LogoutView):
     next_page = 'custom_login'
@@ -659,6 +657,8 @@ class SummitLogoutView(LogoutView):
 def about(request):
     return render(request, 'summit/samples/about.html')
 
+
+# --------------------------------------------
 
 def index(request):
     return render(request, 'summit/index.html')
@@ -1374,14 +1374,6 @@ def gallery(request):
     return render(request, "summit/gallery.html", {
         'gallery_items': gallery_items,
     })
-
-
-
-
-
-
-
-
 
 
 # --------------------------------------------
