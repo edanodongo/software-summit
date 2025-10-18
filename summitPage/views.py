@@ -914,7 +914,6 @@ def speaker_create(request):
     return render(request, "speaker/speaker_form.html", {
         "form": form,
         "title": "Add Speaker",
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         'current_year': timezone.now().year,})
 
 
