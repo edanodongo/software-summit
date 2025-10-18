@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,18 +188,13 @@
 
                   <div class="col-lg-6">
                       <div class="content">
-                          <h2>The Definitive Software Summit</h2>
+                          <h2>The Flagship Software Summit</h2>
                           <p class="lead">
-                              The global economy is being transformed by software development,
-                              artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with
-                              its
-                              dynamic youth population, thriving ICT sector, and fast-growing digital economy, is
-                              strategically
-                              positioned to lead Africa's next wave of digital transformation.
+                              Kenya's and Africa's digital transformation agenda presents a unique opportunity to leapfrog development stages, increased opportunities for innovation and entrepreneurship,fostering  inclusive growth as well as strengthen competitiveness in the global digital economy.</br></br>
+                              This is anchored on talented youthful population, thriving ICT sector and fast-growing digital economy supported by Government Policies,Private Sector initiatives ,Academia and development partners support, strategically positioning Kenya to lead Africa’s next wave of digital transformation.</br></br>
+                              To realize this agenda, the Ministry of Information, Communications and the Digital Economy in partners with Africa Telecommunications Union is hosting the Kenya Software Summit, an annual event attracting stakeholders from various sectors all over the world.
+
                           </p>
-                          <p>The Kenya Software Summit aligns with Kenya's vision of decentralizing innovation and
-                              fostering
-                              the digital economy.</p>
 
                       </div>
                   </div>
@@ -224,6 +219,8 @@
                           </div>
 
                       </div>
+                          <p class="lead mt-4"></br>The summit provides a platform for dialogue, knowledge exchange and partnership building in the Software,Artificial Intelligence and other emerging technologies  Sectors. </br></br>
+                              This Year 2025,the Summit will be held at Moi University,Annnex Campus Eldoret City.</p>
                   </div>
 
               </div>
@@ -305,7 +302,108 @@
                     </div>
                 </div><!-- End Featured Speaker 1 -->
 
-                <!-- Featured Speaker 1 -->
+                <!-- Featured Speaker 2 -->
+                <div class="col-lg-6">
+                    <div class="speaker-card featured">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="speaker-image">
+                                    <img src="{% static 'images/speakers/S_A_Kakai.webp' %}"
+                                        alt="Director"  loading="lazy" class="img-fluid">
+<!--                                    <div class="speaker-social">-->
+<!--                                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>-->
+<!--                                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="speaker-content">
+                                    <span class="speaker-category">Keynote Speaker</span>
+                                    <h3 class="speaker-name">Mr S. A Kakai</h3>
+                                    <p class="speaker-title">Director </p>
+                                    <p class="speaker-company">Virtual Assets Chamber of Commerce, Web3Club Foundation</p>
+                                    <!-- <div class="speaker-session">
+                                      <h4>Session: "The Future of AI in Business"</h4>
+                                    </div> -->
+
+                                    <a href="#"
+                                      class="btn-speaker"
+                                       loading="lazy"
+                                      data-name="Mr S. A Kakai"
+                                      data-position="Director"
+                                      data-org="Virtual Assets Chamber of Commerce & Web3Club Foundation"
+                                      data-photo="{% static 'images/speakers/S_A_Kakai.webp' %}"
+                                      data-bio="S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce,
+                                      he has been at the forefront of advancing policy dialogue and stakeholder engagement around blockchain technology and virtual asset regulation in Kenya.
+                                      Through this role, he has worked with global stablecoin issuers, multinational virtual asset service providers, decentralized finance (DeFi) protocols, and international exchanges, as well as Pan-African startups and local entrepreneurs.
+                                      His efforts focus on designing business and policy use cases, promoting consumer adoption, conducting product and regulatory research, and supporting the responsible adoption of blockchain and virtual assets across the continent.
+                                      In parallel, Kakai serves as a Director at the Web3Club Foundation, a hub that empowers software and blockchain developers to upskill and innovate within the Web3 ecosystem.
+                                      Through this role, he has collaborated with leading global protocols such as Ethereum (via the Ethereum Foundation), Scroll (through the Scroll Foundation), and Hedera (through the Hashgraph Foundation) to empower builders and strengthen Africa’s developer community.
+                                      His work centers on nurturing local talent, attracting foreign direct investment, and supporting entrepreneurs to create sustainable, blockchain-driven solutions that advance Kenya’s economic and technological growth.">
+                                      View Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Featured Speaker 1 -->
+
+                <!-- Dynamic Featured Speaker -->
+                {% for speaker in speakers %}
+                <div class="col-lg-6">
+                    <div class="speaker-card featured">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="speaker-image">
+                                    <img src="{{ speaker.photo.url|default:'/static/images/speakers/placeholder.webp' }}"
+                                         alt="{{ speaker.full_name }}" loading="lazy" class="img-fluid">
+
+                                    {% if speaker.linkedin_url or speaker.twitter_url %}
+                                    <div class="speaker-social">
+                                        {% if speaker.linkedin_url %}
+                                        <a href="{{ speaker.linkedin_url }}" target="_blank" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                        {% endif %}
+                                        {% if speaker.twitter_url %}
+                                        <a href="{{ speaker.twitter_url }}" target="_blank" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <div class="speaker-content">
+                                    <span class="speaker-category">{{ speaker.track|default:"Speaker" }}</span>
+                                    <h3 class="speaker-name">{{ speaker.full_name }}</h3>
+                                    <p class="speaker-title">{{ speaker.position }}</p>
+                                    <p class="speaker-company">{{ speaker.organization }}</p>
+
+<!--                                    {% if speaker.topic %}-->
+<!--                                    <div class="speaker-session">-->
+<!--                                        <h4>Session: "{{ speaker.topic }}"</h4>-->
+<!--                                    </div>-->
+<!--                                    {% endif %}-->
+
+                                    <a href="#"
+                                       class="btn-speaker"
+                                       loading="lazy"
+                                       data-name="{{ speaker.full_name }}"
+                                       data-position="{{ speaker.position }}"
+                                       data-org="{{ speaker.organization }}"
+                                       data-photo="{{ speaker.photo.url|default:'/static/images/speakers/placeholder.webp' }}"
+                                       data-bio="{{ speaker.bio|default:speaker.summary }}">
+                                        View Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">No speakers have been added yet.</p>
+                {% endfor %}
+
+                <!-- Featured Speaker 3 -->
                 <div class="col-lg-6">
                     <div class="speaker-card featured">
                         <div class="row">
@@ -346,7 +444,7 @@
                     </div>
                 </div><!-- End Featured Speaker 1 -->
 
-                <!-- Featured Speaker 2 -->
+                <!-- Featured Speaker 4 -->
                 <div class="col-lg-6">
                     <div class="speaker-card featured">
                         <div class="row">

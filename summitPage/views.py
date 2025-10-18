@@ -68,6 +68,9 @@ from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from django.utils import timezone
 
+from django.db.models import Case, When, Value, IntegerField
+from django.shortcuts import render
+from .models import SummitSpeaker
 
 def home(request):
 
@@ -126,11 +129,22 @@ def home(request):
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
+    summitspeakers = SummitSpeaker.objects.annotate(
+        custom_order=Case(
+            When(track__icontains='Keynote', then=Value(1)),
+            When(track__icontains='Host', then=Value(2)),
+            When(track__icontains='Speaker', then=Value(3)),
+            default=Value(4),
+            output_field=IntegerField(),
+        )
+    ).order_by('custom_order', 'full_name')
+
     return render(request, "summit/home.html", {
         'form': form,
         'gallery_items': gallery_items,
         'partners': partners,
         'days': days,
+        'speakers': summitspeakers,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
