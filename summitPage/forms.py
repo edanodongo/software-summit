@@ -337,14 +337,23 @@ class SpeakerForm(forms.ModelForm):
 # ✅ Exhibitor Registration Form
 # --------------------------------------------
 
+from .models import ExhibitionCategory
 
 class ExhibitorRegistrationForm(forms.ModelForm):
+    # --- Dropdown for dynamic exhibition category ---
+    exhibit_category = forms.ModelChoiceField(
+        queryset=ExhibitionCategory.objects.all(),
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Exhibition Category",
+        empty_label="Select exhibition category"
+    )
     class Meta:
         model = Exhibitor
         fields = [
             'title', 'first_name', 'second_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-            'section', 'booth', 'product_description',
+            'exhibit_category', 'product_description',
             'business_type', 'kra_pin', 'business_registration_doc',
             'international_business_doc', 'country_of_registration',
             'beneficial_owner_details', 'beneficial_owner_doc',
@@ -385,7 +394,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         required_fields = [
             'title', 'first_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-            'section', 'booth', 'national_id_number',
+            'exhibit_category', 'national_id_number',
             'national_id_scan', 'passport_photo',
             'country_of_registration', 'privacy_agreed'
         ]
@@ -396,12 +405,8 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         self.fields['national_id_number'].widget.attrs['minlength'] = 8
         self.fields['kra_pin'].widget.attrs['minlength'] = 11
 
-        self.fields['booth'].queryset = Booth.objects.filter(is_booked=False)
-        self.fields['section'].queryset = ExhibitionSection.objects.all()
 
-        self.fields['category'].empty_label = "Select exhibitor category"
-        self.fields['section'].empty_label = "Select exhibition section"
-        self.fields['booth'].empty_label = "Choose preferred booth"
+        self.fields['exhibit_category'].empty_label = "Select exhibitor category"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -460,3 +465,84 @@ class ExhibitionSectionForm(forms.ModelForm):
                 field.widget.attrs.update({'class': 'form-control'})
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({'class': 'form-control', 'rows': 3})
+
+
+
+# --------------------------------------------
+
+from django import forms
+from .models import SummitSponsor
+
+
+class SummitSponsorForm(forms.ModelForm):
+    """Form for registering summit sponsors and partners."""
+
+    AREAS_OF_INTEREST_CHOICES = [
+        ("branding", "Branding"),
+        ("csr_collaboration", "CSR Collaboration"),
+        ("exhibition", "Exhibition"),
+        ("media_support", "Media Support"),
+        ("technical_support", "Technical Support"),
+        ("other", "Other"),
+    ]
+
+    areas_of_interest = forms.MultipleChoiceField(
+        choices=AREAS_OF_INTEREST_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Areas of Interest"
+    )
+
+    consent_confirmation = forms.BooleanField(
+        label=(
+            "I hereby confirm that the information provided is accurate and that our "
+            "organization agrees to comply with the Government of Kenya partnership guidelines."
+        ),
+        required=True
+    )
+
+    class Meta:
+        model = SummitSponsor
+        fields = [
+            # --- Organization Details ---
+            "organization_name",
+            "registration_number",
+            "sector",
+            "website",
+            "logo",
+
+            # --- Contact Person ---
+            "contact_full_name",
+            "contact_designation",
+            "contact_email",
+            "contact_phone",
+
+            # --- Sponsorship Details ---
+            "areas_of_interest",
+            "proposed_contribution",
+            "proposal_file",
+
+            # --- Supporting Documents ---
+            "company_profile",
+            "tax_compliance_certificate",
+
+            # --- Consent ---
+            "consent_confirmation",
+        ]
+
+        widgets = {
+            "organization_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Organization name"}),
+            "registration_number": forms.TextInput(attrs={"class": "form-control", "placeholder": "PIN or Registration Number"}),
+            "sector": forms.TextInput(attrs={"class": "form-control", "placeholder": "Industry / Sector"}),
+            "website": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://example.com"}),
+            "contact_full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full name"}),
+            "contact_designation": forms.TextInput(attrs={"class": "form-control", "placeholder": "Designation / Role"}),
+            "contact_email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email address"}),
+            "contact_phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone number"}),
+            "proposed_contribution": forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Describe proposed contribution"}),
+        }
+
+    def clean_areas_of_interest(self):
+        """Convert list of checkbox selections into a storable list for JSONField."""
+        return self.cleaned_data.get("areas_of_interest", [])
+

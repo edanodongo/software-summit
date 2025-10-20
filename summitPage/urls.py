@@ -95,4 +95,9 @@ urlpatterns = [
     path("admin-dashboard/booths/add/", views.admin_add_booth, name="add_booth"),
     path("admin-dashboard/booths/<int:pk>/edit/", views.admin_edit_booth, name="admin_edit_booth"),
     path("admin-dashboard/booths/<int:pk>/delete/", views.admin_delete_booth, name="delete_booth"),
+
+    # --- sponsor management ---
+    path("sponsor/register/", views.summit_sponsor_registration, name="summit_sponsor_registration"),
+    path("admin/sponsors/", views.sponsor_dashboard, name="sponsor_dashboard"),
+    path("admin/sponsors/delete/<uuid:sponsor_id>/", views.delete_sponsor, name="delete_sponsor"),
 ]

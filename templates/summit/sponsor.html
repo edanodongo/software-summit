@@ -45,7 +45,7 @@
               <ul>
                   <li><a href="{% url 'register' %}">DELEGATE</a></li>
                 <li><a href="#">EXHIBITOR</a></li>
-                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+                 <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
               </ul>
             </li>
             <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
@@ -89,8 +89,8 @@
     <!-- Page Title -->
     <div class="page-title dark-background" >
       <div class="container position-relative">
-        <h1>Register</h1>
-        <p>Register as an exhibitor for the Kenya Software Summit 2025</p>
+        <h1>Partner</h1>
+        <p>Register as a partner for the Kenya Software Summit 2025</p>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="{% url 'home' %}">Home</a></li>
@@ -120,213 +120,156 @@
                 </div>
               </div>
 
-                <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
+                <form id="sponsor-registration-form" method="post" enctype="multipart/form-data" novalidate class="p-4 rounded-4 shadow-sm bg-white">
                   {% csrf_token %}
 
                   <!-- ============================= -->
-                  <!-- 👤 PERSONAL INFORMATION -->
+                  <!-- 🏢 ORGANIZATION DETAILS -->
                   <!-- ============================= -->
-                  <h5 class="fw-bold mt-2 mb-3 text-success">Personal Information</h5>
+                  <div class="mb-4 border-bottom pb-2">
+                    <h5 class="fw-bold text-success mb-3">
+                      <i class="fas fa-building me-2"></i> Organization Details
+                    </h5>
 
-                  <div class="row g-2">
-                    <div class="col-md-12 mb-2">
-                      <label for="id_title" class="form-label fw-semibold dark mb-1">Title</label>
-                      {{ form.title }}
-                    </div>
-                    <div class="col-md-12 mb-2">
-                      <label for="id_first_name" class="form-label fw-semibold dark mb-1">First Name</label>
-                      {{ form.first_name }}
-                    </div>
-                    <div class="col-md-12 mb-2">
-                      <label for="id_second_name" class="form-label fw-semibold dark mb-1">Other Names</label>
-                      {{ form.second_name }}
-                    </div>
-                  </div>
-
-                  <!-- Email + Phone -->
-                  <div class="row g-2 mt-2">
-                    <div class="col-md-6 mb-2">
-                      <label for="id_email" class="form-label fw-semibold dark mb-1">Email</label>
-                      {{ form.email }}
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label for="id_phone" class="form-label fw-semibold dark mb-1">Phone</label>
-                      {{ form.phone }}
-                    </div>
-                  </div>
-
-                  <!-- ============================= -->
-                  <!-- 🏢 ORGANIZATION INFORMATION -->
-                  <!-- ============================= -->
-                  <h5 class="fw-bold mt-4 mb-3 text-success">Organization Details</h5>
-
-                  <div class="row g-2 mt-2">
-                    <div class="col-md-6 mb-2">
-                      <label for="id_organization_type" class="form-label fw-semibold dark mb-1">Organization / Institution</label>
-                      {{ form.organization_type }}
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label for="id_job_title" class="form-label fw-semibold dark mb-1">Job Title / Role</label>
-                      {{ form.job_title }}
-                    </div>
-                  </div>
-
-                  <!-- Category -->
-                  <div class="mt-2 mb-2">
-                    <label for="id_category" class="form-label fw-semibold dark mb-1">Category</label>
-                    {{ form.category }}
-                    {% if form.category.errors %}
-                      <div class="text-danger small mt-1">{{ form.category.errors }}</div>
-                    {% endif %}
-                  </div>
-
-                  <!-- Product / Service Description -->
-                  <div class="mt-2 mb-2">
-                    <label for="id_product_description" class="form-label fw-semibold dark mb-1">Brief Description of Your Product / Service</label>
-                    {{ form.product_description }}
-                  </div>
-
-                  <!-- ============================= -->
-                  <!-- 🎪 EXHIBITION DETAILS -->
-                  <!-- ============================= -->
-
-                  <div class="row g-2 mt-2">
-                    <div class="col-md-6 mb-2">
-                      <label for="id_exhibit_category" class="form-label fw-semibold dark mb-1">
-                        Exhibition Category
-                      </label>
-                      {{ form.exhibit_category }}
-                      {% if form.exhibit_category.errors %}
-                        <div class="text-danger small mt-1">{{ form.exhibit_category.errors }}</div>
-                      {% endif %}
-                    </div>
-
-                  </div>
-
-                  <!-- ============================= -->
-                  <!-- 🪪 IDENTIFICATION -->
-                  <!-- ============================= -->
-                  <h5 class="fw-bold mt-4 mb-3 text-success">Identification</h5>
-
-                  <div class="mt-3 mb-3">
-                    <label for="id_national_id_number" class="form-label fw-semibold dark mb-1">National ID / Passport Number</label>
-                    {{ form.national_id_number }}
-                  </div>
-
-                  <div class="mt-3 mb-3">
-                    <label for="id_national_id_scan" class="form-label fw-semibold dark mb-1">Upload Scanned ID/Passport (JPG or PDF)</label>
-                    {{ form.national_id_scan }}
-                    <small class="text-muted d-block mt-1">
-                      Accepted formats: .jpg, .png, .pdf | Max size: 5 MB
-                    </small>
-                    <div id="id_scan_preview" class="mt-3"></div>
-                  </div>
-
-                  <div class="mt-3 mb-3">
-                    <label for="id_passport_photo" class="form-label fw-semibold dark mb-1">Upload Passport Photo (JPG or PNG)</label>
-                    {{ form.passport_photo }}
-                    <small class="text-muted d-block mt-1">
-                      Accepted formats: .jpg, .png | Max size: 5 MB
-                    </small>
-                    <div id="passport_preview" class="mt-3"></div>
-                  </div>
-
-                  <!-- ============================= -->
-                  <!-- 💼 BUSINESS INFORMATION -->
-                  <!-- ============================= -->
-                    <h5 class="fw-bold mt-4 mb-3 text-success">Business Registration</h5>
-
-                    <!-- Business Type Toggle -->
-                    <div class="mt-3 mb-3">
-                      <label for="id_business_type" class="form-label fw-semibold dark mb-1">Business Type</label>
-                      {{ form.business_type }}
-                    </div>
-
-                    <!-- Country -->
-                    <div class="mt-3 mb-3">
-                      <label for="id_country_of_registration" class="form-label fw-semibold dark mb-1">Country of Registration</label>
-                      {{ form.country_of_registration }}
-                    </div>
-
-                    <!-- Local (Kenyan) Fields -->
-                    <div class="local-fields">
-                      <div class="mt-3 mb-3">
-                        <label for="id_kra_pin" class="form-label fw-semibold dark mb-1">KRA PIN (Kenyan Exhibitors)</label>
-                        {{ form.kra_pin }}
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="id_organization_name" class="form-label fw-semibold">Organization Name</label>
+                        {{ form.organization_name }}
                       </div>
-
-                      <div class="mt-3 mb-3">
-                        <label for="id_business_registration_doc" class="form-label fw-semibold dark mb-1">
-                          Business Registration Certificate (Local)
-                        </label>
-                        {{ form.business_registration_doc }}
+                      <div class="col-md-6">
+                        <label for="id_registration_number" class="form-label fw-semibold">Registration Number / PIN</label>
+                        {{ form.registration_number }}
                       </div>
                     </div>
 
-                    <!-- International Fields -->
-                    <div class="international-fields">
-                      <div class="mt-3 mb-3">
-                        <label for="id_international_business_doc" class="form-label fw-semibold dark mb-1">
-                          Trade License / Registration (International)
-                        </label>
-                        {{ form.international_business_doc }}
+                    <div class="row g-3 mt-2">
+                      <div class="col-md-6">
+                        <label for="id_sector" class="form-label fw-semibold">Sector / Industry</label>
+                        {{ form.sector }}
+                      </div>
+                      <div class="col-md-6">
+                        <label for="id_website" class="form-label fw-semibold">Website URL</label>
+                        {{ form.website }}
                       </div>
                     </div>
 
-                  <!-- ============================= -->
-                  <!-- 👥 BENEFICIAL OWNERS -->
-                  <!-- ============================= -->
-                  <h5 class="fw-bold mt-4 mb-3 text-success">Beneficial Ownership</h5>
-
-                  <div class="mt-3 mb-3">
-                    <label for="id_beneficial_owner_details" class="form-label fw-semibold dark mb-1">Registered Directors / Owners</label>
-                    {{ form.beneficial_owner_details }}
-                    <small class="text-muted d-block mt-1">
-                      Provide names, ID/Passport numbers, and ownership percentages.
-                    </small>
-                  </div>
-
-                  <div class="mt-3 mb-3">
-                    <label for="id_beneficial_owner_doc" class="form-label fw-semibold dark mb-1">Upload Supporting Document (CR12 / Register of Members)</label>
-                    {{ form.beneficial_owner_doc }}
+                    <div class="mt-3">
+                      <label for="id_logo" class="form-label fw-semibold">Upload Logo (Optional)</label>
+                      {{ form.logo }}
+                      <small class="text-muted d-block mt-1">Supported formats: JPG, PNG, SVG</small>
+                      <div id="logo_preview" class="mt-2"></div>
+                    </div>
                   </div>
 
                   <!-- ============================= -->
-                  <!-- 🔒 PRIVACY AGREEMENT -->
+                  <!-- 👤 CONTACT PERSON -->
                   <!-- ============================= -->
-                  <div class="mt-3 mb-2 form-check text-center">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      name="{{ form.privacy_agreed.name }}"
-                      id="id_privacy_agreed"
-                      value="true"
-                      {% if form.privacy_agreed.value %}checked{% endif %}
-                      required
-                    >
-                    <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
-                      I have read and agree to the
-                      <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                  <div class="mb-4 border-bottom pb-2">
+                    <h5 class="fw-bold text-success mb-3">
+                      <i class="fas fa-user-tie me-2"></i> Contact Person
+                    </h5>
+
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="id_contact_full_name" class="form-label fw-semibold">Full Name</label>
+                        {{ form.contact_full_name }}
+                      </div>
+                      <div class="col-md-6">
+                        <label for="id_contact_designation" class="form-label fw-semibold">Designation / Role</label>
+                        {{ form.contact_designation }}
+                      </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                      <div class="col-md-6">
+                        <label for="id_contact_email" class="form-label fw-semibold">Email Address</label>
+                        {{ form.contact_email }}
+                      </div>
+                      <div class="col-md-6">
+                        <label for="id_contact_phone" class="form-label fw-semibold">Phone Number</label>
+                        {{ form.contact_phone }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ============================= -->
+                  <!-- 💰 SPONSORSHIP DETAILS -->
+                  <!-- ============================= -->
+                  <div class="mb-4 border-bottom pb-2">
+                    <h5 class="fw-bold text-success mb-3">
+                      <i class="fas fa-hand-holding-usd me-2"></i> Sponsorship Details
+                    </h5>
+
+                    <div class="mb-3">
+                      <label for="id_areas_of_interest" class="form-label fw-semibold">Areas of Interest</label>
+                      <div class="ms-2">{{ form.areas_of_interest }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="id_proposed_contribution" class="form-label fw-semibold">Proposed Contribution</label>
+                      {{ form.proposed_contribution }}
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="id_proposal_file" class="form-label fw-semibold">Upload Detailed Proposal</label>
+                      {{ form.proposal_file }}
+                      <small class="text-muted d-block mt-1">Accepted formats: PDF, DOCX, DOC</small>
+                      <div id="proposal_preview" class="mt-2"></div>
+                    </div>
+                  </div>
+
+                  <!-- ============================= -->
+                  <!-- 📄 SUPPORTING DOCUMENTS -->
+                  <!-- ============================= -->
+                  <div class="mb-4 border-bottom pb-2">
+                    <h5 class="fw-bold text-success mb-3">
+                      <i class="fas fa-file-contract me-2"></i> Supporting Documents
+                    </h5>
+
+                    <div class="mb-3">
+                      <label for="id_company_profile" class="form-label fw-semibold">Company Profile (PDF/DOCX)</label>
+                      {{ form.company_profile }}
+                      <div id="profile_preview" class="mt-2"></div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="id_tax_compliance_certificate" class="form-label fw-semibold">Tax Compliance Certificate / Letter of Intent</label>
+                      {{ form.tax_compliance_certificate }}
+                      <div id="tax_preview" class="mt-2"></div>
+                    </div>
+                  </div>
+
+                  <!-- ============================= -->
+                  <!-- ✅ CONSENT & DECLARATION -->
+                  <!-- ============================= -->
+                  <div class="form-check mb-4">
+                    {{ form.consent_confirmation }}
+                    <label for="id_consent_confirmation" class="form-check-label fw-semibold">
+                      {{ form.consent_confirmation.label }}
                     </label>
-                    {% if form.privacy_agreed.errors %}
-                      <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
-                    {% endif %}
                   </div>
 
                   <!-- ============================= -->
                   <!-- 🚀 SUBMIT BUTTON -->
                   <!-- ============================= -->
-                  <div class="d-grid mt-3">
-                    <button type="submit" id="submit-btn"
-                        class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark">
-                      <i class="fa fa-paper-plane me-2"></i> Register as Exhibitor
+                  <div class="d-grid">
+                    <button
+                      type="submit"
+                      id="submit-btn"
+                      class="btn btn-success btn-lg fw-semibold shadow-sm"
+                    >
+                      <i class="fa fa-paper-plane me-2"></i> Submit Sponsorship Application
                     </button>
                   </div>
                 </form>
 
-                <!-- Alerts -->
-                <div id="alert-container" class="mt-2"></div>
 
+                <!-- Alerts -->
+                <div id="alert-container" class="mt-3">
+                  {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+                  {% endfor %}
+                </div>
 
 
 
@@ -377,6 +320,7 @@
             <ul>
               <li><a href="{% url 'register' %}#features">Delegate</a></li>
               <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="#">Partner</a></li>
             </ul>
           </div>
 
@@ -443,7 +387,7 @@
 
 
 <!-- Main JS File -->
-<script src="{% static 'js/exhibit.js' %}"></script>
+<script src="{% static 'js/sponsor.js' %}"></script>
 
 <script src="{% static 'js/custom/main.js' %}"></script>
 

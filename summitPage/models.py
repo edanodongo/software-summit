@@ -474,6 +474,32 @@ class EmailLogs(models.Model):
 # --------------------------------------------
 # EXHIBITION SECTION
 # --------------------------------------------
+
+
+class ExhibitionCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+def get_category_choice():
+    choices = [('', 'Select Category')]
+    choices += [(c.id, c.name) for c in ExhibitionCategory.objects.all()]
+    return choices
+
+# --------------------------------------------
+
+def get_exhibcategory_id():
+    """Safely return category choices, even when the DB isn't ready."""
+    try:
+        return [('', 'Select Category')] + [
+            (str(c.id), str(c.id)) for c in ExhibitionCategory.objects.all()
+        ]
+    except Exception:
+        # Happens before migrations or when DB is unavailable
+        return [('', 'Select Category')]
+
 class ExhibitionSection(models.Model):
     """Sections within the exhibition hall (e.g., Innovation, Corporate, Startups)."""
     name = models.CharField(max_length=100, unique=True)
@@ -591,6 +617,8 @@ class Exhibitor(models.Model):
     )
     product_description = models.TextField(blank=True, null=True)
 
+    exhibit_category = models.ForeignKey('ExhibitionCategory', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Exhibition Category")
+
     # --- Booth & Section ---
     booth = models.ForeignKey("Booth", on_delete=models.SET_NULL, null=True, blank=True)
     section = models.ForeignKey("ExhibitionSection", on_delete=models.SET_NULL, null=True, blank=True)
@@ -656,3 +684,81 @@ class BeneficialOwner(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.ownership_percentage or 0}%)"
+
+
+
+# ---------------------------------------------
+
+import uuid
+from django.db import models
+
+
+class SummitSponsor(models.Model):
+    """Model to register and manage Summit Sponsors or Partners."""
+
+    # ---------- 1. Organization Details ----------
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    organization_name = models.CharField(max_length=255)
+    registration_number = models.CharField(
+        max_length=100, blank=True, null=True, help_text="Business registration number or PIN (optional)"
+    )
+    sector = models.CharField(max_length=150, help_text="Industry or sector of operation")
+    website = models.URLField(blank=True, null=True)
+    logo = models.ImageField(
+        upload_to="uploads/sponsors/logos/", blank=True, null=True, help_text="Optional logo upload"
+    )
+
+    # ---------- 2. Contact Person ----------
+    contact_full_name = models.CharField(max_length=150)
+    contact_designation = models.CharField(max_length=150)
+    contact_email = models.EmailField()
+    contact_phone = models.CharField(max_length=50)
+
+    # ---------- 3. Sponsorship Details ----------
+    AREAS_OF_INTEREST_CHOICES = [
+        ("branding", "Branding"),
+        ("csr_collaboration", "CSR Collaboration"),
+        ("exhibition", "Exhibition"),
+        ("media_support", "Media Support"),
+        ("technical_support", "Technical Support"),
+        ("other", "Other"),
+    ]
+    areas_of_interest = models.JSONField(
+        default=list,
+        help_text="List of selected areas of interest (checkboxes)"
+    )
+    proposed_contribution = models.TextField(
+        blank=True, help_text="Description of proposed contribution"
+    )
+    proposal_file = models.FileField(
+        upload_to="uploads/sponsors/proposals/", blank=True, null=True, help_text="Optional detailed proposal file"
+    )
+
+    # ---------- 4. Supporting Documents ----------
+    company_profile = models.FileField(
+        upload_to="uploads/sponsors/documents/", blank=True, null=True, help_text="Upload company profile (PDF/DOCX)"
+    )
+    tax_compliance_certificate = models.FileField(
+        upload_to="uploads/sponsors/documents/", blank=True, null=True,
+        help_text="Tax compliance certificate or letter of intent"
+    )
+
+    # ---------- 5. Consent & Declaration ----------
+    consent_confirmation = models.BooleanField(
+        default=False,
+        help_text="Confirms accuracy and agreement with Government of Kenya partnership guidelines"
+    )
+
+    # ---------- Metadata ----------
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Summit Sponsor"
+        verbose_name_plural = "Summit Sponsors"
+        ordering = ["-submitted_at"]
+
+    def __str__(self):
+        return self.organization_name
+
+
+# ---------------------------------------------
