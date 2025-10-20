@@ -1526,19 +1526,50 @@ section,
   border: 2px solid color-mix(in srgb, var(--accent-color), transparent 80%);
 }
 
+/* ============================
+   🎤 FEATURED & COMPACT SPEAKERS
+   ============================ */
+
+/* === Featured Speaker Card === */
+.featured-speakers .speaker-card.featured {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-speakers .speaker-card.featured:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* === Speaker Image Container === */
 .featured-speakers .speaker-card.featured .speaker-image {
   position: relative;
   overflow: hidden;
-  height: 340px;
+  height: clamp(200px, 40vw, 340px);
+  border-radius: 16px 0 0 16px;
+  background-color: #f9f9f9;
 }
 
+/* === Speaker Image === */
 .featured-speakers .speaker-card.featured .speaker-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.3s ease;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
+/* Hover zoom */
+.featured-speakers .speaker-card.featured:hover .speaker-image img {
+  transform: scale(1.03);
+}
+
+/* === Optional Social Buttons === */
 .featured-speakers .speaker-card.featured .speaker-image .speaker-social {
   position: absolute;
   bottom: 20px;
@@ -1565,8 +1596,117 @@ section,
   transform: translateY(-3px);
 }
 
-.featured-speakers .speaker-card.featured .speaker-image .speaker-social a i {
+/* === Speaker Content === */
+.featured-speakers .speaker-card.featured .speaker-content {
+  padding: 25px;
+}
+
+.featured-speakers .speaker-card.featured .speaker-content .speaker-category {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.featured-speakers .speaker-card.featured .speaker-content .speaker-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.featured-speakers .speaker-card.featured .speaker-content .speaker-title,
+.featured-speakers .speaker-card.featured .speaker-content .speaker-company {
   font-size: 16px;
+  color: var(--text-muted, #666);
+  margin-bottom: 4px;
+}
+
+/* === Responsive Fixes === */
+@media (max-width: 992px) {
+  .featured-speakers .speaker-card.featured {
+    flex-direction: column;
+  }
+
+  .featured-speakers .speaker-card.featured .speaker-image {
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-speakers .speaker-card.featured .speaker-image {
+    height: auto; /* allow full scaling */
+  }
+
+  .featured-speakers .speaker-card.featured .speaker-image img {
+    height: auto;
+    object-fit: contain; /* stop cropping on mobile */
+  }
+
+  .featured-speakers .speaker-card.featured .speaker-content {
+    padding: 20px 15px;
+  }
+
+  .featured-speakers .speaker-card.featured .speaker-content .speaker-name {
+    font-size: 20px;
+  }
+}
+
+/* ============================
+   🎤 COMPACT SPEAKER CARD
+   ============================ */
+.featured-speakers .speaker-card.compact {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-speakers .speaker-card.compact:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+.featured-speakers .speaker-card.compact .speaker-image {
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+}
+
+.featured-speakers .speaker-card.compact .speaker-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.featured-speakers .speaker-card.compact .speaker-image:hover img {
+  transform: scale(1.05);
+}
+
+.featured-speakers .speaker-card.compact .speaker-content {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .featured-speakers .speaker-card.compact .speaker-image {
+    height: 220px;
+  }
+
+  .featured-speakers .speaker-card.compact .speaker-content .speaker-name {
+    font-size: 16px;
+  }
+}
+
+/* === Schedule Speaker Avatar (Unchanged) === */
+.schedule .schedule-timeline .time-slot .sessions-row .session-card .speaker .speaker-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
 }
 
 .featured-speakers .speaker-card.featured .speaker-content {
@@ -1643,93 +1783,11 @@ section,
   transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
-  .featured-speakers .speaker-card.featured .speaker-image {
-    height: 250px;
-  }
-
-  .featured-speakers .speaker-card.featured .speaker-content {
-    padding: 20px;
-  }
-
-  .featured-speakers .speaker-card.featured .speaker-content .speaker-name {
-    font-size: 20px;
-  }
-}
-
 .featured-speakers .speaker-card.compact {
   text-align: center;
   transition: all 0.3s ease;
 }
 
-.featured-speakers .speaker-card.compact .speaker-image {
-  position: relative;
-  overflow: hidden;
-  height: 280px;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 0.3s ease;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image .speaker-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--default-color), transparent 30%) 100%);
-  opacity: 0;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 20px;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image .speaker-overlay .speaker-social {
-  display: flex;
-  gap: 10px;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image .speaker-overlay .speaker-social a {
-  width: 36px;
-  height: 36px;
-  background: var(--contrast-color);
-  color: var(--accent-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image .speaker-overlay .speaker-social a:hover {
-  background: var(--accent-color);
-  color: var(--contrast-color);
-}
-
-.featured-speakers .speaker-card.compact .speaker-image .speaker-overlay .speaker-social a i {
-  font-size: 14px;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image:hover .speaker-overlay {
-  opacity: 1;
-}
-
-.featured-speakers .speaker-card.compact .speaker-image:hover .speaker-overlay .speaker-social {
-  transform: translateY(0);
-}
-
-.featured-speakers .speaker-card.compact .speaker-image:hover img {
-  transform: scale(1.05);
-}
 
 .featured-speakers .speaker-card.compact .speaker-content {
   padding: 25px 20px;
@@ -1765,20 +1823,6 @@ section,
   font-size: 12px;
   font-weight: 500;
   font-style: italic;
-}
-
-@media (max-width: 768px) {
-  .featured-speakers .speaker-card.compact .speaker-image {
-    height: 250px;
-  }
-
-  .featured-speakers .speaker-card.compact .speaker-content {
-    padding: 20px 15px;
-  }
-
-  .featured-speakers .speaker-card.compact .speaker-content .speaker-name {
-    font-size: 16px;
-  }
 }
 
 .featured-speakers .speaker-quote {
@@ -2083,13 +2127,7 @@ section,
   margin-bottom: 12px;
 }
 
-.schedule .schedule-timeline .time-slot .sessions-row .session-card .speaker .speaker-image {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 12px;
-}
+
 
 .schedule .schedule-timeline .time-slot .sessions-row .session-card .speaker .speaker-details h5 {
   font-size: 14px;
@@ -6120,4 +6158,28 @@ html {
 .btn-cta.dropdown-toggle::after {
   margin-left: 0.4rem;
   vertical-align: middle;
+}
+
+#sponsor-registration-form input,
+#sponsor-registration-form select,
+#sponsor-registration-form textarea {
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ced4da;
+  transition: all 0.2s ease-in-out;
+}
+
+#sponsor-registration-form input:focus,
+#sponsor-registration-form select:focus,
+#sponsor-registration-form textarea:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
+}
+
+#sponsor-registration-form h5 i {
+  color: #198754;
+}
+
+#sponsor-registration-form small.text-muted {
+  font-size: 0.85rem;
 }

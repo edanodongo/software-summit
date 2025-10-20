@@ -1477,7 +1477,7 @@ def exhibitor(request):
     else:
         form = ExhibitorRegistrationForm()
 
-    form.fields["booth"].queryset = Booth.objects.filter(is_booked=False)
+    # form.fields["booth"].queryset = Booth.objects.filter(is_booked=False)
     return render(request, "summit/exhibitor.html", {"form": form})
 
 
@@ -1822,3 +1822,65 @@ def main_dashboard_view(request):
     }
 
     return render(request, "dashboard/stats_dashboard.html", context)
+
+
+
+# --------------------------------------------
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import SummitSponsorForm
+
+
+def summit_sponsor_registration(request):
+    """View for registering summit sponsors and partners."""
+    if request.method == "POST":
+        form = SummitSponsorForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "message": "Your sponsorship application has been received."})
+            messages.success(request, "Thank you! Your sponsorship application has been submitted successfully.")
+            return redirect("summit_sponsor_registration")
+        else:
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": False, "errors": form.errors})
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = SummitSponsorForm()
+
+    return render(request, "summit/sponsor.html", {"form": form})
+
+
+# --------------------------------------------
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+
+from summitPage.models import SummitSponsor
+
+
+@login_required
+def sponsor_dashboard(request):
+    """Admin dashboard to view and manage sponsor partners."""
+    query = request.GET.get("q", "")
+    sponsors = SummitSponsor.objects.all().order_by("-submitted_at")
+
+    if query:
+        sponsors = sponsors.filter(organization_name__icontains=query)
+
+    context = {
+        "sponsors": sponsors,
+        "query": query,
+    }
+    return render(request, "sponsors/sponsor_dashboard.html", context)
+
+
+@login_required
+def delete_sponsor(request, sponsor_id):
+    """Delete a sponsor record."""
+    sponsor = get_object_or_404(SummitSponsor, id=sponsor_id)
+    sponsor.delete()
+    messages.success(request, f"Sponsor '{sponsor.organization_name}' deleted successfully.")
+    return redirect("sponsor_dashboard")
+

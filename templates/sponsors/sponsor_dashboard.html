@@ -1,0 +1,108 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="fw-bold mb-4 text-success">
+    <i class="fas fa-handshake me-2"></i> Summit Sponsors & Partners
+  </h3>
+
+  <!-- Alerts -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Search -->
+  <form method="get" class="mb-3 d-flex gap-2">
+    <input
+      type="text"
+      name="q"
+      class="form-control"
+      placeholder="Search by organization name..."
+      value="{{ query }}"
+    />
+    <button class="btn btn-success" type="submit"><i class="fas fa-search me-1"></i> Search</button>
+  </form>
+
+  <!-- Sponsors Table -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-success">
+        <tr>
+          <th>#</th>
+          <th>Organization</th>
+          <th>Sector</th>
+          <th>Contact Person</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Website</th>
+          <th>Areas of Interest</th>
+          <th>Files</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in sponsors %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ s.organization_name }}</td>
+          <td>{{ s.sector }}</td>
+          <td>{{ s.contact_full_name }}</td>
+          <td>{{ s.contact_email }}</td>
+          <td>{{ s.contact_phone }}</td>
+          <td>
+            {% if s.website %}
+              <a href="{{ s.website }}" target="_blank">{{ s.website|truncatechars:25 }}</a>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            {% if s.areas_of_interest %}
+              <ul class="mb-0 ps-3">
+                {% for area in s.areas_of_interest %}
+                  <li>{{ area|capfirst }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            {% if s.logo %}
+              <a href="{{ s.logo.url }}" target="_blank">Logo</a><br>
+            {% endif %}
+            {% if s.proposal_file %}
+              <a href="{{ s.proposal_file.url }}" target="_blank">Proposal</a><br>
+            {% endif %}
+            {% if s.company_profile %}
+              <a href="{{ s.company_profile.url }}" target="_blank">Profile</a><br>
+            {% endif %}
+            {% if s.tax_compliance_certificate %}
+              <a href="{{ s.tax_compliance_certificate.url }}" target="_blank">Tax Cert</a>
+            {% endif %}
+          </td>
+          <td>
+            <a
+              href="{% url 'delete_sponsor' s.id %}"
+              class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('Are you sure you want to delete this sponsor?')"
+            >
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10" class="text-center text-muted py-4">
+            No sponsors or partners registered yet.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
