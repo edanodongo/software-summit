@@ -20,22 +20,14 @@ def get_category_choices():
     return choices
 
 # --------------------------------------------
-# def get_category_id():
-#
-#     choices = [('', 'Select Category')]  # Placeholder
-#     choices += [(str(c.id), str(c.id)) for c in Category.objects.all()]  # 👈 id as both value & label
-#     return choices
-
-# --------------------------------------------
 
 def get_category_id():
-    """Safely return category choices, even when the DB isn't ready."""
+    """Return category choices safely even if DB isn't ready."""
     try:
         return [('', 'Select Category')] + [
-            (str(c.id), str(c.id)) for c in Category.objects.all()
+            (str(c.id), c.name) for c in Category.objects.all()
         ]
     except Exception:
-        # Happens before migrations or when DB is unavailable
         return [('', 'Select Category')]
 
 

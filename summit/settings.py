@@ -157,7 +157,7 @@ DEFAULT_FROM_EMAIL = config['DEFAULT_FROM_EMAIL']
 
 
 # Auto logout after minutes of inactivity
-AUTO_LOGOUT_TIMEOUT = 60 * 5
+AUTO_LOGOUT_TIMEOUT = 60 * 15
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 14 days max
 SESSION_SAVE_EVERY_REQUEST = True        # resets expiry on each request
