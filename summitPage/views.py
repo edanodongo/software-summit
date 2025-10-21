@@ -159,7 +159,7 @@ def reg(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # ✅ Explicitly assign file fields
+            # Explicitly assign file fields
             if request.FILES.get("passport_photo"):
                 registrant.passport_photo = request.FILES["passport_photo"]
             if request.FILES.get("national_id_scan"):
@@ -1883,4 +1883,32 @@ def delete_sponsor(request, sponsor_id):
     sponsor.delete()
     messages.success(request, f"Sponsor '{sponsor.organization_name}' deleted successfully.")
     return redirect("sponsor_dashboard")
+
+
+@login_required
+def dashboard_student_view(request):
+    total_users = Registrant.objects.count()
+    updates_count = Registrant.objects.filter(updates_opt_in=True).count()
+
+    # Annotate registrants with email log info
+    registrants = Registrant.objects.all().order_by('-created_at').annotate(
+        email_attempts=Count('emaillog'),
+        email_status=Max('emaillog__status'),
+        email_last_sent=Max('emaillog__sent_at')
+    )
+
+    registrants_with_names = []
+    for regNames in registrants:
+        regNames.category_name = get_category_name_from_id(regNames.category)
+        registrants_with_names.append(regNames)
+
+    context = {
+        "total_users": total_users,
+        "updates_count": updates_count,
+        "registrants": registrants_with_names,
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        'current_year': timezone.now().year,
+    }
+    return render(request, "summit/dashboard.html", context)
 

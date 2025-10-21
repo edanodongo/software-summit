@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
+    path("dashboard/student", views.dashboard_student_view, name="student"),
     path("mailme/", views.mailme_view, name="mailme"),
 
     #category setup
