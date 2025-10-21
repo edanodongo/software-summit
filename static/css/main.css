@@ -6066,17 +6066,17 @@ section,
       margin-bottom: 15px;
     }
 
+    .bio-body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #444;
+    }
+
     .bio-photo {
       width: 200px;
       height: 200px;
       object-fit: cover;
       border-radius: 8px;
-    }
-
-    .bio-body {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #444;
     }
 
     /* Mobile adjustments */
@@ -6163,28 +6163,4 @@ html {
 .btn-cta.dropdown-toggle::after {
   margin-left: 0.4rem;
   vertical-align: middle;
-}
-
-#sponsor-registration-form input,
-#sponsor-registration-form select,
-#sponsor-registration-form textarea {
-  border-radius: 10px;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ced4da;
-  transition: all 0.2s ease-in-out;
-}
-
-#sponsor-registration-form input:focus,
-#sponsor-registration-form select:focus,
-#sponsor-registration-form textarea:focus {
-  border-color: #198754;
-  box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
-}
-
-#sponsor-registration-form h5 i {
-  color: #198754;
-}
-
-#sponsor-registration-form small.text-muted {
-  font-size: 0.85rem;
 }
