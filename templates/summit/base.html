@@ -1,19 +1,21 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenya Software Summit 2025 - Admin Dashboard</title>
+    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
     <!-- Fontawesome -->
-    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
 
     <!-- Favicons -->
     <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
     <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-    <!-- Vendor CSS -->
+    <!-- Vendor CSS Files -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
@@ -21,9 +23,11 @@
     <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/notyf.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/dash.css' %}" rel="stylesheet">
 
+    <!-- Main CSS File -->
+    <link href="{% static 'css/dash.css' %}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token }}">
+
 
     <style>
         :root {
@@ -250,7 +254,6 @@
         }
     </style>
 </head>
-
 <body>
 <div class="container-fluid p-0">
     <!-- Sidebar -->
@@ -348,8 +351,6 @@
 
 </div>
 
-<!-- JS -->
-
 <!-- Bootstrap JS -->
 <!-- Scripts -->
 <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
@@ -368,7 +369,6 @@
 <script src="{% static 'js/notyf.min.js' %}"></script>
 <script src="{% static 'js/extra/notfy_setting.js' %}"></script>
 <script src="{% static 'js/extra/external.js' %}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script>
     const toggleBtn = document.getElementById("toggleSidebar");
     const sidebar = document.getElementById("sidebar");
@@ -394,5 +394,7 @@
         overlay.classList.remove("active");
     });
 </script>
+
+{% block scripts %}{% endblock %}
 </body>
 </html>

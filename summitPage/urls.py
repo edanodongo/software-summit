@@ -16,7 +16,6 @@ urlpatterns = [
     path('categories/editCategory/', views.edit_category, name='editCategory'),
 
     path("index/", views.index, name="index"),
-    path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("privacy/", views.privacy, name="privacy"),
     path("404/", views.not_found, name="not_found"),
     path("speakers/", views.speakers, name="speakers"),
@@ -43,6 +42,8 @@ urlpatterns = [
     path("register", views.reg, name="register"),
     path('calendar/add/', views.add_to_calendar, name='add_to_calendar'),
     path('resend-email/<int:registrant_id>/', views.resend_confirmation_email, name='resend_confirmation_email'),
+    path('approve-student/<int:registrant_id>/', views.approve_student, name='approve_student'),
+    path('delete/<int:pk>/', views.delete_registrant, name='delete_registrant'),
     path('dashboard/data/', views.dashboard_data, name='dashboard_data'),
 
     # SHEDULE
