@@ -3120,9 +3120,6 @@ section,
   transform: translateY(-3px);
 }
 
-.speakers .speakers-list .speaker-profile:hover .speaker-photo img {
-  transform: scale(1.05);
-}
 
 .speakers .speakers-list .speaker-meta {
   display: flex;
@@ -3130,11 +3127,14 @@ section,
   gap: 20px;
   margin-bottom: 20px;
 }
+.speakers .speakers-list .speaker-profile:hover .speaker-photo img {
+  transform: scale(1.05);
+}
 
 .speakers .speakers-list .speaker-photo {
   flex-shrink: 0;
-  width: 85px;
-  height: 85px;
+  width: 100px; /* increased slightly for better framing */
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid color-mix(in srgb, var(--accent-color), transparent 80%);
@@ -3143,8 +3143,36 @@ section,
 .speakers .speakers-list .speaker-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fills circle completely */
+  object-position: center top; /* centers face vertically */
   transition: transform 0.3s ease;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .speakers .speakers-list .speaker-profile {
+    padding: 20px;
+  }
+
+  .speakers .speakers-list .speaker-meta {
+    gap: 15px;
+  }
+
+  .speakers .speakers-list .speaker-photo {
+    width: 85px; /* smaller for tablets */
+    height: 85px;
+  }
+
+  .speakers .speakers-list .speaker-info h4 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .speakers .speakers-list .speaker-photo {
+    width: 75px; /* smaller for mobile */
+    height: 75px;
+  }
 }
 
 .speakers .speakers-list .speaker-info {
@@ -3264,25 +3292,6 @@ section,
   transform: translateY(-2px);
 }
 
-@media (max-width: 992px) {
-  .speakers .speakers-list .speaker-profile {
-    padding: 20px;
-  }
-
-  .speakers .speakers-list .speaker-meta {
-    gap: 15px;
-  }
-
-  .speakers .speakers-list .speaker-photo {
-    width: 75px;
-    height: 75px;
-  }
-
-  .speakers .speakers-list .speaker-info h4 {
-    font-size: 18px;
-  }
-}
-
 @media (max-width: 768px) {
   .speakers .speakers-list .speaker-entry {
     margin-bottom: 1.5rem;
@@ -3299,10 +3308,6 @@ section,
     gap: 15px;
   }
 
-  .speakers .speakers-list .speaker-photo {
-    width: 80px;
-    height: 80px;
-  }
 
   .speakers .speakers-list .speaker-details .speaker-actions {
     flex-direction: column;
