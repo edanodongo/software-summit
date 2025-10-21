@@ -588,26 +588,38 @@ def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # Annotate registrants with email log info
-    registrants = Registrant.objects.all().order_by('-created_at').annotate(
-        email_attempts=Count('emaillog'),
-        email_status=Max('emaillog__status'),
-        email_last_sent=Max('emaillog__sent_at')
+    # ✅ Get Delegate category ID
+    delegate_category = Category.objects.filter(name__iexact="Delegate").first()
+
+    # ✅ Filter only delegate registrants
+    registrants = (
+        Registrant.objects.filter(category=str(delegate_category.id))
+        .order_by("-created_at")
+        .annotate(
+            email_attempts=Count("emaillog"),
+            email_status=Max("emaillog__status"),
+            email_last_sent=Max("emaillog__sent_at"),
+        )
+        if delegate_category
+        else []
     )
 
+    # ✅ Add category names to each registrant for display
     registrants_with_names = []
-    for regNames in registrants:
-        regNames.category_name = get_category_name_from_id(regNames.category)
-        registrants_with_names.append(regNames)
+    for reg in registrants:
+        reg.category_name = get_category_name_from_id(reg.category)
+        registrants_with_names.append(reg)
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants_with_names,
-        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
-        'current_year': timezone.now().year,
+        "current_year": timezone.now().year,
+        "dashboard_type": "delegate",  # optional flag for template logic
     }
+
     return render(request, "summit/dashboard.html", context)
 
 
@@ -1890,25 +1902,36 @@ def dashboard_student_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # Annotate registrants with email log info
-    registrants = Registrant.objects.all().order_by('-created_at').annotate(
-        email_attempts=Count('emaillog'),
-        email_status=Max('emaillog__status'),
-        email_last_sent=Max('emaillog__sent_at')
+    # ✅ Getting Student category ID
+    student_category = Category.objects.filter(name__iexact="Student").first()
+
+    # ✅ Filtering only student registrants
+    registrants = (
+        Registrant.objects.filter(category=str(student_category.id))
+        .order_by("-created_at")
+        .annotate(
+            email_attempts=Count("emaillog"),
+            email_status=Max("emaillog__status"),
+            email_last_sent=Max("emaillog__sent_at"),
+        )
+        if student_category
+        else []
     )
 
+    # ✅ Adding category names to each registrant for display
     registrants_with_names = []
-    for regNames in registrants:
-        regNames.category_name = get_category_name_from_id(regNames.category)
-        registrants_with_names.append(regNames)
+    for reg in registrants:
+        reg.category_name = get_category_name_from_id(reg.category)
+        registrants_with_names.append(reg)
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants_with_names,
-        "org_type_choices": Registrant.ORG_TYPE_CHOICES,  # send choices to template
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
-        'current_year': timezone.now().year,
+        "current_year": timezone.now().year,
+        "dashboard_type": "student",  # optional flag for template logic
     }
-    return render(request, "summit/dashboard.html", context)
 
+    return render(request, "summit/dashboard.html", context)
