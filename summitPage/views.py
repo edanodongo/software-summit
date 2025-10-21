@@ -588,23 +588,18 @@ def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # ✅ Get Delegate category ID
-    delegate_category = Category.objects.filter(name__iexact="Delegate").first()
-
-    # ✅ Filter only delegate registrants
+    # ✅ Filter out all non-students
     registrants = (
-        Registrant.objects.filter(category=str(delegate_category.id))
+        Registrant.objects.exclude(organization_type="Student")
         .order_by("-created_at")
         .annotate(
             email_attempts=Count("emaillog"),
             email_status=Max("emaillog__status"),
             email_last_sent=Max("emaillog__sent_at"),
         )
-        if delegate_category
-        else []
     )
 
-    # ✅ Add category names to each registrant for display
+    # ✅ Attach category name (if you display it in template)
     registrants_with_names = []
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
@@ -617,7 +612,7 @@ def dashboard_view(request):
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
-        "dashboard_type": "delegate",  # optional flag for template logic
+        "dashboard_type": "delegate",
     }
 
     return render(request, "summit/dashboard.html", context)
@@ -1902,23 +1897,18 @@ def dashboard_student_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # ✅ Getting Student category ID
-    student_category = Category.objects.filter(name__iexact="Student").first()
-
-    # ✅ Filtering only student registrants
+    # ✅ Filter only students
     registrants = (
-        Registrant.objects.filter(category=str(student_category.id))
+        Registrant.objects.filter(organization_type="Student")
         .order_by("-created_at")
         .annotate(
             email_attempts=Count("emaillog"),
             email_status=Max("emaillog__status"),
             email_last_sent=Max("emaillog__sent_at"),
         )
-        if student_category
-        else []
     )
 
-    # ✅ Adding category names to each registrant for display
+    # ✅ Attach category name (if you display it in template)
     registrants_with_names = []
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
@@ -1931,7 +1921,7 @@ def dashboard_student_view(request):
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
-        "dashboard_type": "student",  # optional flag for template logic
+        "dashboard_type": "student",
     }
 
     return render(request, "summit/dashboard.html", context)
