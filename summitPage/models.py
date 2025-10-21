@@ -63,6 +63,12 @@ class Registrant(models.Model):
         ("others", "Others"),
     ]
 
+    DAY_CHOICES = [
+        ("Day 1", "Day 1"),
+        ("Day 2", "Day 2"),
+        ("Day 3", "Day 3"),
+        ("all", "All 3 Days"),
+    ]
 
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
@@ -82,12 +88,15 @@ class Registrant(models.Model):
     category = models.CharField(max_length=50, choices=get_category_id, blank=False, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
+    approved = models.BooleanField(default=False)
     accessibility_needs = models.TextField(blank=True, null=True)
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
+    days_to_attend = models.CharField(max_length=100, choices=DAY_CHOICES, blank=True, null=True)
+    admn_number = models.CharField(max_length=20, unique=True, blank=True, null=True, verbose_name="National ID Number")
     national_id_number = models.CharField(max_length=20, unique=True, blank=True, null=True, verbose_name="National ID Number")
 
     national_id_scan = models.FileField(upload_to="uploads/id_scans/", blank=True, null=True, verbose_name="Scanned National ID (JPG/PDF)")
@@ -632,6 +641,9 @@ class Exhibitor(models.Model):
         help_text="Select whether this is a local or international business",
     )
 
+    logo = models.ImageField(
+        upload_to="uploads/exhibitors/logos/", blank=True, null=True, help_text="Optional logo upload"
+    )
     # --- Business Documents ---
     kra_pin = models.CharField(max_length=20, blank=True, null=True)
     business_registration_doc = models.FileField(upload_to="uploads/exhibitors/business_docs/", blank=True, null=True)

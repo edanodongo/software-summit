@@ -125,6 +125,21 @@
                                     <button class="btn btn-sm btn-outline-danger delete-btn" data-url="{% url 'delete_registrant' registrant.id %}" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                    {% if registrant.organization_type == "Student" or registrant.category_name|lower == "student" %}
+                                        {% if not registrant.approved %}
+                                            <button class="btn btn-sm btn-outline-success approve-btn"
+                                                    data-url="{% url 'approve_student' registrant.id %}"
+                                                    title="Approve Student">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-success" disabled title="Approved">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+
+
                                 </div>
                             </td>
                         </tr>
@@ -272,6 +287,31 @@ document.addEventListener('DOMContentLoaded', function () {
             complete: function(){ btn.prop('disabled', false).html('<i class="fas fa-envelope"></i>'); }
         });
     });
+    // Approve Student logic
+$('#registrants-table').on('click', '.approve-btn', function(){
+    const btn = $(this);
+    const row = btn.closest('tr');
+    const url = btn.data('url');
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        success: function(resp){
+            if(resp.success){
+                btn.replaceWith('<button class="btn btn-sm btn-success" disabled title="Approved"><i class="fas fa-check-circle"></i></button>');
+            } else {
+                alert("⚠️ "+(resp.error || "Approval failed."));
+                btn.prop('disabled', false).html('<i class="fas fa-check"></i>');
+            }
+        },
+        error: function(xhr){
+            alert("❌ Server Error: "+xhr.status+" - "+xhr.statusText);
+            btn.prop('disabled', false).html('<i class="fas fa-check"></i>');
+        }
+    });
+});
+
 });
 </script>
 {% endblock %}

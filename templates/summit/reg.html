@@ -185,6 +185,19 @@
                                 </div>
                             </div>
 
+                            <!-- student registration number -->
+                            <div class="mt-3 mb-3">
+                                <label for="id_admn_number" class="form-label fw-semibold dark mb-1">Student Registration Number</label>
+                                {{ form.admn_number }}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <div class="mt-3 mb-3">
+                                    <label for="id_days_to_attend" class="form-label fw-semibold dark mb-1">Days to attend</label>
+                                    {{ form.days_to_attend }}
+                                </div>
+                            </div>
+
                             <!-- Interests -->
                             <div class="mt-4 mb-2">
                                 <label class="form-label fw-semibold dark mb-1">Areas of Interest</label>
@@ -526,6 +539,55 @@
             }
         }
     });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const orgSelect = document.getElementById("id_organization_type");
+    const categorySelect = document.getElementById("id_category");
+    const admnNumberInput = document.getElementById("id_admn_number");
+    const studentRegDiv = admnNumberInput.closest(".mt-3.mb-3"); // container div of the field
+
+    function updateFormBehavior() {
+        const selectedOrg = orgSelect.value.trim().toLowerCase();
+
+        if (selectedOrg === "student") {
+            // Show the Student Registration Number field
+            studentRegDiv.style.display = "block";
+
+            // Make it required
+            admnNumberInput.setAttribute("required", "required");
+
+            // Auto-select "Student" in category
+            for (let option of categorySelect.options) {
+                if (option.text.trim().toLowerCase() === "student") {
+                    option.selected = true;
+                    break;
+                }
+            }
+
+        } else {
+            // Hide the Student Registration Number field
+            studentRegDiv.style.display = "none";
+
+            // Remove required attribute
+            admnNumberInput.removeAttribute("required");
+            admnNumberInput.value = ""; // clear any previously entered value
+
+            // Auto-select "Delegate" in category
+            for (let option of categorySelect.options) {
+                if (option.text.trim().toLowerCase() === "delegate") {
+                    option.selected = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Run immediately on load (in case of preselected value)
+    updateFormBehavior();
+
+    // Watch for changes in organization dropdown
+    orgSelect.addEventListener("change", updateFormBehavior);
+});
 </script>
 
 

@@ -6,6 +6,7 @@ from django_countries.widgets import CountrySelectWidget
 from .models import Exhibitor, Booth, ExhibitionSection
 
 from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
+from .models import Category
 
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
@@ -81,8 +82,7 @@ class QuickRegistrationForm(forms.ModelForm):
             'interests', 'other_interest',
             'accessibility_needs', 'updates_opt_in',
             'privacy_agreed',
-
-            # ✅ Added fields that were missing before
+            'admn_number', 'days_to_attend',
             'national_id_number',
             'national_id_scan',
             'passport_photo',
@@ -98,6 +98,8 @@ class QuickRegistrationForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Institution name'
             }),
+            'days_to_attend': forms.Select(attrs={'class': 'form-select'}),
+            'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'accessibility_needs': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -167,6 +169,32 @@ class QuickRegistrationForm(forms.ModelForm):
         # Ensure Privacy Policy is agreed to
         if not cleaned_data.get("privacy_agreed"):
             self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        organization_type = cleaned_data.get("organization_type")
+        admn_number = cleaned_data.get("admn_number")
+
+        # ✅ Auto-set category ID based on organization_type
+        try:
+            if organization_type and organization_type.lower() == "student":
+                student_category = Category.objects.filter(name__iexact="Student").first()
+                if student_category:
+                    cleaned_data["category"] = str(student_category.id)
+                else:
+                    self.add_error("category", "Student category not found in database.")
+                if not admn_number:
+                    self.add_error("admn_number", "Student Registration Number is required for students.")
+            else:
+                delegate_category = Category.objects.filter(name__iexact="Delegate").first()
+                if delegate_category:
+                    cleaned_data["category"] = str(delegate_category.id)
+                else:
+                    self.add_error("category", "Delegate category not found in database.")
+                # admn_number is optional for non-students
+                cleaned_data["admn_number"] = admn_number or None
+        except Exception as e:
+            self.add_error("category", f"Error setting category automatically: {e}")
 
         return cleaned_data
 
@@ -340,19 +368,12 @@ class SpeakerForm(forms.ModelForm):
 from .models import ExhibitionCategory
 
 class ExhibitorRegistrationForm(forms.ModelForm):
-    # --- Dropdown for dynamic exhibition category ---
-    # exhibit_category = forms.ModelChoiceField(
-    #     queryset=ExhibitionCategory.objects.all(),
-    #     required=True,
-    #     widget=forms.Select(attrs={'class': 'form-select'}),
-    #     label="Exhibition Category",
-    #     empty_label="Select exhibition category"
-    # )
     class Meta:
         model = Exhibitor
         fields = [
             'title', 'first_name', 'second_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
+            'logo',
             'product_description',
             'business_type', 'kra_pin', 'business_registration_doc',
             'international_business_doc', 'country_of_registration',

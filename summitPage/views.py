@@ -40,7 +40,7 @@ import os
 
 from django.views.decorators.http import require_POST
 from .models import Registrant, EmailLog
-from .utils import send_confirmation_email  #  email sending function
+from .utils import send_confirmation_email, send_student_email  #  email sending function
 
 from django.http import HttpResponse
 from datetime import datetime
@@ -152,6 +152,8 @@ def home(request):
 # --------------------------------------------
 
 
+from django.db.models import Q
+
 def reg(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
@@ -159,13 +161,13 @@ def reg(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # Explicitly assign file fields
+            # --- Explicitly assign uploaded files ---
             if request.FILES.get("passport_photo"):
                 registrant.passport_photo = request.FILES["passport_photo"]
             if request.FILES.get("national_id_scan"):
                 registrant.national_id_scan = request.FILES["national_id_scan"]
 
-            # Interests handling
+            # --- Handle interests ---
             interests = form.cleaned_data.get("interests", [])
             other_interest = form.cleaned_data.get("other_interest")
             if "others" in interests and other_interest:
@@ -174,18 +176,46 @@ def reg(request):
 
             registrant.save()
 
-            # Send confirmation email
-            try:
-                send_confirmation_email(registrant)
-            except Exception as e:
-                print("Email Send error:", e)
-                if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse(
-                        {"success": True, "message": "Registration saved, but email failed."},
-                        status=200
-                    )
-                messages.warning(request, "Registered, but confirmation email failed.")
+            # --- Determine if registrant is a Student ---
+            is_student = False
 
+            # 1️⃣ Check organization_type
+            if registrant.organization_type.strip().lower() == "student":
+                is_student = True
+
+            # 2️⃣ Check category name
+            try:
+                category_obj = Category.objects.filter(name__iexact="Student").first()
+                if category_obj and str(category_obj.id) == str(registrant.category):
+                    is_student = True
+            except Exception:
+                pass
+
+            # --- Send confirmation email only if not a student ---
+            if not is_student:
+                try:
+                    send_confirmation_email(registrant)
+                except Exception as e:
+                    print("Email Send error:", e)
+                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                        return JsonResponse(
+                            {"success": True, "message": "Registration saved, but email failed."},
+                            status=200
+                        )
+                    messages.warning(request, "Registered, but confirmation email failed.")
+            else:
+                try:
+                    send_student_email(registrant)
+                except Exception as e:
+                    print("Email Send error:", e)
+                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                        return JsonResponse(
+                            {"success": True, "message": "Registration saved, but email failed."},
+                            status=200
+                        )
+                    messages.warning(request, "Registered, but confirmation email failed.")
+
+            # --- Return success response ---
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
 
@@ -195,12 +225,12 @@ def reg(request):
         else:
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
-
             messages.error(request, "There was a problem with your registration.")
 
     else:
         form = QuickRegistrationForm()
 
+    # --- Extra context data ---
     days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by("date")
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
@@ -212,7 +242,6 @@ def reg(request):
         'days': days,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
-
 
 
 def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold"):
@@ -588,9 +617,14 @@ def dashboard_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # ✅ Filter out all non-students
+    # Convert category IDs to strings because Registrant.category is a CharField
+    student_category_ids = [str(cid) for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+
+    # Exclude students (either via org_type or category)
     registrants = (
-        Registrant.objects.exclude(organization_type="Student")
+        Registrant.objects.exclude(
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
+        )
         .order_by("-created_at")
         .annotate(
             email_attempts=Count("emaillog"),
@@ -599,22 +633,17 @@ def dashboard_view(request):
         )
     )
 
-    # ✅ Attach category name (if you display it in template)
-    registrants_with_names = []
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
-        registrants_with_names.append(reg)
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants_with_names,
+        "registrants": registrants,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
-        "dashboard_type": "delegate",
     }
-
     return render(request, "summit/dashboard.html", context)
 
 
@@ -1892,14 +1921,25 @@ def delete_sponsor(request, sponsor_id):
     return redirect("sponsor_dashboard")
 
 
+from django.db.models import Count, Max, Q
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils import timezone
+from django.conf import settings
+
 @login_required
 def dashboard_student_view(request):
     total_users = Registrant.objects.count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # ✅ Filter only students
+    # Convert category IDs to strings because Registrant.category is a CharField
+    student_category_ids = [str(cid) for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+
+    # Include only students
     registrants = (
-        Registrant.objects.filter(organization_type="Student")
+        Registrant.objects.filter(
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
+        )
         .order_by("-created_at")
         .annotate(
             email_attempts=Count("emaillog"),
@@ -1908,20 +1948,36 @@ def dashboard_student_view(request):
         )
     )
 
-    # ✅ Attach category name (if you display it in template)
-    registrants_with_names = []
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
-        registrants_with_names.append(reg)
 
     context = {
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants_with_names,
+        "registrants": registrants,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
-        "dashboard_type": "student",
     }
-
     return render(request, "summit/dashboard.html", context)
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Registrant
+
+@login_required
+@require_POST
+def approve_student(request, registrant_id):
+    registrant = get_object_or_404(Registrant, id=registrant_id)
+
+    # Ensure only students can be approved
+    if registrant.organization_type != "Student":
+        return JsonResponse({"success": False, "error": "Only students can be approved."})
+
+    registrant.approved = True
+    registrant.save(update_fields=["approved"])
+    return JsonResponse({"success": True})
