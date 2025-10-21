@@ -341,19 +341,19 @@ from .models import ExhibitionCategory
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     # --- Dropdown for dynamic exhibition category ---
-    exhibit_category = forms.ModelChoiceField(
-        queryset=ExhibitionCategory.objects.all(),
-        required=True,
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label="Exhibition Category",
-        empty_label="Select exhibition category"
-    )
+    # exhibit_category = forms.ModelChoiceField(
+    #     queryset=ExhibitionCategory.objects.all(),
+    #     required=True,
+    #     widget=forms.Select(attrs={'class': 'form-select'}),
+    #     label="Exhibition Category",
+    #     empty_label="Select exhibition category"
+    # )
     class Meta:
         model = Exhibitor
         fields = [
             'title', 'first_name', 'second_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-            'exhibit_category', 'product_description',
+            'product_description',
             'business_type', 'kra_pin', 'business_registration_doc',
             'international_business_doc', 'country_of_registration',
             'beneficial_owner_details', 'beneficial_owner_doc',
@@ -394,7 +394,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         required_fields = [
             'title', 'first_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-            'exhibit_category', 'national_id_number',
+             'national_id_number',
             'national_id_scan', 'passport_photo',
             'country_of_registration', 'privacy_agreed'
         ]
@@ -406,7 +406,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         self.fields['kra_pin'].widget.attrs['minlength'] = 11
 
 
-        self.fields['exhibit_category'].empty_label = "Select exhibitor category"
+        #self.fields['exhibit_category'].empty_label = "Select exhibitor category"
 
     def clean(self):
         cleaned_data = super().clean()
