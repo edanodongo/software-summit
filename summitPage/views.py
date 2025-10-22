@@ -1407,37 +1407,49 @@ def exhibitor(request):
     })
 
 # --------------------------------------------
-
+from django.db.models import Sum
+from django.http import JsonResponse
+from .models import Exhibitor, DashboardSetting
 
 def exhibitor_status(request):
-    """Return the current remaining booth count and alert state."""
+    """Return the accurate remaining booth count considering all existing exhibitors."""
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
-    max_count = dashboard_setting.max_count
-    total_sum_locked = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    max_count = dashboard_setting.max_count or 0
 
-    remaining = max_count - total_sum if max_count > total_sum else 0
+    # --- Calculate total taken booths (exclude nulls and zero) ---
+    total_taken = (
+        Exhibitor.objects.filter(total_count__gt=0)
+        .aggregate(total=Sum('total_count'))['total']
+        or 0
+    )
 
+    remaining = max(max_count - total_taken, 0)
+
+    # --- Build the alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = "3 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = "2 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-warning"
     elif remaining == 1:
-        alert_message = "1 booth remaining."
+        alert_message = "1 booth remaining!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available Maximum reached!"
+        alert_message = "0 booths available. Registration closed!"
         alert_class = "alert-danger"
 
     return JsonResponse({
+        "max_count": max_count,
+        "total_taken": total_taken,
         "remaining": remaining,
         "alert_message": alert_message,
         "alert_class": alert_class,
     })
+
 
 
 # --------------------------------------------
