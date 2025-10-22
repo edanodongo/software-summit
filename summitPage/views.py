@@ -1308,7 +1308,7 @@ def exhibitor(request):
     # --- Fetch and compute current availability ---
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count
-    total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
     remaining = max_count - total_sum if max_count > total_sum else 0
 
     # --- Display message logic ---
@@ -1413,7 +1413,7 @@ def exhibitor_status(request):
     """Return the current remaining booth count and alert state."""
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count
-    total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    total_sum_locked = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
 
     remaining = max_count - total_sum if max_count > total_sum else 0
 
