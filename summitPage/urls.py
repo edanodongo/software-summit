@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 from .views import *
 
@@ -7,7 +8,7 @@ urlpatterns = [
     path("dashboard/student", views.dashboard_student_view, name="student"),
     path("mailme/", views.mailme_view, name="mailme"),
 
-    #category setup
+    # category setup
     path("categories/", views.guest_category, name="categories"),
     path("categories/add/", views.categories_create, name="categories_create"),
     path('categories/saveCategory/', views.save_category, name='saveCategory'),
@@ -103,4 +104,9 @@ urlpatterns = [
     path("sponsor/register/", views.summit_sponsor_registration, name="summit_sponsor_registration"),
     path("admin/sponsors/", views.sponsor_dashboard, name="sponsor_dashboard"),
     path("admin/sponsors/delete/<uuid:sponsor_id>/", views.delete_sponsor, name="delete_sponsor"),
+
+    # --- audit & trails ---
+    path("audit/apiTrails", views.api_trails, name="api_trails"),
+    path("audit/regTrails", views.dashboard_student_view, name="reg_trails"),
+    path("audit/approvaTrails", views.dashboard_student_view, name="approve_trails"),
 ]

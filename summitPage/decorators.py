@@ -1,7 +1,13 @@
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.cache import cache
+from django.utils import timezone
+from django.db import connection
+from django.db import models
+from django.utils.timezone import now
+from django.db.models import Q
 import time
+from urllib.parse import urlencode
 import traceback
 from .models import ApiAccessLog
 
@@ -11,30 +17,37 @@ def get_client_ip(request):
         return x_forwarded_for.split(',')[0]
     return request.META.get('REMOTE_ADDR')
 
-def log_api_access(request, status_code, token=None):
+def log_api_access(request, status_code, token=None, method=None, query_params=None):
     try:
         ApiAccessLog.objects.create(
-            api_key=token,
-            endpoint=request.path,
-            method=request.method,
             ip_address=get_client_ip(request),
-            status_code=status_code
+            api_key=token or "N/A",
+            endpoint=request.path,
+            method=method or request.method,
+            query_params=query_params or "",
+            status_code=status_code,
+            timestamp=timezone.now(),
         )
     except Exception as e:
         print("Failed to log API access:", e)
         traceback.print_exc()
 
+
 def require_api_key(view_func):
     """
     Decorator to check for a valid API key, apply per-endpoint rate limiting,
-    and log all API accesses (success and error responses).
+    and (optionally) log API accesses excluding 200 OK responses.
     """
     def wrapper(request, *args, **kwargs):
         auth_header = request.headers.get("Authorization")
         token = None
-        status_code = 500  # default in case of unexpected errors
+        status_code = 500  # default fallback
+        method = request.method
+        query_params = request.GET.dict()
+        extra_params = urlencode(query_params) if query_params else None
 
         try:
+            # --- API Key validation ---
             if not auth_header or not auth_header.startswith("Bearer "):
                 status_code = 401
                 return JsonResponse({"detail": "Authorization header missing or invalid."}, status=status_code)
@@ -49,7 +62,7 @@ def require_api_key(view_func):
             RATE_LIMIT_REQUESTS = getattr(settings, "RATE_LIMIT_REQUESTS", 60)
             RATE_LIMIT_PERIOD = getattr(settings, "RATE_LIMIT_PERIOD", 60)
 
-            endpoint_key = f"rl:{token}:{request.path}:{request.method}"
+            endpoint_key = f"rl:{token}:{request.path}:{method}"
             record = cache.get(endpoint_key)
             current_time = int(time.time())
 
@@ -81,7 +94,17 @@ def require_api_key(view_func):
             return response
 
         finally:
-            # --- Log the access regardless of outcome ---
-            log_api_access(request, status_code=status_code, token=token)
+            # --- Log only non-200 responses ---
+            try:
+                if status_code != 200:
+                    log_api_access(
+                        request=request,
+                        status_code=status_code,
+                        token=token,
+                        method=method,
+                        query_params=extra_params
+                    )
+            except Exception as e:
+                print(f"[API LOG ERROR] {e}")
 
     return wrapper

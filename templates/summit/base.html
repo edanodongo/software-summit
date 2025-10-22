@@ -67,6 +67,28 @@
         <a href="{% url 'dashboard_home' %}"><i class="fas fa-calendar-alt"></i><span> Agenda Dashboard</span></a>
         <a href="{% url 'speaker_dashboard' %}"><i class="fas fa-microphone"></i><span> Speaker Dashboard</span></a>
         <a href="{% url 'mailme' %}"><i class="fas fa-envelope"></i><span> Email Client</span></a>
+        <a class="d-block text-white dropdown-toggle py-2"
+           data-bs-toggle="collapse"
+           href="#audit"
+           role="button"
+           aria-expanded="false"
+           aria-controls="audit">
+            <i class="fas fa-file-lines"></i>
+            <span> Audit & Trails</span>
+        </a>
+
+        <!-- Collapsible Submenu -->
+        <div class="collapse ps-4" id="audit">
+            <a href="{% url 'api_trails' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-link"></i> API Trails
+            </a>
+            <a href="{% url 'student' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-calculator"></i> Registration Trails
+            </a>
+            <a href="{% url 'student' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-box-archive"></i> Approval Trails
+            </a>
+        </div>
 
         <form method="post" action="{% url 'logout' %}" class="mt-3">
             {% csrf_token %}

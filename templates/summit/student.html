@@ -183,15 +183,15 @@
 {% endblock %}
 
 {% block scripts %}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<link rel="stylesheet" href="{% static 'datatables/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'datatables/css/buttons.dataTables.min.css' %}">
+<script src="{% static 'datatables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'datatables/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'datatables/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'datatables/js/jszip.min.js' %}"></script>
+<script src="{% static 'datatables/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'datatables/js/vfs_fonts.js' %}"></script>
 
 <style>
 #registrants-table { width:100%!important; font-size:0.9rem; table-layout:auto; border-spacing:0 4px; }

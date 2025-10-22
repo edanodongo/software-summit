@@ -1,0 +1,68 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="mb-4">API trails</h2>
+        <div class="table-responsive">
+            <table id="api-table" class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>IP Address</th>
+                    <th>Key</th>
+                    <th>Endpoint</th>
+                    <th>Endpoint Params</th>
+                    <th>Method</th>
+                    <th>Status Code</th>
+                    <th>Time Stamp</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for api_users in api_user %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ api_users.ip_address }}</td>
+                        <td>{{ api_users.api_key }}</td>
+                        <td>{{ api_users.endpoint }}</td>
+                        <td>{{ api_users.query_params }}</td>
+                        <td>{{ api_users.method }}</td>
+                        <td>{{ api_users.status_code }}</td>
+                        <td>{{ api_users.timestamp }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No Data Available.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <link rel="stylesheet" href="{% static 'datatables/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'datatables/css/buttons.dataTables.min.css' %}">
+    <script src="{% static 'datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'datatables/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'datatables/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'datatables/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'datatables/js/jszip.min.js' %}"></script>
+    <script src="{% static 'datatables/js/pdfmake.min.js' %}"></script>
+    <script src="{% static 'datatables/js/vfs_fonts.js' %}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#api-table').DataTable({
+            responsive: true,
+            dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
+            buttons: [
+                {extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV'},
+                {extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel'},
+                {extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF'},
+                {extend: 'print', text: '<i class="fas fa-print"></i> Print'}
+            ],
+            pageLength: 5
+        });
+    });
+</script>
+{% endblock %}

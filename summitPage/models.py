@@ -402,8 +402,9 @@ class ApiAccessLog(models.Model):
     endpoint = models.CharField(max_length=255)
     method = models.CharField(max_length=10)
     ip_address = models.GenericIPAddressField()
+    query_params = models.TextField(blank=True, null=True)
     status_code = models.PositiveSmallIntegerField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-timestamp']
