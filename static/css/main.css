@@ -6033,8 +6033,10 @@ section,
   display: none;
   position: fixed;
   z-index: 9999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.7);
   justify-content: center;
   align-items: center;
@@ -6084,23 +6086,23 @@ section,
   padding-bottom: 15px;
 }
 
-/* --- Improved Photo Styling --- */
+/* --- Circular Photo Styling (Optimized for Faces) --- */
 .bio-photo {
   width: 180px;
   height: 180px;
-  border-radius: 12px;
-  object-fit: contain;   /* shows full image */
-  object-position: center;
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
+  border-radius: 50%;              /* Circular shape */
+  object-fit: cover;               /* Fill circle, no dead space */
+  object-position: top center;     /* Show more of the top (face area) */
+  background-color: #f8f8f8;       /* Fallback background */
+  border: 2px solid #ddd;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  padding: 5px;
+  padding: 3px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .bio-photo:hover {
   transform: scale(1.03);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
 }
 
 /* --- Text Styling --- */
@@ -6142,18 +6144,26 @@ section,
   .bio-modal-content {
     padding: 20px;
   }
+
   .bio-header {
     flex-direction: column;
     text-align: center;
+    border-bottom: none;
   }
+
   .bio-photo {
     width: 120px;
     height: 120px;
+    padding: 3px;
+    object-position: top center;  /* Maintain face visibility on mobile */
   }
+
   .bio-header h3 {
     font-size: 1.3rem;
+    margin-top: 10px;
   }
 }
+
 
 .img-thumbnail {
   border-radius: 8px;
