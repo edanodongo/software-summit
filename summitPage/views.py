@@ -1309,7 +1309,7 @@ def exhibitor(request):
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count
     total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
-    remaining = max(max_count - total_sum, 0)
+    remaining = max_count - total_sum if max_count > total_sum else 0
 
     # --- Display message logic ---
     if remaining > 4:
@@ -1414,7 +1414,8 @@ def exhibitor_status(request):
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count
     total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
-    remaining = max(max_count - total_sum, 0)
+
+    remaining = max_count - total_sum if max_count > total_sum else 0
 
     if remaining > 4:
         alert_message = f"{remaining} booths available"
