@@ -559,7 +559,10 @@ def print_registrants(request):
 
 @login_required
 def dashboard_view(request):
-    total_users = Registrant.objects.count()
+    total_users = Registrant.objects.exclude(
+        Q(organization_type='Student') | Q(category='4')
+    ).count()
+
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
     # Convert category IDs to strings because Registrant.category is a CharField
@@ -1182,7 +1185,7 @@ def resend_confirmation_email(request, registrant_id):
 
 @login_required
 def guest_category(request):
-    category = Category.objects.all().order_by('name')
+    category = Category.objects.all().order_by('id')
     category = {"category": category}
 
     return render(request, "setup/add_category.html", category)
@@ -1864,7 +1867,9 @@ def delete_sponsor(request, sponsor_id):
 
 @login_required
 def dashboard_student_view(request):
-    total_users = Registrant.objects.count()
+    total_users = Registrant.objects.filter(
+        Q(organization_type='Student') | Q(category='4')
+    ).count()
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
     # Convert category IDs to strings because Registrant.category is a CharField
