@@ -40,6 +40,7 @@
                 <table id="registrants-table" class="table table-hover align-middle table-borderless w-100">
                     <thead class="table-primary text-white">
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -62,6 +63,7 @@
                     <tbody>
                         {% for registrant in registrants %}
                         <tr id="row-{{ registrant.id }}">
+                            <td>{{ forloop.counter }}</td>
                             <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                             <td>{{ registrant.email }}</td>
                             <td>{{ registrant.phone }}</td>
