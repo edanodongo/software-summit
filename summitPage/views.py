@@ -80,7 +80,7 @@ def home(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # ✅ Explicitly assign file fields
+            # Explicitly assign file fields
             if request.FILES.get("passport_photo"):
                 registrant.passport_photo = request.FILES["passport_photo"]
             if request.FILES.get("national_id_scan"):
@@ -916,12 +916,12 @@ def speaker_dashboard(request):
     speakers = SummitSpeaker.objects.all().order_by('full_name')
     form = SpeakerForm()
 
-    # ✅ Handle new speaker creation
+    # Handle new speaker creation
     if request.method == "POST":
         form = SpeakerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, "✅ Speaker added successfully!")
+            messages.success(request, "Speaker added successfully!")
             return redirect("speaker_dashboard")
         else:
             messages.error(request, "⚠️ Please correct the errors below.")
@@ -1015,7 +1015,7 @@ def save_partner(request):
             if logo:
                 partner.logo = logo
             partner.save()
-            messages.success(request, "✅ Partner updated successfully!")
+            messages.success(request, "Partner updated successfully!")
         else:
             if not logo:
                 messages.error(request, "Please upload a logo before saving.")
@@ -1028,7 +1028,7 @@ def save_partner(request):
                 order=order,
                 is_active=is_active,
             )
-            messages.success(request, "✅ Partner added successfully!")
+            messages.success(request, "Partner added successfully!")
 
         return redirect("partner_dashboard")
 
@@ -1065,7 +1065,7 @@ def add_day(request):
         form = ScheduleDayForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "✅ Day added successfully.")
+            messages.success(request, "Day added successfully.")
             return redirect("dashboard_home")
     else:
         form = ScheduleDayForm()
@@ -1079,7 +1079,7 @@ def edit_day(request, pk):
         form = ScheduleDayForm(request.POST, instance=day)
         if form.is_valid():
             form.save()
-            messages.success(request, "✅ Day updated successfully.")
+            messages.success(request, "Day updated successfully.")
             return redirect("dashboard_home")
     else:
         form = ScheduleDayForm(instance=day)
@@ -1106,7 +1106,7 @@ def add_timeslot(request, day_id):
             timeslot = form.save(commit=False)
             timeslot.day = day
             timeslot.save()
-            messages.success(request, "✅ Time slot added successfully.")
+            messages.success(request, "Time slot added successfully.")
             return redirect("dashboard_home")
     else:
         form = TimeSlotForm(initial={"day": day})
@@ -1133,7 +1133,7 @@ def add_session(request, timeslot_id):
             session.save()
             formset.instance = session
             formset.save()
-            messages.success(request, "✅ Session and panelists added.")
+            messages.success(request, "Session and panelists added.")
             return redirect("dashboard_home")
     else:
         form = SessionForm()
@@ -1156,7 +1156,7 @@ def edit_session(request, pk):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
-            messages.success(request, "✅ Session updated successfully.")
+            messages.success(request, "Session updated successfully.")
             return redirect("dashboard_home")
     else:
         form = SessionForm(instance=session)
@@ -1450,45 +1450,91 @@ def gallery(request):
 
 
 # --------------------------------------------
-# ✅ Exhibitor Registration
+# Exhibitor Registration
 # --------------------------------------------
+from django.db import transaction
+from django.db.models import Sum
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.http import JsonResponse
+from django.utils import timezone
+
+from .models import Exhibitor, DashboardSetting
+from .forms import ExhibitorRegistrationForm
+from .utils import send_confirmation_mail  # adjust import path
+from .models import BoothBooking  # if relevant
+
+
 def exhibitor(request):
+    # --- Fetch and compute current availability ---
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    max_count = dashboard_setting.max_count
+    total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    remaining = max(max_count - total_sum, 0)
+
+    # --- Display message logic ---
+    if remaining > 4:
+        alert_message = f"{remaining} booths available."
+        alert_class = "alert-success"
+    elif 2 < remaining <= 4:
+        alert_message = "3 booths available"
+        alert_class = "alert-info"
+    elif 1 < remaining <= 2:
+        alert_message = "2 booths available"
+        alert_class = "alert-warning"
+    elif remaining == 1:
+        alert_message = "1 booth remaining."
+        alert_class = "alert-danger"
+    else:
+        alert_message = "0 booths available Maximum reached!"
+        alert_class = "alert-danger"
+
+    registration_closed = remaining <= 0
+
+    # --- Handle submission ---
     if request.method == "POST":
         form = ExhibitorRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            exhibitor = form.save(commit=False)
+            selected_count = int(form.cleaned_data.get("count", 1))
 
-            # Handle uploads
-            for field in ["passport_photo", "national_id_scan", "registration_certificate", "kra_pin_document"]:
-                if request.FILES.get(field):
-                    setattr(exhibitor, field, request.FILES[field])
+            try:
+                with transaction.atomic():
+                    # Lock the DashboardSetting to prevent race conditions
+                    locked_setting = DashboardSetting.objects.select_for_update().get(id=1)
+                    total_sum_locked = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+                    remaining_locked = max(locked_setting.max_count - total_sum_locked, 0)
 
-            booth = form.cleaned_data.get("booth")
-            section = form.cleaned_data.get("section")
+                    if selected_count > remaining_locked:
+                        msg = f"Cannot register {selected_count} booths. Only {remaining_locked} remaining."
+                        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                            return JsonResponse({"success": False, "errors": {"count": [msg]}}, status=400)
+                        messages.error(request, msg)
+                        return render(request, "summit/exhibitor.html", {
+                            "form": form,
+                            "alert_message": alert_message,
+                            "alert_class": alert_class,
+                            "remaining": remaining_locked,
+                        })
 
-            # Prevent double booking
-            if booth and booth.is_booked:
-                msg = f"The booth {booth.booth_number} is already booked."
+                    # Save exhibitor safely
+                    exhibitor = form.save(commit=False)
+                    exhibitor.total_count = selected_count
+                    exhibitor.save()
+
+            except Exception as e:
+                print("❌ Transaction error:", e)
+                msg = "An unexpected error occurred. Please try again."
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse({"success": False, "errors": {"booth": [msg]}}, status=400)
+                    return JsonResponse({"success": False, "errors": {"server": [msg]}}, status=500)
                 messages.error(request, msg)
-                return render(request, "summit/exhibitor.html", {"form": form})
+                return render(request, "summit/exhibitor.html", {
+                    "form": form,
+                    "alert_message": alert_message,
+                    "alert_class": alert_class,
+                    "remaining": remaining,
+                })
 
-            exhibitor.section = section
-            exhibitor.booth = booth
-            exhibitor.save()
-
-            # Link booth booking
-            if booth:
-                BoothBooking.objects.create(
-                    exhibitor=exhibitor,
-                    booth=booth,
-                    booked_at=timezone.now(),
-                    approved=False,
-                )
-                booth.mark_booked()
-
-            # Send confirmation email
+            # --- Try sending confirmation email ---
             try:
                 send_confirmation_mail(exhibitor)
             except Exception as e:
@@ -1500,26 +1546,75 @@ def exhibitor(request):
                     })
                 messages.warning(request, "Registration saved, but email could not be sent.")
 
-            # ✅ Success response
+            # Success
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({"success": True, "message": "Registration successful!"})
             messages.success(request, "Registration successful!")
             return redirect("home")
 
-        # ❌ Form invalid
+        # ❌ Invalid form
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({"success": False, "errors": form.errors}, status=400)
         messages.error(request, "Please correct the errors.")
     else:
         form = ExhibitorRegistrationForm()
 
-    # form.fields["booth"].queryset = Booth.objects.filter(is_booked=False)
-    return render(request, "summit/exhibitor.html", {"form": form})
+    return render(request, "summit/exhibitor.html", {
+        "form": form,
+        "registration_closed": registration_closed,
+        "alert_message": alert_message,
+        "alert_class": alert_class,
+        "remaining": remaining,
+    })
+
+# --------------------------------------------
+from django.http import JsonResponse
+from django.db.models import Sum
+
+def exhibitor_status(request):
+    """Return the current remaining booth count and alert state."""
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    max_count = dashboard_setting.max_count
+    total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    remaining = max(max_count - total_sum, 0)
+
+    if remaining > 4:
+        alert_message = f"{remaining} booths available"
+        alert_class = "alert-success"
+    elif 2 < remaining <= 4:
+        alert_message = "3 booths available"
+        alert_class = "alert-info"
+    elif 1 < remaining <= 2:
+        alert_message = "2 booths available"
+        alert_class = "alert-warning"
+    elif remaining == 1:
+        alert_message = "1 booth remaining."
+        alert_class = "alert-danger"
+    else:
+        alert_message = "0 booths available Maximum reached!"
+        alert_class = "alert-danger"
+
+    return JsonResponse({
+        "remaining": remaining,
+        "alert_message": alert_message,
+        "alert_class": alert_class,
+    })
 
 
 # --------------------------------------------
-# ✅ Admin Dashboard (Exhibitor Management)
+# Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
+from django.db import models
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.db import models
+from django.db.models import Q
+from django.contrib import messages
+from django.utils import timezone
+from django.conf import settings
+
+from .models import Exhibitor, Booth, ExhibitionSection, DashboardSetting
+from .forms import DashboardSettingForm
 
 @login_required
 def admin_dashboard(request):
@@ -1527,7 +1622,46 @@ def admin_dashboard(request):
     booths = Booth.objects.all()
     exhibitors = Exhibitor.objects.all()
 
-    # --- Search and Filtering ---
+    # Fetch or create dashboard settings
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+
+    # Handle form submission for editing max_count
+    if request.method == "POST":
+        form = DashboardSettingForm(request.POST, instance=dashboard_setting)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Dashboard settings updated successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = DashboardSettingForm(instance=dashboard_setting)
+
+    # --- Total and remaining counts/booths ---
+    # Include exhibitors even if they have total_count = 0
+    exhibitor_count = exhibitors.count()
+    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
+    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
+
+    max_count = dashboard_setting.max_count
+    remaining = max_count - total_sum if max_count > total_sum else 0
+
+    # --- Determine alert message ---
+    if remaining > 4:
+        alert_message = f"{remaining} booths available"
+        alert_class = "alert-success"
+    elif 2 < remaining <= 4:
+        alert_message = "3 booths available"
+        alert_class = "alert-info"
+    elif 1 < remaining <= 2:
+        alert_message = "2 booths available"
+        alert_class = "alert-warning"
+    elif 0 < remaining <= 1:
+        alert_message = "1 booth remaining."
+        alert_class = "alert-danger"
+    else:
+        alert_message = "0 booths available Maximum reached!"
+        alert_class = "alert-danger"
+
+    # --- Search and filtering ---
     query = request.GET.get("q", "").strip()
     category_filter = request.GET.get("category", "")
     section_filter = request.GET.get("section", "")
@@ -1559,14 +1693,14 @@ def admin_dashboard(request):
 
     categories = Exhibitor._meta.get_field("category").choices
 
-    # --- Build available countries list (for dropdown) ---
+    # --- Available countries ---
     used_countries = Exhibitor.objects.values_list("country_of_registration", flat=True).distinct()
     available_countries = sorted(
         [(code, dict(countries).get(code, code)) for code in used_countries if code],
         key=lambda x: x[1]
     )
 
-    # --- Add readable country display to each exhibitor ---
+    # --- Add readable country display ---
     for exhibitor in exhibitors:
         exhibitor.country_display = (
             exhibitor.get_country_of_registration_display() if exhibitor.country_of_registration else "—"
@@ -1587,13 +1721,19 @@ def admin_dashboard(request):
         "section_filter": section_filter,
         "country_filter": country_filter,
         "available_countries": available_countries,
-        'current_year': timezone.now().year,
+        "form": form,
+        "total_count": total_sum,
+        "max_count": max_count,
+        "remaining": remaining,
+        "alert_message": alert_message,
+        "alert_class": alert_class,
+        "current_year": timezone.now().year,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
     })
 
 
 # --------------------------------------------
-# ✅ Delete Exhibitor
+# Delete Exhibitor
 # --------------------------------------------
 @login_required
 def admin_exhibitor_delete(request, pk):
@@ -1610,7 +1750,7 @@ def admin_exhibitor_delete(request, pk):
 
 
 # --------------------------------------------
-# ✅ Section Management
+# Section Management
 # --------------------------------------------
 @login_required
 def admin_sections(request):
@@ -1656,7 +1796,7 @@ def admin_delete_section(request, pk):
 
 
 # --------------------------------------------
-# ✅ Booth Management
+# Booth Management
 # --------------------------------------------
 @login_required
 def admin_booths(request):
@@ -1921,6 +2061,8 @@ def delete_sponsor(request, sponsor_id):
     return redirect("sponsor_dashboard")
 
 
+# --------------------------------------------
+
 from django.db.models import Count, Max, Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -1963,6 +2105,7 @@ def dashboard_student_view(request):
 
 
 
+# --------------------------------------------
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
