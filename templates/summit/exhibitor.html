@@ -119,18 +119,12 @@
                   </div>
                 </div>
               </div>
-                <!-- Max Count Alert -->
-                <div id="alert-container" class="mt-2">
-                  {% if alert_message %}
-                  <div class="alert {{ alert_class }}" role="alert">
-                    {{ alert_message }}
-                  </div>
-                  {% endif %}
-                </div>
-
 
                 <!-- Count Alert -->
-
+              <!-- Remaining Counts Alert -->
+              <div class="alert {{ alert_class }} shadow-sm" role="alert">
+                {{ alert_message }}
+              </div>
 
                 <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
                   {% csrf_token %}
