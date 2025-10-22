@@ -1,11 +1,11 @@
+# imports
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models.functions import TruncDate
+from django.db.models.functions import TruncDate, TruncMonth
 from django.forms import inlineformset_factory
-from django.utils.timezone import now
 from openpyxl import Workbook
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.pagesizes import landscape
+from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
@@ -15,8 +15,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .decorators import require_api_key
-from .forms import GalleryForm, RegistrantForm, ScheduleDayForm, TimeSlotForm, SessionForm, \
-    PanelistForm, SpeakerForm
+from .forms import *
 from .models import *
 from .serializers_new import serialize_registrant
 from .utils import *
@@ -24,54 +23,27 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-
-from .models import SummitGallery, SummitPartner, SummitScheduleDay
-from .forms import QuickRegistrationForm
-
 import qrcode
 from io import BytesIO
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A7, portrait
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
-from django.conf import settings
 import os
-
 from django.views.decorators.http import require_POST
-from .models import Registrant, EmailLog
-from .utils import send_confirmation_email, send_student_email  #  email sending function
-
-from django.http import HttpResponse
 from datetime import datetime
-
-from django.db.models import Max
-
-from django.db.models import Count
-
 from django_countries import countries
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.db.models import Q
-
-from .models import (
-    ExhibitionSection, Booth, BoothBooking, Exhibitor
-)
-from .forms import (
-    ExhibitorRegistrationForm, ExhibitionSectionForm, BoothForm
-)
-from .utils import send_confirmation_mail
-
 from django.contrib.auth.views import LogoutView
-from django.contrib import messages
 from django.contrib.auth.views import LoginView
-from django.utils import timezone
+from django.db.models import Case, When, Value, IntegerField, Sum, Count, Max, Q
+from django.shortcuts import get_object_or_404, render, redirect
+from django.db import transaction, models
+from django.utils.timezone import now, timedelta
 
-from django.db.models import Case, When, Value, IntegerField
-from django.shortcuts import render
-from .models import SummitSpeaker
 
+
+#begin your views here
 def home(request):
 
     if request.method == 'POST':
@@ -147,12 +119,6 @@ def home(request):
         'speakers': summitspeakers,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
-
-
-# --------------------------------------------
-
-
-from django.db.models import Q
 
 def reg(request):
     if request.method == 'POST':
@@ -243,17 +209,12 @@ def reg(request):
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
-
 def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold"):
     """Dynamically adjust font size so text fits within the given width."""
     font_size = start_font_size
     while c.stringWidth(text, font_name, font_size) > max_width and font_size > 5:
         font_size -= 0.5
     return font_size
-
-
-# --------------------------------------------
-
 
 @login_required
 def generate_badge(request, registrant_id):
@@ -413,10 +374,6 @@ def generate_badge(request, registrant_id):
     filename = f"{registrant.first_name}_{registrant.second_name}_Badge.pdf"
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
-
-
-# --------------------------------------------
-
 @login_required
 def unsubscribe_view(request, token):
     try:
@@ -426,10 +383,6 @@ def unsubscribe_view(request, token):
         return render(request, "summit/unsubscribe.html")
     except Registrant.DoesNotExist:
         return HttpResponse("<h2>Invalid unsubscribe link.</h2>", status=400)
-
-
-# --------------------------------------------
-
 
 @login_required
 @api_view(['GET'])
@@ -468,7 +421,6 @@ def dashboard_stats(request):
         'current_year': timezone.now().year,
     })
 
-
 # --------------------------------------------
 # === Excel Export ===
 # --------------------------------------------
@@ -502,7 +454,6 @@ def export_registrants_excel(request):
     response["Content-Disposition"] = 'attachment; filename="registrants.xlsx"'
     wb.save(response)
     return response
-
 
 # --------------------------------------------
 # === PDF Export in Landscape ===
@@ -591,9 +542,6 @@ def export_registrants_pdf(request):
 
     return response
 
-
-# --------------------------------------------
-
 @login_required
 def print_registrants(request):
     registrants = Registrant.objects.all().order_by("created_at")
@@ -608,9 +556,6 @@ def print_registrants(request):
         "registrants": registrants,
         "org_type_counts": org_type_counts.items(),
     })
-
-
-# --------------------------------------------
 
 @login_required
 def dashboard_view(request):
@@ -646,9 +591,6 @@ def dashboard_view(request):
     }
     return render(request, "summit/dashboard.html", context)
 
-
-# --------------------------------------------
-
 # Endpoint for charts (AJAX/React)
 @login_required
 def dashboard_data(request):
@@ -665,8 +607,6 @@ def dashboard_data(request):
         "updates_count": Registrant.objects.filter(updates_opt_in=True).count(),
     }
     return JsonResponse(data)
-
-# --------------------------------------------
 
 class SummitLoginView(LoginView):
     template_name = "summit/login.html"
@@ -690,8 +630,6 @@ class SummitLoginView(LoginView):
 
         return response
 
-# --------------------------------------------
-
 class SummitLogoutView(LogoutView):
     next_page = 'custom_login'
 
@@ -702,21 +640,12 @@ class SummitLogoutView(LogoutView):
         messages.success(request, "You have been logged out successfully.")
         return super().post(request, *args, **kwargs)
 
-
-# --------------------------------------------
-
 @login_required
 def about(request):
     return render(request, 'summit/samples/about.html')
 
-
-# --------------------------------------------
-
 def index(request):
     return render(request, 'summit/index.html')
-
-
-# --------------------------------------------
 
 @login_required
 @require_POST
@@ -731,46 +660,26 @@ def delete_registrant(request, pk):
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
-
-# --------------------------------------------
-
 def privacy(request):
     return render(request, "summit/privacy.html")
-
-
-# --------------------------------------------
 
 def places(request):
     return render(request, "summit/venue.html")
 
-# --------------------------------------------
-
 def not_found(request):
     return render(request, "summit/404.html")
-
-
-# --------------------------------------------
 
 @login_required
 def mailme_view(request):
     emails = Registrant.objects.values_list('email', flat=True)
     return render(request, "setup/mailme.html", {"emails": emails})
 
-
-# --------------------------------------------
-
 def speakers(request):
     speakers = SummitSpeaker.objects.all()
     return render(request, "summit/speakers.html", {"speakers": speakers})
 
-
-# --------------------------------------------
-
 def media(request):
     return render(request, "summit/gallery.html")
-
-
-# --------------------------------------------
 
 def register(request):
     if request.method == "POST":
@@ -806,9 +715,6 @@ def register(request):
         form = RegistrantForm()
 
     return render(request, "summit/buy-tickets.html", {"form": form})
-
-
-# --------------------------------------------
 
 @login_required
 def sendMail(request):
@@ -850,9 +756,6 @@ def sendMail(request):
     # Invalid request method
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
-
-# --------------------------------------------
-
 @login_required
 def gallery_dashboard(request):
     """Display all gallery images and allow adding new ones."""
@@ -875,9 +778,6 @@ def gallery_dashboard(request):
         'current_year': timezone.now().year,
     })
 
-
-# --------------------------------------------
-
 @login_required
 def gallery_edit(request, pk):
     """Edit a specific gallery image."""
@@ -895,9 +795,6 @@ def gallery_edit(request, pk):
 
     return render(request, 'gallery/gallery_edit.html', {'form': form, 'item': item})
 
-
-# --------------------------------------------
-
 @login_required
 @require_POST
 def gallery_delete(request, pk):
@@ -906,9 +803,6 @@ def gallery_delete(request, pk):
     item.delete()
     messages.success(request, "Gallery image deleted successfully!")
     return redirect('gallery_dashboard')
-
-
-# --------------------------------------------
 
 @login_required
 def speaker_dashboard(request):
@@ -934,9 +828,6 @@ def speaker_dashboard(request):
     }
     return render(request, "speaker/speaker_dashboard.html", context)
 
-
-# --------------------------------------------
-
 @login_required
 def speaker_create(request):
     if request.method == "POST":
@@ -952,9 +843,6 @@ def speaker_create(request):
         "title": "Add Speaker",
         'current_year': timezone.now().year,})
 
-
-# --------------------------------------------
-
 @login_required
 def update_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
@@ -968,9 +856,6 @@ def update_speaker(request, pk):
         form = SpeakerForm(instance=speaker)
     return render(request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"})
 
-
-# --------------------------------------------
-
 @login_required
 def delete_speaker(request, pk):
     speaker = get_object_or_404(SummitSpeaker, pk=pk)
@@ -979,9 +864,6 @@ def delete_speaker(request, pk):
         messages.success(request, "Speaker deleted successfully!")
         return redirect("speaker_dashboard")
     return render(request, "speaker/confirm_delete.html", {"speaker": speaker})
-
-
-# --------------------------------------------
 
 # Partner
 
@@ -992,9 +874,6 @@ def partner_dashboard(request):
         "partners": partners,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         'current_year': timezone.now().year,})
-
-
-# --------------------------------------------
 
 @login_required
 def save_partner(request):
@@ -1032,9 +911,6 @@ def save_partner(request):
 
         return redirect("partner_dashboard")
 
-
-# --------------------------------------------
-
 @login_required
 def delete_partner(request, partner_id):
     if request.method == "POST":
@@ -1042,8 +918,6 @@ def delete_partner(request, partner_id):
         partner.delete()
         messages.success(request, "🗑️ Partner deleted successfully!")
         return redirect("partner_dashboard")
-
-
 
 # --------------------------------------------
 # Agenda view
@@ -1056,7 +930,6 @@ def dashboard_home(request):
         "days": days,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         'current_year': timezone.now().year,})
-
 
 # ---------------- DAY CRUD ----------------
 @login_required
@@ -1071,7 +944,6 @@ def add_day(request):
         form = ScheduleDayForm()
     return render(request, "schedule/day_form.html", {"form": form})
 
-
 @login_required
 def edit_day(request, pk):
     day = get_object_or_404(SummitScheduleDay, id=pk)
@@ -1085,14 +957,12 @@ def edit_day(request, pk):
         form = ScheduleDayForm(instance=day)
     return render(request, "schedule/day_form.html", {"form": form, "day": day})
 
-
 @login_required
 def delete_day(request, pk):
     day = get_object_or_404(SummitScheduleDay, id=pk)
     day.delete()
     messages.warning(request, "🗑️ Day deleted successfully.")
     return redirect("dashboard_home")
-
 
 # --------------------------------------------
 # -TIMESLOT CRUD -
@@ -1145,8 +1015,6 @@ def add_session(request, timeslot_id):
     })
 
 
-# --------------------------------------------
-
 @login_required
 def edit_session(request, pk):
     session = get_object_or_404(SummitSession, id=pk)
@@ -1169,17 +1037,12 @@ def edit_session(request, pk):
     })
 
 
-# --------------------------------------------
-
 @login_required
 def delete_session(request, pk):
     session = get_object_or_404(SummitSession, id=pk)
     session.delete()
     messages.warning(request, "🗑️ Session deleted successfully.")
     return redirect("dashboard_home")
-
-
-# --------------------------------------------
 
 @require_api_key
 def get_registrants(request):
@@ -1242,9 +1105,6 @@ def get_registrants(request):
         "registrants": data
     }, status=200)
 
-
-# --------------------------------------------
-
 def add_to_calendar(request):
     ics_content = """BEGIN:VCALENDAR
 VERSION:2.0
@@ -1267,9 +1127,6 @@ END:VCALENDAR
     response = HttpResponse(ics_content, content_type="text/calendar; charset=utf-8")
     response["Content-Disposition"] = "attachment; filename=KenyaSoftwareSummit2025.ics"
     return response
-
-
-# --------------------------------------------
 
 @login_required
 @require_POST
@@ -1323,9 +1180,6 @@ def resend_confirmation_email(request, registrant_id):
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
         }, status=500)
 
-
-# --------------------------------------------
-
 @login_required
 def guest_category(request):
     category = Category.objects.all().order_by('name')
@@ -1333,15 +1187,9 @@ def guest_category(request):
 
     return render(request, "setup/add_category.html", category)
 
-
-# --------------------------------------------
-
 @login_required
 def categories_create(request):
     return render(request, "setup/category_form.html")
-
-
-# --------------------------------------------
 
 @login_required
 def save_category(request):
@@ -1452,17 +1300,8 @@ def gallery(request):
 # --------------------------------------------
 # Exhibitor Registration
 # --------------------------------------------
-from django.db import transaction
-from django.db.models import Sum
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.http import JsonResponse
-from django.utils import timezone
 
-from .models import Exhibitor, DashboardSetting
-from .forms import ExhibitorRegistrationForm
-from .utils import send_confirmation_mail  # adjust import path
-from .models import BoothBooking  # if relevant
+
 
 
 def exhibitor(request):
@@ -1568,8 +1407,7 @@ def exhibitor(request):
     })
 
 # --------------------------------------------
-from django.http import JsonResponse
-from django.db.models import Sum
+
 
 def exhibitor_status(request):
     """Return the current remaining booth count and alert state."""
@@ -1604,17 +1442,6 @@ def exhibitor_status(request):
 # --------------------------------------------
 # Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
-from django.db import models
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.db import models
-from django.db.models import Q
-from django.contrib import messages
-from django.utils import timezone
-from django.conf import settings
-
-from .models import Exhibitor, Booth, ExhibitionSection, DashboardSetting
-from .forms import DashboardSettingForm
 
 @login_required
 def admin_dashboard(request):
@@ -1842,21 +1669,6 @@ def admin_delete_booth(request, pk):
 
 # --------------------------------------------
 
-
-from django.db.models import Count
-from django.utils.timezone import now, timedelta
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.db.models.functions import TruncMonth
-
-from summitPage.models import (
-    Registrant,
-    Exhibitor,
-    SummitPartner,
-    SummitGallery,
-    Booth,
-)
-
 @login_required
 def main_dashboard_view(request):
     today = now().date()
@@ -1944,7 +1756,6 @@ def main_dashboard_view(request):
     # --- Optional API/email logs ---
     emails_today = 0
     try:
-        from summitPage.models import EmailLog
         emails_today = EmailLog.objects.filter(sent_at__date=today).count()
     except Exception:
         pass
@@ -1999,14 +1810,6 @@ def main_dashboard_view(request):
 
     return render(request, "dashboard/stats_dashboard.html", context)
 
-
-
-# --------------------------------------------
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import SummitSponsorForm
-
-
 def summit_sponsor_registration(request):
     """View for registering summit sponsors and partners."""
     if request.method == "POST":
@@ -2029,9 +1832,8 @@ def summit_sponsor_registration(request):
 
 # --------------------------------------------
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
+
+
 
 from summitPage.models import SummitSponsor
 
@@ -2059,15 +1861,6 @@ def delete_sponsor(request, sponsor_id):
     sponsor.delete()
     messages.success(request, f"Sponsor '{sponsor.organization_name}' deleted successfully.")
     return redirect("sponsor_dashboard")
-
-
-# --------------------------------------------
-
-from django.db.models import Count, Max, Q
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.utils import timezone
-from django.conf import settings
 
 @login_required
 def dashboard_student_view(request):
@@ -2106,11 +1899,7 @@ def dashboard_student_view(request):
 
 
 # --------------------------------------------
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Registrant
+
 
 @login_required
 @require_POST
