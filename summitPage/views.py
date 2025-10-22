@@ -41,6 +41,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.db import transaction, models
 from django.utils.timezone import now, timedelta
 
+from django.db.models import Sum
+from django.http import JsonResponse
+from .models import Exhibitor, DashboardSetting
+from summitPage.models import SummitSponsor
 
 
 #begin your views here
@@ -1412,9 +1416,7 @@ def exhibitor(request):
     })
 
 # --------------------------------------------
-from django.db.models import Sum
-from django.http import JsonResponse
-from .models import Exhibitor, DashboardSetting
+
 
 def exhibitor_status(request):
     """Return the accurate remaining booth count considering all existing exhibitors."""
@@ -1852,8 +1854,6 @@ def summit_sponsor_registration(request):
 
 
 
-
-from summitPage.models import SummitSponsor
 
 
 @login_required
