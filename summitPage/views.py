@@ -1305,15 +1305,20 @@ def gallery(request):
 
 
 def exhibitor(request):
-    # --- Fetch and compute current availability ---
+    # --- Total and remaining counts/booths ---
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
-    max_count = dashboard_setting.max_count
+    exhibitors = Exhibitor.objects.all()
+    # Include exhibitors even if they have total_count = 0
+    exhibitor_count = exhibitors.count()
     total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
+    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
+
+    max_count = dashboard_setting.max_count
     remaining = max_count - total_sum if max_count > total_sum else 0
 
-    # --- Display message logic ---
+    # --- Determine alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available."
+        alert_message = f"{remaining} booths available"
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
         alert_message = "3 booths available"
@@ -1321,7 +1326,7 @@ def exhibitor(request):
     elif 1 < remaining <= 2:
         alert_message = "2 booths available"
         alert_class = "alert-warning"
-    elif remaining == 1:
+    elif 0 < remaining <= 1:
         alert_message = "1 booth remaining."
         alert_class = "alert-danger"
     else:
