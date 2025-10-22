@@ -119,18 +119,12 @@
                   </div>
                 </div>
               </div>
-                <!-- Max Count Alert -->
-                <div id="alert-container" class="mt-2">
-                  {% if alert_message %}
-                  <div class="alert {{ alert_class }}" role="alert">
-                    {{ alert_message }}
-                  </div>
-                  {% endif %}
-                </div>
-
 
                 <!-- Count Alert -->
-
+              <!-- Remaining Counts Alert -->
+              <div class="alert {{ alert_class }} shadow-sm" role="alert">
+                {{ alert_message }}
+              </div>
 
                 <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
                   {% csrf_token %}
@@ -216,6 +210,7 @@
                     <div class="mt-3 mb-3">
                         <label for="id_count" class="form-label fw-semibold dark mb-1">Select Booth</label>
                         {{ form.count }}
+                      <small class="text-muted d-block mt-1">Booth size: 3m x 3m</small>
                     </div>
 
                   <!-- ============================= -->
@@ -343,13 +338,7 @@
                             </button>
                         {% endif %}
                     </div>
-
                 </form>
-
-                <!-- Alerts -->
-                <div id="alert-container" class="mt-2"></div>
-
-
 
 
             </div>
