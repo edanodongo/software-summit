@@ -143,7 +143,7 @@ class QuickRegistrationForm(forms.ModelForm):
         if not id_number:
             raise ValidationError("Please enter your National ID number.")
         if not id_number.isdigit():
-            raise ValidationError("National ID number must contain only digits.")
+            raise ValidationError("Invalid ID/Passport Number.")
         if len(id_number) < 6:
             raise ValidationError("Please enter a valid National ID number.")
         return id_number
@@ -479,13 +479,13 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             self.add_error('country_of_registration', "Please select the country of registration.")
 
         if id_number and len(id_number.strip()) < 8:
-            self.add_error('national_id_number', "National ID / Passport number must be at least 8 characters long.")
+            self.add_error('national_id_number', "Invalid ID/Passport number.")
 
         if business_type == 'local':
             if not kra_pin:
                 self.add_error('kra_pin', "KRA PIN is required for Kenyan businesses.")
             elif len(kra_pin.strip()) < 11:
-                self.add_error('kra_pin', "KRA PIN must be at least 11 characters long.")
+                self.add_error('kra_pin', "Invalid KRA PIN.")
             if not cleaned_data.get('business_registration_doc'):
                 self.add_error('business_registration_doc', "Upload your Business Registration Certificate.")
         elif business_type == 'international':
