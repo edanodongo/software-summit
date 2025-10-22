@@ -10,7 +10,7 @@ from .models import Category
 
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
-    # 🔹 Custom Field Definitions
+    # Custom Field Definitions
     # =====================================================
     national_id_number = forms.CharField(
         required=True,
@@ -70,7 +70,7 @@ class QuickRegistrationForm(forms.ModelForm):
     )
 
     # =====================================================
-    # 🔹 Meta Configuration
+    # Meta Configuration
     # =====================================================
     class Meta:
         model = Registrant
@@ -109,7 +109,7 @@ class QuickRegistrationForm(forms.ModelForm):
         }
 
     # =====================================================
-    # 🔹 Validation Helpers
+    # Validation Helpers
     # =====================================================
     def validate_file(self, file, allowed_extensions):
         """Generic file validation utility."""
@@ -149,7 +149,7 @@ class QuickRegistrationForm(forms.ModelForm):
         return id_number
 
     # =====================================================
-    # 🔹 Cross-field Validation
+    # Cross-field Validation
     # =====================================================
     def clean(self):
         cleaned_data = super().clean()
@@ -362,19 +362,31 @@ class SpeakerForm(forms.ModelForm):
 
 
 # --------------------------------------------
-# ✅ Exhibitor Registration Form
+# Exhibitor Registration Form
 # --------------------------------------------
 
 from .models import ExhibitionCategory
+from django import forms
+from django_countries.widgets import CountrySelectWidget
+from django.db.models import Sum
+from .models import Exhibitor, DashboardSetting
+
 
 class ExhibitorRegistrationForm(forms.ModelForm):
+    """Registration form that dynamically limits count choices based on remaining availability."""
+
+    count = forms.ChoiceField(
+        label="Select Booth",
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+    )
+
     class Meta:
         model = Exhibitor
         fields = [
             'title', 'first_name', 'second_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-            'logo',
-            'product_description',
+            'logo', 'product_description',
             'business_type', 'kra_pin', 'business_registration_doc',
             'international_business_doc', 'country_of_registration',
             'beneficial_owner_details', 'beneficial_owner_doc',
@@ -388,6 +400,31 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # =====================================
+        # Dynamically calculate remaining counts/Booths (limit to max 3)
+        # =====================================
+        try:
+            dashboard_setting = DashboardSetting.objects.first()
+            max_count = dashboard_setting.max_count if dashboard_setting else 0
+        except DashboardSetting.DoesNotExist:
+            max_count = 0
+
+        total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+        remaining = max(max_count - total_sum, 0)
+
+        if remaining > 0:
+            visible_limit = min(3, remaining)  # ✅ show at most 3 options
+            count_choices = [(i, str(i)) for i in range(1, visible_limit + 1)]
+        else:
+            count_choices = [(0, "No booths available")]
+
+        self.fields['count'].choices = count_choices
+        self.fields['count'].disabled = (remaining <= 0)
+        self.remaining = remaining  # optional, useful for template display
+
+        # =====================================
+        # Form field styling and placeholders
+        # =====================================
         placeholders = {
             'first_name': "Enter your first name",
             'second_name': "Enter your other names (optional)",
@@ -401,7 +438,8 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             'national_id_number': "Enter your National ID or Passport number",
         }
 
-        for field_name, field in self.fields.items():
+        for name, field in self.fields.items():
+            # Apply uniform Bootstrap classes
             if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput)):
                 field.widget.attrs.update({'class': 'form-control'})
             elif isinstance(field.widget, forms.Select):
@@ -409,26 +447,27 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})
 
-            if field_name in placeholders:
-                field.widget.attrs['placeholder'] = placeholders[field_name]
+            # Add placeholders
+            if name in placeholders:
+                field.widget.attrs['placeholder'] = placeholders[name]
 
+        # Mark required fields
         required_fields = [
             'title', 'first_name', 'email', 'phone',
             'organization_type', 'job_title', 'category',
-             'national_id_number',
-            'national_id_scan', 'passport_photo',
+            'national_id_number', 'national_id_scan', 'passport_photo',
             'country_of_registration', 'privacy_agreed'
         ]
         for f in required_fields:
             self.fields[f].required = True
 
-        # Add frontend min length hints
+        # Minimum lengths
         self.fields['national_id_number'].widget.attrs['minlength'] = 8
         self.fields['kra_pin'].widget.attrs['minlength'] = 11
 
-
-        #self.fields['exhibit_category'].empty_label = "Select exhibitor category"
-
+    # =====================================
+    # Validation logic
+    # =====================================
     def clean(self):
         cleaned_data = super().clean()
         business_type = cleaned_data.get('business_type')
@@ -455,6 +494,17 @@ class ExhibitorRegistrationForm(forms.ModelForm):
 
         return cleaned_data
 
+    # =====================================
+    # Save method override
+    # =====================================
+    def save(self, commit=True):
+        exhibitor = super().save(commit=False)
+        exhibitor.total_count = int(self.cleaned_data.get('count', 0))
+        if commit:
+            exhibitor.save()
+        return exhibitor
+
+
 
 # --------------------------------------------
 # ✅ Booth Form
@@ -472,7 +522,7 @@ class BoothForm(forms.ModelForm):
 
 
 # --------------------------------------------
-# ✅ Exhibition Section Form
+# Exhibition Section Form
 # --------------------------------------------
 class ExhibitionSectionForm(forms.ModelForm):
     class Meta:
@@ -567,3 +617,36 @@ class SummitSponsorForm(forms.ModelForm):
         """Convert list of checkbox selections into a storable list for JSONField."""
         return self.cleaned_data.get("areas_of_interest", [])
 
+
+# --------------------------------------------
+
+from django import forms
+from django.db.models import Sum
+from django.core.exceptions import ValidationError
+from .models import DashboardSetting, Exhibitor
+
+class DashboardSettingForm(forms.ModelForm):
+    class Meta:
+        model = DashboardSetting
+        fields = ['max_count']
+        widgets = {
+            'max_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'placeholder': 'Enter max count',
+            }),
+        }
+        labels = {
+            'max_count': 'Maximum Count Limit',
+        }
+
+    def clean_max_count(self):
+        """Prevent setting max_count below the total already registered."""
+        new_max = self.cleaned_data.get('max_count')
+        total_used = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+
+        if new_max < total_used:
+            raise ValidationError(
+                f"Cannot set maximum count to {new_max}. There are already {total_used} counts registered."
+            )
+        return new_max

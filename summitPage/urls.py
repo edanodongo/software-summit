@@ -81,6 +81,7 @@ urlpatterns = [
 
     path("gallery/", views.gallery, name="gallery"),
     path("exhibitor/", views.exhibitor, name="exhibitor"),
+    path('exhibitor/status/', views.exhibitor_status, name='exhibitor_status'),
 
     # --- Exhibitors management ---
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),

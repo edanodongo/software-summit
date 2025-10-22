@@ -619,6 +619,7 @@ class Exhibitor(models.Model):
     product_description = models.TextField(blank=True, null=True)
 
     exhibit_category = models.ForeignKey('ExhibitionCategory', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Exhibition Category")
+    total_count = models.IntegerField(default=0)
 
     # --- Booth & Section ---
     booth = models.ForeignKey("Booth", on_delete=models.SET_NULL, null=True, blank=True)
@@ -662,6 +663,9 @@ class Exhibitor(models.Model):
 
     def get_full_name(self):
         return f"{self.title} {self.first_name} {self.second_name or ''}".strip()
+
+    def display_total(self):
+        return f"Total Count: {self.total_count}"
 
     def __str__(self):
         return f"{self.get_full_name()} - {self.organization_type}"
@@ -766,3 +770,15 @@ class SummitSponsor(models.Model):
 
 
 # ---------------------------------------------
+
+from django.db import models
+
+class DashboardSetting(models.Model):
+    max_count = models.PositiveIntegerField(default=10)
+
+    def __str__(self):
+        return f"Dashboard Settings (Max Count: {self.max_count})"
+
+    class Meta:
+        verbose_name = "Dashboard Setting"
+        verbose_name_plural = "Dashboard Settings"
