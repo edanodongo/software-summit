@@ -68,6 +68,18 @@ class QuickRegistrationForm(forms.ModelForm):
         label='I have read and agree to the Privacy Policy',
         error_messages={'required': 'You must agree to the Privacy Policy to register.'},
     )
+    DAY_CHOICES = [
+        ("Day 1", "Day 1"),
+        ("Day 2", "Day 2"),
+        ("Day 3", "Day 3"),
+    ]
+
+    days_to_attend = forms.MultipleChoiceField(
+        choices=DAY_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=False,
+        label="Select Days to Attend",
+    )
 
     # =====================================================
     # Meta Configuration
@@ -98,7 +110,7 @@ class QuickRegistrationForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Institution name'
             }),
-            'days_to_attend': forms.Select(attrs={'class': 'form-select'}),
+
             'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'category': forms.HiddenInput(),
@@ -108,6 +120,10 @@ class QuickRegistrationForm(forms.ModelForm):
                 'placeholder': 'Accessibility/Dietary Needs (optional)'
             }),
         }
+
+    def clean_days_to_attend(self):
+        data = self.cleaned_data.get("days_to_attend", [])
+        return ",".join(data)  # store as comma-separated string
 
     # =====================================================
     # Validation Helpers

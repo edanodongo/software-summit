@@ -186,20 +186,38 @@
                                 {{ form.admn_number }}
                             </div>
 
-                            <!-- Job Title -->
                             <div class="row g-2 mt-2">
+                                <!-- Job Title -->
                                 <div class="col-md-6 mb-2">
-                                    <label for="id_job_title" class="form-label fw-semibold dark mb-1">Job Title /
-                                        Role</label>
+                                    <label for="id_job_title" class="form-label fw-semibold dark mb-1">
+                                        Job Title / Role
+                                    </label>
                                     {{ form.job_title }}
                                 </div>
 
-                                <!-- Category -->
+                                <!-- Days to Attend -->
                                 <div class="col-md-6 mb-2">
-                                    <label for="id_days_to_attend" class="form-label fw-semibold dark mb-1">Days to attend</label>
-                                    {{ form.days_to_attend }}
+                                    <label class="form-label fw-semibold dark mb-1">Days to attend</label>
+
+                                    <div class="form-check-group">
+                                        {% for checkbox in form.days_to_attend %}
+                                            <div class="form-check form-check-inline">
+                                                {{ checkbox.tag }}
+                                                <label class="form-check-label ms-1" for="{{ checkbox.id_for_label }}">
+                                                    {{ checkbox.choice_label }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% if form.days_to_attend.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.days_to_attend.errors.as_text }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
+
 
                             <!-- Interests -->
                             <div class="mt-4 mb-2">
