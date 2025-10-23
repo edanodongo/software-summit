@@ -485,12 +485,8 @@ def send_student_email(registrant, retries=3, delay=3):
               </h2>
 
               <!-- Intro -->
-              <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
-              </p>
-
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                We are delighted to welcome you to this year’s Software Summit, taking place from 
+                Thank you for successfully registering for the <strong>Software Summit 2025</strong>. We are delighted to welcome you to this year’s Software Summit, taking place from 
                 10th November -12th November , 2025 at Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
               </p>
 
@@ -499,15 +495,11 @@ def send_student_email(registrant, retries=3, delay=3):
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-              Your academic institution, {registrant.other_organization_type} will confirm your details for attendance.
+              <strong>As a student your institution, {registrant.other_organization_type} will confirm your details for purposes of attendance.</strong>
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
                 This experience has been thoughtfully tailored to meet your innovative needs and standards.
-              </p>
-
-              <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                <strong>Karibu!</strong>
               </p>
 
               <p style="margin-top:30px; text-align:center;">
