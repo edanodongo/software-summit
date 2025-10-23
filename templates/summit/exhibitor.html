@@ -125,6 +125,13 @@
               <div class="alert {{ alert_class }} shadow-sm" role="alert">
                 {{ alert_message }}
               </div>
+<!--            &lt;!&ndash; Booth Availability Alert &ndash;&gt;-->
+<!--            <div id="alert-container" class="mt-3">-->
+<!--              <div class="alert alert-info" role="alert">-->
+<!--                Loading booth availability...-->
+<!--              </div>-->
+<!--            </div>-->
+
 
                 <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
                   {% csrf_token %}
@@ -388,6 +395,7 @@
             <ul>
               <li><a href="{% url 'register' %}#features">Delegate</a></li>
               <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
             </ul>
           </div>
 
@@ -460,130 +468,99 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const typeSelect = document.getElementById("id_business_type");
-  const localFields = document.querySelectorAll(".local-fields");
-  const intlFields = document.querySelectorAll(".international-fields");
 
-  function toggleFields() {
-    const type = typeSelect.value;
-    localFields.forEach(el => el.style.display = type === "local" ? "block" : "none");
-    intlFields.forEach(el => el.style.display = type === "international" ? "block" : "none");
-  }
+    // ==============================
+    // 1️⃣ BUSINESS TYPE TOGGLE
+    // ==============================
+    const typeSelect = document.getElementById("id_business_type");
+    const localFields = document.querySelectorAll(".local-fields");
+    const intlFields = document.querySelectorAll(".international-fields");
 
-  typeSelect.addEventListener("change", toggleFields);
-  toggleFields(); // run on load
-});
+    function toggleFields() {
+        const type = typeSelect ? typeSelect.value : "";
+        localFields.forEach(el => el.style.display = type === "local" ? "block" : "none");
+        intlFields.forEach(el => el.style.display = type === "international" ? "block" : "none");
+    }
 
+    if (typeSelect) {
+        typeSelect.addEventListener("change", toggleFields);
+        toggleFields(); // Run on load
+    }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const remaining = {{ remaining|default:0 }};
+    // ==============================
+    // 2️⃣ FETCH LIVE EXHIBITOR STATUS
+    // ==============================
+    const alertContainer = document.getElementById("alert-container");
     const countField = document.getElementById("id_count");
-    const countAlert = document.getElementById("count-alert");
     const submitBtn = document.getElementById("submit-btn");
+    const countAlert = document.getElementById("count-alert");
 
-    if (!countField) return;
+    async function fetchExhibitorStatus() {
+        try {
+            const response = await fetch("{% url 'exhibitor_status' %}");
+            if (!response.ok) throw new Error("Network error");
 
-    // If count is a SELECT element
-    if (countField.tagName === "SELECT") {
-        const options = countField.querySelectorAll("option");
+            const data = await response.json();
 
-        // Remove all options above the remaining value
-        options.forEach(opt => {
-            const val = parseInt(opt.value, 10);
-            if (!isNaN(val) && val > remaining) {
-                opt.remove();
+            // --- Update alert message dynamically ---
+            if (alertContainer) {
+                alertContainer.innerHTML = `
+                    <div class="alert ${data.alert_class}" role="alert">
+                        ${data.alert_message}
+                    </div>`;
             }
-        });
 
-        // Disable field if no counts remain
-        if (remaining <= 0) {
-            countField.innerHTML = '<option value="">No counts available</option>';
-            countField.disabled = true;
-            if (submitBtn) submitBtn.disabled = true;
-            countAlert.innerHTML = `
-                <div class="alert alert-danger mt-2">
-                    Registration closed — no available counts.
-                </div>`;
-            return;
+            // --- Enable/disable submit button based on remaining ---
+            if (submitBtn) {
+                submitBtn.disabled = data.remaining <= 0;
+                submitBtn.innerText = data.remaining <= 0
+                    ? "Registration Closed"
+                    : "Register as Exhibitor";
+            }
+
+            // --- Update the booth count dropdown ---
+            if (countField) {
+                const remaining = data.remaining;
+
+                // Enable/disable the dropdown
+                countField.disabled = remaining <= 0;
+
+                // Reset dropdown options based on availability
+                const options = countField.querySelectorAll("option");
+                options.forEach(opt => {
+                    const val = parseInt(opt.value, 10);
+                    opt.disabled = !isNaN(val) && val > remaining;
+                });
+
+                // Add live feedback on selection
+                countField.addEventListener("change", function() {
+                    const selected = parseInt(this.value, 10) || 0;
+                    const remainingAfter = remaining - selected;
+                    if (countAlert) {
+                        countAlert.innerHTML = `
+                            <div class="alert alert-info mt-2">
+                                ${remainingAfter} booths remaining after your selection.
+                            </div>`;
+                    }
+                });
+            }
+
+        } catch (err) {
+            console.error("❌ Failed to fetch exhibitor status:", err);
+            if (alertContainer) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-warning" role="alert">
+                        Unable to load booth availability.
+                    </div>`;
+            }
         }
-
-        // Show live info when user changes selection
-        countField.addEventListener("change", function() {
-            const selected = parseInt(this.value, 10);
-            if (selected > remaining) {
-                this.value = remaining;
-            }
-            const remainingAfter = remaining - (parseInt(this.value, 10) || 0);
-            countAlert.innerHTML = `
-                <div class="alert alert-success mt-2">
-                    ${remainingAfter} counts remaining after selection.
-                </div>`;
-        });
     }
 
-    // If count is a NumberInput instead
-    if (countField.tagName === "INPUT" && countField.type === "number") {
-        countField.setAttribute("max", remaining);
-        countField.setAttribute("min", 1);
-
-        if (remaining <= 0) {
-            countField.disabled = true;
-            if (submitBtn) submitBtn.disabled = true;
-            countAlert.innerHTML = `
-                <div class="alert alert-danger mt-2">
-                    Registration closed — no counts remaining.
-                </div>`;
-            return;
-        }
-
-        countField.addEventListener("input", function() {
-            let value = parseInt(this.value, 10);
-            if (value > remaining) this.value = remaining;
-            if (value < 1) this.value = 1;
-
-            const remainingAfter = remaining - parseInt(this.value, 10);
-            countAlert.innerHTML = `
-                <div class="alert alert-info mt-2">
-                    ${remainingAfter} counts remaining after selection.
-                </div>`;
-        });
-    }
+    // Fetch immediately + auto-refresh every 15 seconds
+    fetchExhibitorStatus();
+    setInterval(fetchExhibitorStatus, 15000);
 });
-
-async function fetchExhibitorStatus() {
-    try {
-        const response = await fetch("{% url 'exhibitor_status' %}");
-        if (!response.ok) throw new Error("Network error");
-
-        const data = await response.json();
-        const container = document.getElementById("alert-container");
-
-        if (data.alert_message) {
-            container.innerHTML = `
-                <div class="alert ${data.alert_class}" role="alert">
-                    ${data.alert_message}
-                </div>
-            `;
-        } else {
-            container.innerHTML = "";
-        }
-
-        // Optional: disable submit button when full
-        const btn = document.querySelector("form button[type='submit']");
-        if (btn) btn.disabled = data.remaining <= 0;
-
-    } catch (error) {
-        console.error("❌ Error fetching exhibitor status:", error);
-    }
-}
-
-// Fetch every 10 seconds
-setInterval(fetchExhibitorStatus, 10000);
-
-// Fetch immediately when page loads
-fetchExhibitorStatus();
 </script>
-
 
 
 

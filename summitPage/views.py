@@ -45,8 +45,31 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from .models import Exhibitor, DashboardSetting
 from summitPage.models import SummitSponsor
+from django.db.models import Q
+from .models import Category, Registrant
 
 # begin your views here
+
+def is_student_registrant(registrant: Registrant) -> bool:
+    """
+    Determines whether a registrant is a student based on both
+    organization_type and category name (case-insensitive).
+    """
+    try:
+        # 1️⃣ Check by organization_type
+        if registrant.organization_type.strip().lower() == "student":
+            return True
+
+        # 2️⃣ Check by category (compare to Category name "Student")
+        student_category_ids = [
+            str(cid) for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
+        ]
+        return str(registrant.category) in student_category_ids
+
+    except Exception:
+        return False
+
+
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
@@ -130,7 +153,7 @@ def reg(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # --- Explicitly assign uploaded files ---
+            # --- Assign uploaded files ---
             if request.FILES.get("passport_photo"):
                 registrant.passport_photo = request.FILES["passport_photo"]
             if request.FILES.get("national_id_scan"):
@@ -145,44 +168,26 @@ def reg(request):
 
             registrant.save()
 
-            # --- Determine if registrant is a Student ---
-            is_student = False
+            # ✅ Use shared student logic
+            is_student = is_student_registrant(registrant)
 
-            # 1️⃣ Check organization_type
-            if registrant.organization_type.strip().lower() == "student":
-                is_student = True
-
-            # 2️⃣ Check category name
+            # --- Send appropriate email ---
             try:
-                category_obj = Category.objects.filter(name__iexact="Student").first()
-                if category_obj and str(category_obj.id) == str(registrant.category):
-                    is_student = True
-            except Exception:
-                pass
-
-            # --- Send confirmation email only if not a student ---
-            if not is_student:
-                try:
-                    send_confirmation_email(registrant)
-                except Exception as e:
-                    print("Email Send error:", e)
-                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                        return JsonResponse(
-                            {"success": True, "message": "Registration saved, but email failed."},
-                            status=200
-                        )
-                    messages.warning(request, "Registered, but confirmation email failed.")
-            else:
-                try:
+                if is_student:
                     send_student_email(registrant)
-                except Exception as e:
-                    print("Email Send error:", e)
-                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                        return JsonResponse(
-                            {"success": True, "message": "Registration saved, but email failed."},
-                            status=200
-                        )
-                    messages.warning(request, "Registered, but confirmation email failed.")
+                    print("Student")
+                else:
+                    send_confirmation_email(registrant)
+                    print("Delegate")
+
+            except Exception as e:
+                print("Email Send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse(
+                        {"success": True, "message": "Registration saved, but email failed."},
+                        status=200
+                    )
+                messages.warning(request, "Registered, but confirmation email failed.")
 
             # --- Return success response ---
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -1356,30 +1361,32 @@ def gallery(request):
 def exhibitor(request):
     # --- Total and remaining counts/booths ---
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
-    exhibitors = Exhibitor.objects.all()
-    # Include exhibitors even if they have total_count = 0
-    exhibitor_count = exhibitors.count()
-    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
-    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
+    max_count = dashboard_setting.max_count or 0
 
-    max_count = dashboard_setting.max_count
-    remaining = max_count - total_sum if max_count > total_sum else 0
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
 
-    # --- Determine alert message ---
+    remaining = max(max_count - total_taken, 0)
+
+    # --- Build the alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = "3 booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = "2 booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
-    elif 0 < remaining <= 1:
-        alert_message = "1 booth remaining."
+    elif remaining == 1:
+        alert_message = "1 booth remaining!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available Maximum reached!"
+        alert_message = "0 booths available. Registration closed!"
         alert_class = "alert-danger"
 
     registration_closed = remaining <= 0
@@ -1457,24 +1464,23 @@ def exhibitor(request):
         "registration_closed": registration_closed,
         "alert_message": alert_message,
         "alert_class": alert_class,
-        "remaining": remaining,
+        # "remaining": remaining,
     })
 
 
 # --------------------------------------------
 
-
 def exhibitor_status(request):
-    """Return the accurate remaining booth count considering all existing exhibitors."""
+    """Return the accurate remaining booth count including exhibitors with 0 or null total_count."""
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count or 0
 
-    # --- Calculate total taken booths (exclude nulls and zero) ---
-    total_taken = (
-        Exhibitor.objects.filter(total_count__gt=0)
-        .aggregate(total=Sum('total_count'))['total']
-        or 0
-    )
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
 
     remaining = max(max_count - total_taken, 0)
 
@@ -1483,10 +1489,10 @@ def exhibitor_status(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
         alert_message = "1 booth remaining!"
@@ -1502,7 +1508,6 @@ def exhibitor_status(request):
         "alert_message": alert_message,
         "alert_class": alert_class,
     })
-
 
 
 # --------------------------------------------
@@ -1529,30 +1534,36 @@ def admin_dashboard(request):
         form = DashboardSettingForm(instance=dashboard_setting)
 
     # --- Total and remaining counts/booths ---
-    # Include exhibitors even if they have total_count = 0
-    exhibitor_count = exhibitors.count()
-    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
-    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    max_count = dashboard_setting.max_count or 0
 
-    max_count = dashboard_setting.max_count
-    remaining = max_count - total_sum if max_count > total_sum else 0
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
 
-    # --- Determine alert message ---
+    remaining = max(max_count - total_taken, 0)
+
+    # --- Build the alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = "3 booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = "2 booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
-    elif 0 < remaining <= 1:
-        alert_message = "1 booth remaining."
+    elif remaining == 1:
+        alert_message = "1 booth remaining!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available Maximum reached!"
+        alert_message = "0 booths available. Registration closed!"
         alert_class = "alert-danger"
+
+    registration_closed = remaining <= 0
 
     # --- Search and filtering ---
     query = request.GET.get("q", "").strip()
@@ -1615,7 +1626,7 @@ def admin_dashboard(request):
         "country_filter": country_filter,
         "available_countries": available_countries,
         "form": form,
-        "total_count": total_sum,
+        "total_count": total_taken,
         "max_count": max_count,
         "remaining": remaining,
         "alert_message": alert_message,

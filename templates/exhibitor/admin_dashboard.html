@@ -171,6 +171,7 @@
             <th>Job Title</th>
             <th>Category</th>
             <th>Booked booths</th>
+            <th>Files</th>
             <th>Date Registered</th>
             <th class="text-center">Action</th>
           </tr>
@@ -182,10 +183,30 @@
             <td>{{ e.email }}</td>
             <td>{{ e.phone }}</td>
             <td>{{ e.organization_type }}</td>
-              <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
+            <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
             <td>{{ e.job_title|default:"—" }}</td>
             <td>{{ e.get_category_display|default:"—" }}</td>
-              <td>{{ e.total_count|default:"0" }}</td>
+            <td>{{ e.total_count|default:"0" }}</td>
+              <td>
+                {% if e.logo %}
+                  <a href="{{ e.logo.url }}" target="_blank">Logo</a><br>
+                {% endif %}
+                {% if e.passport_photo %}
+                  <a href="{{ e.passport_photo.url }}" target="_blank">Proposal</a><br>
+                {% endif %}
+                {% if e.national_id_scan %}
+                  <a href="{{ e.national_id_scan.url }}" target="_blank">Profile</a><br>
+                {% endif %}
+                {% if e.business_registration_doc %}
+                  <a href="{{ e.business_registration_doc.url }}" target="_blank">Tax Cert</a>
+                {% endif %}
+                {% if e.international_business_doc %}
+                  <a href="{{ e.international_business_doc.url }}" target="_blank">Tax Cert</a>
+                {% endif %}
+                {% if e.beneficial_owner_doc %}
+                  <a href="{{ e.beneficial_owner_doc.url }}" target="_blank">Tax Cert</a>
+                {% endif %}
+              </td>
             <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
             <td class="text-center">
               <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">

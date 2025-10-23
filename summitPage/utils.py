@@ -494,10 +494,6 @@ def send_student_email(registrant, retries=3, delay=3):
               </h2>
 
               <!-- Intro -->
-              <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
-              </p>
-
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
                 Your registration has been received and is currently <strong>awaiting verification</strong> from your academic institution. 
                 Once your details are confirmed, your participation will be officially approved.
