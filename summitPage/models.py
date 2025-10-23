@@ -64,6 +64,7 @@ class Registrant(models.Model):
     ]
 
     DAY_CHOICES = [
+        ('', 'Select day to attend'),
         ("Day 1", "Day 1"),
         ("Day 2", "Day 2"),
         ("Day 3", "Day 3"),

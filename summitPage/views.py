@@ -45,8 +45,31 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from .models import Exhibitor, DashboardSetting
 from summitPage.models import SummitSponsor
+from django.db.models import Q
+from .models import Category, Registrant
 
 # begin your views here
+
+def is_student_registrant(registrant: Registrant) -> bool:
+    """
+    Determines whether a registrant is a student based on both
+    organization_type and category name (case-insensitive).
+    """
+    try:
+        # 1️⃣ Check by organization_type
+        if registrant.organization_type.strip().lower() == "student":
+            return True
+
+        # 2️⃣ Check by category (compare to Category name "Student")
+        student_category_ids = [
+            str(cid) for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
+        ]
+        return str(registrant.category) in student_category_ids
+
+    except Exception:
+        return False
+
+
 def home(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
@@ -122,7 +145,7 @@ def home(request):
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
-
+@login_required
 def reg(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
@@ -130,7 +153,7 @@ def reg(request):
         if form.is_valid():
             registrant = form.save(commit=False)
 
-            # --- Explicitly assign uploaded files ---
+            # --- Assign uploaded files ---
             if request.FILES.get("passport_photo"):
                 registrant.passport_photo = request.FILES["passport_photo"]
             if request.FILES.get("national_id_scan"):
@@ -145,46 +168,26 @@ def reg(request):
 
             registrant.save()
 
-            # --- Determine if registrant is a Student ---
-            is_student = False
+            # ✅ Use shared student logic
+            is_student = is_student_registrant(registrant)
 
-            # 1️⃣ Check organization_type
-            if registrant.organization_type.strip().lower() == "Student":
-                is_student = True
-
-            # 2️⃣ Check category name
+            # --- Send appropriate email ---
             try:
-                category_obj = Category.objects.filter(name__iexact="Student").first()
-                if category_obj and str(category_obj.id) == str(registrant.category):
-                    is_student = True
-            except Exception:
-                pass
-
-            # --- Send confirmation email only if not a student ---
-            if not is_student:
-                try:
-                    send_confirmation_email(registrant)
-                    print("Delegate")
-                except Exception as e:
-                    print("Email Send error:", e)
-                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                        return JsonResponse(
-                            {"success": True, "message": "Registration saved, but email failed."},
-                            status=200
-                        )
-                    messages.warning(request, "Registered, but confirmation email failed.")
-            else:
-                try:
+                if is_student:
                     send_student_email(registrant)
                     print("Student")
-                except Exception as e:
-                    print("Email Send error:", e)
-                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                        return JsonResponse(
-                            {"success": True, "message": "Registration saved, but email failed."},
-                            status=200
-                        )
-                    messages.warning(request, "Registered, but confirmation email failed.")
+                else:
+                    send_confirmation_email(registrant)
+                    print("Delegate")
+
+            except Exception as e:
+                print("Email Send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse(
+                        {"success": True, "message": "Registration saved, but email failed."},
+                        status=200
+                    )
+                messages.warning(request, "Registered, but confirmation email failed.")
 
             # --- Return success response ---
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
