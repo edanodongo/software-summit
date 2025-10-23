@@ -64,11 +64,9 @@ class Registrant(models.Model):
     ]
 
     DAY_CHOICES = [
-        ('', 'Select day to attend'),
         ("Day 1", "Day 1"),
         ("Day 2", "Day 2"),
         ("Day 3", "Day 3"),
-        ("all", "All 3 Days"),
     ]
 
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
@@ -103,6 +101,11 @@ class Registrant(models.Model):
     national_id_scan = models.FileField(upload_to="uploads/id_scans/", blank=True, null=True, verbose_name="Scanned National ID (JPG/PDF)")
 
     passport_photo = models.FileField(upload_to="uploads/passport_photos/", blank=True, null=True, verbose_name="Passport Photo (JPG/PDF)")
+
+    def get_days_list(self):
+        if self.days_to_attend:
+            return [day.strip() for day in self.days_to_attend.split(",")]
+        return []
 
     def display_org_type(self):
         base_label = self.get_organization_type_display()

@@ -51,6 +51,7 @@
                             <th>Org. Type</th>
                             <th>Job Title</th>
                             <th>Category</th>
+                            <th>Days to attend</th>
                             <th>National ID</th>
                             <th>ID Scan</th>
                             <th>Passport</th>
@@ -74,6 +75,7 @@
                                 <td>{{ registrant.get_organization_type_display }}</td>
                                 <td class="truncate">{{ registrant.job_title|default:"—" }}</td>
                                 <td>{{ registrant.category_name|default:"—" }}</td>
+                                <td>{{ registrant.days_to_attend|default:"—" }}</td>
                                 <td>{{ registrant.national_id_number|default:"—" }}</td>
                                 <td>
                                     {% if registrant.national_id_scan %}
