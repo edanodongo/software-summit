@@ -101,6 +101,7 @@ class QuickRegistrationForm(forms.ModelForm):
             'days_to_attend': forms.Select(attrs={'class': 'form-select'}),
             'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
+            'category': forms.HiddenInput(),
             'accessibility_needs': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 2,
@@ -175,24 +176,29 @@ class QuickRegistrationForm(forms.ModelForm):
         organization_type = cleaned_data.get("organization_type")
         admn_number = cleaned_data.get("admn_number")
 
-        # ✅ Auto-set category ID based on organization_type
         try:
-            if organization_type and organization_type.lower() == "student":
+            # 🔒 Always reset category based on organization_type, ignoring user input
+            if organization_type and organization_type.strip().lower() == "student":
                 student_category = Category.objects.filter(name__iexact="Student").first()
                 if student_category:
                     cleaned_data["category"] = str(student_category.id)
                 else:
                     self.add_error("category", "Student category not found in database.")
+
+                # Require admission number for students
                 if not admn_number:
                     self.add_error("admn_number", "Student Registration Number is required for students.")
+
             else:
                 delegate_category = Category.objects.filter(name__iexact="Delegate").first()
                 if delegate_category:
                     cleaned_data["category"] = str(delegate_category.id)
                 else:
                     self.add_error("category", "Delegate category not found in database.")
-                # admn_number is optional for non-students
+
+                # admn_number optional for delegates
                 cleaned_data["admn_number"] = admn_number or None
+
         except Exception as e:
             self.add_error("category", f"Error setting category automatically: {e}")
 
