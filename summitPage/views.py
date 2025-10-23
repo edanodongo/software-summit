@@ -149,7 +149,7 @@ def reg(request):
             is_student = False
 
             # 1️⃣ Check organization_type
-            if registrant.organization_type.strip().lower() == "student":
+            if registrant.organization_type.strip().lower() == "Student":
                 is_student = True
 
             # 2️⃣ Check category name
@@ -164,6 +164,7 @@ def reg(request):
             if not is_student:
                 try:
                     send_confirmation_email(registrant)
+                    print("Delegate")
                 except Exception as e:
                     print("Email Send error:", e)
                     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -175,6 +176,7 @@ def reg(request):
             else:
                 try:
                     send_student_email(registrant)
+                    print("Student")
                 except Exception as e:
                     print("Email Send error:", e)
                     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -1360,8 +1362,7 @@ def exhibitor(request):
     # Include exhibitors even if they have total_count = 0
     exhibitor_count = exhibitors.count()
     total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
-    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
-
+    
     max_count = dashboard_setting.max_count
     remaining = max_count - total_sum if max_count > total_sum else 0
 
@@ -1532,7 +1533,6 @@ def admin_dashboard(request):
     # Include exhibitors even if they have total_count = 0
     exhibitor_count = exhibitors.count()
     total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
-    total_sum += exhibitor_count  # Add all exhibitors (each counts/booths at least once)
 
     max_count = dashboard_setting.max_count
     remaining = max_count - total_sum if max_count > total_sum else 0

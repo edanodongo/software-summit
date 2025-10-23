@@ -499,7 +499,7 @@ def send_student_email(registrant, retries=3, delay=3):
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-              f"Your academic institution, {registrant.other_organization_type} will confirm your details for attendance."
+              Your academic institution, {registrant.other_organization_type} will confirm your details for attendance.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
