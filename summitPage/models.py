@@ -613,7 +613,7 @@ class Exhibitor(models.Model):
             ('corporate', 'Corporate'),
             ('government', 'Government Agency'),
             ('academic', 'Academic Institution'),
-            ('ngo', 'NGO'),
+            ('ngo', 'Not for Profit'),
             ('other', 'Other'),
         ],
     )
