@@ -145,7 +145,7 @@ def home(request):
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
-@login_required
+
 def reg(request):
     if request.method == 'POST':
         form = QuickRegistrationForm(request.POST, request.FILES)
