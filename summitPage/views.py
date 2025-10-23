@@ -1964,24 +1964,41 @@ def dashboard_student_view(request):
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
     }
-    return render(request, "summit/dashboard.html", context)
+    return render(request, "summit/student.html", context)
 
 
-# --------------------------------------------
+
 
 
 @login_required
 @require_POST
 def approve_student(request, registrant_id):
     registrant = get_object_or_404(Registrant, id=registrant_id)
+    name = f"{registrant.first_name} {registrant.second_name}"
 
-    # Ensure only students can be approved
-    if registrant.organization_type != "Student":
-        return JsonResponse({"success": False, "error": "Only students can be approved."})
+    try:
+        with transaction.atomic():
+            registrant.approved = True
+            registrant.save(update_fields=["approved"])
 
-    registrant.approved = True
-    registrant.save(update_fields=["approved"])
-    return JsonResponse({"success": True})
+        # Try sending verification email — if it fails, just log it
+        try:
+            send_student_email_verify(registrant)
+        except Exception as e:
+            print(f"Email send error for {name}: {e}")
+
+        # Always return success JSON to JS
+        return JsonResponse({
+            "status": "success",
+            "message": f"{name} has been approved successfully."
+        })
+
+    except Exception as e:
+        print(f"Approval error for {name}: {e}")
+        return JsonResponse({
+            "status": "error",
+            "message": "An unexpected error occurred while approving the student."
+        }, status=500)
 
 
 @login_required
