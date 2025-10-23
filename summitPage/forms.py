@@ -76,9 +76,10 @@ class QuickRegistrationForm(forms.ModelForm):
 
     days_to_attend = forms.MultipleChoiceField(
         choices=DAY_CHOICES,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         required=True,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         label="Select Days to Attend",
+        error_messages={'required': 'Please select day(s) to attend.'}
     )
 
     # =====================================================

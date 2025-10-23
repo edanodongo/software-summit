@@ -233,7 +233,6 @@
 
 })();
 
-
 document.addEventListener("DOMContentLoaded", () => {
     // =====================================================
     // 🔹 ELEMENT REFERENCES
@@ -306,44 +305,35 @@ document.addEventListener("DOMContentLoaded", () => {
     form?.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        // Clear any previous errors
+        // Clear previous errors
         form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
         form.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
+        alertContainer.innerHTML = "";
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Submitting...`;
 
         const formData = new FormData(form);
 
-        // =====================================================
-        // ✅ FIX 1: Ensure interests are sent as multiple values
-        // =====================================================
+        // ✅ Ensure interests are sent as multiple values
         formData.delete("interests");
         interestCheckboxes.forEach((cb) => {
             if (cb.checked) formData.append("interests", cb.value);
         });
 
-        // =====================================================
-        // ✅ FIX 2: Ensure privacy checkbox sends proper boolean
-        // =====================================================
+        // ✅ Ensure privacy checkbox sends proper boolean
         const privacyCb = form.querySelector("[name='privacy_agreed']");
         if (privacyCb) {
             formData.delete("privacy_agreed");
             if (privacyCb.checked) formData.append("privacy_agreed", "true");
         }
 
-        // =====================================================
-        // ✅ FIX 3: Ensure updates_opt_in sends correct value
-        // =====================================================
+        // ✅ Ensure updates_opt_in sends correct value
         const updatesCb = form.querySelector("[name='updates_opt_in']");
         if (updatesCb) {
             formData.delete("updates_opt_in");
             if (updatesCb.checked) formData.append("updates_opt_in", "true");
         }
-
-        // Debugging output
-        console.log("🧾 Submitting Form Data:");
-        for (let [key, val] of formData.entries()) console.log(`${key}:`, val);
 
         // =====================================================
         // 🔹 AJAX SUBMIT
@@ -365,12 +355,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (data.success) {
                     showAlert(data.message || "Registration successful!", "success");
-
-                    // ✅ Use form.reset() to properly clear all fields
                     form.reset();
                     handleInterestChange();
 
-                    // ✅ Clear file previews (if any)
+                    // Clear previews
                     ["id_national_id_scan", "id_passport_photo"].forEach((id) => {
                         const input = document.getElementById(id);
                         const preview = document.getElementById(
@@ -379,10 +367,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (input) input.value = "";
                         if (preview) preview.innerHTML = "";
                     });
+
                 } else if (data.errors) {
+                    let globalErrors = [];
                     let firstInvalidEl = null;
+
                     Object.entries(data.errors).forEach(([field, errors]) => {
                         const inputEl = form.querySelector(`#id_${field}`);
+
                         if (inputEl) {
                             inputEl.classList.add("is-invalid");
                             const errorDiv = document.createElement("div");
@@ -392,12 +384,21 @@ document.addEventListener("DOMContentLoaded", () => {
                                 inputEl.insertAdjacentElement("afterend", errorDiv);
                             }
                             if (!firstInvalidEl) firstInvalidEl = inputEl;
+                        } else {
+                            // If no matching field (e.g. general or choice errors like days_to_attend)
+                            globalErrors.push(errors.join(", "));
                         }
                     });
+
+                    if (globalErrors.length > 0) {
+                        showAlert(globalErrors.join("<br>"), "danger");
+                    }
+
                     if (firstInvalidEl) {
-                        firstInvalidEl.scrollIntoView({behavior: "smooth", block: "center"});
+                        firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
                         firstInvalidEl.focus();
                     }
+
                 } else if (data.message) {
                     showAlert(data.message, "warning");
                 } else {
