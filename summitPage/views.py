@@ -1374,10 +1374,10 @@ def exhibitor(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
         alert_message = "1 booth remaining!"
@@ -1486,10 +1486,10 @@ def exhibitor_status(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
         alert_message = "1 booth remaining!"
@@ -1548,10 +1548,10 @@ def admin_dashboard(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = f"{remaining} booths remaining."
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
         alert_message = "1 booth remaining!"
