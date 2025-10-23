@@ -1358,29 +1358,32 @@ def gallery(request):
 def exhibitor(request):
     # --- Total and remaining counts/booths ---
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
-    exhibitors = Exhibitor.objects.all()
-    # Include exhibitors even if they have total_count = 0
-    exhibitor_count = exhibitors.count()
-    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
-    
-    max_count = dashboard_setting.max_count
-    remaining = max_count - total_sum if max_count > total_sum else 0
+    max_count = dashboard_setting.max_count or 0
 
-    # --- Determine alert message ---
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
+
+    remaining = max(max_count - total_taken, 0)
+
+    # --- Build the alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = "3 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = "2 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-warning"
-    elif 0 < remaining <= 1:
-        alert_message = "1 booth remaining."
+    elif remaining == 1:
+        alert_message = "1 booth remaining!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available Maximum reached!"
+        alert_message = "0 booths available. Registration closed!"
         alert_class = "alert-danger"
 
     registration_closed = remaining <= 0
@@ -1458,24 +1461,23 @@ def exhibitor(request):
         "registration_closed": registration_closed,
         "alert_message": alert_message,
         "alert_class": alert_class,
-        "remaining": remaining,
+        # "remaining": remaining,
     })
 
 
 # --------------------------------------------
 
-
 def exhibitor_status(request):
-    """Return the accurate remaining booth count considering all existing exhibitors."""
+    """Return the accurate remaining booth count including exhibitors with 0 or null total_count."""
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count or 0
 
-    # --- Calculate total taken booths (exclude nulls and zero) ---
-    total_taken = (
-        Exhibitor.objects.filter(total_count__gt=0)
-        .aggregate(total=Sum('total_count'))['total']
-        or 0
-    )
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
 
     remaining = max(max_count - total_taken, 0)
 
@@ -1505,7 +1507,6 @@ def exhibitor_status(request):
     })
 
 
-
 # --------------------------------------------
 # Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
@@ -1530,29 +1531,36 @@ def admin_dashboard(request):
         form = DashboardSettingForm(instance=dashboard_setting)
 
     # --- Total and remaining counts/booths ---
-    # Include exhibitors even if they have total_count = 0
-    exhibitor_count = exhibitors.count()
-    total_sum = Exhibitor.objects.aggregate(total=models.Sum('total_count'))['total'] or 0
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    max_count = dashboard_setting.max_count or 0
 
-    max_count = dashboard_setting.max_count
-    remaining = max_count - total_sum if max_count > total_sum else 0
+    # --- Calculate total taken booths (include nulls and zeros) ---
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    null_or_zero_count = Exhibitor.objects.filter(
+        Q(total_count__isnull=True) | Q(total_count=0)
+    ).count()
+    total_taken += null_or_zero_count
 
-    # --- Determine alert message ---
+    remaining = max(max_count - total_taken, 0)
+
+    # --- Build the alert message ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available"
+        alert_message = f"{remaining} booths available."
         alert_class = "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = "3 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = "2 booths available"
+        alert_message = f"{remaining} booths remaining."
         alert_class = "alert-warning"
-    elif 0 < remaining <= 1:
-        alert_message = "1 booth remaining."
+    elif remaining == 1:
+        alert_message = "1 booth remaining!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available Maximum reached!"
+        alert_message = "0 booths available. Registration closed!"
         alert_class = "alert-danger"
+
+    registration_closed = remaining <= 0
 
     # --- Search and filtering ---
     query = request.GET.get("q", "").strip()
@@ -1615,7 +1623,7 @@ def admin_dashboard(request):
         "country_filter": country_filter,
         "available_countries": available_countries,
         "form": form,
-        "total_count": total_sum,
+        "total_count": total_taken,
         "max_count": max_count,
         "remaining": remaining,
         "alert_message": alert_message,

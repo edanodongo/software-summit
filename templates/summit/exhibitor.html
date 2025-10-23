@@ -125,6 +125,13 @@
               <div class="alert {{ alert_class }} shadow-sm" role="alert">
                 {{ alert_message }}
               </div>
+<!--            &lt;!&ndash; Booth Availability Alert &ndash;&gt;-->
+<!--            <div id="alert-container" class="mt-3">-->
+<!--              <div class="alert alert-info" role="alert">-->
+<!--                Loading booth availability...-->
+<!--              </div>-->
+<!--            </div>-->
+
 
                 <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
                   {% csrf_token %}
@@ -582,8 +589,53 @@ setInterval(fetchExhibitorStatus, 10000);
 
 // Fetch immediately when page loads
 fetchExhibitorStatus();
-</script>
 
+document.addEventListener("DOMContentLoaded", function() {
+    const alertContainer = document.getElementById("alert-container");
+
+    function fetchExhibitorStatus() {
+        fetch("{% url 'exhibitor_status' %}")  // <-- your Django URL name
+            .then(response => response.json())
+            .then(data => {
+                // Build alert markup
+                alertContainer.innerHTML = `
+                    <div class="alert ${data.alert_class}" role="alert">
+                        ${data.alert_message}
+                    </div>
+                `;
+
+                // Optionally disable register button if full
+                const submitBtn = document.getElementById("submit-btn");
+                if (submitBtn) {
+                    submitBtn.disabled = data.remaining <= 0;
+                    submitBtn.innerText = data.remaining <= 0
+                        ? "Registration Closed"
+                        : "Register as Exhibitor";
+                }
+
+                // Optionally disable count dropdown
+                const countSelect = document.getElementById("id_count");
+                if (countSelect) {
+                    countSelect.disabled = data.remaining <= 0;
+                }
+            })
+            .catch(err => {
+                console.error("Failed to fetch exhibitor status:", err);
+                alertContainer.innerHTML = `
+                    <div class="alert alert-warning" role="alert">
+                        Unable to load booth availability.
+                    </div>
+                `;
+            });
+    }
+
+    // Fetch immediately when page loads
+    fetchExhibitorStatus();
+
+    // 🔁 Optionally refresh every 15 seconds
+    setInterval(fetchExhibitorStatus, 15000);
+});
+</script>
 
 
 
