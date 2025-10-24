@@ -461,7 +461,6 @@ def send_student_email(registrant, retries=3, delay=3):
             f"Your academic institution, {registrant.other_organization_type}, will confirm your attendance details.\n\n"
             "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "We appreciate your patience during this verification process.\n\n"
-            "Karibu sana!\n\n"
             "Best regards,\n"
             "The Software Summit Team\n"
             "Ministry of Information, Communications and The Digital Economy\n"
@@ -515,10 +514,6 @@ def send_student_email(registrant, retries=3, delay=3):
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
                 We appreciate your patience as your registration is being verified.
-              </p>
-
-              <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                <strong>Karibu sana!</strong>
               </p>
 
               <p style="margin-top:30px; text-align:center;">
