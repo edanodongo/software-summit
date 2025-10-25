@@ -48,10 +48,10 @@ def sendmailer(subject, message, recipients):
                     </div>
                     <hr style="margin-top: 40px;">
                     <p style="font-size: 13px; color: #777; text-align:center;">
-                        This email was sent by the Software Summit Secretariat.
+                        This email was sent by the Kenya Software & AI Summit Secretariat.
                     </p>
                     <footer style="text-align:center; font-size:12px; color:#888; margin-top:25px;">
-                        <p>&copy; {current_year} Kenya Software Summit.</p>
+                        <p>&copy; {current_year} The Kenya Software & AI Summit.</p>
                         <p>The Ministry of Information, Communications and The Digital Economy</p>
                         <p>6th Floor, Bruce House, Standard Street</p>
                         <p>Email: softwaresummit@ict.go.ke</p>
@@ -81,7 +81,7 @@ def sendmailer(subject, message, recipients):
 # --------------------------------------------
 
 def send_confirmation_email(registrant, retries=3, delay=3):
-    subject = "Kenya Software Summit Registration"
+    subject = "The Kenya Software & AI Summit Registration"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
     current_year = datetime.now().year
@@ -111,8 +111,8 @@ def send_confirmation_email(registrant, retries=3, delay=3):
 
         plain_message = (
             f"Welcome {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
-            "Thank you for successfully registering for the Software Summit 2025.\n\n"
-            "We are delighted to welcome you to this year’s Software Summit, taking place from "
+            "Thank you for successfully registering for the Kenya Software & AI Summit 2025.\n\n"
+            "We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from "
             "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
             "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. "
@@ -121,7 +121,7 @@ def send_confirmation_email(registrant, retries=3, delay=3):
             "and the full programme to help you easily navigate the conference activities.\n\n"
             "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
             "Karibu.\n\n"
-            "Best regards,\nThe Software Summit Team"
+            "Best regards,\nThe Kenya Software & AI Summit Team"
         )
 
         # === HTML Email Body ===
@@ -149,11 +149,11 @@ def send_confirmation_email(registrant, retries=3, delay=3):
 
               <!-- Intro -->
               <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
+                Thank you for successfully registering for the <strong>The Kenya Software & AI Summit 2025</strong>.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                We are delighted to welcome you to this year’s Software Summit, taking place from 
+                We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from 
                 10th November -12th November , 2025 at Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
               </p>
 
@@ -177,7 +177,7 @@ def send_confirmation_email(registrant, retries=3, delay=3):
               </p>
 
               <p style="margin-top:30px; text-align:center;">
-                Best regards,<br><strong>The Software Summit Team</strong>
+                Best regards,<br><strong>The Kenya Software & AI Summit Team</strong>
               </p>
             </div>
 
@@ -191,7 +191,7 @@ def send_confirmation_email(registrant, retries=3, delay=3):
 
             <!-- Footer outside card -->
             <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-              <p>&copy; {current_year} Kenya Software Summit.</p>
+              <p>&copy; {current_year} The Kenya Software & AI Summit.</p>
               <p>The Ministry of Information, Communications and The Digital Economy</p>
               <p>6th Floor, Bruce House, Standard Street</p>
               <p>Email: softwaresummit@ict.go.ke</p>
@@ -257,7 +257,7 @@ def get_category_name_from_id(category_id):
 # --------------------------------------------
 
 def send_confirmation_mail(exhibitor, retries=3, delay=3):
-    subject = "Kenya Software Summit Registration"
+    subject = "The Kenya Software & AI Summit Registration"
     from_email = "softwaresummit@ict.go.ke"
     to = [exhibitor.email]
     current_year = datetime.now().year
@@ -287,8 +287,8 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
         plain_message = (
             f"Welcome {exhibitor.title} {exhibitor.first_name} {exhibitor.second_name},\n\n"
-            "Thank you for successfully registering for the Software Summit 2025.\n\n"
-            "We are delighted to welcome you to this year’s Software Summit, taking place from "
+            "Thank you for successfully registering for the Kenya Software & AI Summit 2025.\n\n"
+            "We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from "
             "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
             "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "Upon your arrival in Eldoret, our team will receive you and confirm your Exhibitor status. "
@@ -297,7 +297,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             "and the full programme to help you easily navigate the conference activities.\n\n"
             "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
             "Karibu.\n\n"
-            "Best regards,\nThe Software Summit Team"
+            "Best regards,\nThe Kenya Software & AI Summit Team"
         )
 
         # === HTML Email Body ===
@@ -325,11 +325,11 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
               <!-- Intro -->
               <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Thank you for successfully registering for the <strong>Software Summit 2025</strong>.
+                Thank you for successfully registering for the <strong>Kenya Software & AI Summit 2025</strong>.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                We are delighted to welcome you to this year’s Software Summit, taking place from 
+                We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from 
                 10th November -12th November , 2025 at Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
               </p>
 
@@ -353,7 +353,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
               </p>
 
               <p style="margin-top:30px; text-align:center;">
-                Best regards,<br><strong>The Software Summit Team</strong>
+                Best regards,<br><strong>The Kenya Software & AI Summit Team</strong>
               </p>
             </div>
 
@@ -367,7 +367,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
             <!-- Footer outside card -->
             <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-              <p>&copy; {current_year} Kenya Software Summit.</p>
+              <p>&copy; {current_year} The Kenya Software & AI Summit.</p>
               <p>The Ministry of Information, Communications and The Digital Economy</p>
               <p>6th Floor, Bruce House, Standard Street</p>
               <p>Email: softwaresummit@ict.go.ke</p>
@@ -423,7 +423,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 # --------------------------------------------
 
 def send_student_email(registrant, retries=3, delay=3):
-    subject = "Kenya Software Summit Registration"
+    subject = "The Kenya Software & AI Summit Registration"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
     current_year = datetime.now().year
@@ -453,16 +453,16 @@ def send_student_email(registrant, retries=3, delay=3):
 
         plain_message = (
             f"Dear {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
-            "Thank you for successfully registering for the Software Summit 2025.\n\n"
+            "Thank you for successfully registering for the Kenya Software & AI Summit 2025.\n\n"
             "Your registration has been received and is currently awaiting verification from your academic institution.\n"
             "Once your institution confirms your details, your participation will be officially approved.\n\n"
-            "This year’s Software Summit will be held from 10th November to 12th November 2025 at Moi University Annex Campus, "
+            "This year’s Kenya Software & AI Summit will be held from 10th November to 12th November 2025 at Moi University Annex Campus, "
             "Eldoret City, Uasin Gishu County, Kenya.\n\n"
             f"Your academic institution, {registrant.other_organization_type}, will confirm your attendance details.\n\n"
             "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "We appreciate your patience during this verification process.\n\n"
             "Best regards,\n"
-            "The Software Summit Team\n"
+            "The Kenya Software & AI Summit Team\n"
             "Ministry of Information, Communications and The Digital Economy\n"
             "Email: softwaresummit@ict.go.ke\n"
             "Website: https://softwaresummit.go.ke"
@@ -518,7 +518,7 @@ def send_student_email(registrant, retries=3, delay=3):
 
               <p style="margin-top:30px; text-align:center;">
                 Best regards,<br>
-                <strong>The Software Summit Team</strong><br>
+                <strong>The Kenya Software & AI Summit Team</strong><br>
                 Ministry of Information, Communications and The Digital Economy
               </p>
             </div>
@@ -533,7 +533,7 @@ def send_student_email(registrant, retries=3, delay=3):
 
             <!-- Footer -->
             <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-              <p>&copy; {datetime.now().year} Kenya Software Summit.</p>
+              <p>&copy; {datetime.now().year} The Kenya Software & AI Summit Team.</p>
               <p>The Ministry of Information, Communications and The Digital Economy</p>
               <p>6th Floor, Bruce House, Standard Street</p>
               <p>Email: softwaresummit@ict.go.ke</p>
@@ -587,7 +587,7 @@ def send_student_email(registrant, retries=3, delay=3):
 
 
 def send_student_email_verify(registrant, retries=3, delay=3):
-    subject = "Kenya Software Summit Registration Successful"
+    subject = "Kenya Software & AI Summit Registration Successful"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
     current_year = datetime.now().year
@@ -617,15 +617,15 @@ def send_student_email_verify(registrant, retries=3, delay=3):
 
         plain_message = (
             f"Dear {registrant.title} {registrant.first_name} {registrant.second_name},\n\n"
-            "Congratulations! Your registration for the Software Summit 2025 has been successfully received and approved.\n\n"
-            "We are delighted to welcome you to this year’s Software Summit, taking place from "
+            "Congratulations! Your registration for the Kenya Software & AI Summit has been successfully received and approved.\n\n"
+            "We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from "
             "10th November to 12th November 2025 at Moi University Annex Campus, Eldoret City, "
             "Uasin Gishu County, Kenya.\n\n"
             "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "This year’s summit promises to be an inspiring and transformative experience for all participants.\n\n"
             "Karibu sana!\n\n"
             "Best regards,\n"
-            "The Software Summit Team\n"
+            "The Kenya Software & AI Summit Team\n"
             "Ministry of Information, Communications and The Digital Economy\n"
             "Email: softwaresummit@ict.go.ke\n"
             "Website: https://softwaresummit.go.ke"
@@ -657,11 +657,11 @@ def send_student_email_verify(registrant, retries=3, delay=3):
 
               <!-- Intro -->
               <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Congratulations! Your registration for the <strong>Software Summit 2025</strong> has been approved.
+                Congratulations! Your registration for the <strong>The Kenya Software & AI Summit 2025</strong> has been approved.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                We are thrilled to welcome you to this year’s Software Summit, taking place from 
+                We are thrilled to welcome you to this year’s Kenya Software & AI Summit, taking place from 
                 <strong>10th – 12th November 2025</strong> at <strong>Moi University Annex Campus</strong>, 
                 Eldoret City, <strong>Uasin Gishu County, Kenya</strong>.
               </p>
@@ -680,7 +680,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
 
               <p style="margin-top:30px; text-align:center;">
                 Best regards,<br>
-                <strong>The Software Summit Team</strong><br>
+                <strong>The Kenya Software & AI Summit Team</strong><br>
                 Ministry of Information, Communications and The Digital Economy
               </p>
             </div>
@@ -695,7 +695,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
 
             <!-- Footer -->
             <footer style="text-align:center; font-size:12px; color:#888; margin-top:20px;">
-              <p>&copy; {datetime.now().year} Kenya Software Summit.</p>
+              <p>&copy; {datetime.now().year} Kenya Software & AI Summit.</p>
               <p>The Ministry of Information, Communications and The Digital Economy</p>
               <p>6th Floor, Bruce House, Standard Street</p>
               <p>Email: softwaresummit@ict.go.ke</p>
