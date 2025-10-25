@@ -6027,14 +6027,12 @@ section,
 
 
 
-    /* --- Biography Modal Styles --- */
-/* --- Biography Modal Styles --- */
+    /* --- Biography Modal Styles --- *//* --- Biography Modal Styles --- */
 .bio-modal {
   display: none;
   position: fixed;
   z-index: 9999;
-  left: 0;
-  top: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
@@ -6048,20 +6046,21 @@ section,
   background: #ffffff;
   max-width: 720px;
   width: 100%;
-  border-radius: 16px;
-  padding: 30px 25px;
+  border-radius: 18px;
+  padding: 35px 30px;
   position: relative;
   overflow-y: auto;
   max-height: 90vh;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-  animation: fadeInScale 0.25s ease-in-out;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.25);
+  animation: fadeInScale 0.3s ease-in-out;
 }
 
 @keyframes fadeInScale {
-  from { opacity: 0; transform: scale(0.95); }
+  from { opacity: 0; transform: scale(0.94); }
   to { opacity: 1; transform: scale(1); }
 }
 
+/* --- Close Button --- */
 .bio-close {
   position: absolute;
   right: 18px;
@@ -6072,45 +6071,45 @@ section,
   cursor: pointer;
   transition: color 0.3s ease;
 }
-
 .bio-close:hover {
   color: #000;
 }
 
+/* --- Header Section --- */
 .bio-header {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
-  padding-bottom: 15px;
+  padding-bottom: 18px;
 }
 
 /* --- Circular Photo Styling (Optimized for Faces) --- */
 .bio-photo {
   width: 180px;
   height: 180px;
-  border-radius: 50%;              /* Circular shape */
-  object-fit: cover;               /* Fill circle, no dead space */
-  object-position: top center;     /* Show more of the top (face area) */
-  background-color: #f8f8f8;       /* Fallback background */
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  background-color: #f8f8f8;
   border: 2px solid #ddd;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 3px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .bio-photo:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  transform: scale(1.04);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Text Styling --- */
+/* --- Header Text --- */
 .bio-header h3 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: #222;
+  letter-spacing: -0.3px;
 }
 
 .bio-header p {
@@ -6119,18 +6118,38 @@ section,
   font-size: 0.95rem;
 }
 
+/* --- Bio Body --- */
 .bio-body {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #444;
-  padding-top: 10px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #3c3c3c;
+  padding-top: 15px;
 }
 
-.bio-body p {
+/* --- Improved Paragraph Formatting --- */
+.bio-body p,
+.bio-text {
   margin-bottom: 1em;
+  text-align: justify;
+  text-indent: 1.5em;               /* subtle indentation for paragraphs */
+  white-space: pre-line;            /* preserve line breaks from JS */
+  letter-spacing: 0.01em;
 }
 
-/* --- Scrollbar styling for content overflow --- */
+.bio-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Optional subtle fade-in for text --- */
+.bio-text {
+  opacity: 0;
+  animation: fadeInText 0.4s ease-in forwards 0.2s;
+}
+@keyframes fadeInText {
+  to { opacity: 1; }
+}
+
+/* --- Scrollbar Styling --- */
 .bio-modal-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -6139,10 +6158,10 @@ section,
   border-radius: 10px;
 }
 
-/* --- Mobile adjustments --- */
+/* --- Mobile Adjustments --- */
 @media (max-width: 600px) {
   .bio-modal-content {
-    padding: 20px;
+    padding: 22px;
   }
 
   .bio-header {
@@ -6154,16 +6173,24 @@ section,
   .bio-photo {
     width: 120px;
     height: 120px;
-    padding: 3px;
-    object-position: top center;  /* Maintain face visibility on mobile */
+    object-position: top center;
   }
 
   .bio-header h3 {
-    font-size: 1.3rem;
-    margin-top: 10px;
+    font-size: 1.35rem;
+    margin-top: 12px;
+  }
+
+  .bio-body {
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .bio-body p,
+  .bio-text {
+    text-indent: 0; /* remove indent on mobile for simplicity */
   }
 }
-
 
 .img-thumbnail {
   border-radius: 8px;

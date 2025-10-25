@@ -707,6 +707,15 @@ def mailme_view(request):
 
 def speakers(request):
     speakers = SummitSpeaker.objects.all()
+    summitspeakers = SummitSpeaker.objects.annotate(
+        custom_order=Case(
+            When(track__icontains='Keynote', then=Value(1)),
+            When(track__icontains='Host', then=Value(2)),
+            When(track__icontains='Speaker', then=Value(3)),
+            default=Value(4),
+            output_field=IntegerField(),
+        )
+    ).order_by('custom_order', 'full_name')
     return render(request, "summit/speakers.html", {"speakers": speakers})
 
 

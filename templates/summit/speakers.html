@@ -197,6 +197,73 @@
                 </div>
               </div><!-- End Speaker Entry -->
 
+              {% for speaker in speakers %}
+              <div class="col-lg-6 speaker-entry">
+                <div class="speaker-profile">
+                  <div class="speaker-meta">
+                    <div class="speaker-photo">
+                      <img
+                        src="{{ speaker.photo_url }}"
+                        loading="lazy"
+                        alt="{{ speaker.full_name }}"
+                        class="img-fluid">
+                    </div>
+                    <div class="speaker-info">
+                      <h4>{{ speaker.full_name }}</h4>
+                      <span class="speaker-position">{{ speaker.position }}</span>
+                      <span class="speaker-org">{{ speaker.organization }}</span>
+                      {% if speaker.track %}
+                      <div class="speaker-track">{{ speaker.track }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="speaker-details">
+                    {% if speaker.topic %}
+                    <!-- <div class="speaker-topic">
+                      <i class="bi bi-mic"></i>
+                      <span>{{ speaker.topic }}</span>
+                    </div> -->
+                    {% endif %}
+
+                    {% if speaker.summary %}
+                    <p class="speaker-summary">{{ speaker.summary }}</p>
+                    {% endif %}
+
+                    <div class="speaker-actions">
+                      <a href="#"
+                        class="profile-btn"
+                        loading="lazy"
+                        data-name="{{ speaker.full_name }}"
+                        data-position="{{ speaker.position }}"
+                        data-org="{{ speaker.organization }}"
+                        data-photo="{{ speaker.photo_url }}"
+                        data-bio="{{ speaker.bio|escape }}">
+                        View Profile
+                      </a>
+
+                      <div class="speaker-social">
+                        {% if speaker.linkedin_url %}
+                          <a href="{{ speaker.linkedin_url }}" target="_blank" class="social-link">
+                            <i class="bi bi-linkedin"></i>
+                          </a>
+                        {% endif %}
+                        {% if speaker.twitter_url %}
+                          <a href="{{ speaker.twitter_url }}" target="_blank" class="social-link">
+                            <i class="bi bi-twitter"></i>
+                          </a>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Speaker Entry -->
+              {% empty %}
+              <!-- <div class="col-12 text-center py-5">
+                <p>No speakers have been added yet.</p>
+              </div> -->
+              {% endfor %}
+
               <div class="col-lg-6 speaker-entry">
                 <div class="speaker-profile">
                   <div class="speaker-meta">
@@ -280,72 +347,6 @@
                 </div>
               </div><!-- End Speaker Entry -->
 
-              {% for speaker in speakers %}
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img
-                        src="{{ speaker.photo_url }}"
-                        loading="lazy"
-                        alt="{{ speaker.full_name }}"
-                        class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>{{ speaker.full_name }}</h4>
-                      <span class="speaker-position">{{ speaker.position }}</span>
-                      <span class="speaker-org">{{ speaker.organization }}</span>
-                      {% if speaker.track %}
-                      <div class="speaker-track">{{ speaker.track }}</div>
-                      {% endif %}
-                    </div>
-                  </div>
-
-                  <div class="speaker-details">
-                    {% if speaker.topic %}
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>{{ speaker.topic }}</span>
-                    </div> -->
-                    {% endif %}
-
-                    {% if speaker.summary %}
-                    <p class="speaker-summary">{{ speaker.summary }}</p>
-                    {% endif %}
-
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                        loading="lazy"
-                        data-name="{{ speaker.full_name }}"
-                        data-position="{{ speaker.position }}"
-                        data-org="{{ speaker.organization }}"
-                        data-photo="{{ speaker.photo_url }}"
-                        data-bio="{{ speaker.bio|escape }}">
-                        View Profile
-                      </a>
-
-                      <div class="speaker-social">
-                        {% if speaker.linkedin_url %}
-                          <a href="{{ speaker.linkedin_url }}" target="_blank" class="social-link">
-                            <i class="bi bi-linkedin"></i>
-                          </a>
-                        {% endif %}
-                        {% if speaker.twitter_url %}
-                          <a href="{{ speaker.twitter_url }}" target="_blank" class="social-link">
-                            <i class="bi bi-twitter"></i>
-                          </a>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Speaker Entry -->
-              {% empty %}
-              <!-- <div class="col-12 text-center py-5">
-                <p>No speakers have been added yet.</p>
-              </div> -->
-              {% endfor %}
             </div>
 
           </div>
