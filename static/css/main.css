@@ -169,7 +169,7 @@ h6 {
 }
 
 .header .logo img {
-  max-height: 70px;
+  max-height: 80px;
   margin-right: 8px;
 }
 
@@ -638,7 +638,7 @@ body.dark-mode .dark-logo { display: block; }
 }
 
 .logo-loader {
-  width: 180px;
+  width: 220px;
   height: auto;
   animation: pulse 2s infinite ease-in-out;
   margin-bottom: 15px;
