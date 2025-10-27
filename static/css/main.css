@@ -6265,3 +6265,44 @@ html {
   margin-left: 0.4rem;
   vertical-align: middle;
 }
+
+/* Venue css */
+
+.hotel-info {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hotel-info:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.hotel-info i {
+  color: #0d6efd;
+  margin-right: 6px;
+}
+
+.hotel-price span {
+  font-size: 0.95rem;
+}
+
+.hotel-contact a:hover {
+  text-decoration: underline;
+}
+.hotel-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hotel-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+.hotel-card i {
+  color: #0d6efd;
+  margin-right: 6px;
+}
+
+.hotel-card a:hover {
+  text-decoration: underline;
+}

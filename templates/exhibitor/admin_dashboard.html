@@ -172,6 +172,8 @@
             <th>Category</th>
             <th>Booked booths</th>
             <th>Files</th>
+            <th>Email Attempts</th>
+            <th>Email Status</th>
             <th>Date Registered</th>
             <th class="text-center">Action</th>
           </tr>
@@ -207,12 +209,36 @@
                   <a href="{{ e.beneficial_owner_doc.url }}" target="_blank">Tax Cert</a>
                 {% endif %}
               </td>
-            <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
-            <td class="text-center">
-              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
-                <i class="fas fa-trash"></i>
-              </a>
+
+            <td class="text-center email-status">
+                {% if registrant.email_status %}
+                    {% if registrant.email_status|lower == "success" %}
+                        <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
+                    {% elif registrant.email_status|lower == "failed" %}
+                        <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
+                    {% else %}
+                        <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">{{ registrant.email_status|capfirst }}</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
+                {% endif %}
             </td>
+            <td class="text-center email-last-sent">
+                {% if registrant.email_last_sent %}
+                    {{ registrant.email_last_sent|date:"M d, Y H:i" }}
+                {% else %}—{% endif %}
+            </td>
+            <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-outline-danger delete-btn" title="Delete">
+                          <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                    </button>
+                </div>
+            </td>
+
           </tr>
           {% empty %}
           <tr>
