@@ -340,7 +340,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
                 Upon your arrival in Eldoret, our team will receive you and confirm your exhibitor status. 
                 To facilitate this, kindly carry a valid identification document. You will then receive 
-                a badge, a exhibitor’s pack containing your conference guide, and the programme for 
+                a badge, an exhibitor’s pack containing your conference guide, and the programme for 
                 easier navigation of the conference activities.
               </p>
 
