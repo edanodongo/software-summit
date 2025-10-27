@@ -575,6 +575,7 @@ def print_registrants(request):
 
 @login_required
 def dashboard_view(request):
+    registrations = Registrant.objects.all().order_by("created_at")
     total_users = Registrant.objects.exclude(
         Q(organization_type='Student') | Q(category='4')
     ).count()
@@ -602,6 +603,7 @@ def dashboard_view(request):
         reg.category_name = get_category_name_from_id(reg.category)
 
     context = {
+        "registrations": registrations,
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants,
@@ -1951,6 +1953,8 @@ def delete_sponsor(request, sponsor_id):
 
 @login_required
 def dashboard_student_view(request):
+    registrations = Registrant.objects.all().order_by("created_at")
+
     total_users = Registrant.objects.filter(
         Q(organization_type='Student') | Q(category='4')
     ).count()
@@ -1977,6 +1981,7 @@ def dashboard_student_view(request):
         reg.category_name = get_category_name_from_id(reg.category)
 
     context = {
+        "registrations": registrations,
         "total_users": total_users,
         "updates_count": updates_count,
         "registrants": registrants,

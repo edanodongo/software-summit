@@ -9,22 +9,39 @@
             Student Dashboard
         </h2>
 
+        <!-- Summary Cards -->
+        <div class="row row-cols-1 row-cols-md-2 g-4">
 
-        <!-- Summary Card -->
-        <div class="row mb-4">
-            <div class="col-lg-12">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-body text-center py-4">
-                        <h5 class="text-muted mb-2">Total Registrations</h5>
-                        <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
-                        <h6 class="text-secondary">
-                            Updates Opt-in:
-                            <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
-                        </h6>
-                    </div>
-                </div>
+          <!-- Total Students Card -->
+          <div class="col">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+              <div class="card-body text-center py-4">
+                <h5 class="text-muted mb-2">Total Students</h5>
+                <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
+                <h6 class="text-secondary mb-0">
+                  Updates Opt-in:
+                  <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
+                </h6>
+              </div>
             </div>
+          </div>
+
+          <!-- Total Registrations Card -->
+          <div class="col">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+              <div class="card-body text-center py-4">
+                <h5 class="text-muted mb-2">Total Registrations</h5>
+                <p class="display-5 fw-bold text-primary mb-1">{{ registrations.count }}</p>
+                <h6 class="text-secondary mb-0">
+                  Updates Opt-in:
+                  <span class="fw-semibold text-success">{{ updates_count }}</span>
+                </h6>
+              </div>
+            </div>
+          </div>
+
         </div>
+
 
         <!-- Actions -->
         <div class="d-flex justify-content-end mb-3 gap-2">
