@@ -293,7 +293,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "Upon your arrival in Eldoret, our team will receive you and confirm your Exhibitor status. "
             "To facilitate this, kindly carry a valid identification document. "
-            "You will then be issued with a badge, a delegate’s pack containing your conference guide, "
+            "You will then be issued with a badge, an exhibitor’s pack containing your conference guide, "
             "and the full programme to help you easily navigate the conference activities.\n\n"
             "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
             "Karibu.\n\n"
@@ -338,9 +338,9 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                Upon your arrival in Eldoret, our team will receive you and confirm your delegate status. 
+                Upon your arrival in Eldoret, our team will receive you and confirm your exhibitor status. 
                 To facilitate this, kindly carry a valid identification document. You will then receive 
-                a badge, a delegate’s pack containing your conference guide, and the programme for 
+                a badge, a exhibitor’s pack containing your conference guide, and the programme for 
                 easier navigation of the conference activities.
               </p>
 
