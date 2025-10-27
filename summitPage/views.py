@@ -1524,6 +1524,16 @@ def exhibitor_status(request):
 # --------------------------------------------
 # Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
+from django.db.models import Sum, Q, Count, OuterRef, Subquery, Max
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
+from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, DashboardSetting
+from summitPage.forms import DashboardSettingForm
+
 
 @login_required
 def admin_dashboard(request):
@@ -1531,10 +1541,10 @@ def admin_dashboard(request):
     booths = Booth.objects.all()
     exhibitors = Exhibitor.objects.all()
 
-    # Fetch or create dashboard settings
+    # --- Fetch or create dashboard settings ---
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
 
-    # Handle form submission for editing max_count
+    # --- Handle form submission for editing max_count ---
     if request.method == "POST":
         form = DashboardSettingForm(request.POST, instance=dashboard_setting)
         if form.is_valid():
@@ -1544,39 +1554,28 @@ def admin_dashboard(request):
     else:
         form = DashboardSettingForm(instance=dashboard_setting)
 
-    # --- Total and remaining counts/booths ---
-    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    # --- Total and remaining counts ---
     max_count = dashboard_setting.max_count or 0
-
-    # --- Calculate total taken booths (include nulls and zeros) ---
-    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
-    null_or_zero_count = Exhibitor.objects.filter(
-        Q(total_count__isnull=True) | Q(total_count=0)
-    ).count()
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    null_or_zero_count = Exhibitor.objects.filter(Q(total_count__isnull=True) | Q(total_count=0)).count()
     total_taken += null_or_zero_count
-
     remaining = max(max_count - total_taken, 0)
 
-    # --- Build the alert message ---
+    # --- Alert message setup ---
     if remaining > 4:
-        alert_message = f"{remaining} booths available."
-        alert_class = "alert-success"
+        alert_message, alert_class = f"{remaining} booths available.", "alert-success"
     elif 2 < remaining <= 4:
-        alert_message = f"{remaining} booths available."
-        alert_class = "alert-info"
+        alert_message, alert_class = f"{remaining} booths available.", "alert-info"
     elif 1 < remaining <= 2:
-        alert_message = f"{remaining} booths available."
-        alert_class = "alert-warning"
+        alert_message, alert_class = f"{remaining} booths available.", "alert-warning"
     elif remaining == 1:
-        alert_message = "1 booth remaining!"
-        alert_class = "alert-danger"
+        alert_message, alert_class = "1 booth remaining!", "alert-danger"
     else:
-        alert_message = "0 booths available. Registration closed!"
-        alert_class = "alert-danger"
+        alert_message, alert_class = "0 booths available. Registration closed!", "alert-danger"
 
     registration_closed = remaining <= 0
 
-    # --- Search and filtering ---
+    # --- Search & filtering ---
     query = request.GET.get("q", "").strip()
     category_filter = request.GET.get("category", "")
     section_filter = request.GET.get("section", "")
@@ -1590,13 +1589,10 @@ def admin_dashboard(request):
             | Q(phone__icontains=query)
             | Q(organization_type__icontains=query)
         )
-
     if category_filter:
         exhibitors = exhibitors.filter(category=category_filter)
-
     if section_filter:
         exhibitors = exhibitors.filter(section_id=section_filter)
-
     if country_filter:
         exhibitors = exhibitors.filter(country_of_registration=country_filter)
 
@@ -1605,46 +1601,62 @@ def admin_dashboard(request):
     total_booths = booths.count()
     booked_booths = booths.filter(is_booked=True).count()
     pending_approvals = exhibitors.filter(privacy_agreed=False).count()
-
     categories = Exhibitor._meta.get_field("category").choices
 
     # --- Available countries ---
     used_countries = Exhibitor.objects.values_list("country_of_registration", flat=True).distinct()
+    countries = dict(Exhibitor._meta.get_field("country_of_registration").choices)
     available_countries = sorted(
-        [(code, dict(countries).get(code, code)) for code in used_countries if code],
-        key=lambda x: x[1]
+        [(code, countries.get(code, code)) for code in used_countries if code],
+        key=lambda x: x[1],
+    )
+
+    # --- Annotate exhibitors with latest email log info ---
+    latest_log = EmailLogs.objects.filter(exhibitor=OuterRef("pk")).order_by("-sent_at")
+
+    exhibitors = exhibitors.annotate(
+        email_last_sent=Subquery(latest_log.values("sent_at")[:1]),
+        email_status=Subquery(latest_log.values("status")[:1]),
+        email_attempts=Count("emaillog"),
     )
 
     # --- Add readable country display ---
     for exhibitor in exhibitors:
         exhibitor.country_display = (
-            exhibitor.get_country_of_registration_display() if exhibitor.country_of_registration else "—"
+            exhibitor.get_country_of_registration_display()
+            if exhibitor.country_of_registration
+            else "—"
         )
 
     # --- Render template ---
-    return render(request, "exhibitor/admin_dashboard.html", {
-        "sections": sections,
-        "booths": booths,
-        "exhibitors": exhibitors.order_by("-created_at")[:20],
-        "total_exhibitors": total_exhibitors,
-        "total_booths": total_booths,
-        "booked_booths": booked_booths,
-        "pending_approvals": pending_approvals,
-        "categories": categories,
-        "query": query,
-        "category_filter": category_filter,
-        "section_filter": section_filter,
-        "country_filter": country_filter,
-        "available_countries": available_countries,
-        "form": form,
-        "total_count": total_taken,
-        "max_count": max_count,
-        "remaining": remaining,
-        "alert_message": alert_message,
-        "alert_class": alert_class,
-        "current_year": timezone.now().year,
-        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
-    })
+    return render(
+        request,
+        "exhibitor/admin_dashboard.html",
+        {
+            "sections": sections,
+            "booths": booths,
+            "exhibitors": exhibitors.order_by("-created_at")[:20],
+            "total_exhibitors": total_exhibitors,
+            "total_booths": total_booths,
+            "booked_booths": booked_booths,
+            "pending_approvals": pending_approvals,
+            "categories": categories,
+            "query": query,
+            "category_filter": category_filter,
+            "section_filter": section_filter,
+            "country_filter": country_filter,
+            "available_countries": available_countries,
+            "form": form,
+            "total_count": total_taken,
+            "max_count": max_count,
+            "remaining": remaining,
+            "alert_message": alert_message,
+            "alert_class": alert_class,
+            "registration_closed": registration_closed,
+            "current_year": timezone.now().year,
+            "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        },
+    )
 
 
 # --------------------------------------------
@@ -2038,4 +2050,195 @@ def api_trails(request):
     }
     return render(request, "audit/api.html", context)
 
+
+@login_required
+@require_POST
+def resend_exhibitor_confirmation_email(request, exhibitor_id):
+    exhib = get_object_or_404(Exhibitor, id=exhibitor_id)
+    try:
+        send_confirmation_mail(exhib)
+        log, created = EmailLogs.objects.get_or_create(
+            exhibitor=exhib,
+            recipient=exhib.email,
+            subject="Confirmation Email",
+            defaults={'status': 'success'},
+        )
+        log.attempts += 1
+        log.status = 'success'
+        log.sent_at = timezone.now()
+        log.error_message = ''
+        log.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": f"Email resent to {exhib.email} successfully.",
+            "attempts": log.attempts,
+            "status": log.status,
+            "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
+        })
+    except Exception as e:
+        log, _ = EmailLogs.objects.get_or_create(
+            exhibitor=exhib,
+            recipient=exhib.email,
+            subject="Confirmation Email",
+            defaults={'status': 'failed'},
+        )
+        log.attempts += 1
+        log.status = 'failed'
+        log.error_message = str(e)
+        log.sent_at = timezone.now()
+        log.save()
+
+        return JsonResponse({
+            "success": False,
+            "error": str(e),
+            "attempts": log.attempts,
+            "status": log.status,
+            "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
+        }, status=500)
+
+@login_required
+def generate_exhibitor_badge(request, exhibitor_id):
+    try:
+        exhib = Exhibitor.objects.get(pk=exhibitor_id)
+    except Exhibitor.DoesNotExist:
+        raise Http404("Exhibitor not found")
+
+    # --- Data ---
+    full_name = exhib.get_full_name() or ""
+    job_title = exhib.job_title or ""
+
+    # --- Generate QR Code ---
+    qr_data = (
+        f"Name: {full_name}\n"
+        f"Job Title: {job_title}\n"
+    )
+    qr_img = qrcode.make(qr_data)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+
+    # --- PDF Setup ---
+    pdf_buffer = BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=portrait(A7))
+    width, height = portrait(A7)
+
+    # --- Colors ---
+    accent_color = colors.HexColor("#004aad")  # deep blue accent
+    light_accent = colors.HexColor("#e6ecf7")  # soft blue-grey
+
+    # --- Background ---
+    c.setFillColor(light_accent)
+    c.rect(0, 0, width, height, fill=1, stroke=0)
+    c.setFillColor(colors.white)
+    c.roundRect(6, 6, width - 12, height - 12, 10, fill=1, stroke=0)
+
+    # --- Header ---
+    header_h = 32
+    header_y = height - header_h - 6
+    c.setFillColor(colors.white)
+    c.roundRect(6, header_y, width - 12, header_h, 8, fill=1, stroke=0)
+
+    # --- Logo with white background ---
+    logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo_dark.webp")
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        logo_w, logo_h = 80, 34  # increased size
+        logo_x = (width - logo_w) / 2
+        logo_y = header_y + (header_h - logo_h) / 2 - 3
+
+        # white background box for logo
+        # c.setFillColor(colors.white)
+        # c.roundRect(logo_x - 4, logo_y - 2, logo_w + 8, logo_h + 4, 4, fill=1, stroke=0)
+
+        c.drawImage(
+            logo,
+            logo_x,
+            logo_y,
+            width=logo_w,
+            height=logo_h,
+            preserveAspectRatio=True,
+            mask="auto",
+        )
+
+    # --- Summit Title ---
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 8.5)
+    c.drawCentredString(width / 2, header_y - 9, "Kenya Software Summit 2025")
+
+    # --- Passport Photo ---
+    photo_w, photo_h = 60, 60
+    photo_x = (width - photo_w) / 2
+    photo_y = header_y - photo_h - 20
+
+    c.setFillColor(light_accent)
+    c.roundRect(photo_x - 3, photo_y - 3, photo_w + 6, photo_h + 6, 8, fill=1, stroke=0)
+
+    def draw_placeholder():
+        c.setFillColor(colors.lightgrey)
+        c.roundRect(photo_x, photo_y, photo_w, photo_h, 6, fill=1, stroke=0)
+        c.setFillColor(colors.darkgrey)
+        c.setFont("Helvetica", 7)
+        c.drawCentredString(width / 2, photo_y + photo_h / 2 - 3, "No Photo")
+
+    if exhib.passport_photo:
+        photo_path = os.path.join(settings.MEDIA_ROOT, exhib.passport_photo.name)
+        if os.path.exists(photo_path):
+            c.drawImage(
+                photo_path,
+                photo_x,
+                photo_y,
+                width=photo_w,
+                height=photo_h,
+                preserveAspectRatio=True,
+                mask="auto",
+            )
+        else:
+            draw_placeholder()
+    else:
+        draw_placeholder()
+
+    # --- Registrant Info ---
+    info_y = photo_y - 12
+    c.setFillColor(colors.black)
+
+    # Full Name
+    name_font_size = _fit_text(c, full_name, width - 20, 10)
+    c.setFont("Helvetica-Bold", name_font_size)
+    c.drawCentredString(width / 2, info_y, full_name[:40])
+
+    # Job Title
+    c.setFillColor(colors.darkgray)
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(width / 2, info_y - 11, job_title[:45])
+
+    # Organization
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 8)
+
+    # Interests
+
+    # --- QR Code ---
+    qr_size = 52
+    qr_x = (width - qr_size) / 2
+    qr_y = info_y - 33 - qr_size + 1  # adjusted upward (removed bottom gap)
+    qr_img_reader = ImageReader(qr_buffer)
+    c.drawImage(qr_img_reader, qr_x, qr_y, width=qr_size, height=qr_size, mask="auto")
+
+    # --- Footer ---
+    c.setStrokeColor(accent_color)
+    c.setLineWidth(0.8)
+    c.line(12, qr_y - 3, width - 12, qr_y - 3)
+
+    c.setFillColor(colors.grey)
+    c.setFont("Helvetica-Oblique", 6.3)
+    c.drawCentredString(width / 2, qr_y - 10, "Scan QR for Summit Check-in")
+
+    # --- Finalize ---
+    c.showPage()
+    c.save()
+    pdf_buffer.seek(0)
+
+    filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
+    return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 

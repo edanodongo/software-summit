@@ -35,6 +35,9 @@ urlpatterns = [
 
     path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
 
+    path('badge/<uuid:exhibitor_id>/', views.generate_exhibitor_badge, name='generate_exhibitor_badge'),
+    path('resend-email/<uuid:exhibitor_id>', views.resend_exhibitor_confirmation_email, name='resend_exhibitor_confirmation_email'),
+
     # Registration API
     path('reg-service/registrations/', views.get_registrants, name='get_registrants'),
     # path("api/", include(router.urls)),
