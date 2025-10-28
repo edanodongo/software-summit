@@ -7,7 +7,6 @@ from .models import Exhibitor, Booth, ExhibitionSection
 
 from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
 from .models import Category
-
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
     # Custom Field Definitions
@@ -68,6 +67,7 @@ class QuickRegistrationForm(forms.ModelForm):
         label='I have read and agree to the Privacy Policy',
         error_messages={'required': 'You must agree to the Privacy Policy to register.'},
     )
+
     DAY_CHOICES = [
         ("Day 1", "Day 1"),
         ("Day 2", "Day 2"),
@@ -80,6 +80,16 @@ class QuickRegistrationForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         label="Select Days to Attend",
         error_messages={'required': 'Please select day(s) to attend.'}
+    )
+
+    #  Add Confirm Email field (not stored in DB)
+    confirm_email = forms.EmailField(
+        label="Confirm Email",
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Re-enter your email address'
+        }),
     )
 
     # =====================================================
@@ -107,11 +117,7 @@ class QuickRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Institution name'
-            }),
-
+            'other_organization_type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
             'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'category': forms.HiddenInput(),
@@ -122,25 +128,22 @@ class QuickRegistrationForm(forms.ModelForm):
             }),
         }
 
+    # =====================================================
+    # Individual Clean Methods
+    # =====================================================
     def clean_days_to_attend(self):
         data = self.cleaned_data.get("days_to_attend", [])
-        return ",".join(data)  # store as comma-separated string
+        return ",".join(data)
 
-    # =====================================================
-    # Validation Helpers
-    # =====================================================
     def validate_file(self, file, allowed_extensions):
-        """Generic file validation utility."""
         if not file:
             return
         max_size_mb = 2
         if file.size > max_size_mb * 1024 * 1024:
             raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
-
         ext = file.name.split('.')[-1].lower()
         if ext not in allowed_extensions:
-            allowed = ", ".join(allowed_extensions)
-            raise ValidationError(f"Unsupported file format. Allowed types: {allowed}")
+            raise ValidationError(f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}")
 
     def clean_national_id_scan(self):
         file = self.cleaned_data.get("national_id_scan")
@@ -167,34 +170,36 @@ class QuickRegistrationForm(forms.ModelForm):
         return id_number
 
     # =====================================================
-    # Cross-field Validation
+    # Unified Clean (all cross-field logic here)
     # =====================================================
     def clean(self):
         cleaned_data = super().clean()
+
+        # Email confirmation
+        email = cleaned_data.get("email")
+        confirm_email = cleaned_data.get("confirm_email")
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
+            self.add_error("confirm_email", "Email addresses do not match.")
+
+        # Organization type and other org
         organization_type = cleaned_data.get("organization_type")
         other_organization_type = cleaned_data.get("other_organization_type")
-        interests = cleaned_data.get("interests") or []
-        other_interest = cleaned_data.get("other_interest")
-
-        # Require "other organization" details when selected
         if organization_type == "other" and not other_organization_type:
             self.add_error("other_organization_type", "Please specify your organization type.")
 
-        # Require "other interest" details when selected
+        # Interests
+        interests = cleaned_data.get("interests") or []
+        other_interest = cleaned_data.get("other_interest")
         if "others" in interests and not other_interest:
             self.add_error("other_interest", "Please specify your interest.")
 
-        # Ensure Privacy Policy is agreed to
+        # Privacy policy agreement
         if not cleaned_data.get("privacy_agreed"):
             self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
 
-    def clean(self):
-        cleaned_data = super().clean()
-        organization_type = cleaned_data.get("organization_type")
+        # Category auto-set based on organization type
         admn_number = cleaned_data.get("admn_number")
-
         try:
-            # 🔒 Always reset category based on organization_type, ignoring user input
             if organization_type and organization_type.strip().lower() == "student":
                 student_category = Category.objects.filter(name__iexact="Student").first()
                 if student_category:
@@ -202,20 +207,15 @@ class QuickRegistrationForm(forms.ModelForm):
                 else:
                     self.add_error("category", "Student category not found in database.")
 
-                # Require admission number for students
                 if not admn_number:
                     self.add_error("admn_number", "Student Registration Number is required for students.")
-
             else:
                 delegate_category = Category.objects.filter(name__iexact="Delegate").first()
                 if delegate_category:
                     cleaned_data["category"] = str(delegate_category.id)
                 else:
                     self.add_error("category", "Delegate category not found in database.")
-
-                # admn_number optional for delegates
                 cleaned_data["admn_number"] = admn_number or None
-
         except Exception as e:
             self.add_error("category", f"Error setting category automatically: {e}")
 
@@ -394,6 +394,12 @@ from django_countries.widgets import CountrySelectWidget
 from django.db.models import Sum
 from .models import Exhibitor, DashboardSetting
 
+from django import forms
+from django.db.models import Sum
+from django.core.exceptions import ValidationError
+from django_countries.widgets import CountrySelectWidget
+from .models import Exhibitor, DashboardSetting
+
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     """Registration form that dynamically limits count choices based on remaining availability."""
@@ -402,6 +408,16 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         label="Select Booth",
         widget=forms.Select(attrs={'class': 'form-select'}),
         required=True,
+    )
+
+    #  Add Confirm Email field (not stored in DB)
+    confirm_email = forms.EmailField(
+        label="Confirm Email",
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Re-enter your email address'
+        }),
     )
 
     class Meta:
@@ -436,7 +452,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         remaining = max(max_count - total_sum, 0)
 
         if remaining > 0:
-            visible_limit = min(3, remaining)  # ✅ show at most 3 options
+            visible_limit = min(3, remaining)  #  show at most 3 options
             count_choices = [(i, str(i)) for i in range(1, visible_limit + 1)]
         else:
             count_choices = [(0, "No booths available")]
@@ -452,6 +468,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             'first_name': "Enter your first name",
             'second_name': "Enter your other names (optional)",
             'email': "Enter your email address",
+            'confirm_email': "Re-enter your email address",
             'phone': "Enter your phone number",
             'organization_type': "Enter your organization or institution name",
             'job_title': "Enter your job title or role",
@@ -476,7 +493,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
 
         # Mark required fields
         required_fields = [
-            'title', 'first_name', 'email', 'phone',
+            'title', 'first_name', 'email', 'confirm_email', 'phone',
             'organization_type', 'job_title', 'category',
             'national_id_number', 'national_id_scan', 'passport_photo',
             'country_of_registration', 'privacy_agreed'
@@ -493,6 +510,17 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     # =====================================
     def clean(self):
         cleaned_data = super().clean()
+
+        #  Confirm Email validation
+        email = cleaned_data.get('email')
+        confirm_email = cleaned_data.get('confirm_email')
+
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
+            self.add_error('confirm_email', "Email addresses do not match.")
+
+        # =====================================
+        # Existing validation logic
+        # =====================================
         business_type = cleaned_data.get('business_type')
         kra_pin = cleaned_data.get('kra_pin')
         id_number = cleaned_data.get('national_id_number')
@@ -530,7 +558,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
 
 
 # --------------------------------------------
-# ✅ Booth Form
+#  Booth Form
 # --------------------------------------------
 class BoothForm(forms.ModelForm):
     class Meta:
