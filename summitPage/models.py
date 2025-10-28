@@ -32,7 +32,19 @@ def get_category_id():
 
 
 # --------------------------------------------
+import os
+import uuid
+from io import BytesIO
+from PIL import Image
+from django.conf import settings
+from django.db import models
+from django.core.files.base import ContentFile
+from django_countries.fields import CountryField
 
+
+# ============================================================
+# REGISTRANT MODEL
+# ============================================================
 class Registrant(models.Model):
     TITLE_CHOICES = [
         ('', 'Select Title'),
@@ -74,11 +86,10 @@ class Registrant(models.Model):
     other_organization_type = models.CharField(max_length=255, blank=True, null=True)
 
     job_title = models.CharField(max_length=255, blank=True)
-
     interests = models.JSONField(default=list, blank=True)
     other_interest = models.TextField(blank=True, null=True)
 
-    category = models.CharField(max_length=50, choices=get_category_id, blank=False, verbose_name="Registration Category")
+    category = models.CharField(max_length=50, choices=get_category_id, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
     approved = models.BooleanField(default=False)
@@ -92,9 +103,19 @@ class Registrant(models.Model):
     admn_number = models.CharField(max_length=25, unique=True, blank=True, null=True, verbose_name="National ID Number")
     national_id_number = models.CharField(max_length=20, unique=True, blank=True, null=True, verbose_name="National ID Number")
 
-    national_id_scan = models.FileField(upload_to="uploads/id_scans/", blank=True, null=True, verbose_name="Scanned National ID (JPG/PDF)")
+    national_id_scan = models.FileField(
+        upload_to="uploads/id_scans/",
+        blank=True,
+        null=True,
+        verbose_name="Scanned National ID (JPG/PDF)"
+    )
 
-    passport_photo = models.FileField(upload_to="uploads/passport_photos/", blank=True, null=True, verbose_name="Passport Photo (JPG/PDF)")
+    passport_photo = models.ImageField(
+        upload_to="uploads/passport_photos/",
+        blank=True,
+        null=True,
+        verbose_name="Passport Photo (JPG/PDF)"
+    )
 
     def get_days_list(self):
         if self.days_to_attend:
@@ -122,7 +143,7 @@ class Registrant(models.Model):
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"
 
-    # ✅ Automatically ensure upload folders exist
+    # ✅ Save method: create upload folders + resize image to 600×600
     def save(self, *args, **kwargs):
         upload_dirs = [
             os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
@@ -133,7 +154,21 @@ class Registrant(models.Model):
         ]
         for path in upload_dirs:
             os.makedirs(path, exist_ok=True)
+
         super().save(*args, **kwargs)
+
+        # ⚡ Resize passport photo
+        if self.passport_photo:
+            try:
+                img = Image.open(self.passport_photo.path)
+                if img.format.lower() in ["jpeg", "jpg", "png"]:
+                    img = img.convert("RGB")
+                    img.thumbnail((600, 600))
+                    img.save(self.passport_photo.path, format="JPEG", quality=85)
+            except Exception as e:
+                print(f"⚠️ Could not resize passport photo: {e}")
+
+
 
 
 
@@ -574,10 +609,9 @@ class BoothBooking(models.Model):
         super().delete(*args, **kwargs)
 
 
-# --------------------------------------------
-# EXHIBITOR
-# --------------------------------------------
-
+# ============================================================
+# EXHIBITOR MODEL
+# ============================================================
 class Exhibitor(models.Model):
     """Main exhibitor registration details (local & international)."""
 
@@ -617,7 +651,13 @@ class Exhibitor(models.Model):
     )
     product_description = models.TextField(blank=True, null=True)
 
-    exhibit_category = models.ForeignKey('ExhibitionCategory', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Exhibition Category")
+    exhibit_category = models.ForeignKey(
+        'ExhibitionCategory',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Exhibition Category"
+    )
     total_count = models.IntegerField(default=0)
 
     # --- Booth & Section ---
@@ -642,8 +682,12 @@ class Exhibitor(models.Model):
     )
 
     logo = models.ImageField(
-        upload_to="uploads/exhibitors/logos/", blank=True, null=True, help_text="Optional logo upload"
+        upload_to="uploads/exhibitors/logos/",
+        blank=True,
+        null=True,
+        help_text="Optional logo upload"
     )
+
     # --- Business Documents ---
     kra_pin = models.CharField(max_length=20, blank=True, null=True)
     business_registration_doc = models.FileField(upload_to="uploads/exhibitors/business_docs/", blank=True, null=True)
@@ -669,6 +713,21 @@ class Exhibitor(models.Model):
     def __str__(self):
         return f"{self.get_full_name()} - {self.organization_type}"
 
+    # ✅ Save method: resize passport & logo images to 600×600
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        image_fields = [self.passport_photo, self.logo]
+        for img_field in image_fields:
+            if img_field and os.path.exists(img_field.path):
+                try:
+                    img = Image.open(img_field.path)
+                    if img.format.lower() in ["jpeg", "jpg", "png"]:
+                        img = img.convert("RGB")
+                        img.thumbnail((600, 600))
+                        img.save(img_field.path, format="JPEG", quality=85)
+                except Exception as e:
+                    print(f"⚠️ Could not resize {img_field.name}: {e}")
 # --------------------------------------------
 
 class BeneficialOwner(models.Model):
