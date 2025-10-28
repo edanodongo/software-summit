@@ -400,16 +400,9 @@ from django.core.exceptions import ValidationError
 from django_countries.widgets import CountrySelectWidget
 from .models import Exhibitor, DashboardSetting
 
-from django import forms
-from django.db.models import Sum
-from django_countries.widgets import CountrySelectWidget
-from django.core.exceptions import ValidationError
-from .models import Exhibitor, DashboardSetting
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     """Registration form that dynamically limits count choices based on remaining availability."""
-
-    MAX_FILE_SIZE = 2 * 1024 * 1024  # 2 MB limit for all files
 
     count = forms.ChoiceField(
         label="Select Booth",
@@ -417,6 +410,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         required=True,
     )
 
+    #  Add Confirm Email field (not stored in DB)
     confirm_email = forms.EmailField(
         label="Confirm Email",
         required=True,
@@ -445,9 +439,9 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # ---------------------------------------------
-        # Dynamic booth count logic
-        # ---------------------------------------------
+        # =====================================
+        # Dynamically calculate remaining counts/Booths (limit to max 3)
+        # =====================================
         try:
             dashboard_setting = DashboardSetting.objects.first()
             max_count = dashboard_setting.max_count if dashboard_setting else 0
@@ -458,18 +452,18 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         remaining = max(max_count - total_sum, 0)
 
         if remaining > 0:
-            visible_limit = min(3, remaining)
+            visible_limit = min(3, remaining)  #  show at most 3 options
             count_choices = [(i, str(i)) for i in range(1, visible_limit + 1)]
         else:
             count_choices = [(0, "No booths available")]
 
         self.fields['count'].choices = count_choices
         self.fields['count'].disabled = (remaining <= 0)
-        self.remaining = remaining
+        self.remaining = remaining  # optional, useful for template display
 
-        # ---------------------------------------------
-        # Styling and placeholders
-        # ---------------------------------------------
+        # =====================================
+        # Form field styling and placeholders
+        # =====================================
         placeholders = {
             'first_name': "Enter your first name",
             'second_name': "Enter your other names (optional)",
@@ -485,6 +479,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         }
 
         for name, field in self.fields.items():
+            # Apply uniform Bootstrap classes
             if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput)):
                 field.widget.attrs.update({'class': 'form-control'})
             elif isinstance(field.widget, forms.Select):
@@ -492,9 +487,11 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})
 
+            # Add placeholders
             if name in placeholders:
                 field.widget.attrs['placeholder'] = placeholders[name]
 
+        # Mark required fields
         required_fields = [
             'title', 'first_name', 'email', 'confirm_email', 'phone',
             'organization_type', 'job_title', 'category',
@@ -504,29 +501,26 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         for f in required_fields:
             self.fields[f].required = True
 
+        # Minimum lengths
         self.fields['national_id_number'].widget.attrs['minlength'] = 8
         self.fields['kra_pin'].widget.attrs['minlength'] = 11
 
-    # ---------------------------------------------------
-    # Custom file size validator (2MB for all uploads)
-    # ---------------------------------------------------
-    def validate_file_size(self, file, field_name):
-        if file and file.size > self.MAX_FILE_SIZE:
-            mb_size = self.MAX_FILE_SIZE / (1024 * 1024)
-            raise ValidationError(
-                {field_name: f"File too large. Maximum allowed size is {mb_size:.0f} MB."}
-            )
-
+    # =====================================
+    # Validation logic
+    # =====================================
     def clean(self):
         cleaned_data = super().clean()
 
-        # Confirm Email check
+        #  Confirm Email validation
         email = cleaned_data.get('email')
         confirm_email = cleaned_data.get('confirm_email')
+
         if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
             self.add_error('confirm_email', "Email addresses do not match.")
 
-        # Basic logic validation
+        # =====================================
+        # Existing validation logic
+        # =====================================
         business_type = cleaned_data.get('business_type')
         kra_pin = cleaned_data.get('kra_pin')
         id_number = cleaned_data.get('national_id_number')
@@ -549,24 +543,17 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             if not cleaned_data.get('international_business_doc'):
                 self.add_error('international_business_doc', "Upload your Trade License or Registration Document.")
 
-        # File size validation (2MB each)
-        file_fields = [
-            'logo', 'national_id_scan', 'passport_photo',
-            'business_registration_doc', 'international_business_doc',
-            'beneficial_owner_doc'
-        ]
-        for field in file_fields:
-            self.validate_file_size(cleaned_data.get(field), field)
-
         return cleaned_data
 
+    # =====================================
+    # Save method override
+    # =====================================
     def save(self, commit=True):
         exhibitor = super().save(commit=False)
         exhibitor.total_count = int(self.cleaned_data.get('count', 0))
         if commit:
             exhibitor.save()
         return exhibitor
-
 
 
 
