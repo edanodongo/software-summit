@@ -217,7 +217,7 @@
                     <div class="mt-3">
                       <label for="id_logo" class="form-label fw-semibold">Upload Logo </label>
                       {{ form.logo }}
-                      <small class="text-muted d-block mt-1">Supported formats: JPG, PNG, SVG</small>
+                      <small class="text-muted d-block mt-1">Supported formats: JPG, PNG, SVG| Max size: 2 MB</small>
                       <div id="logo_preview" class="mt-2"></div>
                     </div>
                   </div>
@@ -243,7 +243,7 @@
                     <label for="id_national_id_scan" class="form-label fw-semibold dark mb-1">Upload Scanned ID/Passport (JPG or PDF)</label>
                     {{ form.national_id_scan }}
                     <small class="text-muted d-block mt-1">
-                      Accepted formats: .jpg, .png, .pdf | Max size: 5 MB
+                      Accepted formats: .jpg, .png, .pdf | Max size: 2 MB
                     </small>
                     <div id="id_scan_preview" class="mt-3"></div>
                   </div>
@@ -252,7 +252,7 @@
                     <label for="id_passport_photo" class="form-label fw-semibold dark mb-1">Upload Passport Photo (JPG or PNG)</label>
                     {{ form.passport_photo }}
                     <small class="text-muted d-block mt-1">
-                      Accepted formats: .jpg, .png | Max size: 5 MB
+                      Accepted formats: .jpg, .png | Max size: 2 MB
                     </small>
                     <div id="passport_preview" class="mt-3"></div>
                   </div>
@@ -296,6 +296,9 @@
                           Trade License / Registration (International)
                         </label>
                         {{ form.international_business_doc }}
+                        <small class="text-muted d-block mt-1">
+                          Accepted formats: .pdf | Max size: 2 MB
+                        </small>
                       </div>
                     </div>
 
@@ -315,6 +318,9 @@
                   <div class="mt-3 mb-3">
                     <label for="id_beneficial_owner_doc" class="form-label fw-semibold dark mb-1">Upload Supporting Document (CR12 / Register of Members)</label>
                     {{ form.beneficial_owner_doc }}
+                        <small class="text-muted d-block mt-1">
+                          Accepted formats: .pdf | Max size: 2 MB
+                        </small>
                   </div>
 
                   <!-- ============================= -->

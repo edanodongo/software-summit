@@ -292,11 +292,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!file) return;
 
       // Limit: 5MB
-      if (file.size > 5 * 1024 * 1024) {
-        preview.innerHTML = `<p class="text-danger">❌ File too large (max 5MB)</p>`;
-        input.value = "";
-        return;
-      }
+    if (file.size > 2 * 1024 * 1024) {
+      preview.innerHTML = `<p class="text-danger">❌ File too large (max 2 MB)</p>`;
+      input.value = "";
+      return;
+    }
 
       const ext = file.name.split(".").pop().toLowerCase();
       const validExts = imageOnly
