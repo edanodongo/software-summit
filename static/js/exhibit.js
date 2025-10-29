@@ -516,11 +516,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Close modal
-  closeBtn.addEventListener("click", () => modal.style.display = "none");
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.style.display = "none";
-  });
+  // Safe close logic
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+  }
 });
 
 

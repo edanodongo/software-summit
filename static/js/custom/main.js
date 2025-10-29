@@ -94,14 +94,17 @@ window.addEventListener('scroll', function () {
 });
 
 // Scroll to top functionality
-const scrollToTopBtn = document.getElementById('scrollToTop');
+document.addEventListener("DOMContentLoaded", function () {
+  const scrollToTopBtn = document.getElementById("scrollToTop");
 
-
-scrollToTopBtn.addEventListener('click', function () {
-    window.scrollTo({
+  if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener("click", function () {
+      window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth"
+      });
     });
+  }
 });
 
 // Form submission with AJAX
