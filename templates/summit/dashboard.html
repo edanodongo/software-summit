@@ -83,24 +83,25 @@
                         <tbody>
                         {% for registrant in registrants %}
                             <tr id="row-{{ registrant.id }}">
-                                <td>{{ forloop.counter }}</td>
+                                <td>{{ forloop.counter|default:"" }}</td>
                                 <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                                 <td>{{ registrant.email }}</td>
                                 <td>{{ registrant.phone }}</td>
                                 <td>{{ registrant.display_org_type }}</td>
                                 <td>{{ registrant.get_organization_type_display }}</td>
-                                <td class="truncate">{{ registrant.job_title|default:"—" }}</td>
+                                <td>{{ registrant.job_title|default:"—" }}</td>
                                 <td>{{ registrant.category_name|default:"—" }}</td>
                                 <td>{{ registrant.days_to_attend|default:"—" }}</td>
                                 <td>{{ registrant.national_id_number|default:"—" }}</td>
+
                                 <td>
                                     {% if registrant.national_id_scan %}
-                                        <a href="{{ registrant.national_id_scan.url }}" target="_blank"
-                                           class="text-decoration-none text-primary">
+                                        <a href="{{ registrant.national_id_scan.url }}" target="_blank" class="text-primary">
                                             <i class="fas fa-file-pdf"></i> View
                                         </a>
                                     {% else %}—{% endif %}
                                 </td>
+
                                 <td>
                                     {% if registrant.passport_photo %}
                                         <a href="{{ registrant.passport_photo.url }}" target="_blank">
@@ -109,7 +110,9 @@
                                         </a>
                                     {% else %}—{% endif %}
                                 </td>
+
                                 <td class="truncate">{{ registrant.display_interests|default:"—" }}</td>
+
                                 <td class="text-center">
                                     {% if registrant.privacy_agreed %}
                                         <i class="fas fa-check-circle text-success"></i>
@@ -117,9 +120,13 @@
                                         <i class="fas fa-times-circle text-danger"></i>
                                     {% endif %}
                                 </td>
+
                                 <td class="text-center email-attempts">
-                                    <span class="badge bg-info-subtle text-info border border-info px-2">{{ registrant.email_attempts|default:"0" }}</span>
+                                    <span class="badge bg-info-subtle text-info border border-info px-2">
+                                        {{ registrant.email_attempts|default:"0" }}
+                                    </span>
                                 </td>
+
                                 <td class="text-center email-status">
                                     {% if registrant.email_status %}
                                         {% if registrant.email_status|lower == "success" %}
@@ -127,51 +134,46 @@
                                         {% elif registrant.email_status|lower == "failed" %}
                                             <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
                                         {% else %}
-                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">{{ registrant.email_status|capfirst }}</span>
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">
+                                                {{ registrant.email_status|capfirst }}
+                                            </span>
                                         {% endif %}
                                     {% else %}
                                         <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
                                     {% endif %}
                                 </td>
+
                                 <td class="text-center email-last-sent">
                                     {% if registrant.email_last_sent %}
                                         {{ registrant.email_last_sent|date:"M d, Y H:i" }}
                                     {% else %}—{% endif %}
                                 </td>
+
                                 <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
+
                                 <td>
                                     <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-warning edit-btn"
+                                                data-id="{{ registrant.id }}"
+                                                data-url="{% url 'edit_registrant_modal' registrant.id %}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <a href="{% url 'generate_badge' registrant.id %}"
-                                           class="btn btn-sm btn-outline-primary" target="_blank" title="Badge">
-                                            <i class="fas fa-id-badge"></i>
+                                           class="btn btn-sm btn-outline-primary" target="_blank">
+                                           <i class="fas fa-id-badge"></i>
                                         </a>
                                         <button class="btn btn-sm btn-outline-success resend-btn"
-                                                data-url="{% url 'resend_confirmation_email' registrant.id %}"
-                                                title="Resend Email">
+                                                data-url="{% url 'resend_confirmation_email' registrant.id %}">
                                             <i class="fas fa-envelope"></i>
                                         </button>
                                         <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                data-url="{% url 'delete_registrant' registrant.id %}" title="Delete">
+                                                data-url="{% url 'delete_registrant' registrant.id %}">
                                             <i class="fas fa-trash"></i>
                                         </button>
-                                        {% if registrant.organization_type == "Student" or registrant.category_name|lower == "student" %}
-                                            {% if not registrant.approved %}
-                                                <button class="btn btn-sm btn-outline-success approve-btn"
-                                                        data-url="{% url 'approve_student' registrant.id %}"
-                                                        title="Approve Student">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            {% else %}
-                                                <button class="btn btn-sm btn-success" disabled title="Approved">
-                                                    <i class="fas fa-check-circle"></i>
-                                                </button>
-                                            {% endif %}
-                                        {% endif %}
-
-
                                     </div>
                                 </td>
                             </tr>
+
                         {% empty %}
                             <tr>
                                 <td colspan="17" class="text-center py-4 text-muted">No registrations yet.</td>
@@ -220,6 +222,26 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <!-- ✨ Edit Modal -->
+        <div class="modal fade" id="editRegistrantModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+              <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                  <i class="fas fa-user-edit"></i> Edit Registrant
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body" id="editRegistrantBody">
+                <div class="text-center py-5 text-muted">
+                  <i class="fas fa-spinner fa-spin fa-2x"></i>
+                  <p class="mt-2">Loading...</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Delete Confirmation Modal -->
@@ -296,6 +318,20 @@
 
         .bg-info-subtle {
             background-color: rgba(13, 202, 240, 0.1) !important;
+        }
+        #editRegistrantModal .modal-content {
+          border-radius: 1rem;
+          overflow: hidden;
+        }
+
+        #editRegistrantModal .form-control,
+        #editRegistrantModal select {
+          border-radius: 0.5rem;
+          box-shadow: none !important;
+        }
+
+        .toast {
+          z-index: 20000;
         }
     </style>
 
@@ -399,5 +435,73 @@
             });
 
         });
-    </script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
+    const modalBody = document.getElementById('editRegistrantBody');
+
+    // 🟡 Open modal and load form
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const url = btn.getAttribute('data-url');
+            modalBody.innerHTML = `<div class="text-center py-5 text-muted">
+                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
+            modal.show();
+
+            const response = await fetch(url);
+            const data = await response.json();
+            modalBody.innerHTML = data.html_form;
+            attachFormSubmit();
+        });
+    });
+
+    // 🟢 Handle form submission via AJAX
+    function attachFormSubmit() {
+        const form = document.getElementById('edit-registrant-form');
+        if (!form) return;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const action = form.getAttribute('action') || window.location.href;
+
+            const response = await fetch(action, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                modal.hide();
+                const row = document.getElementById(`row-${data.id}`);
+                if (row && data.row_html) {
+                    row.outerHTML = data.row_html;
+                }
+                showToast("✅ " + data.message, "success");
+            } else {
+                modalBody.innerHTML = data.html_form;
+                attachFormSubmit(); // rebind form
+            }
+        });
+    }
+
+    // 🔔 Toast feedback
+    function showToast(message, type) {
+        const toast = document.createElement("div");
+        toast.className = `toast align-items-center text-bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
+        toast.role = "alert";
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>`;
+        document.body.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        setTimeout(() => toast.remove(), 4000);
+    }
+});
+</script>
+
 {% endblock %}

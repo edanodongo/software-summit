@@ -1,0 +1,140 @@
+<style>
+  /* 🌿 Form Container */
+  #edit-registrant-form {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  /* 🏷️ Labels */
+  #edit-registrant-form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* 🧾 Inputs, Selects, Textareas */
+  #edit-registrant-form .form-control,
+  #edit-registrant-form .form-select {
+    border-radius: 0.5rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #edit-registrant-form .form-control:focus,
+  #edit-registrant-form .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+  }
+
+  /* 🧩 Grid spacing */
+  #edit-registrant-form .row.g-3 > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 🔘 Checkbox area */
+  #edit-registrant-form .form-check {
+    margin-top: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  #edit-registrant-form .form-check label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  #edit-registrant-form .form-check a {
+    text-decoration: underline;
+    color: #0d6efd;
+  }
+
+  /* 💾 Submit button */
+  #edit-registrant-form button {
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+  }
+
+  #edit-registrant-form button i {
+    margin-right: 0.4rem;
+  }
+</style>
+
+<form
+  method="post"
+  enctype="multipart/form-data"
+  id="edit-registrant-form"
+  action="{% url 'edit_registrant_modal' registrant.id %}"
+>
+  {% csrf_token %}
+
+  <div class="row g-3">
+    <div class="col-md-4">{{ form.title.label_tag }} {{ form.title }}</div>
+    <div class="col-md-4">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+    <div class="col-md-4">{{ form.second_name.label_tag }} {{ form.second_name }}</div>
+
+    <div class="col-md-6">{{ form.email.label_tag }} {{ form.email }}</div>
+    <div class="col-md-6">{{ form.phone.label_tag }} {{ form.phone }}</div>
+
+    <div class="col-md-6">{{ form.organization_type.label_tag }} {{ form.organization_type }}</div>
+    <div class="col-md-6">{{ form.other_organization_type.label_tag }} {{ form.other_organization_type }}</div>
+
+    <div class="col-md-6">{{ form.job_title.label_tag }} {{ form.job_title }}</div>
+    <div class="col-md-6">{{ form.category.label_tag }} {{ form.category }}</div>
+
+    <div class="col-md-12">{{ form.days_to_attend.label_tag }} {{ form.days_to_attend }}</div>
+
+    <div class="col-md-6">{{ form.national_id_number.label_tag }} {{ form.national_id_number }}</div>
+
+    <div class="col-md-6">
+      {{ form.national_id_scan.label_tag }}
+      {{ form.national_id_scan }}
+      {% if registrant.national_id_scan %}
+      <small class="d-block text-muted mt-1">
+        Current file:
+        <a href="{{ registrant.national_id_scan.url }}" target="_blank">View</a>
+      </small>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.passport_photo.label_tag }}
+      {{ form.passport_photo }}
+      {% if registrant.passport_photo %}
+      <small class="d-block text-muted mt-1">
+        <img
+          src="{{ registrant.passport_photo.url }}"
+          style="height:60px;width:60px;border-radius:50%;object-fit:cover;"
+        />
+      </small>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ✅ Privacy agreement -->
+  <div class="col-md-12 mt-3">
+    <div class="form-check">
+      {{ form.privacy_agreed }}
+      <label class="form-check-label" for="{{ form.privacy_agreed.id_for_label }}">
+        I agree to the
+        <a href="/privacy-policy/" target="_blank">Privacy Policy</a>.
+      </label>
+      {% if form.privacy_agreed.errors %}
+      <div class="text-danger small">{{ form.privacy_agreed.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mt-4 text-end">
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-save"></i> Save Changes
+    </button>
+  </div>
+</form>
