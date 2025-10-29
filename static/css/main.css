@@ -608,25 +608,39 @@ h6 {
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
-/* Default light mode */
+/*--------------------------------------------------------------
+# Preloader (Glowing Animated Logo)
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+# Preloader (Glowing Animated Logo)
+--------------------------------------------------------------*/
+
+/* --- Default (Light Mode) Theme Variables --- */
 :root {
   --bg-color: #ffffff;
   --text-color: #222;
 }
 
-/* Hide both logos by default */
-.light-logo, .dark-logo { display: none; }
+/* --- Dark Mode Overrides --- */
+body.dark-mode {
+  --bg-color: #000;
+  --text-color: #f5f5f5;
+}
 
-/* Theme-based logo visibility */
+/* --- Hide both logos initially --- */
+.light-logo, .dark-logo {
+  display: none;
+  transition: opacity 0.4s ease;
+}
+
+/* --- Show relevant logo per theme --- */
 body.light-mode .light-logo { display: block; }
 body.dark-mode .dark-logo { display: block; }
 
+/* --- Preloader Container --- */
 #preloader {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: var(--bg-color);
   color: var(--text-color);
   display: flex;
@@ -634,29 +648,53 @@ body.dark-mode .dark-logo { display: block; }
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
+/* --- Animated Logo --- */
 .logo-loader {
   width: 220px;
   height: auto;
-  animation: pulse 2s infinite ease-in-out;
   margin-bottom: 15px;
+  animation: glowPulse 2.4s infinite ease-in-out;
+  filter: drop-shadow(0 0 8px var(--accent-color));
 }
 
-@keyframes pulse {
-  0%   { transform: scale(1); filter: drop-shadow(0 0 0 var(--accent-color)); }
-  50%  { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--accent-color)); }
-  100% { transform: scale(1); filter: drop-shadow(0 0 0 var(--accent-color)); }
+/* --- Glow Animation --- */
+@keyframes glowPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px var(--accent-color))
+            brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 24px var(--accent-color))
+            brightness(1.4);
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px var(--accent-color))
+            brightness(1);
+  }
 }
 
+/* --- Optional Loading Text --- */
 #preloader p {
   font-size: 16px;
   font-weight: 500;
   margin: 0;
   color: var(--text-color);
+  letter-spacing: 0.5px;
+  animation: textFade 1.8s infinite ease-in-out;
 }
 
+@keyframes textFade {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* --- Hide after page load --- */
 #preloader.fade-out {
   opacity: 0;
   visibility: hidden;
@@ -664,6 +702,10 @@ body.dark-mode .dark-logo { display: block; }
 }
 
 
+  #preloader {
+    background: #ffffff !important;
+    color: #222 !important;
+  }
 
 /*--------------------------------------------------------------
 # Scroll Top Button

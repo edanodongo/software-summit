@@ -61,55 +61,59 @@
         });
     });
 
-    /**
-     * Preloader
-     */
-    document.addEventListener("DOMContentLoaded", function () {
-        const preloader = document.getElementById("preloader");
-        const content = document.getElementById("content");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+/**
+ * Preloader + Theme Handler
+ */
+(function() {
+    const preloader = document.getElementById("preloader");
+    const content = document.getElementById("content");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
 
+    // --- Instant Theme Application (runs immediately, before DOMContentLoaded)
+    const savedTheme = localStorage.getItem("theme");
+    const initialTheme = savedTheme || (prefersDark.matches ? "dark-mode" : "light-mode");
+    document.documentElement.classList.add("js-enabled"); // optional helper
+    document.body.classList.add(initialTheme);
+
+    // Wait for DOM to attach buttons and listeners
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // --- Apply Theme Function
         function applyTheme(theme) {
             document.body.classList.remove("light-mode", "dark-mode");
             document.body.classList.add(theme);
             localStorage.setItem("theme", theme);
         }
 
-        // Init theme (system default or saved)
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) {
-            applyTheme(savedTheme);
-        } else {
-            applyTheme(prefersDark.matches ? "dark-mode" : "light-mode");
-        }
-
-        // Listen for system theme change if no manual override
+        // --- System theme change
         prefersDark.addEventListener("change", (e) => {
             if (!localStorage.getItem("theme")) {
                 applyTheme(e.matches ? "dark-mode" : "light-mode");
             }
         });
 
-        // Manual toggle button
+        // --- Manual toggle
         const toggleBtn = document.getElementById("theme-toggle");
         if (toggleBtn) {
             toggleBtn.addEventListener("click", () => {
-                if (document.body.classList.contains("dark-mode")) {
-                    applyTheme("light-mode");
-                } else {
-                    applyTheme("dark-mode");
-                }
+                applyTheme(document.body.classList.contains("dark-mode")
+                    ? "light-mode"
+                    : "dark-mode"
+                );
             });
         }
 
-        // Preloader fade-out after page loads
-        window.addEventListener("load", function () {
+        // --- Preloader fade out after full load
+        window.addEventListener("load", () => {
+            // Give a small delay for transition smoothness
             setTimeout(() => {
                 if (preloader) preloader.classList.add("fade-out");
                 if (content) content.style.display = "block";
-            }, 800);
+            }, 400); // reduced delay for smoother experience
         });
     });
+})();
+
 
 
     // Initialize AOS
