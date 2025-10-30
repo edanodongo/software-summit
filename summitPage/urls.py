@@ -42,7 +42,8 @@ urlpatterns = [
     path('badge/<int:registrant_id>/', views.generate_badge, name='generate_badge'),
 
     path('badge/<uuid:exhibitor_id>/', views.generate_exhibitor_badge, name='generate_exhibitor_badge'),
-    path('resend-email/<uuid:exhibitor_id>', views.resend_exhibitor_confirmation_email, name='resend_exhibitor_confirmation_email'),
+    path('resend-email/<uuid:exhibitor_id>', views.resend_exhibitor_confirmation_email,
+         name='resend_exhibitor_confirmation_email'),
 
     # Registration API
     path('reg-service/registrations/', views.get_registrants, name='get_registrants'),
@@ -118,5 +119,11 @@ urlpatterns = [
     path("audit/apiTrails", views.api_trails, name="api_trails"),
     path("audit/regTrails", views.dashboard_student_view, name="reg_trails"),
     path("audit/approvaTrails", views.dashboard_student_view, name="approve_trails"),
+
+    # User Management
     path("dashboard/users", views.users, name="users"),
+    path("dashboard/add_user", views.add_user, name="add_user"),
+
+    path('dashboard/authregister/', views.save_user, name='save_user'),
+
 ]

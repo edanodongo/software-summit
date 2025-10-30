@@ -30,8 +30,22 @@
                         <td>{{ accounts.first_name }} {{ accounts.last_name }}</td>
                         <td>{{ accounts.username }}</td>
                         <td>{{ accounts.email }}</td>
-                        <td>{{ accounts.is_superuser }}</td>
-                        <td>{{ accounts.is_active }}</td>
+                        <td>
+                            {% if accounts.is_superuser %}
+                                <span class="badge bg-success">Admin</span>
+                            {% else %}
+                                <span class="badge bg-info text-dark">Badge Printer</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if accounts.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Not Active</span>
+                            {% endif %}
+                        </td>
+
                         <td>{{ accounts.date_joined }}</td>
                         <td></td>
                     </tr>

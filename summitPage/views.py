@@ -1,7 +1,6 @@
 # imports
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
 from django.forms import inlineformset_factory
@@ -26,7 +25,7 @@ PanelistFormSet = inlineformset_factory(
 )
 import qrcode
 from io import BytesIO
-from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A7, portrait
 from reportlab.lib.utils import ImageReader
@@ -34,45 +33,30 @@ from reportlab.lib import colors
 import os
 from django.views.decorators.http import require_POST
 from datetime import datetime
-from django_countries import countries
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.views import LoginView
-from django.db.models import Case, When, Value, IntegerField, Sum, Count, Max, Q
-from django.shortcuts import get_object_or_404, render, redirect
-from django.db import transaction, models
+from django.db.models import Case, When, Value, IntegerField
+from django.db import transaction
 from django.utils.timezone import now, timedelta
 
-from django.db.models import Sum
-from django.http import JsonResponse
-from .models import Exhibitor, DashboardSetting
 from summitPage.models import SummitSponsor
-from django.db.models import Q
-from .models import Category, Registrant
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
+from .models import Category
 from .models import Registrant
 from .forms import RegistrantEditForm
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from .models import Registrant
-from .forms import RegistrantEditForm
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
-from .models import Exhibitor
 from .forms import ExhibitorEditForm
 
 from django.db.models import Sum, Q, Count, OuterRef, Subquery, Max
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, DashboardSetting
 from summitPage.forms import DashboardSettingForm
 from django.conf import settings
+
 
 # begin your views here
 
@@ -1952,9 +1936,6 @@ def summit_sponsor_registration(request):
 # --------------------------------------------
 
 
-
-
-
 @login_required
 def sponsor_dashboard(request):
     """Admin dashboard to view and manage sponsor partners."""
@@ -2019,9 +2000,6 @@ def dashboard_student_view(request):
         "current_year": timezone.now().year,
     }
     return render(request, "summit/student.html", context)
-
-
-
 
 
 @login_required
@@ -2333,7 +2311,6 @@ def protocol(request):
     })
 
 
-
 def edit_registrant(request, registrant_id):
     registrant = get_object_or_404(Registrant, id=registrant_id)
 
@@ -2350,7 +2327,6 @@ def edit_registrant(request, registrant_id):
         'form': form,
         'registrant': registrant,
     })
-
 
 
 def edit_registrant_modal(request, registrant_id):
@@ -2384,7 +2360,6 @@ def edit_registrant_modal(request, registrant_id):
         request=request
     )
     return JsonResponse({"html_form": html_form})
-
 
 
 def edit_exhibitor_modal(request, exhibitor_id):
@@ -2496,6 +2471,7 @@ def special_registration(request):
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
 
+
 @login_required
 def users(request):
     User = get_user_model()
@@ -2508,3 +2484,80 @@ def users(request):
     }
 
     return render(request, "users/view_users.html", context)
+
+
+def add_user(request):
+    context = {
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+
+    return render(request, "users/add_user.html", context)
+
+
+def save_user(request):
+    if request.method == "POST":
+        User = get_user_model()
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        password = generate_strong_password(8)
+        subject = "Your Printing Badge Account has been Created!"
+        message = f"""
+        <html>
+          <body style="font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px;">
+            <div style="max-width:650px; margin:40px auto; background:#ffffff; border-radius:8px;
+                        padding:30px; border:1px solid #e0e0e0;">
+              <h2 style="color:#0d6efd;">Summit Printing Badge Account Created</h2>
+              <p>Dear <strong>{first_name} {last_name}</strong>,</p>
+              <p>Your account for the <strong>Summit Printing Badge system</strong> has been successfully created.</p>
+
+              <p><strong>Login Details:</strong></p>
+              <ul style="list-style:none; padding-left:0;">
+                <li><strong>Email:</strong> {email}</li>
+                <li><strong>Password:</strong> {password}</li>
+              </ul>
+
+              <p style="margin-top:20px;">For security, please change your password immediately after your first login.</p>
+
+              <a href="https://softwaresummit.go.ke/badge" 
+                 style="display:inline-block; background-color:#0d6efd; color:#ffffff; text-decoration:none; 
+                        padding:10px 20px; border-radius:5px; margin-top:15px;">
+                Go to Login
+              </a>
+
+              <p style="margin-top:25px; color:#666;">Regards,<br>Summit IT Support Team</p>
+            </div>
+          </body>
+        </html>
+        """
+
+        try:
+
+            # Create and save the user
+            User.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                username=email,
+                password=make_password(password),
+                is_active=True,
+                is_superuser=False,
+            )
+
+            # Send to all recipients in one go
+            sendmailer(subject, message, email)
+
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Registration Successful! An email with your Credentials has been sent to this email address. {email}',
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Failed to send email: {str(e)}'
+            })
+
+    # Invalid request method
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
