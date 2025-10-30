@@ -1422,7 +1422,7 @@ def exhibitor(request):
         alert_message = "1 booth available!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available. Registration closed!"
+        alert_message = "Registration closed!"
         alert_class = "alert-danger"
 
     registration_closed = remaining <= 0
@@ -1534,7 +1534,7 @@ def exhibitor_status(request):
         alert_message = "1 booth available!"
         alert_class = "alert-danger"
     else:
-        alert_message = "0 booths available. Registration closed!"
+        alert_message = "Registration closed!"
         alert_class = "alert-danger"
 
     return JsonResponse({
@@ -1587,7 +1587,7 @@ def admin_dashboard(request):
     elif remaining == 1:
         alert_message, alert_class = "1 booth available!", "alert-danger"
     else:
-        alert_message, alert_class = "0 booths available. Registration closed!", "alert-danger"
+        alert_message, alert_class = "Registration closed!", "alert-danger"
 
     registration_closed = remaining <= 0
 
