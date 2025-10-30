@@ -1,5 +1,5 @@
 # imports
-from django.contrib.auth import get_user_model,authenticate, login
+from django.contrib.auth import get_user_model,authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
@@ -2599,5 +2599,13 @@ def badge_dashboard(request):
         "current_year": timezone.now().year,
     }
     return render(request, "badge/badge.html", context)
+
+def badgeLogout(request):
+    if request.method in ["POST", "GET"]:
+        logout(request)
+        messages.success(request, "You have been logged out successfully.")
+        return redirect('badge')
+
+    return render(request, "badge/login.html")
 
 
