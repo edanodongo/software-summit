@@ -927,3 +927,35 @@ class RegistrantEditForm(forms.ModelForm):
         if not agreed:
             raise forms.ValidationError("You must agree to the Privacy Policy before saving.")
         return agreed
+
+
+# forms.py
+from django import forms
+from .models import Exhibitor
+
+class ExhibitorEditForm(forms.ModelForm):
+    class Meta:
+        model = Exhibitor
+        fields = [
+            'title', 'first_name', 'second_name', 'email', 'phone',
+            'organization_type', 'job_title', 'category', 'product_description',
+            'exhibit_category', 'booth', 'section', 'national_id_number',
+            'national_id_scan', 'passport_photo', 'business_type', 'logo',
+            'kra_pin', 'business_registration_doc', 'international_business_doc',
+            'country_of_registration', 'beneficial_owner_details', 'beneficial_owner_doc',
+            'privacy_agreed'
+        ]
+        widgets = {
+            'product_description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'beneficial_owner_details': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            css = 'form-control'
+            if isinstance(field.widget, forms.CheckboxInput):
+                css = 'form-check-input'
+            elif isinstance(field.widget, forms.Select):
+                css = 'form-select'
+            field.widget.attrs.update({'class': css})

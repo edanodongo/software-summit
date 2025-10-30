@@ -1394,7 +1394,7 @@ def exhibitor(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
-        alert_message = "1 booth remaining!"
+        alert_message = "1 booth available!"
         alert_class = "alert-danger"
     else:
         alert_message = "0 booths available. Registration closed!"
@@ -1506,7 +1506,7 @@ def exhibitor_status(request):
         alert_message = f"{remaining} booths available."
         alert_class = "alert-warning"
     elif remaining == 1:
-        alert_message = "1 booth remaining!"
+        alert_message = "1 booth available!"
         alert_class = "alert-danger"
     else:
         alert_message = "0 booths available. Registration closed!"
@@ -1569,7 +1569,7 @@ def admin_dashboard(request):
     elif 1 < remaining <= 2:
         alert_message, alert_class = f"{remaining} booths available.", "alert-warning"
     elif remaining == 1:
-        alert_message, alert_class = "1 booth remaining!", "alert-danger"
+        alert_message, alert_class = "1 booth available!", "alert-danger"
     else:
         alert_message, alert_class = "0 booths available. Registration closed!", "alert-danger"
 
@@ -2377,3 +2377,40 @@ def edit_registrant_modal(request, registrant_id):
     return JsonResponse({"html_form": html_form})
 
 
+# views.py
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from .models import Exhibitor
+from .forms import ExhibitorEditForm
+
+def edit_exhibitor_modal(request, exhibitor_id):
+    """Handles AJAX editing of an exhibitor from dashboard."""
+    exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
+
+    if request.method == "POST":
+        form = ExhibitorEditForm(request.POST, request.FILES, instance=exhibitor)
+        if form.is_valid():
+            form.save()
+
+            return JsonResponse({
+                "success": True,
+                "message": "Exhibitor updated successfully.",
+                "id": str(exhibitor.id),
+            })
+
+        html_form = render_to_string(
+            "partials/edit_exhibitor_form.html",
+            {"form": form, "exhibitor": exhibitor},
+            request=request
+        )
+        return JsonResponse({"success": False, "html_form": html_form})
+
+    # GET – open edit form
+    form = ExhibitorEditForm(instance=exhibitor)
+    html_form = render_to_string(
+        "partials/edit_exhibitor_form.html",
+        {"form": form, "exhibitor": exhibitor},
+        request=request
+    )
+    return JsonResponse({"html_form": html_form})
