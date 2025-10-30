@@ -1,5 +1,5 @@
 # imports
-from django.contrib.auth import get_user_model,authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
@@ -585,6 +585,10 @@ def print_registrants(request):
 
 @login_required
 def dashboard_view(request):
+    if not request.user.is_superuser:
+        logout(request)
+        return redirect('custom_login')
+
     registrations = Registrant.objects.all().order_by("created_at")
     total_users = Registrant.objects.exclude(
         Q(organization_type='Student') | Q(category='4')
@@ -2561,9 +2565,9 @@ def save_user(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 
-
 def badge(request):
     return render(request, "badge/login.html")
+
 
 def auth_badge(request):
     if request.method == "POST":
@@ -2589,16 +2593,28 @@ def auth_badge(request):
     # If GET, just render the form normally
     return render(request, "badge/login.html")
 
+
 @login_required
 def badge_dashboard(request):
-
+    # Convert category IDs to strings because Registrant.category is a CharField
+    student_category_ids = [str(cid) for cid in
+                            Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+    registrants = (
+        Registrant.objects.filter(
+            Q(approved=True) |
+            ~Q(Q(organization_type__iexact="Student") | Q(category__in=student_category_ids))
+        ).order_by("-created_at")
+    )
 
     context = {
+        "registrants": registrants,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
     }
+
     return render(request, "badge/badge.html", context)
+
 
 def badgeLogout(request):
     if request.method in ["POST", "GET"]:
@@ -2607,5 +2623,3 @@ def badgeLogout(request):
         return redirect('badge')
 
     return render(request, "badge/login.html")
-
-
