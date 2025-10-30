@@ -784,9 +784,9 @@ def send_protocol_confirmation_email(registrant, retries=3, delay=3):
             "We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from "
             "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
             "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
-            f"Upon your arrival in Eldoret, our team will receive you and confirm your {registrant.category} status. "
+            f"Upon your arrival in Eldoret, our team will receive you and confirm your {registrant.get_category_display} status. "
             "To facilitate this, kindly carry a valid identification document. "
-            f"You will then be issued with a badge, the {registrant.category} pack containing your conference guide, "
+            f"You will then be issued with a badge, the {registrant.get_category_display} pack containing your conference guide, "
             "and the full programme to help you easily navigate the conference activities.\n\n"
             "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
             "Karibu.\n\n"
@@ -831,9 +831,9 @@ def send_protocol_confirmation_email(registrant, retries=3, delay=3):
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                Upon your arrival in Eldoret, our team will receive you and confirm your {registrant.category} status. 
+                Upon your arrival in Eldoret, our team will receive you and confirm your {registrant.get_category_display} status. 
                 To facilitate this, kindly carry a valid identification document. You will then receive 
-                a badge, the {registrant.category} pack containing your conference guide, and the programme for 
+                a badge, the {registrant.get_category_display} pack containing your conference guide, and the programme for 
                 easier navigation of the conference activities.
               </p>
 
