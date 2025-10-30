@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django_countries.fields import CountryField
+from PIL import Image
 import uuid
 
 
@@ -32,14 +33,7 @@ def get_category_id():
 
 
 # --------------------------------------------
-import os
-import uuid
-from io import BytesIO
-from PIL import Image
-from django.conf import settings
-from django.db import models
-from django.core.files.base import ContentFile
-from django_countries.fields import CountryField
+
 
 
 # ============================================================
@@ -755,8 +749,7 @@ class BeneficialOwner(models.Model):
 
 # ---------------------------------------------
 
-import uuid
-from django.db import models
+
 
 
 class SummitSponsor(models.Model):
@@ -829,7 +822,7 @@ class SummitSponsor(models.Model):
 
 # ---------------------------------------------
 
-from django.db import models
+
 
 class DashboardSetting(models.Model):
     max_count = models.PositiveIntegerField(default=10)

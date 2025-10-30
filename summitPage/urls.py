@@ -118,4 +118,5 @@ urlpatterns = [
     path("audit/apiTrails", views.api_trails, name="api_trails"),
     path("audit/regTrails", views.dashboard_student_view, name="reg_trails"),
     path("audit/approvaTrails", views.dashboard_student_view, name="approve_trails"),
+    path("dashboard/users", views.users, name="users"),
 ]

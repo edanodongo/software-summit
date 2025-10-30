@@ -1,6 +1,7 @@
 # imports
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
 from django.forms import inlineformset_factory
@@ -2494,3 +2495,16 @@ def special_registration(request):
         'days': days,
         'interest_choices': Registrant.INTEREST_CHOICES,
     })
+
+@login_required
+def users(request):
+    User = get_user_model()
+    users_list = User.objects.all()
+    context = {
+        "account": users_list,
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+
+    return render(request, "users/view_users.html", context)
