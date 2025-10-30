@@ -7,6 +7,29 @@ from .models import Exhibitor, Booth, ExhibitionSection
 
 from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
 from .models import Category
+from .models import ExhibitionCategory
+from django import forms
+from django_countries.widgets import CountrySelectWidget
+from django.db.models import Sum
+from .models import Exhibitor, DashboardSetting
+
+from django import forms
+from django.db.models import Sum
+from django.core.exceptions import ValidationError
+from django_countries.widgets import CountrySelectWidget
+from .models import Exhibitor, DashboardSetting
+from django import forms
+from .models import SummitSponsor
+from django import forms
+from django.db.models import Sum
+from django.core.exceptions import ValidationError
+from .models import DashboardSetting, Exhibitor
+from django import forms
+from .models import Registrant
+# forms.py
+from django import forms
+from .models import Exhibitor
+
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
     # Custom Field Definitions
@@ -388,18 +411,6 @@ class SpeakerForm(forms.ModelForm):
 # Exhibitor Registration Form
 # --------------------------------------------
 
-from .models import ExhibitionCategory
-from django import forms
-from django_countries.widgets import CountrySelectWidget
-from django.db.models import Sum
-from .models import Exhibitor, DashboardSetting
-
-from django import forms
-from django.db.models import Sum
-from django.core.exceptions import ValidationError
-from django_countries.widgets import CountrySelectWidget
-from .models import Exhibitor, DashboardSetting
-
 
 class ExhibitorRegistrationForm(forms.ModelForm):
     """Registration form that dynamically limits count choices based on remaining availability."""
@@ -592,9 +603,6 @@ class ExhibitionSectionForm(forms.ModelForm):
 
 # --------------------------------------------
 
-from django import forms
-from .models import SummitSponsor
-
 
 class SummitSponsorForm(forms.ModelForm):
     """Form for registering summit sponsors and partners."""
@@ -671,10 +679,6 @@ class SummitSponsorForm(forms.ModelForm):
 
 # --------------------------------------------
 
-from django import forms
-from django.db.models import Sum
-from django.core.exceptions import ValidationError
-from .models import DashboardSetting, Exhibitor
 
 class DashboardSettingForm(forms.ModelForm):
     class Meta:
@@ -898,8 +902,6 @@ class ProtocolRegistrationForm(forms.ModelForm):
 
 
 
-from django import forms
-from .models import Registrant
 
 class RegistrantEditForm(forms.ModelForm):
     class Meta:
@@ -929,9 +931,6 @@ class RegistrantEditForm(forms.ModelForm):
         return agreed
 
 
-# forms.py
-from django import forms
-from .models import Exhibitor
 
 class ExhibitorEditForm(forms.ModelForm):
     class Meta:

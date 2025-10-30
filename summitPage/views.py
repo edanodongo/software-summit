@@ -47,6 +47,31 @@ from .models import Exhibitor, DashboardSetting
 from summitPage.models import SummitSponsor
 from django.db.models import Q
 from .models import Category, Registrant
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import Registrant
+from .forms import RegistrantEditForm
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from .models import Registrant
+from .forms import RegistrantEditForm
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from .models import Exhibitor
+from .forms import ExhibitorEditForm
+
+from django.db.models import Sum, Q, Count, OuterRef, Subquery, Max
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
+from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, DashboardSetting
+from summitPage.forms import DashboardSettingForm
+from django.conf import settings
 
 # begin your views here
 
@@ -1524,15 +1549,6 @@ def exhibitor_status(request):
 # --------------------------------------------
 # Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
-from django.db.models import Sum, Q, Count, OuterRef, Subquery, Max
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-
-from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, DashboardSetting
-from summitPage.forms import DashboardSettingForm
 
 
 @login_required
@@ -2097,6 +2113,7 @@ def resend_exhibitor_confirmation_email(request, exhibitor_id):
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
         }, status=500)
 
+
 @login_required
 def generate_exhibitor_badge(request, exhibitor_id):
     try:
@@ -2315,10 +2332,6 @@ def protocol(request):
     })
 
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from .models import Registrant
-from .forms import RegistrantEditForm
 
 def edit_registrant(request, registrant_id):
     registrant = get_object_or_404(Registrant, id=registrant_id)
@@ -2338,11 +2351,6 @@ def edit_registrant(request, registrant_id):
     })
 
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
-from .models import Registrant
-from .forms import RegistrantEditForm
 
 def edit_registrant_modal(request, registrant_id):
     """AJAX modal handler for editing a registrant."""
@@ -2367,7 +2375,7 @@ def edit_registrant_modal(request, registrant_id):
         )
         return JsonResponse({"success": False, "html_form": html_form})
 
-    # 🟢 GET request — return form HTML to show in modal
+    # GET request — return form HTML to show in modal
     form = RegistrantEditForm(instance=registrant)
     html_form = render_to_string(
         "partials/edit_registrant_form.html",
@@ -2377,12 +2385,6 @@ def edit_registrant_modal(request, registrant_id):
     return JsonResponse({"html_form": html_form})
 
 
-# views.py
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
-from .models import Exhibitor
-from .forms import ExhibitorEditForm
 
 def edit_exhibitor_modal(request, exhibitor_id):
     """Handles AJAX editing of an exhibitor from dashboard."""
@@ -2414,3 +2416,81 @@ def edit_exhibitor_modal(request, exhibitor_id):
         request=request
     )
     return JsonResponse({"html_form": html_form})
+
+
+def special_registration(request):
+    token = request.GET.get("token")
+
+    if token != settings.SPECIAL_ACCESS_KEY:
+        return redirect("home")
+
+    else:
+        if request.method == 'POST':
+            form = ProtocolRegistrationForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                registrant = form.save(commit=False)
+
+                # --- Assign uploaded files ---
+                if request.FILES.get("passport_photo"):
+                    registrant.passport_photo = request.FILES["passport_photo"]
+                if request.FILES.get("national_id_scan"):
+                    registrant.national_id_scan = request.FILES["national_id_scan"]
+
+                # --- Handle interests ---
+                interests = form.cleaned_data.get("interests", [])
+                other_interest = form.cleaned_data.get("other_interest")
+                if "others" in interests and other_interest:
+                    registrant.other_interest = other_interest
+                registrant.interests = interests
+
+                registrant.save()
+
+                # Use shared student logic
+                is_student = is_student_registrant(registrant)
+
+                # --- Send appropriate email ---
+                try:
+                    if is_student:
+                        send_student_email(registrant)
+                        print("Student")
+                    else:
+                        send_protocol_confirmation_email(registrant)
+                        print("Delegate")
+
+                except Exception as e:
+                    print("Email Send error:", e)
+                    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                        return JsonResponse(
+                            {"success": True, "message": "Registration saved, but email failed."},
+                            status=200
+                        )
+                    messages.warning(request, "Registered, but confirmation email failed.")
+
+                # --- Return success response ---
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({"success": True, "message": "Registration successful!"})
+
+                messages.success(request, "Registration successful!")
+                return redirect('home')
+
+            else:
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({"success": False, "errors": form.errors}, status=400)
+                messages.error(request, "There was a problem with your registration.")
+
+        else:
+            form = ProtocolRegistrationForm()
+
+    # --- Extra context data ---
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by("date")
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
+
+    return render(request, "summit/protocol.html", {
+        'form': form,
+        'gallery_items': gallery_items,
+        'partners': partners,
+        'days': days,
+        'interest_choices': Registrant.INTEREST_CHOICES,
+    })
