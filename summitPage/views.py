@@ -168,7 +168,7 @@ def reg(request):
 
             registrant.save()
 
-            # ✅ Use shared student logic
+            #  Use shared student logic
             is_student = is_student_registrant(registrant)
 
             # --- Send appropriate email ---
@@ -2241,4 +2241,139 @@ def generate_exhibitor_badge(request, exhibitor_id):
 
     filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
+
+
+def protocol(request):
+    if request.method == 'POST':
+        form = ProtocolRegistrationForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            registrant = form.save(commit=False)
+
+            # --- Assign uploaded files ---
+            if request.FILES.get("passport_photo"):
+                registrant.passport_photo = request.FILES["passport_photo"]
+            if request.FILES.get("national_id_scan"):
+                registrant.national_id_scan = request.FILES["national_id_scan"]
+
+            # --- Handle interests ---
+            interests = form.cleaned_data.get("interests", [])
+            other_interest = form.cleaned_data.get("other_interest")
+            if "others" in interests and other_interest:
+                registrant.other_interest = other_interest
+            registrant.interests = interests
+
+            registrant.save()
+
+            # Use shared student logic
+            is_student = is_student_registrant(registrant)
+
+            # --- Send appropriate email ---
+            try:
+                if is_student:
+                    send_student_email(registrant)
+                    print("Student")
+                else:
+                    send_protocol_confirmation_email(registrant)
+                    print("Delegate")
+
+            except Exception as e:
+                print("Email Send error:", e)
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse(
+                        {"success": True, "message": "Registration saved, but email failed."},
+                        status=200
+                    )
+                messages.warning(request, "Registered, but confirmation email failed.")
+
+            # --- Return success response ---
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "message": "Registration successful!"})
+
+            messages.success(request, "Registration successful!")
+            return redirect('home')
+
+        else:
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
+            messages.error(request, "There was a problem with your registration.")
+
+    else:
+        form = ProtocolRegistrationForm()
+
+    # --- Extra context data ---
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by("date")
+    gallery_items = SummitGallery.objects.filter(is_active=True).order_by('order')
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
+
+    return render(request, "summit/protocol.html", {
+        'form': form,
+        'gallery_items': gallery_items,
+        'partners': partners,
+        'days': days,
+        'interest_choices': Registrant.INTEREST_CHOICES,
+    })
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import Registrant
+from .forms import RegistrantEditForm
+
+def edit_registrant(request, registrant_id):
+    registrant = get_object_or_404(Registrant, id=registrant_id)
+
+    if request.method == 'POST':
+        form = RegistrantEditForm(request.POST, request.FILES, instance=registrant)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{registrant.get_full_name()} updated successfully.")
+            return redirect('registrants_dashboard')  # adjust to your dashboard view name
+    else:
+        form = RegistrantEditForm(instance=registrant)
+
+    return render(request, 'summit/edit_registrant.html', {
+        'form': form,
+        'registrant': registrant,
+    })
+
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from .models import Registrant
+from .forms import RegistrantEditForm
+
+def edit_registrant_modal(request, registrant_id):
+    """AJAX modal handler for editing a registrant."""
+    registrant = get_object_or_404(Registrant, id=registrant_id)
+
+    if request.method == "POST":
+        form = RegistrantEditForm(request.POST, request.FILES, instance=registrant)
+        if form.is_valid():
+            form.save()
+
+            return JsonResponse({
+                "success": True,
+                "message": "Registrant updated successfully.",
+                "id": str(registrant.get_full_name()),
+            })
+
+        # ❌ If form invalid, re-render the form with errors
+        html_form = render_to_string(
+            "partials/edit_registrant_form.html",
+            {"form": form, "registrant": registrant},
+            request=request
+        )
+        return JsonResponse({"success": False, "html_form": html_form})
+
+    # 🟢 GET request — return form HTML to show in modal
+    form = RegistrantEditForm(instance=registrant)
+    html_form = render_to_string(
+        "partials/edit_registrant_form.html",
+        {"form": form, "registrant": registrant},
+        request=request
+    )
+    return JsonResponse({"html_form": html_form})
+
 

@@ -7,6 +7,10 @@ urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("dashboard/student", views.dashboard_student_view, name="student"),
     path("mailme/", views.mailme_view, name="mailme"),
+    path("protocol/", views.protocol, name="protocol"),
+    path("register/", views.reg, name="register"),
+    path('registrant/<int:registrant_id>/edit/', views.edit_registrant, name='edit_registrant'),
+    path('registrant/<int:registrant_id>/edit/modal/', views.edit_registrant_modal, name='edit_registrant_modal'),
 
     # category setup
     path("categories/", views.guest_category, name="categories"),

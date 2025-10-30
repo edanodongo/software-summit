@@ -728,6 +728,7 @@ class ProtocolRegistrationForm(forms.ModelForm):
     )
 
     interests = forms.MultipleChoiceField(
+        required=False,
         choices=Registrant.INTEREST_CHOICES,
         widget=forms.CheckboxSelectMultiple,
     )
@@ -893,26 +894,36 @@ class ProtocolRegistrationForm(forms.ModelForm):
         if not cleaned_data.get("privacy_agreed"):
             self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
 
-        # Category auto-set based on organization type
-        admn_number = cleaned_data.get("admn_number")
-        try:
-            if organization_type and organization_type.strip().lower() == "student":
-                student_category = Category.objects.filter(name__iexact="Student").first()
-                if student_category:
-                    cleaned_data["category"] = str(student_category.id)
-                else:
-                    self.add_error("category", "Student category not found in database.")
-
-                if not admn_number:
-                    self.add_error("admn_number", "Student Registration Number is required for students.")
-            else:
-                delegate_category = Category.objects.filter(name__iexact="Delegate").first()
-                if delegate_category:
-                    cleaned_data["category"] = str(delegate_category.id)
-                else:
-                    self.add_error("category", "Delegate category not found in database.")
-                cleaned_data["admn_number"] = admn_number or None
-        except Exception as e:
-            self.add_error("category", f"Error setting category automatically: {e}")
-
         return cleaned_data
+
+
+
+from django import forms
+from .models import Registrant
+
+class RegistrantEditForm(forms.ModelForm):
+    class Meta:
+        model = Registrant
+        exclude = ['created_at', 'unsubscribe_token']
+        widgets = {
+            'title': forms.Select(attrs={'class': 'form-select'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'second_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'organization_type': forms.Select(attrs={'class': 'form-select'}),
+            'other_organization_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'job_title': forms.TextInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'days_to_attend': forms.TextInput(attrs={'class': 'form-control'}),
+            'national_id_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'national_id_scan': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'passport_photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'privacy_agreed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+    def clean_privacy_agreed(self):
+        agreed = self.cleaned_data.get('privacy_agreed')
+        if not agreed:
+            raise forms.ValidationError("You must agree to the Privacy Policy before saving.")
+        return agreed
