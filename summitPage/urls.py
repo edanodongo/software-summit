@@ -11,6 +11,7 @@ urlpatterns = [
     path("register/", views.reg, name="register"),
     path('registrant/<int:registrant_id>/edit/', views.edit_registrant, name='edit_registrant'),
     path('registrant/<int:registrant_id>/edit/modal/', views.edit_registrant_modal, name='edit_registrant_modal'),
+    path("edit-exhibitor/<uuid:exhibitor_id>/", views.edit_exhibitor_modal, name="edit_exhibitor_modal"),
 
     # category setup
     path("categories/", views.guest_category, name="categories"),

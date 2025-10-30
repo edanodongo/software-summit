@@ -192,66 +192,31 @@
           <td>{{ e.total_count|default:"0" }}</td>
 
           <td>
-            {% if e.logo %}
-              <a href="{{ e.logo.url }}" target="_blank">Logo</a><br>
-            {% endif %}
-            {% if e.passport_photo %}
-              <a href="{{ e.passport_photo.url }}" target="_blank">Proposal</a><br>
-            {% endif %}
-            {% if e.national_id_scan %}
-              <a href="{{ e.national_id_scan.url }}" target="_blank">Profile</a><br>
-            {% endif %}
-            {% if e.business_registration_doc %}
-              <a href="{{ e.business_registration_doc.url }}" target="_blank">Tax Cert</a>
-            {% endif %}
-            {% if e.international_business_doc %}
-              <a href="{{ e.international_business_doc.url }}" target="_blank">Tax Cert</a>
-            {% endif %}
-            {% if e.beneficial_owner_doc %}
-              <a href="{{ e.beneficial_owner_doc.url }}" target="_blank">Tax Cert</a>
-            {% endif %}
+            {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
+            {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
+            {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
           </td>
 
-          <td class="text-center email-attempts">{{ e.email_attempts|default:"0" }}</td>
-
-          <td class="text-center email-status">
-            {% if e.email_status %}
-              {% if e.email_status|lower == "success" %}
-                <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
-              {% elif e.email_status|lower == "failed" %}
-                <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
-              {% else %}
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">{{ e.email_status|capfirst }}</span>
-              {% endif %}
+          <td class="text-center">{{ e.email_attempts|default:"0" }}</td>
+          <td class="text-center">
+            {% if e.email_status == "success" %}
+              <span class="badge bg-success">Sent</span>
+            {% elif e.email_status == "failed" %}
+              <span class="badge bg-danger">Failed</span>
             {% else %}
-              <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
+              <span class="badge bg-secondary">Pending</span>
             {% endif %}
           </td>
-
-          <td class="text-center email-last-sent">
-            {% if e.email_last_sent %}
-              {{ e.email_last_sent|date:"M d, Y H:i" }}
-            {% else %}—{% endif %}
-          </td>
-
+          <td class="text-center">{{ e.email_last_sent|date:"M d, Y H:i" }}</td>
           <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
 
           <td>
-            <div class="btn-group" role="group">
-              <a href="{% url 'generate_exhibitor_badge' e.id %}" class="btn btn-sm btn-outline-primary">
-                <i class="fas fa-id-badge"></i>
-              </a>
-
-              <form action="{% url 'resend_exhibitor_confirmation_email' e.id %}" method="post" class="resend-email-form" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-success resend-btn" title="Resend Email">
-                  <i class="fas fa-envelope"></i>
-                </button>
-              </form>
-
-              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
-                <i class="fas fa-trash"></i>
-              </a>
+            <div class="btn-group">
+              <button
+                class="btn btn-sm btn-outline-primary edit-exhibitor-btn"
+                data-id="{{ e.id }}">
+                <i class="fas fa-edit"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -265,11 +230,96 @@
   </div>
 </div>
 
+<div class="modal fade" id="dynamicModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Exhibitor</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <!-- Form will load dynamically here -->
+      </div>
+    </div>
+  </div>
+</div>
+
 
 </div>
 {% endblock %}
 
 {% block scripts %}
+<style>
+/* ============================
+   Exhibitor Edit Modal Styling
+   ============================ */
+#edit-exhibitor-form label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  display: block;
+}
+
+#edit-exhibitor-form .form-control,
+#edit-exhibitor-form .form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#edit-exhibitor-form .form-control:focus,
+#edit-exhibitor-form .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+#edit-exhibitor-form .form-check {
+  margin-top: 1rem;
+  padding-left: 1.8rem;
+}
+
+#edit-exhibitor-form .form-check-input {
+  margin-left: -1.8rem;
+  margin-top: 0.25rem;
+}
+
+#edit-exhibitor-form small.text-muted {
+  font-size: 0.85rem;
+}
+
+#edit-exhibitor-form img {
+  border: 1px solid #ddd;
+  padding: 2px;
+  background-color: #fafafa;
+  border-radius: 0.5rem;
+}
+
+#edit-exhibitor-form .btn-primary {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #edit-exhibitor-form .col-md-6,
+  #edit-exhibitor-form .col-md-4,
+  #edit-exhibitor-form .col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+#edit-exhibitor-form input[type="file"] {
+  background: #f8f9fa;
+  border: 1px dashed #ccc;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
@@ -338,5 +388,46 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("dynamicModal");
+  const modalBody = modal.querySelector(".modal-body");
+
+  // Open edit modal
+  document.querySelectorAll(".edit-exhibitor-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      const res = await fetch(`/edit-exhibitor/${id}/`);
+      const data = await res.json();
+      modalBody.innerHTML = data.html_form;
+      new bootstrap.Modal(modal).show();
+
+      bindExhibitorForm();
+    });
+  });
+
+  function bindExhibitorForm() {
+    const form = modalBody.querySelector("#edit-exhibitor-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const row = document.querySelector(`tr[data-exhibitor-id="${data.id}"]`);
+        row.outerHTML = data.row_html;
+        bootstrap.Modal.getInstance(modal).hide();
+      } else {
+        modalBody.innerHTML = data.html_form;
+        bindExhibitorForm();
+      }
+    });
+  }
+});
 </script>
+
 {% endblock %}
