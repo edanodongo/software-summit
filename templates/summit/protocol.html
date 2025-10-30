@@ -23,6 +23,121 @@
 
     <!-- Main CSS File -->
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <style>
+
+    /* 1. Elegant Animated Gradient Banner */
+    .page-title.dark-background {
+      background: linear-gradient(135deg, #0a0a0a 10%, #064f32 80%);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-title.dark-background::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.07), transparent 60%);
+      animation: shimmer 12s infinite linear;
+      z-index: 0;
+    }
+    @keyframes shimmer {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .page-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 2. VIP "Exclusive Access" Badge */
+    .vip-badge .badge {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(90deg, #d4af37, #f5e6a1);
+      color: #2a2a2a;
+      border-radius: 30px;
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    }
+
+    /* 3. Form Wrapper Glow & Background Pattern */
+    .ticket-form-wrapper {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+    .ticket-form-wrapper::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* 4. VIP Floating Assistant Button */
+    #vip-helper button {
+      background: linear-gradient(145deg, #ffffff, #f2f2f2);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      width: 48px;
+      height: 48px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease-in-out;
+    }
+    #vip-helper button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 14px rgba(212, 175, 55, 0.4);
+    }
+
+    /* 5. AOS Entrance Animations */
+    [data-aos] {
+      opacity: 0;
+      transform: translateY(20px);
+      transition-property: opacity, transform;
+    }
+    [data-aos].aos-animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 6. Welcome Banner (below header) */
+    .vip-welcome {
+      background: linear-gradient(90deg, #064f32, #0b3a27);
+      color: #f7f7f7;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-size: 0.95rem;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 7. Upgraded Submit Button */
+    #submit-btn {
+      background: linear-gradient(90deg, #006633, #00aa66);
+      border: none;
+      box-shadow: 0 0 10px rgba(0, 102, 51, 0.5);
+      transition: all 0.3s ease-in-out;
+    }
+    #submit-btn:hover {
+      box-shadow: 0 0 20px rgba(0, 255, 153, 0.7);
+      transform: translateY(-2px);
+    }
+    #submit-btn i {
+      transition: transform 0.3s ease;
+    }
+    #submit-btn:hover i {
+      transform: translateX(4px);
+    }
+
+    </style>
 
 </head>
 
@@ -39,27 +154,27 @@
 
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
-            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                  <li><a href="#">DELEGATE</a></li>
-                <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
-                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
-              </ul>
-            </li>
-            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
-            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
-            <li><a href="{% url 'home' %}#features">ACTIVITIES</a></li>
-            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
-            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                 <li><a href="{% url 'places' %}">VENUE</a></li>
-                <li><a href="{% url 'gallery' %}#gallery">GALLERY</a></li>
-                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
-                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-              </ul>
-            </li>
+<!--            <li><a href="{% url 'home' %}" class="active">HOME</a></li>-->
+<!--            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>-->
+<!--            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>-->
+<!--              <ul>-->
+<!--                  <li><a href="#">DELEGATE</a></li>-->
+<!--                <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>-->
+<!--                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!--            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>-->
+<!--            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>-->
+<!--            <li><a href="{% url 'home' %}#features">ACTIVITIES</a></li>-->
+<!--            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>-->
+<!--            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>-->
+<!--              <ul>-->
+<!--                 <li><a href="{% url 'places' %}">VENUE</a></li>-->
+<!--                <li><a href="{% url 'gallery' %}#gallery">GALLERY</a></li>-->
+<!--                &lt;!&ndash; <li><a href="{% url 'not_found' %}">VENUE</a></li> &ndash;&gt;-->
+<!--                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>-->
+<!--              </ul>-->
+<!--            </li>-->
             <li class="d-none d-md-block">
               <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
             </li>
@@ -89,12 +204,12 @@
     <!-- Page Title -->
     <div class="page-title dark-background">
         <div class="container position-relative">
-            <h1>Register</h1>
+            <h1>Registration</h1>
             <p>Register for the Kenya Software & AI Summit 2025</p>
             <nav class="breadcrumbs">
                 <ol>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li class="current">Register</li>
+<!--                    <li><a href="{% url 'home' %}">Home</a></li>-->
+<!--                    <li class="current">Register</li>-->
                 </ol>
             </nav>
         </div>
@@ -110,11 +225,11 @@
 
                     <div class="ticket-form-wrapper">
                         <div class="event-info mb-5">
-                            <h3>The Kenya Software & AI Summit 2025 Registration</h3>
+                            <h3>The Kenya Software & AI Summit 2025 </h3>
                             <div class="event-details">
                                 <div class="event-meta">
                                     <span><i class="bi bi-calendar-event"></i> November 10-12, 2025</span>
-                                    <span><i class="bi bi-geo-alt"></i> Eldoret City</span>
+                                    <span><i class="bi bi-geo-alt"></i>Moi University, Annex Campus, Eldoret</span>
                                     <!--                    <span><i class="bi bi-clock"></i> 9:00 AM - 6:00 PM</span>-->
                                 </div>
                             </div>
@@ -338,34 +453,34 @@
                   </div>
               </div>
 
-          <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Register</h4>
-            <ul>
-              <li><a href="{% url 'register' %}#features">Delegate</a></li>
-              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
-              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
-            </ul>
-          </div>
+<!--          <div class="col-lg-2 col-md-3 footer-links">-->
+<!--            <h4>Register</h4>-->
+<!--            <ul>-->
+<!--              <li><a href="{% url 'register' %}#features">Delegate</a></li>-->
+<!--              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>-->
+<!--              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>-->
+<!--            </ul>-->
+<!--          </div>-->
 
-          <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="{% url 'home' %}#intro">About</a></li>
-              <li><a href="{% url 'speakers' %}">Speakers</a></li>
-              <li><a href="{% url 'home' %}#schedule">Program</a></li>
-              <li><a href="#">Register</a></li>
-            </ul>
-          </div>
+<!--          <div class="col-lg-2 col-md-3 footer-links">-->
+<!--            <h4>Quick Links</h4>-->
+<!--            <ul>-->
+<!--              <li><a href="{% url 'home' %}#intro">About</a></li>-->
+<!--              <li><a href="{% url 'speakers' %}">Speakers</a></li>-->
+<!--              <li><a href="{% url 'home' %}#schedule">Program</a></li>-->
+<!--              <li><a href="#">Register</a></li>-->
+<!--            </ul>-->
+<!--          </div>-->
 
-          <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Resources</h4>
-            <ul>
-              <li><a href="{% url 'home' %}#features">Activities</a></li>
-              <li><a href="{% url 'home' %}#partners">Partners</a></li>
-              <li><a href="#">Media</a></li>
-              <li><a href="{% url 'privacy' %}">Privacy</a></li>
-            </ul>
-          </div>
+<!--          <div class="col-lg-2 col-md-3 footer-links">-->
+<!--            <h4>Resources</h4>-->
+<!--            <ul>-->
+<!--              <li><a href="{% url 'home' %}#features">Activities</a></li>-->
+<!--              <li><a href="{% url 'home' %}#partners">Partners</a></li>-->
+<!--              <li><a href="#">Media</a></li>-->
+<!--              <li><a href="{% url 'privacy' %}">Privacy</a></li>-->
+<!--            </ul>-->
+<!--          </div>-->
 
           </div>
       </div>
