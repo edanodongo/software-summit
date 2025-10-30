@@ -1,0 +1,159 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0 h4">
+                    <i class="fas fa-id-badge me-2"></i>Delegates Badges to Print
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="badge-table" class="table table-hover table-bordered align-middle">
+                        <thead class="table-dark">
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th>Title</th>
+                            <th>First Name</th>
+                            <th>Other Names</th>
+                            <th>National ID</th>
+                            <th>Org. Type</th>
+                            <th>Job Title</th>
+                            <th>Category</th>
+                            <th>Days to Attend</th>
+                            <th style="width: 80px;">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for registrant in registrants %}
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td>{{ registrant.title }}</td>
+                                <td class="fw-semibold text-primary">{{ registrant.first_name }}</td>
+                                <td class="fw-semibold">{{ registrant.second_name }}</td>
+                                <td class="text-muted">{{ registrant.national_id_number|default:"—" }}</td>
+                                <td><span class="badge bg-info text-dark">{{ registrant.display_org_type }}</span></td>
+                                <td>{{ registrant.job_title|default:"—" }}</td>
+                                <td><span class="badge bg-secondary">{{ registrant.category_name|default:"—" }}</span></td>
+                                <td>{{ registrant.days_to_attend|default:"—" }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'generate_badge' registrant.id %}"
+                                       class="btn btn-sm btn-primary"
+                                       target="_blank"
+                                       title="Generate Badge">
+                                        <i class="fas fa-id-badge"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="10" class="text-center text-muted py-4">
+                                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                                    No delegates available.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #badge-table {
+            font-size: 0.9rem;
+        }
+
+        #badge-table thead th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        #badge-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        #badge-table tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+            transform: scale(1.01);
+        }
+
+        .dataTables_wrapper .dt-buttons {
+            float: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dataTables_wrapper .dt-buttons .btn {
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 0.35em 0.65em;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <link rel="stylesheet" href="{% static 'datatables/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'datatables/css/buttons.dataTables.min.css' %}">
+    <script src="{% static 'datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'datatables/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'datatables/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'datatables/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'datatables/js/jszip.min.js' %}"></script>
+    <script src="{% static 'datatables/js/pdfmake.min.js' %}"></script>
+    <script src="{% static 'datatables/js/vfs_fonts.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#badge-table').DataTable({
+                responsive: true,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"Bf>rtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: '<i class="fas fa-file-csv me-1"></i> CSV',
+                        className: 'btn btn-success btn-sm'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
+                        className: 'btn btn-success btn-sm'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+                        className: 'btn btn-danger btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print me-1"></i> Print',
+                        className: 'btn btn-secondary btn-sm'
+                    }
+                ],
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                language: {
+                    search: "Search delegates:",
+                    lengthMenu: "Show _MENU_ delegates per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ delegates",
+                    infoEmpty: "No delegates found",
+                    infoFiltered: "(filtered from _MAX_ total delegates)"
+                }
+            });
+        });
+    </script>
+{% endblock %}

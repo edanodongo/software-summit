@@ -1,5 +1,7 @@
 import time
 import traceback
+import string
+import secrets
 from datetime import datetime
 from io import BytesIO
 
@@ -911,3 +913,35 @@ def send_protocol_confirmation_email(registrant, retries=3, delay=3):
             attempts=attempt_count,
             sent_at=timezone.now(),
         )
+
+
+
+def generate_strong_password(length=8):
+    """
+    Generates a strong 8-character random password with uppercase,
+    lowercase, digits, and special characters.
+    """
+    if length < 8:
+        raise ValueError("Password length should be at least 8 characters.")
+
+    # Character sets
+    letters = string.ascii_letters  # A-Z + a-z
+    digits = string.digits          # 0-9
+    symbols = "!@#$%^&*()-_=+[]{};:,.<>?"
+
+    # Ensure at least one of each
+    all_chars = letters + digits + symbols
+    password = [
+        secrets.choice(string.ascii_uppercase),
+        secrets.choice(string.ascii_lowercase),
+        secrets.choice(digits),
+        secrets.choice(symbols),
+    ]
+
+    # Fill the rest randomly
+    password += [secrets.choice(all_chars) for _ in range(length - 4)]
+
+    # Shuffle to mix
+    secrets.SystemRandom().shuffle(password)
+
+    return ''.join(password)
