@@ -120,10 +120,14 @@ urlpatterns = [
     path("audit/regTrails", views.dashboard_student_view, name="reg_trails"),
     path("audit/approvaTrails", views.dashboard_student_view, name="approve_trails"),
 
-    # User Management
+    # --- User Management ---
     path("dashboard/users", views.users, name="users"),
     path("dashboard/add_user", views.add_user, name="add_user"),
 
     path('dashboard/authregister/', views.save_user, name='save_user'),
+
+    path("badge/", views.badge, name="badge"),
+    path("auth_badge/", views.auth_badge, name="auth_badge"),
+    path("badge_dashboard/", views.badge_dashboard, name="badge_dashboard"),
 
 ]

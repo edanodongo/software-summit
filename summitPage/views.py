@@ -1,5 +1,5 @@
 # imports
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
@@ -2519,15 +2519,13 @@ def save_user(request):
                 <li><strong>Password:</strong> {password}</li>
               </ul>
 
-              <p style="margin-top:20px;">For security, please change your password immediately after your first login.</p>
-
               <a href="https://softwaresummit.go.ke/badge" 
                  style="display:inline-block; background-color:#0d6efd; color:#ffffff; text-decoration:none; 
                         padding:10px 20px; border-radius:5px; margin-top:15px;">
                 Go to Login
               </a>
 
-              <p style="margin-top:25px; color:#666;">Regards,<br>Summit IT Support Team</p>
+              <p style="margin-top:25px; color:#666;">Regards,<br>Software Summit Team</p>
             </div>
           </body>
         </html>
@@ -2561,3 +2559,45 @@ def save_user(request):
 
     # Invalid request method
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+
+def badge(request):
+    return render(request, "badge/login.html")
+
+def auth_badge(request):
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "").strip()
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            request.session.set_expiry(0)
+            request.session['last_activity'] = timezone.now().isoformat()
+
+            return JsonResponse({
+                "status": "success",
+                "message": "Login successful! Redirecting..."
+            })
+        else:
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid username or password."
+            })
+
+    # If GET, just render the form normally
+    return render(request, "badge/login.html")
+
+@login_required
+def badge_dashboard(request):
+
+
+    context = {
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+    return render(request, "badge/badge.html", context)
+
+
