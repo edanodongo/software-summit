@@ -117,6 +117,14 @@ class Registrant(models.Model):
         verbose_name="Passport Photo (JPG/PDF)"
     )
 
+    def get_category_display(self):
+        """Handle callable choices for category gracefully."""
+        try:
+            choices = get_category_id() if callable(get_category_id) else get_category_id
+            return dict(choices).get(self.category, self.category or "—")
+        except Exception:
+            return self.category or "—"
+
     def get_days_list(self):
         if self.days_to_attend:
             return [day.strip() for day in self.days_to_attend.split(",")]
