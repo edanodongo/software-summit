@@ -164,4 +164,4 @@ SESSION_SAVE_EVERY_REQUEST = True        # resets expiry on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # for Remember Me on login page
 
 #  python -c "import uuid; print(uuid.uuid4())"
-# SPECIAL_ACCESS_KEY = "ce9e2f46-2579-4467-a856-05a04d0caac5"
+SPECIAL_ACCESS_KEY = "ce9e2f46-2579-4467-a856-05a04d0caac5"
