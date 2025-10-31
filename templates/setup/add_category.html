@@ -16,6 +16,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Badge Color Code</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -26,16 +27,21 @@
                         <td>{{ categories.name }}</td>
                         <td>{{ categories.description }}</td>
                         <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width: 40px; height: 40px; background-color: {{ categories.color|default:'#cccccc' }}; border: 2px solid #dee2e6; border-radius: 4px;" title="{{ categories.color|default:'No color set' }}"></div>
+                                <span class="text-muted small">{{ categories.color|default:'N/A' }}</span>
+                            </div>
+                        </td>
+                        <td>
                             <a href="{% url 'update_category' categories.id %}" class="btn btn-sm btn-warning">Edit</a>
                             <a href="#" class="btn btn-sm btn-danger" onclick="deleteCategory('{{ categories.id }}')">
                                 Delete
                             </a>
-
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4" class="text-center text-muted">No categories added yet.</td>
+                        <td colspan="5" class="text-center text-muted">No categories added yet.</td>
                     </tr>
                 {% endfor %}
                 </tbody>

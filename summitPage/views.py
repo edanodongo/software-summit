@@ -1276,12 +1276,14 @@ def save_category(request):
     if request.method == "POST":
         category_name = request.POST.get("category")
         description = request.POST.get("description")
+        color = request.POST.get("color")
 
         try:
             # Save category in DB
             Category.objects.create(
                 name=category_name,
-                description=description
+                description=description,
+                color=color
             )
 
             return JsonResponse({
@@ -1352,12 +1354,14 @@ def edit_category(request):
         category_id = request.POST.get("id")
         name = request.POST.get("category")
         description = request.POST.get("description")
+        color = request.POST.get("color")
 
         try:
             # Update existing record
             category = Category.objects.get(pk=category_id)
             category.name = name
             category.description = description
+            category.color = color
             category.save()
             message = f'Category "{name}" successfully updated.'
 
@@ -2643,3 +2647,4 @@ def badge_isprinted(request):
     }
 
     return render(request, "badge/printed.html", context)
+
