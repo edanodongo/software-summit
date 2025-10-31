@@ -10,6 +10,7 @@ import uuid
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    color = models.CharField(max_length=255, null=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):

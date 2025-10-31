@@ -20,6 +20,18 @@
                               placeholder="Enter category description..."></textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label for="color" class="form-label">Category Color</label>
+                    <div class="input-group">
+                        <input type="color" class="form-control form-control-color" id="color_picker"
+                               value="#3b82f6" title="Choose color" style="max-width: 80px;">
+                        <input type="text" class="form-control" id="color" name="color"
+                               value="#3b82f6" placeholder="#000000" pattern="^#[0-9A-Fa-f]{6}$"
+                               title="Enter a valid hex color code (e.g., #3b82f6)" required>
+                    </div>
+                    <small class="form-text text-muted">Pick a color or enter a hex code (e.g., #3b82f6)</small>
+                </div>
+
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary px-4">Save Category</button>
                 </div>
@@ -27,6 +39,22 @@
         </div>
     </div>
     <script>
+        // Sync color picker with text input
+        const colorPicker = document.getElementById('color_picker');
+        const colorInput = document.getElementById('color');
+
+        colorPicker.addEventListener('input', function() {
+            colorInput.value = this.value.toUpperCase();
+        });
+
+        colorInput.addEventListener('input', function() {
+            const hexValue = this.value.trim();
+            // Validate hex color format
+            if (/^#[0-9A-Fa-f]{6}$/.test(hexValue)) {
+                colorPicker.value = hexValue;
+            }
+        });
+
         document.getElementById('category_form').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -44,10 +72,13 @@
                     if (data.status === 'success') {
                         notyf.success(data.message);
                         document.getElementById('category_form').reset();
+                        // Reset color to default
+                        colorPicker.value = '#3b82f6';
+                        colorInput.value = '#3b82f6';
 
                         // Redirect after short delay (e.g., 1.5 seconds)
                         setTimeout(() => {
-                            window.location.href = '/categories/'; 
+                            window.location.href = '/categories/';
                         }, 1500);
 
                     } else {
