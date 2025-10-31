@@ -2687,6 +2687,23 @@ def approve_exhibitor(request, exhibitor_id):
             messages.error(request, f"Only {remaining} booths remaining.")
             return redirect("admin_dashboard")
 
+        # --- Try sending confirmation email ---
+        try:
+            send_confirmation_booth_confirmation_mail(exhibitor)
+        except Exception as e:
+            print("❌ Email send error:", e)
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({
+                    "success": True,
+                    "message": "Registration successful, but confirmation email failed."
+                })
+            messages.warning(request, "Registration saved, but email could not be sent.")
+
+        # Success
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"success": True, "message": "Registration successful!"})
+        messages.success(request, "Registration successful!")
+
         exhibitor.approve(count)
 
         # ✅ Recalculate after approval
@@ -2748,18 +2765,20 @@ def approved_exhibitors(request):
     )
 
 
-
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt  # not needed if you use {% csrf_token %} via JS
 @login_required
 @require_POST
 def ajax_approve_exhibitor(request, exhibitor_id):
+
     exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
     dashboard_setting = DashboardSetting.objects.first()
     max_count = dashboard_setting.max_count or 0
 
     total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    remaining = max(max_count - total_taken, 0)
+
     remaining = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
 
     try:
@@ -2770,8 +2789,25 @@ def ajax_approve_exhibitor(request, exhibitor_id):
     if count > remaining:
         return JsonResponse({"success": False, "message": f"Only {remaining} booths remaining."})
 
-    # Approve exhibitor
+    # Approve exhibitor and send mail
     exhibitor.approve(count)
+
+    try:
+        send_confirmation_booth_confirmation_mail(exhibitor)
+    except Exception as e:
+        print("❌ Email send error:", e)
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": True,
+                "message": "Registration successful, but confirmation email failed."
+            })
+        messages.warning(request, "Registration saved, but email could not be sent.")
+
+    # Success
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"success": True, "message": "Registration successful!"})
+    messages.success(request, "Registration successful!")
+
 
     # ✅ Recalculate total approved booths
     approved_booths_total = Exhibitor.objects.filter(
