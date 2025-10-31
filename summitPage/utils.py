@@ -253,7 +253,7 @@ def get_category_name_from_id(category_id):
         category = Category.objects.get(id=category_id)
         return category.name
     except Category.DoesNotExist:
-        return "Unknown"
+        return "Delegate"
 
 
 # --------------------------------------------
