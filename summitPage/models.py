@@ -705,6 +705,7 @@ class Exhibitor(models.Model):
 
     # --- Legal & Timestamps ---
     privacy_agreed = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_full_name(self):
