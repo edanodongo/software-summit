@@ -1,5 +1,7 @@
 # imports
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
@@ -56,6 +58,8 @@ from django.contrib.auth.decorators import login_required
 from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, DashboardSetting
 from summitPage.forms import DashboardSettingForm
 from django.conf import settings
+from PIL import Image, ImageDraw, ImageFont
+import os
 
 
 # begin your views here
@@ -1276,12 +1280,14 @@ def save_category(request):
     if request.method == "POST":
         category_name = request.POST.get("category")
         description = request.POST.get("description")
+        color = request.POST.get("color")
 
         try:
             # Save category in DB
             Category.objects.create(
                 name=category_name,
-                description=description
+                description=description,
+                color=color
             )
 
             return JsonResponse({
@@ -1352,12 +1358,14 @@ def edit_category(request):
         category_id = request.POST.get("id")
         name = request.POST.get("category")
         description = request.POST.get("description")
+        color = request.POST.get("color")
 
         try:
             # Update existing record
             category = Category.objects.get(pk=category_id)
             category.name = name
             category.description = description
+            category.color = color
             category.save()
             message = f'Category "{name}" successfully updated.'
 
@@ -2786,3 +2794,127 @@ def ajax_approve_exhibitor(request, exhibitor_id):
         "approved_exhibitors": approved_exhibitors,
         "remaining": max(max_count - approved_booths_total, 0),
     })
+def create_badge(request, reg_id):
+    try:
+        # Fetch registrant record with only the fields we need
+        registrant = (
+            Registrant.objects
+            .only(
+                "id", "title", "first_name", "second_name",
+                "national_id_number", "other_organization_type",
+                "job_title", "category"
+            )
+            .get(id=reg_id)
+        )
+
+        # Fetch category color
+        category_data = (
+            Category.objects
+            .only("color")
+            .get(id=registrant.category)
+        )
+
+        # --- Define Variables ---
+        title = registrant.title or ""
+        first_name = registrant.first_name or ""
+        second_name = registrant.second_name or ""
+        national_id_number = registrant.national_id_number or ""
+        organization = registrant.other_organization_type or ""
+        job_title = registrant.job_title or ""
+        category = get_category_name_from_id(registrant.category)
+        badge_color = category_data.color or "#004aad"
+        logopath = os.path.join(settings.BASE_DIR, "static/images/summit_logo.png")
+
+        # --- Ensure badge folder exists ---
+        badge_dir = os.path.join(settings.MEDIA_ROOT, "badges")
+        os.makedirs(badge_dir, exist_ok=True)
+
+        # --- Define output path ---
+        badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
+
+        # --- Create badge image ---
+        width, height = 800, 1000
+        badge = Image.new("RGB", (width, height), "#ffffff")
+        draw = ImageDraw.Draw(badge)
+
+        # --- Header background ---
+        draw.rectangle([0, 0, width, 150], fill=badge_color)
+
+        # --- Add logo (optional) ---
+        if os.path.exists(logopath):
+            logo = Image.open(logopath).convert("RGBA")
+            logo.thumbnail((200, 200))
+            badge.paste(logo, (width - 230, 10), logo)
+
+        # --- Fonts ---
+        try:
+            name_font = ImageFont.truetype("arialbd.ttf", 48)
+            text_font = ImageFont.truetype("arial.ttf", 36)
+        except:
+            name_font = ImageFont.load_default()
+            text_font = ImageFont.load_default()
+
+        # --- Text placement ---
+        draw.text((50, 200), f"{title} {first_name} {second_name}", fill="black", font=name_font)
+        draw.text((50, 280), f"{organization}", fill="gray", font=text_font)
+        draw.text((50, 340), f"{job_title}", fill="black", font=text_font)
+        draw.text((50, 400), f"{category}", fill=badge_color, font=text_font)
+        draw.text((50, 470), f"ID: {national_id_number}", fill="black", font=text_font)
+
+        # --- Save final badge ---
+        badge.save(badge_path)
+
+        # --- Return URL for frontend preview ---
+        image_url = os.path.join(settings.MEDIA_URL, "badges", f"badge_{reg_id}.png")
+
+        return JsonResponse({"image_url": image_url})
+
+    except Registrant.DoesNotExist:
+        return JsonResponse({"error": "Registrant not found"}, status=404)
+    except CategoryColor.DoesNotExist:
+        return JsonResponse({"error": "Category color not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+@login_required
+@csrf_exempt  # optional: only if your AJAX doesn't send CSRF token
+def mark_printed(request, reg_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    try:
+        registrant = Registrant.objects.get(id=reg_id)
+        user = request.user
+        ip = get_client_ip(request)
+
+        registrant.is_printed = 1
+        registrant.save(update_fields=["is_printed"])
+
+        PrintLog.objects.create(
+            record_id=registrant,
+            printed_by=user,
+            ip_address=ip,
+            timestamp=timezone.now()
+        )
+
+        return JsonResponse({"success": True})
+
+    except Registrant.DoesNotExist:
+        return JsonResponse({"error": "Registrant not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+def get_client_ip(request):
+    """Helper to get real IP even behind proxy."""
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+
+
+

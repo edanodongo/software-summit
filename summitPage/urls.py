@@ -129,15 +129,6 @@ urlpatterns = [
 
     path('dashboard/authregister/', views.save_user, name='save_user'),
 
-    #color setup
-    path("dashboard/color/", views.guest_category, name="color"),
-    path("dashboard/addcolor/", views.categories_create, name="color_create"),
-    path('categories/saveCategory/', views.save_category, name='saveCategory'),
-    path("categories/<int:pk>/edit", views.update_category, name="update_category"),
-    path("categories/<int:pk>/delete/", views.delete_category, name="delete_category"),
-    path('categories/editCategory/', views.edit_category, name='editCategory'),
-
-
 
     # Badge portal
     path("badge/", views.badge, name="badge"),
@@ -145,5 +136,10 @@ urlpatterns = [
     path("badge_dashboard/", views.badge_dashboard, name="badge_dashboard"),
     path("badge/printed", views.badge_isprinted, name="badge_printed"),
     path("badge/logout/", views.badgeLogout, name="signout"),
+
+    # badge generation
+    path("create_badge/<int:reg_id>/", views.create_badge, name="create_badge"),
+    path("mark_printed/<int:reg_id>/", views.mark_printed, name="mark_printed"),
+
 
 ]
