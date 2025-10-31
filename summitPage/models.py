@@ -83,6 +83,7 @@ class Registrant(models.Model):
     interests = models.JSONField(default=list, blank=True)
     other_interest = models.TextField(blank=True, null=True)
 
+    is_printed = models.IntegerField(null=True, blank=True)
     category = models.CharField(max_length=50, choices=get_category_id, verbose_name="Registration Category")
     privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
@@ -841,3 +842,31 @@ class DashboardSetting(models.Model):
     class Meta:
         verbose_name = "Dashboard Setting"
         verbose_name_plural = "Dashboard Settings"
+
+
+class PrintLog(models.Model):
+    record_id = models.ForeignKey(
+        'Registrant',
+        on_delete=models.CASCADE,
+        related_name='print_logs'
+    )
+    printed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='printed_records'
+    )
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Record {self.record_id} printed by {self.printed_by} on {self.timestamp}"
+
+class CategoryColor(models.Model):
+    color_hex_code = models.CharField(max_length=7)  # e.g. #FF5733
+    category_to_rep = models.TextField(help_text="Comma-separated category names")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.color_hex_code} → {self.category_to_rep}"

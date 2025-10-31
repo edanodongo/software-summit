@@ -2597,12 +2597,17 @@ def auth_badge(request):
 @login_required
 def badge_dashboard(request):
     # Convert category IDs to strings because Registrant.category is a CharField
-    student_category_ids = [str(cid) for cid in
-                            Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+    student_category_ids = [
+        str(cid)
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
+    ]
+
     registrants = (
         Registrant.objects.filter(
-            Q(approved=True) |
-            ~Q(Q(organization_type__iexact="Student") | Q(category__in=student_category_ids))
+            Q(is_printed__isnull=True) & (
+                    Q(approved=True) |
+                    ~Q(Q(organization_type__iexact="Student") | Q(category__in=student_category_ids))
+            )
         ).order_by("-created_at")
     )
 
@@ -2623,3 +2628,18 @@ def badgeLogout(request):
         return redirect('badge')
 
     return render(request, "badge/login.html")
+
+def badge_isprinted(request):
+
+    registrants = (
+        Registrant.objects.filter(is_printed=1).order_by("-created_at")
+    )
+
+    context = {
+        "registrants": registrants,
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+
+    return render(request, "badge/printed.html", context)
