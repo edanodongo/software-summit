@@ -1,11 +1,10 @@
 # imports
 from django.contrib.auth import get_user_model, authenticate, login, logout
-from django.db import transaction
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models.functions import TruncDate, TruncMonth
 from django.forms import inlineformset_factory
+from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet
@@ -32,7 +31,6 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A7, portrait
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
-import os
 from django.views.decorators.http import require_POST
 from datetime import datetime
 from django.contrib.auth.views import LogoutView
@@ -59,7 +57,7 @@ from summitPage.models import Exhibitor, Booth, ExhibitionSection, EmailLogs, Da
 from summitPage.forms import DashboardSettingForm
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
-import os
+import qrcode, os
 
 
 # begin your views here
@@ -2647,8 +2645,8 @@ def badgeLogout(request):
 
     return render(request, "badge/login.html")
 
-def badge_isprinted(request):
 
+def badge_isprinted(request):
     registrants = (
         Registrant.objects.filter(is_printed=1).order_by("-created_at")
     )
@@ -2832,7 +2830,6 @@ def ajax_approve_exhibitor(request, exhibitor_id):
     })
 def create_badge(request, reg_id):
     try:
-        # Fetch registrant record with only the fields we need
         registrant = (
             Registrant.objects
             .only(
@@ -2843,74 +2840,105 @@ def create_badge(request, reg_id):
             .get(id=reg_id)
         )
 
-        # Fetch category color
-        category_data = (
-            Category.objects
-            .only("color")
-            .get(id=registrant.category)
-        )
+        category_obj = Category.objects.only("name", "color").get(id=registrant.category)
+        badge_color = category_obj.color or "#008037"  # default green if missing
+        category_name = category_obj.name.upper()
 
-        # --- Define Variables ---
-        title = registrant.title or ""
-        first_name = registrant.first_name or ""
-        second_name = registrant.second_name or ""
-        national_id_number = registrant.national_id_number or ""
-        organization = registrant.other_organization_type or ""
-        job_title = registrant.job_title or ""
-        category = get_category_name_from_id(registrant.category)
-        badge_color = category_data.color or "#004aad"
-        logopath = os.path.join(settings.BASE_DIR, "static/images/summit_logo.png")
-
-        # --- Ensure badge folder exists ---
-        badge_dir = os.path.join(settings.MEDIA_ROOT, "badges")
-        os.makedirs(badge_dir, exist_ok=True)
-
-        # --- Define output path ---
-        badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
-
-        # --- Create badge image ---
-        width, height = 800, 1000
-        badge = Image.new("RGB", (width, height), "#ffffff")
+        # --- Badge size ---
+        width, height = 800, 1200
+        badge = Image.new("RGB", (width, height), "white")
         draw = ImageDraw.Draw(badge)
 
-        # --- Header background ---
-        draw.rectangle([0, 0, width, 150], fill=badge_color)
-
-        # --- Add logo (optional) ---
-        if os.path.exists(logopath):
-            logo = Image.open(logopath).convert("RGBA")
-            logo.thumbnail((200, 200))
-            badge.paste(logo, (width - 230, 10), logo)
+        # --- Paths ---
+        logo_path = os.path.join(settings.BASE_DIR, "static/images/summit_logo.png")
+        badge_dir = os.path.join(settings.MEDIA_ROOT, "badges")
+        os.makedirs(badge_dir, exist_ok=True)
+        badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
 
         # --- Fonts ---
         try:
-            name_font = ImageFont.truetype("arialbd.ttf", 48)
-            text_font = ImageFont.truetype("arial.ttf", 36)
+            bold_font = ImageFont.truetype("arialbd.ttf", 56)
+            name_font = ImageFont.truetype("arialbd.ttf", 60)
+            text_font = ImageFont.truetype("arial.ttf", 34)
+            small_font = ImageFont.truetype("arial.ttf", 28)
         except:
-            name_font = ImageFont.load_default()
-            text_font = ImageFont.load_default()
+            bold_font = name_font = text_font = small_font = ImageFont.load_default()
 
-        # --- Text placement ---
-        draw.text((50, 200), f"{title} {first_name} {second_name}", fill="black", font=name_font)
-        draw.text((50, 280), f"{organization}", fill="gray", font=text_font)
-        draw.text((50, 340), f"{job_title}", fill="black", font=text_font)
-        draw.text((50, 400), f"{category}", fill=badge_color, font=text_font)
-        draw.text((50, 470), f"ID: {national_id_number}", fill="black", font=text_font)
+        # --- Logo ---
+        if os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            logo.thumbnail((400, 180))
+            badge.paste(logo, (int((width - logo.width) / 2), 40), logo)
 
-        # --- Save final badge ---
+        # --- Summit Title ---
+        draw.text(
+            (width / 2, 270),
+            "THE KENYA SOFTWARE & AI SUMMIT 2025",
+            fill="black",
+            font=text_font,
+            anchor="mm"
+        )
+
+        # --- Category Label ---
+        draw.text(
+            (width / 2, 430),
+            category_name,
+            fill="black",
+            font=name_font,
+            anchor="mm"
+        )
+
+        # --- Full Name ---
+        full_name = f"{registrant.title or ''} {registrant.first_name or ''} {registrant.second_name or ''}".strip()
+        draw.text((width / 2, 550), full_name, fill="black", font=bold_font, anchor="mm")
+
+        # --- Organization & Job Title ---
+        org_text = registrant.other_organization_type or ""
+        job_text = registrant.job_title or ""
+        draw.text((width / 2, 640), org_text, fill="gray", font=text_font, anchor="mm")
+        draw.text((width / 2, 700), job_text, fill="black", font=text_font, anchor="mm")
+
+        # --- Diagonal colored section ---
+        # Raise the section to avoid cutoff
+        diagonal_top = height - 260
+        draw.polygon([(0, height), (0, diagonal_top), (width, height)], fill=badge_color)
+
+        # --- Event Date and Venue (move up a bit) ---
+        event_text = "10th – 12th November 2025\nBomas of Kenya, Nairobi"
+        draw.multiline_text(
+            (80, height - 210),
+            event_text,
+            fill="white",
+            font=small_font,
+            spacing=6,
+            anchor="ls"
+        )
+
+        # --- QR Code ---
+        qr_data = f"Name: {full_name}\nID: {registrant.national_id_number}\nCategory: {category_name}"
+        qr_img = qrcode.make(qr_data)
+        qr_img = qr_img.resize((150, 150))
+        badge.paste(qr_img, (width - 220, height - 220))
+
+        # --- White triangle accent (now smaller and higher) ---
+        draw.polygon(
+            [(width - 130, diagonal_top), (width, diagonal_top), (width, diagonal_top + 100)],
+            fill="white"
+        )
+
+        # --- Save ---
         badge.save(badge_path)
-
-        # --- Return URL for frontend preview ---
         image_url = os.path.join(settings.MEDIA_URL, "badges", f"badge_{reg_id}.png")
 
         return JsonResponse({"image_url": image_url})
 
     except Registrant.DoesNotExist:
         return JsonResponse({"error": "Registrant not found"}, status=404)
-    except CategoryColor.DoesNotExist:
-        return JsonResponse({"error": "Category color not found"}, status=404)
+    except Category.DoesNotExist:
+        return JsonResponse({"error": "Category not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
 
 @login_required
 @csrf_exempt  # optional: only if your AJAX doesn't send CSRF token
@@ -2949,8 +2977,3 @@ def get_client_ip(request):
     else:
         ip = request.META.get("REMOTE_ADDR")
     return ip
-
-
-
-
-
