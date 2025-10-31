@@ -59,6 +59,26 @@
             </a>
         </div>
         <a href="{% url 'admin_dashboard' %}"><i class="fas fa-store"></i><span> Exhibitors Dashboard</span></a>
+        <!-- Delegate Dashboard (Collapsible Trigger) -->
+        <a class="d-block text-white dropdown-toggle py-2"
+           data-bs-toggle="collapse"
+           href="#exhibitorSubmenu"
+           role="button"
+           aria-expanded="false"
+           aria-controls="exhibitorSubmenu">
+            <i class="fas fa-home"></i>
+            <span>  Exhibitors Dashboard</span>
+        </a>
+
+        <!-- Collapsible Submenu -->
+        <div class="collapse ps-4" id="exhibitorSubmenu">
+            <a href="{% url 'admin_dashboard' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-user"></i> Registered
+            </a>
+            <a href="{% url 'approved_exhibitors' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-user-graduate"></i> Approved
+            </a>
+        </div>
         <a href="{% url 'sponsor_dashboard' %}"><i class="fas fa-store"></i><span> Sponsor Dashboard</span></a>
         <a href="{% url 'main_dashboard_view' %}"><i class="fas fa-chart-pie"></i><span> Stats Dashboard</span></a>
         <a href="{% url 'categories' %}"><i class="fas fa-user-check"></i><span> Guest Categories</span></a>
