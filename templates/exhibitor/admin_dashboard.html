@@ -226,7 +226,13 @@
               {% if e.approval_status == "approved" %}
                 <span class="badge bg-success">Approved</span>
               {% elif e.approval_status == "pending" %}
-                <button class="btn btn-sm btn-outline-success approve-btn" data-id="{{ e.id }}">
+                <button
+                  class="btn btn-sm btn-outline-success approve-btn"
+                  data-id="{{ e.id }}"
+                  data-name="{{ e.get_full_name }}"
+                  data-organization="{{ e.organization_type }}"
+                  data-email="{{ e.email|default:'N/A' }}"
+                  data-remaining="{{ remaining }}">
                   <i class="fas fa-check"></i> Approve
                 </button>
               {% else %}
@@ -265,25 +271,53 @@
   </div>
 </div>
 
-    <!-- ✅ Approval Modal -->
+<!-- ✅ Approval Modal -->
 <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Approve Exhibitor</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+
+      <!-- Header -->
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-check-circle me-1"></i> Approve Exhibitor
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
+
+      <!-- Body -->
       <div class="modal-body">
-        <p><strong id="exhibitorName"></strong></p>
+        <!-- ✅ Dynamic Exhibitor Info -->
+        <div class="mb-3">
+          <h5 id="exhibitorName" class="fw-bold text-primary mb-2"></h5>
+          <p class="mb-1"><strong>Organization:</strong> <span id="exhibitorOrganization">—</span></p>
+          <p class="mb-1"><strong>Email:</strong> <span id="exhibitorEmail">—</span></p>
+          <p class="text-muted"><strong>Remaining Booths:</strong> <span id="remainingBooths">0</span></p>
+        </div>
+
+        <!-- ✅ Approval Form -->
         <form id="approveForm">
           {% csrf_token %}
           <div class="mb-3">
-            <label for="boothCount" class="form-label">Booth Count</label>
+            <label for="boothCount" class="form-label">Booth Count to Approve</label>
             <input type="number" id="boothCount" name="count" class="form-control" min="1" required>
           </div>
+
           <input type="hidden" id="approveExhibitorId" name="exhibitor_id">
-          <button type="submit" class="btn btn-success w-100">Approve</button>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-check2-circle me-1"></i> Approve Exhibitor
+            </button>
+          </div>
         </form>
+
+        <!-- ✅ Success Message (hidden by default) -->
+        <div id="approvalSuccess" class="alert alert-success mt-3 text-center d-none">
+          Exhibitor approved successfully!
+        </div>
       </div>
     </div>
   </div>
@@ -473,26 +507,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 document.addEventListener("DOMContentLoaded", function () {
   const approveModal = new bootstrap.Modal(document.getElementById("approveModal"));
   const approveForm = document.getElementById("approveForm");
+
   const exhibitorName = document.getElementById("exhibitorName");
+  const exhibitorOrganization = document.getElementById("exhibitorOrganization");
+  const exhibitorEmail = document.getElementById("exhibitorEmail");
+  const remainingBooths = document.getElementById("remainingBooths");
+
   const boothCount = document.getElementById("boothCount");
   const approveExhibitorId = document.getElementById("approveExhibitorId");
+  const approveButton = approveForm.querySelector("button[type='submit']");
 
-  // Open modal when clicking "Approve"
+  // ✅ Open modal when clicking "Approve"
   document.querySelectorAll(".approve-btn").forEach(btn => {
     btn.addEventListener("click", function () {
       const row = this.closest("tr");
+
+      // Extract data from dataset or table columns
       const name = row.querySelector("td:first-child").textContent.trim();
+      const organization = this.dataset.organization || row.querySelector(".org-col")?.textContent?.trim() || "N/A";
+      const email = this.dataset.email || row.querySelector(".email-col")?.textContent?.trim() || "N/A";
+      const remaining = this.dataset.remaining || document.getElementById("remainingBoothsCount")?.textContent || "—";
+
+      // Fill modal fields
       exhibitorName.textContent = `Approve ${name}?`;
+      exhibitorOrganization.textContent = organization;
+      exhibitorEmail.textContent = email;
+      remainingBooths.textContent = remaining;
+
       approveExhibitorId.value = this.dataset.id;
+      boothCount.value = 1; // default booth count
+
       approveModal.show();
     });
   });
 
-  // Submit approval via AJAX
+  // ✅ Submit approval via AJAX
   approveForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -500,27 +552,73 @@ document.addEventListener("DOMContentLoaded", function () {
     const count = boothCount.value;
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    const response = await fetch(`/ajax/approve/${exhibitorId}/`, {
-      method: "POST",
-      headers: {
-        "X-CSRFToken": csrfToken,
-      },
-      body: new URLSearchParams({ count }),
-    });
+    // --- Loading spinner ---
+    approveButton.disabled = true;
+    const originalText = approveButton.innerHTML;
+    approveButton.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Approving...`;
 
-    const data = await response.json();
+    try {
+      const response = await fetch(`/ajax/approve/${exhibitorId}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ count }),
+      });
 
-    if (data.success) {
-      // Update the row instantly
-      const row = document.querySelector(`tr[data-exhibitor-id='${data.id}']`);
-      row.querySelector("td:nth-child(8)").textContent = data.total_count;
-      row.querySelector(".approve-btn").outerHTML = `<span class="badge bg-success">Approved</span>`;
-      approveModal.hide();
-    } else {
-      alert(data.message || "Approval failed.");
+      const data = await response.json();
+
+      if (data.success) {
+        // ✅ Update exhibitor row instantly
+        const row = document.querySelector(`tr[data-exhibitor-id='${data.id}']`);
+        if (row) {
+          row.querySelector("td:nth-child(8)").textContent = data.total_count;
+          row.querySelector(".approve-btn").outerHTML = `
+            <span class="badge bg-success px-3 py-2">Approved</span>
+          `;
+        }
+
+        // ✅ Update dashboard stats (if visible)
+        const approvedExhibitorsCount = document.getElementById("approvedExhibitorsCount");
+        const approvedBoothsTotal = document.getElementById("approvedBoothsTotal");
+        const remainingEl = document.getElementById("remainingBoothsCount");
+
+        if (approvedExhibitorsCount)
+          approvedExhibitorsCount.textContent = parseInt(approvedExhibitorsCount.textContent || 0) + 1;
+
+        if (approvedBoothsTotal)
+          approvedBoothsTotal.textContent = parseInt(approvedBoothsTotal.textContent || 0) + parseInt(data.total_count);
+
+        if (remainingEl)
+          remainingEl.textContent = parseInt(data.remaining);
+
+        // ✅ Button success feedback
+        approveButton.innerHTML = `<i class="bi bi-check-circle"></i> Approved!`;
+        approveButton.classList.replace("btn-success", "btn-primary");
+
+        // ✅ Close modal after short delay
+        setTimeout(() => {
+          approveModal.hide();
+          approveForm.reset();
+          approveButton.disabled = false;
+          approveButton.innerHTML = originalText;
+          approveButton.classList.replace("btn-primary", "btn-success");
+        }, 1000);
+      } else {
+        alert(data.message || "Approval failed.");
+        approveButton.disabled = false;
+        approveButton.innerHTML = originalText;
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Error approving exhibitor.");
+      approveButton.disabled = false;
+      approveButton.innerHTML = originalText;
     }
   });
 });
+
 </script>
+
 
 {% endblock %}
