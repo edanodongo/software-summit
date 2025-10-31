@@ -217,6 +217,10 @@
                 data-id="{{ e.id }}">
                 <i class="fas fa-edit"></i>
               </button>
+
+              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash"></i>
+              </a>
             </div>
           </td>
         </tr>
