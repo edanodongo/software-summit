@@ -35,50 +35,104 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <h2 class="my-4 text-center">
-            <!--        <i class="fas fa-tachometer-alt me-2"></i>-->
             <span>Summit Admin</span>
         </h2>
-        <!-- Delegate Dashboard (Collapsible Trigger) -->
+
+        <!-- Delegate Dashboard -->
         <a class="d-block text-white dropdown-toggle py-2"
            data-bs-toggle="collapse"
            href="#delegateSubmenu"
            role="button"
            aria-expanded="false"
            aria-controls="delegateSubmenu">
-            <i class="fas fa-home"></i>
+            <i class="fas fa-users"></i>
             <span> Delegate Dashboard</span>
         </a>
 
-        <!-- Collapsible Submenu -->
         <div class="collapse ps-4" id="delegateSubmenu">
             <a href="{% url 'dashboard' %}" class="d-block py-1 text-white-50">
-                <i class="fas fa-user"></i> Delegate
+                <i class="fas fa-id-badge"></i> Delegate
             </a>
             <a href="{% url 'student' %}" class="d-block py-1 text-white-50">
                 <i class="fas fa-user-graduate"></i> Student
             </a>
         </div>
-        <a href="{% url 'admin_dashboard' %}"><i class="fas fa-store"></i><span> Exhibitors Dashboard</span></a>
-        <a href="{% url 'sponsor_dashboard' %}"><i class="fas fa-store"></i><span> Sponsor Dashboard</span></a>
-        <a href="{% url 'main_dashboard_view' %}"><i class="fas fa-chart-pie"></i><span> Stats Dashboard</span></a>
-        <a href="{% url 'categories' %}"><i class="fas fa-user-check"></i><span> Guest Categories</span></a>
-        <a href="{% url 'gallery_dashboard' %}"><i class="fas fa-images"></i><span> Gallery Dashboard</span></a>
-        <a href="{% url 'partner_dashboard' %}"><i class="fas fa-handshake"></i><span> Partner Dashboard</span></a>
-        <a href="{% url 'dashboard_home' %}"><i class="fas fa-calendar-alt"></i><span> Agenda Dashboard</span></a>
-        <a href="{% url 'speaker_dashboard' %}"><i class="fas fa-microphone"></i><span> Speaker Dashboard</span></a>
-        <a href="{% url 'mailme' %}"><i class="fas fa-envelope"></i><span> Email Client</span></a>
-        <a href="{% url 'users' %}"><i class="fas fa-user-friends"></i><span> User Management</span></a>
+
+        <!-- Exhibitors Dashboard -->
+        <a class="d-block text-white dropdown-toggle py-2"
+           data-bs-toggle="collapse"
+           href="#exhibitorSubmenu"
+           role="button"
+           aria-expanded="false"
+           aria-controls="exhibitorSubmenu">
+            <i class="fas fa-store-alt"></i>
+            <span> Exhibitors Dashboard</span>
+        </a>
+
+        <div class="collapse ps-4" id="exhibitorSubmenu">
+            <a href="{% url 'admin_dashboard' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-clipboard-list"></i> Registered
+            </a>
+            <a href="{% url 'approved_exhibitors' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-check-circle"></i> Approved
+            </a>
+        </div>
+
+        <a href="{% url 'sponsor_dashboard' %}">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span> Sponsor Dashboard</span>
+        </a>
+
+        <a href="{% url 'main_dashboard_view' %}">
+            <i class="fas fa-chart-line"></i>
+            <span> Stats Dashboard</span>
+        </a>
+
+        <a href="{% url 'categories' %}">
+            <i class="fas fa-list-alt"></i>
+            <span> Guest Categories</span>
+        </a>
+
+        <a href="{% url 'gallery_dashboard' %}">
+            <i class="fas fa-images"></i>
+            <span> Gallery Dashboard</span>
+        </a>
+
+        <a href="{% url 'partner_dashboard' %}">
+            <i class="fas fa-handshake"></i>
+            <span> Partner Dashboard</span>
+        </a>
+
+        <a href="{% url 'dashboard_home' %}">
+            <i class="fas fa-calendar-alt"></i>
+            <span> Agenda Dashboard</span>
+        </a>
+
+        <a href="{% url 'speaker_dashboard' %}">
+            <i class="fas fa-microphone-alt"></i>
+            <span> Speaker Dashboard</span>
+        </a>
+
+        <a href="{% url 'mailme' %}">
+            <i class="fas fa-envelope-open-text"></i>
+            <span> Email Client</span>
+        </a>
+
+        <a href="{% url 'users' %}">
+            <i class="fas fa-user-cog"></i>
+            <span> User Management</span>
+        </a>
+
         <a class="d-block text-white dropdown-toggle py-2"
            data-bs-toggle="collapse"
            href="#audit"
            role="button"
            aria-expanded="false"
            aria-controls="audit">
-            <i class="fas fa-file-lines"></i>
+            <i class="fas fa-file-signature"></i>
             <span> Audit & Trails</span>
         </a>
 
-        <!-- Collapsible Submenu -->
         <div class="collapse ps-4" id="audit">
             <a href="{% url 'api_trails' %}" class="d-block py-1 text-white-50">
                 <i class="fas fa-link"></i> API Trails
@@ -87,7 +141,10 @@
 
         <form method="post" action="{% url 'logout' %}" class="mt-3">
             {% csrf_token %}
-            <button type="submit"><i class="fas fa-sign-out-alt"></i><span> Logout</span></button>
+            <button type="submit">
+                <i class="fas fa-sign-out-alt"></i>
+                <span> Logout</span>
+            </button>
         </form>
     </nav>
 

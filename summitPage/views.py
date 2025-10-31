@@ -1545,7 +1545,6 @@ def exhibitor_status(request):
 # Admin Dashboard (Exhibitor Management)
 # --------------------------------------------
 
-
 @login_required
 def admin_dashboard(request):
     sections = ExhibitionSection.objects.all()
@@ -1612,6 +1611,13 @@ def admin_dashboard(request):
     total_booths = booths.count()
     booked_booths = booths.filter(is_booked=True).count()
     pending_approvals = exhibitors.filter(privacy_agreed=False).count()
+
+    # --- NEW: Approved stats ---
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+
+    # Counts booths linked to approved exhibitors
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status='approved').count()
+
     categories = Exhibitor._meta.get_field("category").choices
 
     # --- Available countries ---
@@ -1624,7 +1630,6 @@ def admin_dashboard(request):
 
     # --- Annotate exhibitors with latest email log info ---
     latest_log = EmailLogs.objects.filter(exhibitor=OuterRef("pk")).order_by("-sent_at")
-
     exhibitors = exhibitors.annotate(
         email_last_sent=Subquery(latest_log.values("sent_at")[:1]),
         email_status=Subquery(latest_log.values("status")[:1]),
@@ -1666,8 +1671,13 @@ def admin_dashboard(request):
             "registration_closed": registration_closed,
             "current_year": timezone.now().year,
             "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+
+            # --- New approved statistics ---
+            "total_approved_exhibitors": total_approved_exhibitors,
+            "total_approved_booths": total_approved_booths,
         },
     )
+
 
 
 # --------------------------------------------
@@ -2651,6 +2661,173 @@ def badge_isprinted(request):
     return render(request, "badge/printed.html", context)
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Sum
+from django.utils import timezone
+@login_required
+def approve_exhibitor(request, exhibitor_id):
+    exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
+    dashboard_setting = DashboardSetting.objects.first()
+    max_count = dashboard_setting.max_count or 0
+
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    remaining = max(max_count - total_taken, 0)
+
+    if request.method == "POST":
+        try:
+            count = int(request.POST.get("count", 1))
+        except ValueError:
+            messages.error(request, "Invalid booth count.")
+            return redirect("admin_dashboard")
+
+        if count > remaining:
+            messages.error(request, f"Only {remaining} booths remaining.")
+            return redirect("admin_dashboard")
+
+        # --- Try sending confirmation email ---
+        try:
+            send_confirmation_booth_confirmation_mail(exhibitor)
+        except Exception as e:
+            print("❌ Email send error:", e)
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({
+                    "success": True,
+                    "message": "Registration successful, but confirmation email failed."
+                })
+            messages.warning(request, "Registration saved, but email could not be sent.")
+
+        # Success
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"success": True, "message": "Registration successful!"})
+        messages.success(request, "Registration successful!")
+
+        exhibitor.approve(count)
+
+        # ✅ Recalculate after approval
+        approved_booths_total = Exhibitor.objects.filter(
+            approval_status='approved'
+        ).aggregate(total=Sum('total_count'))['total'] or 0
+
+        approved_exhibitors_count = Exhibitor.objects.filter(
+            approval_status='approved'
+        ).count()
+
+        messages.success(
+            request,
+            f"{exhibitor.get_full_name()} approved for {count} booth(s). "
+            f"Total Approved Booths: {approved_booths_total}"
+        )
+        return redirect("approved_exhibitors")
+
+    return render(request, "exhibitor/approve_exhibitor.html", {
+        "exhibitor": exhibitor,
+        "remaining": remaining,
+    })
+
+
+from django.db.models import Q, Sum, Count, OuterRef, Subquery
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def approved_exhibitors(request):
+    exhibitors = Exhibitor.objects.filter(approval_status='approved').order_by('-approved_at')
+
+    # --- Stats for approved exhibitors view ---
+    pending_approvals = Exhibitor.objects.filter(approval_status='pending').count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+    # --- Approved stats ---
+
+    approved_booths_total = (
+            Exhibitor.objects.filter(approval_status='approved')
+            .aggregate(total=Sum('total_count'))['total']
+            or 0
+    )
+
+    # Counts booths linked to approved exhibitors
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status='approved').count()
+
+    return render(
+        request,
+        "exhibitor/approved_exhibitors.html",
+        {
+            "pending_approvals": pending_approvals,
+            "exhibitors": exhibitors,
+            "total_approved_exhibitors": total_approved_exhibitors,
+            "approved_booths_total": approved_booths_total,
+        },
+    )
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt  # not needed if you use {% csrf_token %} via JS
+@login_required
+@require_POST
+def ajax_approve_exhibitor(request, exhibitor_id):
+
+    exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
+    dashboard_setting = DashboardSetting.objects.first()
+    max_count = dashboard_setting.max_count or 0
+
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    remaining = max(max_count - total_taken, 0)
+
+    remaining = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+
+    try:
+        count = int(request.POST.get("count", 1))
+    except ValueError:
+        return JsonResponse({"success": False, "message": "Invalid booth count."})
+
+    if count > remaining:
+        return JsonResponse({"success": False, "message": f"Only {remaining} booths remaining."})
+
+    # Approve exhibitor and send mail
+    exhibitor.approve(count)
+
+    try:
+        send_confirmation_booth_confirmation_mail(exhibitor)
+    except Exception as e:
+        print("❌ Email send error:", e)
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": True,
+                "message": "Registration successful, but confirmation email failed."
+            })
+        messages.warning(request, "Registration saved, but email could not be sent.")
+
+    # Success
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"success": True, "message": "Registration successful!"})
+    messages.success(request, "Registration successful!")
+
+
+    # ✅ Recalculate total approved booths
+    approved_booths_total = Exhibitor.objects.filter(
+        approval_status='approved'
+    ).aggregate(total=Sum('total_count'))['total'] or 0
+
+    approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+
+
+    max_count = dashboard_setting.max_count or 0
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    null_or_zero_count = Exhibitor.objects.filter(Q(total_count__isnull=True) | Q(total_count=0)).count()
+    total_taken += null_or_zero_count
+    remaining = max(max_count - total_taken, 0)
+
+    return JsonResponse({
+        "success": True,
+        "message": f"{exhibitor.get_full_name()} approved for {count} booth(s).",
+        "approved_booths_total": approved_booths_total,
+        "approved_exhibitors": approved_exhibitors,
+        "remaining": max(max_count - approved_booths_total, 0),
+    })
 def create_badge(request, reg_id):
     try:
         registrant = (

@@ -633,6 +633,13 @@ class Exhibitor(models.Model):
             ("Ms", "Ms."),
         ],
     )
+
+    APPROVAL_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True)
@@ -708,6 +715,21 @@ class Exhibitor(models.Model):
     privacy_agreed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    approval_status = models.CharField(
+        max_length=20,
+        choices=APPROVAL_STATUS_CHOICES,
+        default='pending'
+    )
+    approved_at = models.DateTimeField(null=True, blank=True)
+
+    def approve(self, count):
+        """Approve exhibitor and assign booth count."""
+        self.approval_status = 'approved'
+        self.approved = True
+        self.total_count = count
+        self.approved_at = timezone.now()
+        self.save()
 
     def get_full_name(self):
         return f"{self.title} {self.first_name} {self.second_name or ''}".strip()
