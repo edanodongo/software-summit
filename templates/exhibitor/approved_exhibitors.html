@@ -5,93 +5,35 @@
 <div class="container-fluid mt-4 px-4">
 <div class="container-fluid mt-4 px-4">
   <h2 class="fw-bold mb-4 text-primary">
-    <i class="fas fa-tachometer-alt me-2"></i> Exhibitions Dashboard
+    <i class="fas fa-tachometer-alt me-2"></i>Approved Exhibitors
   </h2>
-
-  <!-- ✅ Success messages -->
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle me-1"></i> {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-
-  <!-- Dashboard Settings -->
-  <div class="card p-4 mb-4 shadow-sm">
-    <h5 class="mb-3">Dashboard Settings</h5>
-
-    <!-- 🧾 Validation (non-field errors) -->
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
-        {% for error in form.non_field_errors %}
-          <div><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <form method="POST" class="row g-3">
-      {% csrf_token %}
-      <div class="col-md-4">
-        {{ form.max_count.label_tag }}
-        {{ form.max_count }}
-
-        <!-- 🚨 Field-specific validation alert -->
-        {% if form.max_count.errors %}
-          {% for error in form.max_count.errors %}
-            <div class="alert alert-danger mt-2 py-2 px-3" role="alert">
-              <i class="fas fa-exclamation-triangle me-1"></i> {{ error }}
-            </div>
-          {% endfor %}
-        {% endif %}
-      </div>
-
-      <div class="col-md-2 align-self-end">
-        <button type="submit" class="btn btn-primary w-100">
-          <i class="fas fa-save me-1"></i> Update
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- 📢 Remaining Counts Alert -->
-  <div class="alert {{ alert_class }} shadow-sm" role="alert">
-    <strong>Notice:</strong> {{ alert_message }}
-  </div>
 
 </div>
 
   <!-- Summary Cards -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
-        <h6 class="text-muted mb-1">Total Exhibitors</h6>
-        <h3 class="fw-bold text-primary">{{ total_exhibitors }}</h3>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
-        <h6 class="text-muted mb-1">Total Booths</h6>
-        <h3 class="fw-bold text-success">{{ max_count }}</h3>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
-        <h6 class="text-muted mb-1">Available Booths</h6>
-        <h3 class="fs-4 text-success">
-            <h3 class="fw-bold text-success">{{ remaining }}</h3>
-        </h3>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
-        <h6 class="text-muted mb-1">Booked Booths</h6>
-        <h3 class="fw-bold text-danger">{{ total_count }}</h3>
-      </div>
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Total Approved Exhibitors</h5>
+      <h2 class="text-success fw-bold">{{ total_approved_exhibitors }}</h2>
     </div>
   </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Total Approved Booths</h5>
+      <h2 class="text-primary fw-bold">{{ approved_booths_total }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Exhibitors Pending Approval</h5>
+      <h2 class="text-danger fw-bold">{{ pending_approvals }}</h2>
+    </div>
+  </div>
+</div>
+
 
   <!-- Filters -->
   <div class="card shadow-sm border-0 rounded-4 mb-4">
