@@ -129,6 +129,7 @@ urlpatterns = [
     path("badge/", views.badge, name="badge"),
     path("auth_badge/", views.auth_badge, name="auth_badge"),
     path("badge_dashboard/", views.badge_dashboard, name="badge_dashboard"),
+    path("badge/printed", views.badge_isprinted, name="badge_printed"),
     path("badge/logout/", views.badgeLogout, name="signout"),
 
 ]
