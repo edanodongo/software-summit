@@ -1,0 +1,20 @@
+{% extends "summit/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Approve Exhibitor: {{ exhibitor.get_full_name }}</h3>
+  <p><strong>Organization:</strong> {{ exhibitor.organization_type }}</p>
+  <p><strong>Email:</strong> {{ exhibitor.email }}</p>
+  <p><strong>Remaining Booths:</strong> {{ remaining }}</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="count" class="form-label">Booth Count to Approve</label>
+      <input type="number" min="1" max="{{ remaining }}" name="count" id="count"
+             class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Approve Exhibitor</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

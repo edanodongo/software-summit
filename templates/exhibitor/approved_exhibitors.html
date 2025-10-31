@@ -160,88 +160,31 @@
     <i class="fas fa-users me-2"></i>Recent Exhibitors
   </div>
   <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Organization</th>
-          <th>Country</th>
-          <th>Job Title</th>
-          <th>Category</th>
-          <th>Booked booths</th>
-          <th>Files</th>
-          <th>Email Attempts</th>
-          <th>Email Status</th>
-          <th>Last Sent</th>
-          <th>Date Registered</th>
-          <th class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for e in exhibitors %}
-        <tr data-exhibitor-id="{{ e.id }}">
-          <td>{{ e.get_full_name }}</td>
-          <td>{{ e.email }}</td>
-          <td>{{ e.phone }}</td>
-          <td>{{ e.organization_type }}</td>
-          <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
-          <td>{{ e.job_title|default:"—" }}</td>
-          <td>{{ e.get_category_display|default:"—" }}</td>
-          <td>{{ e.total_count|default:"0" }}</td>
 
-          <td>
-            {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
-            {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
-            {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
-          </td>
-
-          <td class="text-center">{{ e.email_attempts|default:"0" }}</td>
-          <td class="text-center">
-            {% if e.email_status == "success" %}
-              <span class="badge bg-success">Sent</span>
-            {% elif e.email_status == "failed" %}
-              <span class="badge bg-danger">Failed</span>
-            {% else %}
-              <span class="badge bg-secondary">Pending</span>
-            {% endif %}
-          </td>
-          <td class="text-center">{{ e.email_last_sent|date:"M d, Y H:i" }}</td>
-          <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
-
-          <td>
-            <div class="btn-group">
-              <button
-                class="btn btn-sm btn-outline-primary edit-exhibitor-btn"
-                data-id="{{ e.id }}">
-                <i class="fas fa-edit"></i>
-              </button>
-
-              {% if e.approval_status == "approved" %}
-                <span class="badge bg-success">Approved</span>
-              {% elif e.approval_status == "pending" %}
-                <a href="{% url 'approve_exhibitor' e.id %}" class="btn btn-sm btn-outline-success">
-                  <i class="fas fa-check"></i> Approve
-                </a>
-              {% else %}
-                <span class="badge bg-danger">Rejected</span>
-              {% endif %}
-
-
-              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
-                <i class="fas fa-trash"></i>
-              </a>
-            </div>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="14" class="text-center text-muted py-3">No exhibitors registered.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Organization</th>
+        <th>Booths Approved</th>
+        <th>Approved On</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in exhibitors %}
+      <tr>
+        <td>{{ e.get_full_name }}</td>
+        <td>{{ e.email }}</td>
+        <td>{{ e.organization_type }}</td>
+        <td>{{ e.total_count }}</td>
+        <td>{{ e.approved_at|date:"M d, Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No approved exhibitors yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
   </div>
 </div>
 

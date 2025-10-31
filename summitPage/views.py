@@ -2643,3 +2643,78 @@ def badge_isprinted(request):
     }
 
     return render(request, "badge/printed.html", context)
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Sum
+from django.utils import timezone
+
+@login_required
+def approve_exhibitor(request, exhibitor_id):
+    exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
+    dashboard_setting = DashboardSetting.objects.first()
+    max_count = dashboard_setting.max_count or 0
+
+    # current booths taken
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    remaining = max(max_count - total_taken, 0)
+
+    if request.method == "POST":
+        try:
+            count = int(request.POST.get("count", 1))
+        except ValueError:
+            messages.error(request, "Invalid booth count.")
+            return redirect("admin_dashboard")
+
+        if count > remaining:
+            messages.error(request, f"Only {remaining} booths remaining.")
+            return redirect("admin_dashboard")
+
+        exhibitor.approve(count)
+        messages.success(request, f"{exhibitor.get_full_name()} approved for {count} booth(s).")
+        return redirect("approved_exhibitors")
+
+    return render(request, "exhibitor/approve_exhibitor.html", {
+        "exhibitor": exhibitor,
+        "remaining": remaining,
+    })
+
+@login_required
+def approved_exhibitors(request):
+    exhibitors = Exhibitor.objects.filter(approval_status='approved').order_by('-approved_at')
+    return render(request, "exhibitor/approved_exhibitors.html", {"exhibitors": exhibitors})
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt  # not needed if you use {% csrf_token %} via JS
+
+@login_required
+@require_POST
+def ajax_approve_exhibitor(request, exhibitor_id):
+    exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
+    dashboard_setting = DashboardSetting.objects.first()
+    max_count = dashboard_setting.max_count or 0
+
+    total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
+    remaining = max(max_count - total_taken, 0)
+
+    try:
+        count = int(request.POST.get("count", 1))
+    except ValueError:
+        return JsonResponse({"success": False, "message": "Invalid booth count."})
+
+    if count > remaining:
+        return JsonResponse({"success": False, "message": f"Only {remaining} booths remaining."})
+
+    exhibitor.approve(count)
+
+    return JsonResponse({
+        "success": True,
+        "id": str(exhibitor.id),
+        "name": exhibitor.get_full_name(),
+        "total_count": exhibitor.total_count,
+        "approved_at": exhibitor.approved_at.strftime("%Y-%m-%d %H:%M"),
+        "remaining": remaining - count,
+    })
