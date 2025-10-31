@@ -329,73 +329,60 @@
 
 {% block scripts %}
 <style>
-/* ============================
-   Exhibitor Edit Modal Styling
-   ============================ */
-#edit-exhibitor-form label {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 4px;
-  display: block;
-}
+        #registrants-table {
+            width: 100% !important;
+            font-size: 0.9rem;
+            table-layout: auto;
+            border-spacing: 0 4px;
+        }
 
-#edit-exhibitor-form .form-control,
-#edit-exhibitor-form .form-select {
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
-  padding: 0.5rem 0.75rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
+        #registrants-table th, #registrants-table td {
+            padding: 0.55rem 0.75rem !important;
+            white-space: nowrap;
+        }
 
-#edit-exhibitor-form .form-control:focus,
-#edit-exhibitor-form .form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-}
+        #registrants-table tfoot input {
+            width: 100%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
 
-#edit-exhibitor-form .form-check {
-  margin-top: 1rem;
-  padding-left: 1.8rem;
-}
+        .truncate {
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-#edit-exhibitor-form .form-check-input {
-  margin-left: -1.8rem;
-  margin-top: 0.25rem;
-}
+        .bg-success-subtle {
+            background-color: rgba(25, 135, 84, 0.1) !important;
+        }
 
-#edit-exhibitor-form small.text-muted {
-  font-size: 0.85rem;
-}
+        .bg-danger-subtle {
+            background-color: rgba(220, 53, 69, 0.1) !important;
+        }
 
-#edit-exhibitor-form img {
-  border: 1px solid #ddd;
-  padding: 2px;
-  background-color: #fafafa;
-  border-radius: 0.5rem;
-}
+        .bg-secondary-subtle {
+            background-color: rgba(108, 117, 125, 0.1) !important;
+        }
 
-#edit-exhibitor-form .btn-primary {
-  border-radius: 0.5rem;
-  padding: 0.5rem 1.2rem;
-  font-weight: 500;
-}
+        .bg-info-subtle {
+            background-color: rgba(13, 202, 240, 0.1) !important;
+        }
+        #editRegistrantModal .modal-content {
+          border-radius: 1rem;
+          overflow: hidden;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  #edit-exhibitor-form .col-md-6,
-  #edit-exhibitor-form .col-md-4,
-  #edit-exhibitor-form .col-md-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-#edit-exhibitor-form input[type="file"] {
-  background: #f8f9fa;
-  border: 1px dashed #ccc;
-  padding: 0.4rem;
-  border-radius: 0.4rem;
-  cursor: pointer;
-}
+        #editRegistrantModal .form-control,
+        #editRegistrantModal select {
+          border-radius: 0.5rem;
+          box-shadow: none !important;
+        }
+
+        .toast {
+          z-index: 20000;
+        }
 
 </style>
 
