@@ -5668,29 +5668,104 @@ section,
 /*--------------------------------------------------------------
 # Partners Section
 --------------------------------------------------------------*/
-#partners .partners-logos {
-    display: flex;
-    flex-wrap: wrap;             /* allows vertical wrapping on smaller screens */
-    justify-content: center;     /* center align all logos */
-    gap: 60px;                    /* increased spacing between logos */
-    margin-top: 40px;
+/* ----------------------------------------------------------
+   PARTNERS SECTION — Bigger Logos, Consistent Frames
+-----------------------------------------------------------*/
+#partners {
+  background: #ffffff;
+  padding: 80px 0;
 }
 
-#partners .partner-logo-container {
-    flex: 0 1 180px;              /* a bit wider min width so they don't squeeze */
-    text-align: center;
+#partners .section-title h2 {
+  font-size: 2rem;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-#partners .partner-logo {
-    max-height: 180px;            
-    max-width: 400px;              
-    object-fit: contain;
-    transition: all 0.3s ease;
+/* Grid layout */
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2.5rem 2rem;
+  justify-items: center;
+  align-items: stretch;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 20px;
 }
 
-#partners .partner-logo:hover {
-    transform: scale(1.1);
+/* Partner card — consistent frame size */
+.partner-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 280px;
+  height: 280px; /* slightly taller for bigger logos */
+  padding: 25px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
 }
+
+.partner-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Bigger logo area */
+.partner-logo {
+  max-height: 140px; /* increased from 110px */
+  max-width: 220px;  /* increased from 200px */
+  object-fit: contain;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  filter: grayscale(25%);
+  opacity: 0.95;
+}
+
+.partner-card:hover .partner-logo {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.07);
+}
+
+/* Partner label */
+.partner-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.3;
+  text-transform: capitalize;
+  margin-top: auto;
+  max-width: 200px;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-wrap: balance;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .partner-card {
+    max-width: 220px;
+    height: 240px;
+    padding: 20px 10px;
+  }
+  .partner-logo {
+    max-height: 110px;
+    max-width: 180px;
+  }
+  .partner-label {
+    font-size: 0.9rem;
+  }
+}
+
 
 
 
