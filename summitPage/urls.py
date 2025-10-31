@@ -134,4 +134,9 @@ urlpatterns = [
     path("badge/printed", views.badge_isprinted, name="badge_printed"),
     path("badge/logout/", views.badgeLogout, name="signout"),
 
+    # badge generation
+    path("create_badge/<int:reg_id>/", views.create_badge, name="create_badge"),
+    path("mark_printed/<int:reg_id>/", views.mark_printed, name="mark_printed"),
+
+
 ]

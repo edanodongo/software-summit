@@ -37,19 +37,20 @@
                                 <td>{{ registrant.job_title|default:"—" }}</td>
                                 <td>{{ registrant.days_to_attend|default:"—" }}</td>
                                 <td class="text-center">
-                                    <a href="{% url 'generate_badge' registrant.id %}"
-                                       class="btn btn-sm btn-primary"
-                                       target="_blank"
-                                       title="Generate Badge">
-                                        <i class="fas fa-id-badge"></i>
-                                    </a>
+                                    <button
+                                            class="btn btn-sm btn-primary"
+                                            title="Generate Badge"
+                                            onclick="openBadgeModal({{ registrant.id }})">
+                                        <i class="fas fa-print"></i>
+                                    </button>
                                 </td>
+
                             </tr>
                         {% empty %}
                             <tr>
                                 <td colspan="9" class="text-center text-muted py-4">
-                                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-                                    No delegates available.
+                                    <i class="fas fa-print fa-3x mb-3 d-block"></i>
+                                    No Pending Badge Available.
                                 </td>
                             </tr>
                         {% endfor %}
@@ -59,6 +60,57 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Badge Preview Modal - Enhanced Design -->
+    <div class="modal fade" id="badgeModal" tabindex="-1" role="dialog" aria-labelledby="badgeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modern-modal">
+                <div class="modal-header-custom">
+                    <div class="modal-icon-wrapper">
+                        <i class="fas fa-id-badge"></i>
+                    </div>
+                    <div class="modal-title-wrapper">
+                        <h5 class="modal-title-main" id="badgeModalLabel">Badge Preview</h5>
+                        <p class="modal-subtitle">Review before printing</p>
+                    </div>
+                    <button type="button" class="close-btn-custom" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body-custom">
+                    <!-- Loading State -->
+                    <div id="badgeLoading" class="loading-container">
+                        <div class="spinner-wrapper">
+                            <div class="spinner-custom"></div>
+                        </div>
+                        <p class="loading-text">Generating your badge</p>
+                        <p class="loading-subtext">Please wait a moment...</p>
+                    </div>
+
+                    <!-- Badge Preview -->
+                    <div class="badge-preview-container d-none">
+                        <div class="preview-frame">
+                            <img id="badgePreview" src="" alt="Badge" class="badge-image">
+                            <div class="preview-overlay">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-custom">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">
+                        <i class="fas fa-times-circle me-2"></i>Cancel
+                    </button>
+                    <button type="button" id="printBadgeBtn" class="btn-print d-none" onclick="printBadge()">
+                        <i class="fas fa-print me-2"></i>Print Badge
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <style>
         #badge-table {
@@ -123,6 +175,289 @@
             font-weight: 500;
             padding: 0.35em 0.65em;
         }
+
+        /* ==================== MODERN MODAL STYLES ==================== */
+
+        .modern-modal {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 50%, #ffffff 100%);
+        }
+
+        /* Custom Header */
+        .modal-header-custom {
+            background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 50%, #ffffff 100%);
+            padding: 2rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .modal-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title-wrapper {
+            flex: 1;
+        }
+
+        .modal-title-main {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .close-btn-custom {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            color: slategrey;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn-custom:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        /* Custom Body */
+        .modal-body-custom {
+            background: white;
+            padding: 3rem 2rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .spinner-wrapper {
+            margin-bottom: 1.5rem;
+        }
+
+        .spinner-custom {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .loading-subtext {
+            color: #999;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Badge Preview Container */
+        .badge-preview-container {
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .preview-frame {
+            position: relative;
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .preview-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .badge-image {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .preview-frame:hover .badge-image {
+            transform: scale(1.02);
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(102, 126, 234, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preview-frame:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        /* Custom Footer */
+        .modal-footer-custom {
+            background: #f8f9fa;
+            padding: 1.5rem 2rem;
+            border: none;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #666;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+            transform: translateY(-2px);
+        }
+
+        .btn-print {
+            padding: 0.75rem 2rem;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-print:active {
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal backdrop enhancement */
+        .modal.fade .modal-dialog {
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+        }
+
+        .modal.show .modal-dialog {
+            transform: scale(1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .modal-header-custom {
+                padding: 1.5rem;
+                gap: 1rem;
+            }
+
+            .modal-icon-wrapper {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .modal-title-main {
+                font-size: 1.2rem;
+            }
+
+            .modal-body-custom {
+                padding: 2rem 1rem;
+            }
+
+            .modal-footer-custom {
+                flex-direction: column;
+            }
+
+            .btn-cancel,
+            .btn-print {
+                width: 100%;
+            }
+        }
     </style>
 {% endblock %}
 
@@ -153,4 +488,124 @@
             });
         });
     </script>
+    <script>
+    // === Open the badge modal and fetch image ===
+    function openBadgeModal(regId) {
+        const previewContainer = document.querySelector(".badge-preview-container");
+        const badgePreview = document.getElementById("badgePreview");
+        const loading = document.getElementById("badgeLoading");
+        const printBtn = document.getElementById("printBadgeBtn");
+
+        previewContainer.classList.add("d-none");
+        loading.classList.remove("d-none");
+        printBtn.classList.add("d-none");
+
+        const modal = new bootstrap.Modal(document.getElementById("badgeModal"));
+        modal.show();
+
+        fetch(`/create_badge/${regId}/`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.image_url) {
+                    badgePreview.src = data.image_url;
+                    previewContainer.classList.remove("d-none");
+                    loading.classList.add("d-none");
+                    printBtn.classList.remove("d-none");
+                    printBtn.setAttribute("data-id", regId);
+                } else {
+                    loading.innerHTML = "<p class='text-danger'>Failed to load badge.</p>";
+                }
+            })
+            .catch((err) => {
+                console.error("Error generating badge:", err);
+                loading.innerHTML = "<p class='text-danger'>Error generating badge.</p>";
+            });
+    }
+
+    // === Print badge reliably ===
+    document.getElementById("printBadgeBtn").addEventListener("click", async function () {
+        const regId = this.getAttribute("data-id");
+        const imgSrc = document.getElementById("badgePreview").src;
+
+        if (!imgSrc) {
+            alert("Badge not loaded yet. Please wait.");
+            return;
+        }
+
+        const printWindow = window.open("", "_blank", "width=800,height=1000");
+        if (!printWindow) {
+            alert("Popup blocked! Allow popups for this site.");
+            return;
+        }
+
+        // Write and close the document properly
+        printWindow.document.open();
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Print Badge</title>
+                    <style>
+                        body { text-align: center; margin: 0; background: #fff; }
+                        img { max-width: 100%; height: auto; margin-top: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <img id="badgeImage" src="${imgSrc}" alt="Badge" />
+                    <script>
+                        const img = document.getElementById('badgeImage');
+                        img.onload = function() {
+                            setTimeout(() => {
+                                window.focus();
+                                window.print();
+                                setTimeout(() => window.close(), 1000);
+                            }, 400);
+                        };
+                    <\/script>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+
+        // === Mark as printed (backend update) ===
+        try {
+            const res = await fetch(`/mark_printed/${regId}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": getCSRFToken() },
+            });
+            const data = await res.json();
+            if (data.success) {
+                const modalEl = document.getElementById("badgeModal");
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+
+                const row = document.querySelector(`#row-${regId}`);
+                if (row) row.remove();
+
+                //refresh after the process is done
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500); // 1.5 sec delay
+            }
+        } catch (err) {
+            console.error("Error marking badge as printed:", err);
+        }
+    });
+
+    // === Helper: Get CSRF token ===
+    function getCSRFToken() {
+        return document.querySelector("[name=csrfmiddlewaretoken]")?.value || "";
+    }
+
+    // === Reset modal on close ===
+    document.getElementById("badgeModal").addEventListener("hidden.bs.modal", () => {
+        document.querySelector(".badge-preview-container").classList.add("d-none");
+        document.getElementById("badgeLoading").classList.remove("d-none");
+        document.getElementById("printBadgeBtn").classList.add("d-none");
+    });
+</script>
+
+
+
+
 {% endblock %}
