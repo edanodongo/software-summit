@@ -54,12 +54,12 @@
             <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                 <li><a href="#">VENUE</a></li>
+                 <li><a href="{% url 'places' %}">VENUE</a></li>
                 <li><a href="{% url 'gallery' %}">GALLERY</a></li>
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-                 <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+                 <li><a href="#">ACCOMMODATIONS</a></li>
               </ul>
-            </li>  
+            </li>
             <li class="d-none d-md-block">
               <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
             </li>
@@ -89,8 +89,8 @@
     <!-- Page Title -->
     <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
       <div class="container position-relative">
-        <h1>Venue </h1>
-        <p>Logistics to Moi University, Annex Campus, Eldoret</p>
+        <h1>Accommodations</h1>
+        <p>Recommended accommodations in Eldoret</p>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="{% url 'home' %}">Home</a></li>
@@ -104,131 +104,136 @@
     <section id="venue-2" class="venue-2 section">
 
       <div class="container">
+        <div class="row mt-5">
+          <div class="col-lg-12">
+            <div class="accommodation-section">
+              <h4 class="fw-bold mb-4">Recommended Accommodations</h4>
 
-        <div class="row gy-5">
+              <div class="row">
 
-          <div class="col-lg-6">
-            <div class="venue-image">
-              <img src="{% static 'images/gallery/mugate.webp'  %} " alt="Event Venue" class="img-fluid rounded">
-              <div class="venue-badge">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>Main Venue</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6">
-            <div class="venue-content">
-              <h3>Moi University Annex</h3>
-              <div class="venue-address">
-                <i class="bi bi-geo-alt"></i>
-                <span>Langas, Eldoret - Nakuru Rd, Kapseret</span>
-              </div>
-
-              <p>
-                  Located along the Eldoret–Kapsabet Road, Moi University Annex Campus offers a vibrant academic environment within the fast-growing town of Eldoret, Kenya.
-                  This modern campus combines accessibility with a serene setting, providing an ideal atmosphere for learning, innovation, and professional events.
-                  With well-equipped lecture halls, conference spaces, and advanced ICT infrastructure, the Annex Campus serves as a hub for research, training, and collaboration,
-                  accommodating both local and international participants in a dynamic and inspiring environment.
-              </p>
-
-              <div class="venue-features">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="feature-item">
-                      <i class="bi bi-people-fill"></i>
-                      <span>Capacity</span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="feature-item">
-                      <i class="bi bi-wifi"></i>
-                      <span>High-Speed WiFi</span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="feature-item">
-                      <i class="bi bi-p-square-fill"></i>
-                      <span>Parking</span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="feature-item">
-                      <i class="bi bi-universal-access"></i>
-                      <span>Fully Accessible</span>
+                <!-- Eka Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/eka_hotel.avif' %}" alt="Eka Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Eka Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://ekaeldoret.com" target="_blank" class=" text-decoration-none">ekaeldoret.com</a></div>
+                        <div><i class="bi bi-tspeakerselephone"></i> <a href="tel:+254793465505 " class="text-dark text-decoration-none">+254 111 150 000 / +254 793 465 505 </a></div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="venue-actions">
-                <a href="https://www.google.com/maps/place/Moi+University+Annex/@0.4811243,35.2984819,17z/data=!3m1!4b1!4m6!3m5!1s0x1780fe08d95d9633:0x7080e30866256693!8m2!3d0.4811243!4d35.2984819!16s%2Fg%2F1tf4tnm1?entry=ttu&g_ep=EgoyMDI1MTAxNC4wIKXMDSoASAFQAw%3D%3D"
-                   class="btn btn-primary">
-                  <i class="bi bi-map"></i>
-                  Get Directions
-                </a>
-<!--                <a href="#" class="btn btn-outline-primary">-->
-<!--                  <i class="bi bi-building"></i>-->
-<!--                  Nearby Hotels-->
-<!--                </a>-->
-              </div>
+                <!-- Boma Inn -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Facade_of_Boma_Inn_Eldoret.webp' %}" alt="Boma Inn Eldoret" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Boma Inn Eldoret</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://theboma.co.ke/inn-eldoret/" target="_blank" class=" text-decoration-none">theboma.co.ke/eldoret</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254719025500" class="text-dark text-decoration-none">+254 719 025 500 / +254 719 025 500</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TJS Boutique Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/TJS_Boutique_Hotel.jpg' %}" alt="TJS Boutique Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> TJS Boutique Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://tjsboutiquehotel.co.ke/" target="_blank" class=" text-decoration-none">tjsboutiquehotel.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254768054455" class="text-dark text-decoration-none">+254 768 054 455 / +020 240 0799</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Noble Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/noble_hotel.jpg' %}" alt="The Noble Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> The Noble Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://thenoble.co.ke/" target="_blank" class=" text-decoration-none">thenoble.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254716291935" class="text-dark text-decoration-none">+254 716 291 935 / +254 731 418 309</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Poa Place -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/poa_place_resort.jpg' %}" alt="Poa Place Resort" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Poa Place Resort</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://poaplace.co.ke/" target="_blank" class=" text-decoration-none">poaplace.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254707156146" class="text-dark text-decoration-none">+254 707 156 146 / +254 707 394 384 </a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- The Grand Empire -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/The_Grand_Empire.jpg' %}" alt="The Grand Empire Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> The Grand Empire Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://thegrandempirehotel.net/" class=" text-decoration-none">thegrandempirehotel.net</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254710528589" class="text-dark text-decoration-none">+254 710 528 589</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sirikwa Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Sirikwa_Hotel.jpg' %}" alt="Sirikwa Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Sirikwa Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://sirikwahotel.com/" target="_blank" class=" text-decoration-none">sirikwahotel.com</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254728680000" class="text-dark text-decoration-none">+254 728 680 000</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cicada Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Cicada_Hotel.jpeg' %}" alt="Cicada Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Cicada Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://cicadalodgesandhotels.com/" class="text-decoration-none">cicadalodgesandhotels.com</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254719183124" class="text-dark text-decoration-none">+254 719 183 124 / +254 733 907 640</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div> <!-- end row -->
             </div>
           </div>
-
-        </div>
-
-        <div class="row mt-5">
-          <div class="col-lg-12">
-            <div class="venue-map text-center">
-              <h4 class="mb-3">Venue Location</h4>
-              <div class="map-container" style="position: relative; width: 100%; height: 400px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.5806067470894!2d35.29629357514978!3d0.4811243636750136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1780fe08d95d9633%3A0x7080e30866256693!2sMoi%20University%20Annex!5e0!3m2!1sen!2ske!4v1697550000000!5m2!1sen!2ske"
-                  width="100%"
-                  height="100%"
-                  style="border:0;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row mt-5">
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-airplane-fill"></i>
-              </div>
-              <h5>By Air</h5>
-              <p>Eldoret Moi International Airport in Eldoret which services numerous international carriers.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-train-front-fill"></i>
-              </div>
-              <h5>By Train</h5>
-              <p>Kenya has a high capacity, high speed Standard Gauge Railway for passengers that connects Nairobi with other popular centres.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-car-front-fill"></i>
-              </div>
-              <h5>Road</h5>
-              <p>Kenya can be accessed by road from Tanzania, Uganda, Ethiopia, Sudan and Somalia. Migration ought to be handled at land outskirt stations.</p>
-            </div>
-          </div>
-
         </div>
 
 
@@ -285,10 +290,10 @@
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="#">Venue</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
               <li><a href="{% url 'home' %}#schedule">Program</a></li>
               <li><a href="{% url 'privacy' %}">Privacy</a></li>
+              <li><a href="{% url 'places' %}">Venue</a></li>
             </ul>
           </div>
 
@@ -298,7 +303,7 @@
               <li><a href="{% url 'home' %}#features">Activities</a></li>
               <li><a href="{% url 'home' %}#partners">Partners</a></li>
               <li><a href="{% url 'gallery' %}">Gallery</a></li>
-              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
+              <li><a href="#">Accommodations</a></li>
             </ul>
           </div>
 

@@ -31,6 +31,7 @@ urlpatterns = [
     path("speakers/", views.speakers, name="speakers"),
     path("media/", views.media, name="media"),
     path("places/", views.places, name="places"),
+    path("accommodations/", views.accommodation, name="accommodation"),
 
     path("login/", SummitLoginView.as_view(), name="custom_login"),
     path("logout/", SummitLogoutView.as_view(), name="logout"),
