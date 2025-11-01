@@ -58,6 +58,7 @@
                 <li><a href="#">GALLERY</a></li>
                 <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+                 <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
               </ul>
             </li>  
             <li class="d-none d-md-block">
@@ -191,10 +192,10 @@
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="{% url 'home' %}#intro">About</a></li>
+              <li><a href="{% url 'places' %}">Venue</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
               <li><a href="{% url 'home' %}#schedule">Program</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
             </ul>
           </div>
 
@@ -203,8 +204,8 @@
             <ul>
               <li><a href="{% url 'home' %}#features">Activities</a></li>
               <li><a href="{% url 'home' %}#partners">Partners</a></li>
-              <li><a href="#">Gallery</a></li>
-              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
             </ul>
           </div>
 
