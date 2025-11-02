@@ -984,6 +984,7 @@ section,
 
 .hero .countdown-section {
   margin-bottom: 50px;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -992,6 +993,7 @@ section,
   }
 }
 
+/* Label */
 .hero .countdown-label {
   font-size: 1.2rem;
   font-weight: 500;
@@ -1007,23 +1009,30 @@ section,
   }
 }
 
+/* Countdown container */
 .hero .countdown {
+  display: flex;
+  flex-wrap: wrap; /* allows wrapping on small screens */
+  justify-content: center;
   gap: 30px;
   margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
   .hero .countdown {
-    gap: 20px;
+    gap: 16px;
   }
 }
 
+/* Countdown box */
 .hero .countdown div {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 24px 20px;
-  min-width: 120px;
+  padding: 20px 16px;
+  min-width: 100px;
+  flex: 1 1 100px; /* make boxes shrink and wrap properly */
+  max-width: 120px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
@@ -1033,13 +1042,14 @@ section,
   transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
   .hero .countdown div {
-    padding: 16px 12px;
-    min-width: 90px;
+    min-width: 80px;
+    padding: 14px 10px;
   }
 }
 
+/* Countdown numbers */
 .hero .countdown div h3 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -1049,10 +1059,11 @@ section,
 
 @media (max-width: 768px) {
   .hero .countdown div h3 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 }
 
+/* Countdown labels */
 .hero .countdown div h4 {
   font-size: 0.9rem;
   color: color-mix(in srgb, var(--default-color) 90%, white 15%);
@@ -1064,7 +1075,7 @@ section,
 
 @media (max-width: 768px) {
   .hero .countdown div h4 {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
