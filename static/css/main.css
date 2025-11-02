@@ -1079,16 +1079,6 @@ section,
   }
 }
 
-.hero .cta-section {
-  margin-bottom: 60px;
-}
-
-@media (max-width: 768px) {
-  .hero .cta-section {
-    margin-bottom: 50px;
-  }
-}
-
 .hero .cta-buttons {
   display: flex;
   justify-content: center;
@@ -1355,6 +1345,141 @@ section,
   transform: translateY(-3px);
 }
 
+@media (max-width: 768px) {
+  .intro .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .intro .cta-section {
+    justify-content: center;
+  }
+
+  .intro .cta-section .btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* Match dropdown with .hero .btn-cta */
+.dropdown-menu-cta {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.25rem 0;
+  margin-top: 8px;
+  min-width: 180px; /* matches .hero .btn-cta */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Bootstrap adds .show when opened — animate only then */
+.dropdown-menu-cta.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  animation: dropdownFloat 0.35s ease forwards;
+}
+
+/* Smooth float + fade */
+@keyframes dropdownFloat {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dropdown items consistent with CTA */
+.dropdown-menu-cta .dropdown-item {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 12px 24px;
+  color: #fff;
+  text-transform: uppercase;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu-cta .dropdown-item:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+/* Keep dropdown arrow aligned */
+.btn-cta.dropdown-toggle::after {
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.hero .cta-section {
+  margin-bottom: 60px;
+}
+
+@media (max-width: 768px) {
+  .hero .cta-section {
+    margin-bottom: 50px;
+  }
+}
+/* --- Fix CTA buttons responsiveness --- */
+
+/* Tablet screens: side-by-side, slightly smaller */
+@media (max-width: 992px) and (min-width: 577px) {
+  .cta-section .d-flex {
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .cta-section .cta-buttons {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .cta-section .btn-cta {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  /* Make dropdown stay aligned and visible */
+  .cta-section .dropdown-menu-cta {
+    min-width: 180px;
+  }
+}
+
+/* Small screens (phones): stack full-width */
+@media (max-width: 576px) {
+  .cta-section .d-flex {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .cta-section .cta-buttons {
+    width: 100%;
+    text-align: center;
+  }
+
+  .cta-section .btn-cta {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+  }
+
+  .cta-section .dropdown-menu-cta {
+    min-width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
 .intro .visual-section {
   position: relative;
 }
@@ -1538,22 +1663,6 @@ section,
   }
 
   .intro .founder-quote blockquote cite {
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .intro .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-
-  .intro .cta-section {
-    justify-content: center;
-  }
-
-  .intro .cta-section .btn {
-    flex: 1;
     text-align: center;
   }
 }
@@ -6334,65 +6443,6 @@ html {
   scroll-behavior: smooth;
 }
 
-
-/* Match dropdown with .hero .btn-cta */
-.dropdown-menu-cta {
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 8px;
-  padding: 0.25rem 0;
-  margin-top: 8px;
-  min-width: 180px; /* matches .hero .btn-cta */
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
-
-/* Bootstrap adds .show when opened — animate only then */
-.dropdown-menu-cta.show {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-  animation: dropdownFloat 0.35s ease forwards;
-}
-
-/* Smooth float + fade */
-@keyframes dropdownFloat {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Dropdown items consistent with CTA */
-.dropdown-menu-cta .dropdown-item {
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 12px 24px;
-  color: #fff;
-  text-transform: uppercase;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.dropdown-menu-cta .dropdown-item:hover {
-  background: var(--accent-color);
-  color: var(--contrast-color);
-}
-
-/* Keep dropdown arrow aligned */
-.btn-cta.dropdown-toggle::after {
-  margin-left: 0.4rem;
-  vertical-align: middle;
-}
 
 /* Venue css */
 
