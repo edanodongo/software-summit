@@ -70,6 +70,7 @@
     </div>
   </div>
 
+
   <!-- ✅ BOOTH APPROVAL OVERVIEW -->
   <h5 class="fw-bold text-success mt-4 mb-3">
     <i class="fas fa-check-circle me-2"></i> Booth Approvals Overview
@@ -116,64 +117,18 @@
     </div>
   </div>
 
-  <!-- ✅ KEY METRICS -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-3 col-6">
-      <div class="card shadow-sm border-success text-center">
-        <div class="card-body">
-          <h6 class="fw-bold text-success mb-2">Booth Utilization</h6>
-          <div class="progress mb-2" style="height: 6px;">
-            <div class="progress-bar bg-success" role="progressbar"
-                 style="width: {{ booth_utilization }}%"
-                 aria-valuenow="{{ booth_utilization }}" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <h4 class="fw-bold text-dark">{{ booth_utilization }}%</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-6">
-      <div class="card shadow-sm border-info text-center">
-        <div class="card-body">
-          <h6 class="fw-bold text-info mb-1">Active Partners</h6>
-          <h3 class="fw-bold text-dark">{{ active_partners }}</h3>
-          <small class="text-muted">{{ inactive_partners }} inactive</small>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-6">
-      <div class="card shadow-sm border-primary text-center">
-        <div class="card-body">
-          <h6 class="fw-bold text-primary mb-1">Engagement Score</h6>
-          <h3 class="fw-bold text-dark">{{ engagement_score }}%</h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-6">
-      <div class="card shadow-sm border-danger text-center">
-        <div class="card-body">
-          <h6 class="fw-bold text-danger mb-1">Emails Sent Today</h6>
-          <h3 class="fw-bold text-dark">{{ emails_today }}</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- ✅ TRENDS -->
   <div class="row g-3 mb-4">
     <div class="col-md-6">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h6 class="fw-bold text-primary mb-3">Registration Trend (Last 7 Days)</h6>
           <canvas id="registrationTrendChart" height="140"></canvas>
         </div>
       </div>
     </div>
-
     <div class="col-md-6">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h6 class="fw-bold text-success mb-3">Monthly Registration Growth</h6>
           <canvas id="monthlyTrendChart" height="140"></canvas>
@@ -185,7 +140,7 @@
   <!-- ✅ DISTRIBUTIONS -->
   <div class="row g-3 mb-4">
     <div class="col-md-6">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h6 class="fw-bold text-success mb-3">Exhibitors by Category</h6>
           <canvas id="exhibitorDistChart" height="200"></canvas>
@@ -193,7 +148,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h6 class="fw-bold text-info mb-3">Organization Types</h6>
           <canvas id="orgDistChart" height="200"></canvas>
@@ -204,15 +159,25 @@
 
   <!-- ✅ REGISTRANT CATEGORIES -->
   <h5 class="fw-bold text-primary mt-5 mb-3">Registrant Categories</h5>
-  <div class="row g-3">
+  <div class="row g-3 mb-4">
     {% for item in category_stats %}
     <div class="col-6 col-md-3 col-lg-2">
-      <div class="card shadow-sm border-0 rounded-4 p-2 text-center h-100">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center h-100">
         <div class="fw-semibold text-secondary">{{ item.name }}</div>
         <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>
       </div>
     </div>
+    {% empty %}
+    <p class="text-muted text-center">No category data available.</p>
     {% endfor %}
+  </div>
+
+
+  <!-- ✅ Chart Container -->
+  <div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-body">
+      <canvas id="categoryChart" style="max-height: 420px;"></canvas>
+    </div>
   </div>
 
   <!-- ✅ RECENT ACTIVITY -->
@@ -274,8 +239,14 @@
   </div>
 </div>
 
-<!-- ✅ CHARTS -->
+<!-- ✅ CHART SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart.js first -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+
+<!-- Then the datalabels plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
 <script>
 const dailyLabels = {{ daily_labels|safe }};
 const dailyCounts = {{ daily_counts|safe }};
@@ -286,62 +257,86 @@ const exhibitorCounts = {{ exhibitor_counts|safe }};
 const orgLabels = {{ org_labels|safe }};
 const orgCounts = {{ org_counts|safe }};
 
-// Daily registration trend
+
+
+// Registration trends
 new Chart(document.getElementById("registrationTrendChart"), {
   type: "line",
-  data: {
-    labels: dailyLabels,
-    datasets: [{
-      label: "Registrations",
-      data: dailyCounts,
-      borderColor: "#007bff",
-      backgroundColor: "rgba(0,123,255,0.15)",
-      fill: true,
-      tension: 0.4
-    }]
-  },
+  data: { labels: dailyLabels, datasets: [{ label: "Registrations", data: dailyCounts, borderColor: "#007bff", backgroundColor: "rgba(0,123,255,0.15)", fill: true, tension: 0.4 }] },
   options: { responsive: true, scales: { y: { beginAtZero: true } } }
 });
-
-// Monthly trend
 new Chart(document.getElementById("monthlyTrendChart"), {
   type: "bar",
-  data: {
-    labels: monthlyLabels,
-    datasets: [{
-      label: "Registrations per Month",
-      data: monthlyCounts,
-      backgroundColor: "rgba(25,135,84,0.6)"
-    }]
-  },
+  data: { labels: monthlyLabels, datasets: [{ label: "Registrations per Month", data: monthlyCounts, backgroundColor: "rgba(25,135,84,0.6)" }] },
   options: { responsive: true, scales: { y: { beginAtZero: true } } }
 });
 
-// Exhibitor distribution
+// Distributions
 new Chart(document.getElementById("exhibitorDistChart"), {
   type: "doughnut",
-  data: {
-    labels: exhibitorLabels,
-    datasets: [{
-      data: exhibitorCounts,
-      backgroundColor: ["#198754","#20c997","#28a745","#6f42c1","#0d6efd","#ffc107","#dc3545"]
-    }]
-  },
+  data: { labels: exhibitorLabels, datasets: [{ data: exhibitorCounts, backgroundColor: ["#198754","#20c997","#28a745","#6f42c1","#0d6efd","#ffc107","#dc3545"] }] },
   options: { responsive: true, plugins: { legend: { position: "bottom" } } }
 });
-
-// Organization types
 new Chart(document.getElementById("orgDistChart"), {
   type: "bar",
-  data: {
-    labels: orgLabels,
-    datasets: [{
-      label: "Organizations",
-      data: orgCounts,
-      backgroundColor: "rgba(13,110,253,0.6)"
-    }]
-  },
+  data: { labels: orgLabels, datasets: [{ label: "Organizations", data: orgCounts, backgroundColor: "rgba(13,110,253,0.6)" }] },
   options: { responsive: true, scales: { y: { beginAtZero: true } } }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const ctx = document.getElementById("categoryChart").getContext("2d");
+
+  const data = {
+    labels: {{ category_labels|safe }},
+    datasets: [{
+      label: "Number of Registrants",
+      data: {{ category_counts|safe }},
+      backgroundColor: [
+        "#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f",
+        "#edc948", "#b07aa1", "#ff9da7", "#9c755f", "#bab0ab"
+      ],
+      borderWidth: 1,
+      borderColor: "#ffffff",
+    }]
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "right",
+        labels: { font: { size: 13 } }
+      },
+      title: {
+        display: true,
+        text: "Registrant Distribution by Category",
+        font: { size: 16, weight: "bold" },
+        color: "#0d6efd"
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.label}: ${context.parsed} Registrants`
+        }
+      },
+      // ✅ Data labels plugin configuration
+      datalabels: {
+        color: "#fff",
+        font: { weight: "bold", size: 13 },
+        formatter: (value, ctx) => {
+          return value > 0 ? value : "";
+        }
+      }
+    }
+  };
+
+  // ✅ Register the plugin and create the chart
+  new Chart(ctx, {
+    type: "pie",
+    data: data,
+    options: options,
+    plugins: [ChartDataLabels]
+  });
+});
 </script>
+
 {% endblock %}
