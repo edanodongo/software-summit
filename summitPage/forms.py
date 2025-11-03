@@ -186,8 +186,6 @@ class QuickRegistrationForm(forms.ModelForm):
         id_number = self.cleaned_data.get('national_id_number', '').strip()
         if not id_number:
             raise ValidationError("Please enter your National ID number.")
-        if not id_number.isdigit():
-            raise ValidationError("Invalid ID/Passport Number.")
         if len(id_number) < 6:
             raise ValidationError("Please enter a valid National ID number.")
         return id_number
