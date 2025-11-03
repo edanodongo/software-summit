@@ -143,4 +143,6 @@ urlpatterns = [
     path("mark_printed/<int:reg_id>/", views.mark_printed, name="mark_printed"),
 
 
+
+
 ]
