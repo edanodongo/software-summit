@@ -1,194 +1,347 @@
 {% extends "summit/base.html" %}
 {% load static %}
 
-{% block title %}Summit Analytics Dashboard{% endblock %}
-
 {% block content %}
-<div class="container-fluid py-4">
+<div class="container-fluid mt-4 px-3 px-md-4">
+  <h2 class="fw-bold mb-4 text-primary">
+    <i class="fas fa-tachometer-alt me-2"></i> Summit Statistics Dashboard
+  </h2>
 
-  <!-- HEADER -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary">Summit Analytics Dashboard</h2>
-    <span class="text-muted">📅 {{ current_year }}</span>
+  <!-- ✅ SUMMARY CARDS -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-primary">
+        <div class="card-body">
+          <i class="fas fa-users fa-2x text-primary mb-2"></i>
+          <h6 class="fw-semibold text-primary">Registrants</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_registrants }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-success">
+        <div class="card-body">
+          <i class="fas fa-store fa-2x text-success mb-2"></i>
+          <h6 class="fw-semibold text-success">Exhibitors</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_exhibitors }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-info">
+        <div class="card-body">
+          <i class="fas fa-handshake fa-2x text-info mb-2"></i>
+          <h6 class="fw-semibold text-info">Partners</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_partners }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-warning">
+        <div class="card-body">
+          <i class="fas fa-donate fa-2x text-warning mb-2"></i>
+          <h6 class="fw-semibold text-warning">Sponsors</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_sponsors }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-secondary">
+        <div class="card-body">
+          <i class="fas fa-microphone fa-2x text-secondary mb-2"></i>
+          <h6 class="fw-semibold text-secondary">Speakers</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_speakers }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="card shadow-sm text-center border-dark">
+        <div class="card-body">
+          <i class="fas fa-calendar-day fa-2x text-dark mb-2"></i>
+          <h6 class="fw-semibold text-dark">Sessions</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_sessions }}</h4>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- SUMMARY CARDS -->
-  <div class="row g-3">
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
-        <div class="card-title"><i class="fa fa-users text-success me-2"></i>Registrants</div>
-        <h4 class="fw-bold text-dark mb-0">{{ total_registrants }}</h4>
-        <small class="text-muted">+{{ new_registrants_month }} this month</small>
+  <!-- ✅ BOOTH APPROVAL OVERVIEW -->
+  <h5 class="fw-bold text-success mt-4 mb-3">
+    <i class="fas fa-check-circle me-2"></i> Booth Approvals Overview
+  </h5>
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-xl-3">
+      <div class="card shadow-sm text-center border-info">
+        <div class="card-body">
+          <i class="fas fa-hourglass-half fa-2x text-info mb-2"></i>
+          <h6 class="fw-semibold text-info">Pending Approvals</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ pending_approvals }}</h4>
+        </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
-        <div class="card-title"><i class="fa fa-building text-primary me-2"></i>Exhibitors</div>
-        <h4 class="fw-bold text-dark mb-0">{{ total_exhibitors }}</h4>
-        <small class="text-muted">+{{ new_exhibitors_month }} this month</small>
+
+    <div class="col-6 col-md-4 col-xl-3">
+      <div class="card shadow-sm text-center border-success">
+        <div class="card-body">
+          <i class="fas fa-check fa-2x text-success mb-2"></i>
+          <h6 class="fw-semibold text-success">Approved Exhibitors</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ total_approved_exhibitors }}</h4>
+        </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
-        <div class="card-title"><i class="fa fa-handshake text-warning me-2"></i>Partners</div>
-        <h4 class="fw-bold text-dark mb-0">{{ total_partners }}</h4>
-        <small class="text-muted">{{ partners_active }} active</small>
+
+    <div class="col-6 col-md-4 col-xl-3">
+      <div class="card shadow-sm text-center border-primary">
+        <div class="card-body">
+          <i class="fas fa-cubes fa-2x text-primary mb-2"></i>
+          <h6 class="fw-semibold text-primary">Approved Booths</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ approved_booths_total }}</h4>
+        </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
-        <div class="card-title"><i class="fa fa-store text-danger me-2"></i>Booths</div>
-        <h4 class="fw-bold text-dark mb-0">{{ total_booths }}</h4>
-        <small class="text-muted">{{ booth_utilization }}% utilized</small>
+
+    <div class="col-6 col-md-4 col-xl-3">
+      <div class="card shadow-sm text-center border-warning">
+        <div class="card-body">
+          <i class="fas fa-warehouse fa-2x text-warning mb-2"></i>
+          <h6 class="fw-semibold text-warning">Total Booth Capacity</h6>
+          <h4 class="fw-bold text-dark mb-0">{{ max_count }}</h4>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- CHARTS SECTION -->
-  <h5 class="fw-semibold text-primary mt-5 mb-3">Statistics Overview</h5>
-  <div class="row g-4">
-    <div class="col-lg-8">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Monthly Registrations Trend</h6>
-        <canvas id="monthlyRegistrationsChart" height="300"></canvas>
+  <!-- ✅ KEY METRICS -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="card shadow-sm border-success text-center">
+        <div class="card-body">
+          <h6 class="fw-bold text-success mb-2">Booth Utilization</h6>
+          <div class="progress mb-2" style="height: 6px;">
+            <div class="progress-bar bg-success" role="progressbar"
+                 style="width: {{ booth_utilization }}%"
+                 aria-valuenow="{{ booth_utilization }}" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <h4 class="fw-bold text-dark">{{ booth_utilization }}%</h4>
+        </div>
       </div>
     </div>
-    <div class="col-lg-4">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Booth Utilization</h6>
-        <canvas id="boothUtilizationChart" height="300"></canvas>
+
+    <div class="col-md-3 col-6">
+      <div class="card shadow-sm border-info text-center">
+        <div class="card-body">
+          <h6 class="fw-bold text-info mb-1">Active Partners</h6>
+          <h3 class="fw-bold text-dark">{{ active_partners }}</h3>
+          <small class="text-muted">{{ inactive_partners }} inactive</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card shadow-sm border-primary text-center">
+        <div class="card-body">
+          <h6 class="fw-bold text-primary mb-1">Engagement Score</h6>
+          <h3 class="fw-bold text-dark">{{ engagement_score }}%</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card shadow-sm border-danger text-center">
+        <div class="card-body">
+          <h6 class="fw-bold text-danger mb-1">Emails Sent Today</h6>
+          <h3 class="fw-bold text-dark">{{ emails_today }}</h3>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="row g-4 mt-1">
+  <!-- ✅ TRENDS -->
+  <div class="row g-3 mb-4">
     <div class="col-md-6">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Exhibitor Categories</h6>
-        <canvas id="exhibitorCategoryChart" height="300"></canvas>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-primary mb-3">Registration Trend (Last 7 Days)</h6>
+          <canvas id="registrationTrendChart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-success mb-3">Monthly Registration Growth</h6>
+          <canvas id="monthlyTrendChart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ DISTRIBUTIONS -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-success mb-3">Exhibitors by Category</h6>
+          <canvas id="exhibitorDistChart" height="200"></canvas>
+        </div>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Registrant Organization Types</h6>
-        <canvas id="registrantOrgChart" height="300"></canvas>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-info mb-3">Organization Types</h6>
+          <canvas id="orgDistChart" height="200"></canvas>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- RECENT ACTIVITY -->
-  <h5 class="fw-semibold text-primary mt-5 mb-3">Recent Activity</h5>
+  <!-- ✅ REGISTRANT CATEGORIES -->
+  <h5 class="fw-bold text-primary mt-5 mb-3">Registrant Categories</h5>
+  <div class="row g-3">
+    {% for item in category_stats %}
+    <div class="col-6 col-md-3 col-lg-2">
+      <div class="card shadow-sm border-0 rounded-4 p-2 text-center h-100">
+        <div class="fw-semibold text-secondary">{{ item.name }}</div>
+        <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ✅ RECENT ACTIVITY -->
+  <h5 class="fw-bold text-secondary mt-5 mb-3">Recent Activity</h5>
   <div class="row g-3">
     <div class="col-md-4">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Recent Registrants</h6>
-        <table class="table table-sm align-middle">
-          {% for r in recent_registrants %}
-          <tr>
-            <td>{{ r.full_name }}</td>
-            <td><small class="text-muted">{{ r.created_at|date:"M d, H:i" }}</small></td>
-          </tr>
-          {% empty %}
-          <tr><td colspan="2" class="text-center text-muted">No recent registrants</td></tr>
-          {% endfor %}
-        </table>
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="fw-bold text-dark mb-3">Recent Registrants</h6>
+          <ul class="list-group list-group-flush small">
+            {% for r in recent_registrants %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ r.first_name }} {{ r.last_name }}</span>
+              <span class="text-muted">{{ r.created_at|date:"M d" }}</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent registrants</li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Recent Exhibitors</h6>
-        <table class="table table-sm align-middle">
-          {% for e in recent_exhibitors %}
-          <tr>
-            <td>{{ e.company_name }}</td>
-            <td><small class="text-muted">{{ e.created_at|date:"M d, H:i" }}</small></td>
-          </tr>
-          {% empty %}
-          <tr><td colspan="2" class="text-center text-muted">No recent exhibitors</td></tr>
-          {% endfor %}
-        </table>
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="fw-bold text-dark mb-3">Recent Exhibitors</h6>
+          <ul class="list-group list-group-flush small">
+            {% for e in recent_exhibitors %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ e.company_name }}</span>
+              <span class="text-muted">{{ e.created_at|date:"M d" }}</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent exhibitors</li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card shadow-sm border-0 rounded-4 p-3">
-        <h6 class="fw-bold mb-3">Recent Partners</h6>
-        <table class="table table-sm align-middle">
-          {% for p in recent_partners %}
-          <tr>
-            <td>{{ p.name }}</td>
-            <td><small class="text-muted">{{ p.created_at|date:"M d, H:i" }}</small></td>
-          </tr>
-          {% empty %}
-          <tr><td colspan="2" class="text-center text-muted">No recent partners</td></tr>
-          {% endfor %}
-        </table>
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="fw-bold text-dark mb-3">Recent Sponsors</h6>
+          <ul class="list-group list-group-flush small">
+            {% for s in recent_sponsors %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ s.organization_name }}</span>
+              <span class="text-muted">{{ s.submitted_at|date:"M d" }}</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent sponsors</li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
-{% endblock %}
 
-{% block extra_scripts %}
+<!-- ✅ CHARTS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Monthly Registrations
-  new Chart(document.getElementById('monthlyRegistrationsChart'), {
-    type: 'line',
-    data: {
-      labels: {{ monthly_labels|safe }},
-      datasets: [{
-        label: 'Registrations',
-        data: {{ monthly_counts|safe }},
-        borderColor: '#01873F',
-        backgroundColor: 'rgba(1,135,63,0.15)',
-        tension: 0.4,
-        fill: true,
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } } }
-  });
+const dailyLabels = {{ daily_labels|safe }};
+const dailyCounts = {{ daily_counts|safe }};
+const monthlyLabels = {{ monthly_labels|safe }};
+const monthlyCounts = {{ monthly_counts|safe }};
+const exhibitorLabels = {{ exhibitor_labels|safe }};
+const exhibitorCounts = {{ exhibitor_counts|safe }};
+const orgLabels = {{ org_labels|safe }};
+const orgCounts = {{ org_counts|safe }};
 
-  // Booth Utilization
-  new Chart(document.getElementById('boothUtilizationChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Active', 'Available'],
-      datasets: [{
-        data: [{{ active_booths }}, {{ available_booths }}],
-        backgroundColor: ['#01873F', '#e8e8e8']
-      }]
-    },
-    options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
-  });
+// Daily registration trend
+new Chart(document.getElementById("registrationTrendChart"), {
+  type: "line",
+  data: {
+    labels: dailyLabels,
+    datasets: [{
+      label: "Registrations",
+      data: dailyCounts,
+      borderColor: "#007bff",
+      backgroundColor: "rgba(0,123,255,0.15)",
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: { responsive: true, scales: { y: { beginAtZero: true } } }
+});
 
-  // Exhibitor Categories
-  new Chart(document.getElementById('exhibitorCategoryChart'), {
-    type: 'bar',
-    data: {
-      labels: {{ exhibitor_labels|safe }},
-      datasets: [{
-        label: 'Exhibitors',
-        data: {{ exhibitor_counts|safe }},
-        backgroundColor: '#02344f'
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } } }
-  });
+// Monthly trend
+new Chart(document.getElementById("monthlyTrendChart"), {
+  type: "bar",
+  data: {
+    labels: monthlyLabels,
+    datasets: [{
+      label: "Registrations per Month",
+      data: monthlyCounts,
+      backgroundColor: "rgba(25,135,84,0.6)"
+    }]
+  },
+  options: { responsive: true, scales: { y: { beginAtZero: true } } }
+});
 
-  // Registrant Organization
-  new Chart(document.getElementById('registrantOrgChart'), {
-    type: 'pie',
-    data: {
-      labels: {{ org_labels|safe }},
-      datasets: [{
-        data: {{ org_counts|safe }},
-        backgroundColor: ['#02344f','#01873F','#CE171C','#F4C430','#1C1C18']
-      }]
-    },
-    options: { plugins: { legend: { position: 'bottom' } } }
-  });
+// Exhibitor distribution
+new Chart(document.getElementById("exhibitorDistChart"), {
+  type: "doughnut",
+  data: {
+    labels: exhibitorLabels,
+    datasets: [{
+      data: exhibitorCounts,
+      backgroundColor: ["#198754","#20c997","#28a745","#6f42c1","#0d6efd","#ffc107","#dc3545"]
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+});
+
+// Organization types
+new Chart(document.getElementById("orgDistChart"), {
+  type: "bar",
+  data: {
+    labels: orgLabels,
+    datasets: [{
+      label: "Organizations",
+      data: orgCounts,
+      backgroundColor: "rgba(13,110,253,0.6)"
+    }]
+  },
+  options: { responsive: true, scales: { y: { beginAtZero: true } } }
+});
 </script>
 {% endblock %}

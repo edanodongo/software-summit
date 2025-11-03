@@ -59,6 +59,33 @@ from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 import qrcode, os
 
+from summitPage.models import (
+    Registrant, Exhibitor, SummitPartner, SummitSponsor,
+    SummitGallery, SummitSpeaker, SummitSession,
+    SummitScheduleDay, Booth, DashboardSetting, EmailLog
+)
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt  # not needed if you use {% csrf_token %} via JS
+
+from django.db.models import Q, Sum, Count, OuterRef, Subquery
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Sum
+from django.utils import timezone
+
+from django.db.models import Count, Sum, Q
+from django.db.models.functions import TruncDate, TruncMonth
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils.timezone import now
+from datetime import timedelta
 
 # begin your views here
 
@@ -1796,7 +1823,7 @@ def admin_delete_booth(request, pk):
 
 @login_required
 def main_dashboard_view(request):
-    today = now().date()
+    today = now()
     week_ago = today - timedelta(days=7)
     month_ago = today - timedelta(days=30)
     year_ago = today - timedelta(days=365)
@@ -1805,72 +1832,120 @@ def main_dashboard_view(request):
     total_registrants = Registrant.objects.count()
     total_exhibitors = Exhibitor.objects.count()
     total_partners = SummitPartner.objects.count()
+    total_sponsors = SummitSponsor.objects.count()
     total_gallery = SummitGallery.objects.count()
+    total_speakers = SummitSpeaker.objects.count()
+    total_sessions = SummitSession.objects.count()
+    total_days = SummitScheduleDay.objects.count()
     total_booths = Booth.objects.count()
 
     # --- Growth comparisons ---
-    new_registrants_week = Registrant.objects.filter(created_at__gte=week_ago).count()
     new_registrants_month = Registrant.objects.filter(created_at__gte=month_ago).count()
+    new_registrants_week = Registrant.objects.filter(created_at__gte=week_ago).count()
     new_exhibitors_month = Exhibitor.objects.filter(created_at__gte=month_ago).count()
     new_partners_month = SummitPartner.objects.filter(created_at__gte=month_ago).count()
+    new_sponsors_month = SummitSponsor.objects.filter(submitted_at__gte=month_ago).count()
 
-    # --- Verification & opt-in stats ---
+    # --- Engagement metrics ---
     verified_registrants = Registrant.objects.filter(privacy_agreed=True).count()
     opted_in_registrants = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # --- Booth stats ---
-    active_booths = Booth.objects.filter(is_booked=True).count()
-    available_booths = total_booths - active_booths
-    booth_utilization = (active_booths / total_booths * 100) if total_booths else 0
+    # --- Booth & capacity ---
+    dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
+    max_count = dashboard_setting.max_count or 0
+    total_taken = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+    total_taken += Exhibitor.objects.filter(Q(total_count__isnull=True) | Q(total_count=0)).count()
+    remaining = max(max_count - total_taken, 0)
+    booth_utilization = round((total_taken / max_count * 100), 1) if max_count else 0
 
-    # --- Partner status ---
-    partners_active = SummitPartner.objects.filter(is_active=True).count()
-    partners_inactive = total_partners - partners_active
+    # --- Partner breakdown ---
+    active_partners = SummitPartner.objects.filter(is_active=True).count()
+    inactive_partners = total_partners - active_partners
 
-    # --- 7-day registration trend ---
-    daily_labels, daily_counts = [], []
-    for i in range(7):
-        day = today - timedelta(days=i)
-        daily_labels.append(day.strftime("%a"))
-        daily_counts.append(Registrant.objects.filter(created_at__date=day).count())
-    daily_labels.reverse()
-    daily_counts.reverse()
+    # --- Approval stats for exhibitors ---
+    pending_approvals = Exhibitor.objects.filter(approval_status='pending').count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+    approved_booths_total = (
+        Exhibitor.objects.filter(approval_status='approved')
+        .aggregate(total=Sum('total_count'))['total']
+        or 0
+    )
 
-    # --- Monthly registration trend (last 6 months) ---
-    monthly_reg_data = (
+    # --- Category breakdown (numeric or text compatible) ---
+    CATEGORY_MAP = {
+        "1": "Delegate",
+        "2": "Student",
+        "3": "Secretariat",
+        "4": "Security",
+        "5": "Service Provider",
+        "6": "Press",
+        "7": "Moderator",
+        "8": "Speaker",
+        "9": "Panellist",
+        "10": "VIP",
+        "11": "VVIP",
+        "12": "Staff",
+    }
+
+    registrant_categories = Registrant.objects.values_list("category", flat=True).distinct()
+    category_stats = []
+    for raw_value in registrant_categories:
+        if not raw_value:
+            continue
+        raw_str = str(raw_value).strip()
+        readable_name = CATEGORY_MAP.get(raw_str, raw_str)
+        count = Registrant.objects.filter(category=raw_value).count()
+        category_stats.append({"name": readable_name, "count": count})
+    category_stats = sorted(category_stats, key=lambda x: x["count"], reverse=True)
+
+    # --- Daily registration trend (last 7 days) ---
+    daily_data = (
+        Registrant.objects.filter(created_at__date__gte=week_ago)
+        .annotate(day=TruncDate("created_at"))
+        .values("day")
+        .annotate(count=Count("id"))
+        .order_by("day")
+    )
+    daily_labels = [d["day"].strftime("%a") for d in daily_data]
+    daily_counts = [d["count"] for d in daily_data]
+
+    # --- Monthly registration trend (last 12 months) ---
+    monthly_data = (
         Registrant.objects.filter(created_at__gte=year_ago)
         .annotate(month=TruncMonth("created_at"))
         .values("month")
         .annotate(count=Count("id"))
         .order_by("month")
     )
-    monthly_labels = [r["month"].strftime("%b %Y") for r in monthly_reg_data]
-    monthly_counts = [r["count"] for r in monthly_reg_data]
+    monthly_labels = [m["month"].strftime("%b %Y") for m in monthly_data]
+    monthly_counts = [m["count"] for m in monthly_data]
 
-    # --- Exhibitor distribution by category ---
-    exhibitor_data = (
+    # --- Exhibitors by category ---
+    exhibitor_dist = (
         Exhibitor.objects.values("category")
         .annotate(count=Count("id"))
         .order_by("-count")
     )
-    exhibitor_labels = [e["category"] or "Uncategorized" for e in exhibitor_data]
-    exhibitor_counts = [e["count"] for e in exhibitor_data]
+    exhibitor_labels = [e["category"] or "Uncategorized" for e in exhibitor_dist]
+    exhibitor_counts = [e["count"] for e in exhibitor_dist]
 
-    # --- Registrant organization breakdown ---
-    org_data = (
+    # --- Organization type distribution ---
+    org_dist = (
         Registrant.objects.values("organization_type")
         .annotate(count=Count("id"))
         .order_by("-count")
     )
-    org_labels = [o["organization_type"] or "Other" for o in org_data]
-    org_counts = [o["count"] for o in org_data]
+    org_labels = [o["organization_type"] or "Other" for o in org_dist]
+    org_counts = [o["count"] for o in org_dist]
 
-    # --- Recent activity lists ---
+    # --- Recent activity ---
     recent_registrants = Registrant.objects.order_by("-created_at")[:5]
     recent_exhibitors = Exhibitor.objects.order_by("-created_at")[:5]
     recent_partners = SummitPartner.objects.order_by("-created_at")[:5]
+    recent_sponsors = SummitSponsor.objects.order_by("-submitted_at")[:5]
+    recent_sessions = SummitSession.objects.order_by("-timeslot__day__date")[:5]
 
-    # --- Engagement score (simple metric) ---
+    # --- Engagement score ---
     engagement_score = 0
     if total_registrants:
         engagement_score = ((opted_in_registrants + verified_registrants) / total_registrants) * 50
@@ -1878,59 +1953,72 @@ def main_dashboard_view(request):
         engagement_score += (new_exhibitors_month / total_exhibitors) * 50
     engagement_score = round(min(100, engagement_score), 1)
 
-    # --- Optional API/email logs ---
-    emails_today = 0
-    try:
-        emails_today = EmailLog.objects.filter(sent_at__date=today).count()
-    except Exception:
-        pass
+    # --- Emails sent today ---
+    emails_today = EmailLog.objects.filter(sent_at__date=today).count()
 
+    # --- Context ---
     context = {
         # Totals
         "total_registrants": total_registrants,
         "total_exhibitors": total_exhibitors,
         "total_partners": total_partners,
+        "total_sponsors": total_sponsors,
         "total_gallery": total_gallery,
+        "total_speakers": total_speakers,
+        "total_sessions": total_sessions,
+        "total_days": total_days,
         "total_booths": total_booths,
 
-        # Growth & insights
-        "new_registrants_week": new_registrants_week,
+        # Growth
         "new_registrants_month": new_registrants_month,
+        "new_registrants_week": new_registrants_week,
         "new_exhibitors_month": new_exhibitors_month,
         "new_partners_month": new_partners_month,
+        "new_sponsors_month": new_sponsors_month,
+
+        # Engagement
         "verified_registrants": verified_registrants,
         "opted_in_registrants": opted_in_registrants,
+        "engagement_score": engagement_score,
 
         # Booths
-        "active_booths": active_booths,
-        "available_booths": available_booths,
-        "booth_utilization": round(booth_utilization, 1),
+        "max_count": max_count,
+        "total_taken": total_taken,
+        "remaining": remaining,
+        "booth_utilization": booth_utilization,
 
-        # Partners
-        "partners_active": partners_active,
-        "partners_inactive": partners_inactive,
+        # Partner breakdown
+        "active_partners": active_partners,
+        "inactive_partners": inactive_partners,
 
-        # Trends
+        # Exhibitor approval stats
+        "pending_approvals": pending_approvals,
+        "total_approved_exhibitors": total_approved_exhibitors,
+        "approved_booths_total": approved_booths_total,
+
+        # Trends & Charts
         "daily_labels": daily_labels,
         "daily_counts": daily_counts,
         "monthly_labels": monthly_labels,
         "monthly_counts": monthly_counts,
-
-        # Charts
         "exhibitor_labels": exhibitor_labels,
         "exhibitor_counts": exhibitor_counts,
         "org_labels": org_labels,
         "org_counts": org_counts,
 
+        # Breakdown
+        "category_stats": category_stats,
+
         # Lists
         "recent_registrants": recent_registrants,
         "recent_exhibitors": recent_exhibitors,
         "recent_partners": recent_partners,
+        "recent_sponsors": recent_sponsors,
+        "recent_sessions": recent_sessions,
 
-        # Others
+        # Misc
         "emails_today": emails_today,
-        "engagement_score": engagement_score,
-        'current_year': timezone.now().year,
+        "current_year": today.year,
     }
 
     return render(request, "dashboard/stats_dashboard.html", context)
@@ -2664,10 +2752,6 @@ def badge_isprinted(request):
     return render(request, "badge/printed.html", context)
 
 
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from django.db.models import Sum
-from django.utils import timezone
 @login_required
 def approve_exhibitor(request, exhibitor_id):
     exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
@@ -2729,12 +2813,6 @@ def approve_exhibitor(request, exhibitor_id):
     })
 
 
-from django.db.models import Q, Sum, Count, OuterRef, Subquery
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.utils import timezone
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def approved_exhibitors(request):
@@ -2766,9 +2844,6 @@ def approved_exhibitors(request):
     )
 
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt  # not needed if you use {% csrf_token %} via JS
 @login_required
 @require_POST
 def ajax_approve_exhibitor(request, exhibitor_id):
