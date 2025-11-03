@@ -2833,6 +2833,7 @@ def ajax_approve_exhibitor(request, exhibitor_id):
     })
 def create_badge(request, reg_id):
     try:
+        # Fetch registrant
         registrant = (
             Registrant.objects
             .only(
@@ -2844,103 +2845,236 @@ def create_badge(request, reg_id):
         )
 
         category_obj = Category.objects.only("name", "color").get(id=registrant.category)
-        badge_color = category_obj.color or "#008037"  # default green if missing
+        badge_color = category_obj.color or "#8DC63F"
         category_name = category_obj.name.upper()
 
-        # --- Badge size ---
-        width, height = 800, 1200
+        # --- Badge dimensions (optimized for printing on A4/Letter) ---
+        # Standard conference badge: 4x6 inches at 200 DPI = 800x1200
+        width, height = 850, 1200
         badge = Image.new("RGB", (width, height), "white")
         draw = ImageDraw.Draw(badge)
 
-        # --- Paths ---
-        logo_path = os.path.join(settings.BASE_DIR, "static/images/summit_logo.png")
+        # --- Colors ---
+        green = badge_color
+        red = "#E31E24"
+        gray = "#666666"
+        dark_text = "#1a1a1a"
+
+        # --- Ensure badge directory exists ---
         badge_dir = os.path.join(settings.MEDIA_ROOT, "badges")
         os.makedirs(badge_dir, exist_ok=True)
         badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
 
-        # --- Fonts ---
+        # --- Load Fonts with better fallbacks ---
         try:
-            bold_font = ImageFont.truetype("arialbd.ttf", 56)
-            name_font = ImageFont.truetype("arialbd.ttf", 60)
-            text_font = ImageFont.truetype("arial.ttf", 34)
-            small_font = ImageFont.truetype("arial.ttf", 28)
-        except:
-            bold_font = name_font = text_font = small_font = ImageFont.load_default()
+            # Try Windows fonts first
+            title_large = ImageFont.truetype("arialbd.ttf", 34)
+            title_medium = ImageFont.truetype("arial.ttf", 24)
+            category_font = ImageFont.truetype("arialbd.ttf", 60)
+            name_font = ImageFont.truetype("arialbd.ttf", 38)
+            info_font = ImageFont.truetype("arial.ttf", 28)
+            date_font = ImageFont.truetype("arialbd.ttf", 40)
+            venue_font = ImageFont.truetype("arialbd.ttf", 28)
+            small_font = ImageFont.truetype("arial.ttf", 22)
+        except IOError:
+            try:
+                # Try Linux fonts
+                title_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 34)
+                title_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+                category_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 60)
+                name_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
+                info_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 28)
+                date_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 40)
+                venue_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
+                small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
+            except IOError:
+                # Ultimate fallback - use default font
+                default_font = ImageFont.load_default()
+                title_large = title_medium = category_font = default_font
+                name_font = info_font = date_font = venue_font = small_font = default_font
 
-        # --- Logo ---
+        # --- Top Logos Section ---
+        logo_y = 40
+        logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+        kenya_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "kenya_coat_of_arms.png")
+
+        # Kenya coat of arms (left) - optional
+        if os.path.exists(kenya_logo_path):
+            try:
+                kenya_logo = Image.open(kenya_logo_path).convert("RGBA")
+                kenya_logo.thumbnail((80, 80), Image.Resampling.LANCZOS)
+                badge.paste(kenya_logo, (60, logo_y), kenya_logo)
+            except Exception as e:
+                print(f"Warning: Could not load Kenya logo: {e}")
+
+        # Summit logo (center) - optional
         if os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            logo.thumbnail((400, 180))
-            badge.paste(logo, (int((width - logo.width) / 2), 40), logo)
+            try:
+                logo = Image.open(logo_path).convert("RGBA")
+                logo.thumbnail((120, 80), Image.Resampling.LANCZOS)
+                logo_x = (width - logo.width) // 2
+                badge.paste(logo, (logo_x, logo_y), logo)
+            except Exception as e:
+                print(f"Warning: Could not load summit logo: {e}")
 
-        # --- Summit Title ---
+        # --- Decorative circle element ---
+        circle_y = 160
+        circle_center = (width // 2, circle_y + 35)
+        circle_radius = 55
+
+        draw.ellipse(
+            [circle_center[0] - circle_radius, circle_center[1] - circle_radius,
+             circle_center[0] + circle_radius, circle_center[1] + circle_radius],
+            outline=red, width=5
+        )
+
+        draw.ellipse(
+            [circle_center[0] - 27, circle_center[1] - 27,
+             circle_center[0] + 27, circle_center[1] + 27],
+            outline=red, width=3
+        )
+
+        # --- Conference Title ---
+        title_y = circle_y + 100
+
         draw.text(
-            (width / 2, 270),
-            "THE KENYA SOFTWARE & AI SUMMIT 2025",
-            fill="black",
-            font=text_font,
+            (width // 2, title_y),
+            "THE KENYA",
+            fill=dark_text,
+            font=title_medium,
+            anchor="mm"
+        )
+        draw.text(
+            (width // 2, title_y + 40),
+            "SOFTWARE &",
+            fill=red,
+            font=title_large,
+            anchor="mm"
+        )
+        draw.text(
+            (width // 2, title_y + 80),
+            "AI SUMMIT",
+            fill=red,
+            font=title_large,
+            anchor="mm"
+        )
+        draw.text(
+            (width // 2, title_y + 120),
+            "2025",
+            fill=green,
+            font=title_large,
             anchor="mm"
         )
 
-        # --- Category Label ---
-        draw.text(
-            (width / 2, 430),
-            category_name,
-            fill="black",
-            font=name_font,
-            anchor="mm"
-        )
+        # --- Category/Role ---
+        category_y = title_y + 190
 
-        # --- Full Name ---
+        if len(category_name) > 15:
+            words = category_name.split()
+            mid = len(words) // 2
+            line1 = " ".join(words[:mid])
+            line2 = " ".join(words[mid:])
+            draw.text((width // 2, category_y), line1, fill=dark_text, font=category_font, anchor="mm")
+            draw.text((width // 2, category_y + 100), line2, fill=dark_text, font=category_font, anchor="mm")
+            name_y = category_y + 200
+        else:
+            draw.text((width // 2, category_y), category_name, fill=dark_text, font=category_font, anchor="mm")
+            name_y = category_y + 120
+
+        # --- Attendee Name ---
         full_name = f"{registrant.title or ''} {registrant.first_name or ''} {registrant.second_name or ''}".strip()
-        draw.text((width / 2, 550), full_name, fill="black", font=bold_font, anchor="mm")
+        draw.text((width // 2, name_y), full_name, fill=dark_text, font=name_font, anchor="mm")
 
         # --- Organization & Job Title ---
         org_text = registrant.other_organization_type or ""
         job_text = registrant.job_title or ""
-        draw.text((width / 2, 640), org_text, fill="gray", font=text_font, anchor="mm")
-        draw.text((width / 2, 700), job_text, fill="black", font=text_font, anchor="mm")
 
-        # --- Diagonal colored section ---
-        # Raise the section to avoid cutoff
-        diagonal_top = height - 260
-        draw.polygon([(0, height), (0, diagonal_top), (width, height)], fill=badge_color)
+        if org_text:
+            draw.text((width // 2, name_y + 70), org_text, fill=gray, font=info_font, anchor="mm")
+        if job_text:
+            draw.text((width // 2, name_y + 120), job_text, fill=gray, font=info_font, anchor="mm")
 
-        # --- Event Date and Venue (move up a bit) ---
-        event_text = "10th – 12th November 2025\nBomas of Kenya, Nairobi"
-        draw.multiline_text(
-            (80, height - 210),
-            event_text,
-            fill="white",
-            font=small_font,
-            spacing=6,
-            anchor="ls"
+        # --- Green Diagonal Section at Bottom ---
+        bottom_y = 730
+
+        draw.polygon(
+            [(0, bottom_y), (width, bottom_y + 130), (width, height), (0, height)],
+            fill=green
         )
 
-        # --- QR Code ---
-        qr_data = f"Name: {full_name}\nID: {registrant.national_id_number}\nCategory: {category_name}"
-        qr_img = qrcode.make(qr_data)
-        qr_img = qr_img.resize((150, 150))
-        badge.paste(qr_img, (width - 220, height - 220))
-
-        # --- White triangle accent (now smaller and higher) ---
         draw.polygon(
-            [(width - 130, diagonal_top), (width, diagonal_top), (width, diagonal_top + 100)],
+            [
+                (width // 2 - 100, bottom_y + 30),
+                (width // 2 + 100, bottom_y + 100),
+                (width // 2 + 100, bottom_y + 130),
+                (width // 2 - 100, bottom_y + 60)
+            ],
             fill="white"
         )
 
-        # --- Save ---
-        badge.save(badge_path)
-        image_url = os.path.join(settings.MEDIA_URL, "badges", f"badge_{reg_id}.png")
+        draw.polygon(
+            [(width - 100, bottom_y + 160), (width, bottom_y + 130), (width, bottom_y + 200)],
+            fill=red
+        )
 
-        return JsonResponse({"image_url": image_url})
+        # --- Icon placeholders ---
+        icon_y = bottom_y + 90
+        draw.ellipse([(150, icon_y), (185, icon_y + 35)], fill="white", outline=green, width=2)
+        draw.ellipse([(230, icon_y), (265, icon_y + 35)], fill="white", outline=green, width=2)
+        draw.ellipse([(310, icon_y), (345, icon_y + 35)], fill="white", outline=green, width=2)
+
+        # --- Event Date and Venue ---
+        draw.text((100, bottom_y + 200), "10th - 12th", fill="white", font=date_font, anchor="lm")
+        draw.text((100, bottom_y + 250), "November 2025", fill="white", font=venue_font, anchor="lm")
+        draw.text((100, bottom_y + 290), "Bomas of Kenya, Nairobi", fill="white", font=small_font, anchor="lm")
+
+        # --- QR Code ---
+        qr_data = f"SUMMIT-2025\nID:{registrant.national_id_number}\nName:{full_name}\nCategory:{category_name}"
+        qr = qrcode.QRCode(box_size=5, border=1)
+        qr.add_data(qr_data)
+        qr.make()
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_img = qr_img.resize((130, 130))
+        badge.paste(qr_img, (width - 185, bottom_y + 190))
+
+        # --- Save ---
+        badge.save(badge_path, quality=95)
+
+        # Generate URL
+        image_url = f"{settings.MEDIA_URL}badges/badge_{reg_id}.png"
+
+        return JsonResponse({
+            "success": True,
+            "image_url": image_url,
+            "registrant": full_name,
+            "category": category_name
+        })
 
     except Registrant.DoesNotExist:
-        return JsonResponse({"error": "Registrant not found"}, status=404)
+        return JsonResponse({
+            "error": "Registrant not found",
+            "detail": f"No registrant with ID {reg_id}"
+        }, status=404)
+
     except Category.DoesNotExist:
-        return JsonResponse({"error": "Category not found"}, status=404)
+        return JsonResponse({
+            "error": "Category not found",
+            "detail": f"Category for registrant {reg_id} does not exist"
+        }, status=404)
+
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        # Log the full traceback
+        error_traceback = traceback.format_exc()
+        print("=" * 50)
+        print("BADGE GENERATION ERROR:")
+        print(error_traceback)
+        print("=" * 50)
+
+        return JsonResponse({
+            "error": "Badge generation failed",
+            "detail": str(e),
+            "type": type(e).__name__
+        }, status=500)
 
 
 @login_required
