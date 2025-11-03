@@ -440,19 +440,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
     const modalBody = document.getElementById('editRegistrantBody');
 
-    // 🟡 Open modal and load form
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const url = btn.getAttribute('data-url');
-            modalBody.innerHTML = `<div class="text-center py-5 text-muted">
-                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
-            modal.show();
 
+    // 🟡 Open modal and load form (with event delegation)
+    document.addEventListener('click', async (event) => {
+        const btn = event.target.closest('.edit-btn');
+        if (!btn) return;
+
+        const url = btn.getAttribute('data-url');
+        modalBody.innerHTML = `<div class="text-center py-5 text-muted">
+            <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
+        modal.show();
+
+        try {
             const response = await fetch(url);
             const data = await response.json();
             modalBody.innerHTML = data.html_form;
             attachFormSubmit();
-        });
+        } catch (error) {
+            modalBody.innerHTML = `<div class="text-danger text-center py-4">
+                <i class="fas fa-exclamation-circle"></i> Failed to load form.
+            </div>`;
+        }
     });
 
     // 🟢 Handle form submission via AJAX
