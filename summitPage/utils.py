@@ -288,16 +288,20 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
         plain_message = (
             f"Welcome {exhibitor.title} {exhibitor.first_name} {exhibitor.second_name},\n\n"
-            "Thank you for successfully registering for the Kenya Software & AI Summit 2025.\n\n"
-            "We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from "
-            "10th November - 12th November , 2025 at Eldoret Moi University  Annex campus, Eldoret City, Uasin Gishu County, Kenya.\n\n"
-            "The theme for this year is: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
-            "Upon your arrival in Eldoret, our team will receive you and confirm your Exhibitor status. "
-            "To facilitate this, kindly carry a valid identification document. "
-            "You will then be issued with a badge, an exhibitor’s pack containing your conference guide, "
-            "and the full programme to help you easily navigate the conference activities.\n\n"
-            "This experience has been thoughtfully tailored to meet your innovative needs and standards.\n\n"
-            "Karibu.\n\n"
+            "Thank you for booking your exhibitor booth for the Kenya Software & AI Summit 2025.\n\n"
+            "We have received your booth reservation request for the upcoming summit, "
+            "taking place from 10th November - 12th November, 2025 at Moi University Annex Campus, "
+            "Eldoret City, Uasin Gishu County, Kenya.\n\n"
+            "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
+            "Please note that your booth booking is currently pending payment confirmation. "
+            "To secure your booth, kindly proceed to make the required payment as outlined "
+            "on the Summit Portal (https://softwaresummit.go.ke/). "
+            "Once payment has been received, you will receive a confirmation email along with "
+            "your booth allocation details.\n\n"
+            "For any assistance or clarification regarding payment or booth allocation, "
+            "please contact us at softwaresummit@ict.go.ke.\n\n"
+            "We look forward to your participation and contribution to this year’s Summit.\n\n"
+            "Karibu!\n\n"
             "Best regards,\nThe Kenya Software & AI Summit Team"
         )
 
@@ -326,12 +330,13 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
               <!-- Intro -->
               <p style="color:#333; font-size:15px; text-align:center; margin-bottom:25px;">
-                Thank you for successfully registering for the <strong>Kenya Software & AI Summit 2025</strong>.
+                Thank you for booking your exhibitor booth for the <strong>Kenya Software & AI Summit 2025</strong>.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                We are delighted to welcome you to this year’s Kenya Software & AI Summit, taking place from 
-                10th November -12th November , 2025 at Eldoret Moi University  Annex campus, <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
+                We have received your booth reservation request for the upcoming summit, taking place from 
+                <strong>10th – 12th November 2025</strong> at Moi University Annex Campus, 
+                <strong>Eldoret City, Uasin Gishu County, Kenya</strong>.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
@@ -339,14 +344,18 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                Upon your arrival in Eldoret, our team will receive you and confirm your exhibitor status. 
-                To facilitate this, kindly carry a valid identification document. You will then receive 
-                a badge, an exhibitor’s pack containing your conference guide, and the programme for 
-                easier navigation of the conference activities.
+                Please note that your booth booking is currently <strong>pending payment confirmation</strong>. 
+                To secure your booth, kindly proceed to make the required payment. 
+                Once payment has been received, we will send you a confirmation email along with your booth allocation details.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
-                This experience has been thoughtfully tailored to meet your innovative needs and standards.
+                For assistance or clarification regarding payment or booth allocation, please contact us at 
+                <a href="mailto:softwaresummit@ict.go.ke" style="color:#007bff; text-decoration:none;">softwaresummit@ict.go.ke</a>.
+              </p>
+
+              <p style="color:#333; font-size:14px; margin-bottom:20px;">
+                We look forward to your participation and contribution to this year’s Summit.
               </p>
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
@@ -362,7 +371,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             <div style="margin:30px 0; text-align:center;">
               <a href="https://softwaresummit.go.ke/" 
                 style="background-color:#007bff; color:#fff; padding:12px 25px; border-radius:4px; text-decoration:none; font-weight:bold; font-size:14px;">
-                Visit Summit Portal
+                Complete Payment Now
               </a>
             </div>
 
@@ -419,7 +428,6 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             attempts=attempt_count,
             sent_at=timezone.now(),
         )
-
 
 
 # --------------------------------------------
