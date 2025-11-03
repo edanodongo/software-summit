@@ -2938,6 +2938,8 @@ def ajax_approve_exhibitor(request, exhibitor_id):
         "approved_exhibitors": approved_exhibitors,
         "remaining": max(max_count - approved_booths_total, 0),
     })
+
+
 def create_badge(request, reg_id):
     try:
         # Fetch registrant
@@ -2954,6 +2956,9 @@ def create_badge(request, reg_id):
         category_obj = Category.objects.only("name", "color").get(id=registrant.category)
         badge_color = category_obj.color or "#8DC63F"
         category_name = category_obj.name.upper()
+        full_name = f"{registrant.title or ''} {registrant.first_name or ''} {registrant.second_name or ''}".strip()
+        org_text = registrant.other_organization_type or ""
+        job_text = registrant.job_title or ""
 
         # --- Badge dimensions (optimized for printing on A4/Letter) ---
         # Standard conference badge: 4x6 inches at 200 DPI = 800x1200
@@ -2972,177 +2977,6 @@ def create_badge(request, reg_id):
         os.makedirs(badge_dir, exist_ok=True)
         badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
 
-        # --- Load Fonts with better fallbacks ---
-        try:
-            # Try Windows fonts first
-            title_large = ImageFont.truetype("arialbd.ttf", 34)
-            title_medium = ImageFont.truetype("arial.ttf", 24)
-            category_font = ImageFont.truetype("arialbd.ttf", 60)
-            name_font = ImageFont.truetype("arialbd.ttf", 38)
-            info_font = ImageFont.truetype("arial.ttf", 28)
-            date_font = ImageFont.truetype("arialbd.ttf", 40)
-            venue_font = ImageFont.truetype("arialbd.ttf", 28)
-            small_font = ImageFont.truetype("arial.ttf", 22)
-        except IOError:
-            try:
-                # Try Linux fonts
-                title_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 34)
-                title_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-                category_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 60)
-                name_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
-                info_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 28)
-                date_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 40)
-                venue_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
-                small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
-            except IOError:
-                # Ultimate fallback - use default font
-                default_font = ImageFont.load_default()
-                title_large = title_medium = category_font = default_font
-                name_font = info_font = date_font = venue_font = small_font = default_font
-
-        # --- Top Logos Section ---
-        logo_y = 40
-        logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-        kenya_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "kenya_coat_of_arms.png")
-
-        # Kenya coat of arms (left) - optional
-        if os.path.exists(kenya_logo_path):
-            try:
-                kenya_logo = Image.open(kenya_logo_path).convert("RGBA")
-                kenya_logo.thumbnail((80, 80), Image.Resampling.LANCZOS)
-                badge.paste(kenya_logo, (60, logo_y), kenya_logo)
-            except Exception as e:
-                print(f"Warning: Could not load Kenya logo: {e}")
-
-        # Summit logo (center) - optional
-        if os.path.exists(logo_path):
-            try:
-                logo = Image.open(logo_path).convert("RGBA")
-                logo.thumbnail((120, 80), Image.Resampling.LANCZOS)
-                logo_x = (width - logo.width) // 2
-                badge.paste(logo, (logo_x, logo_y), logo)
-            except Exception as e:
-                print(f"Warning: Could not load summit logo: {e}")
-
-        # --- Decorative circle element ---
-        circle_y = 160
-        circle_center = (width // 2, circle_y + 35)
-        circle_radius = 55
-
-        draw.ellipse(
-            [circle_center[0] - circle_radius, circle_center[1] - circle_radius,
-             circle_center[0] + circle_radius, circle_center[1] + circle_radius],
-            outline=red, width=5
-        )
-
-        draw.ellipse(
-            [circle_center[0] - 27, circle_center[1] - 27,
-             circle_center[0] + 27, circle_center[1] + 27],
-            outline=red, width=3
-        )
-
-        # --- Conference Title ---
-        title_y = circle_y + 100
-
-        draw.text(
-            (width // 2, title_y),
-            "THE KENYA",
-            fill=dark_text,
-            font=title_medium,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 40),
-            "SOFTWARE &",
-            fill=red,
-            font=title_large,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 80),
-            "AI SUMMIT",
-            fill=red,
-            font=title_large,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 120),
-            "2025",
-            fill=green,
-            font=title_large,
-            anchor="mm"
-        )
-
-        # --- Category/Role ---
-        category_y = title_y + 190
-
-        if len(category_name) > 15:
-            words = category_name.split()
-            mid = len(words) // 2
-            line1 = " ".join(words[:mid])
-            line2 = " ".join(words[mid:])
-            draw.text((width // 2, category_y), line1, fill=dark_text, font=category_font, anchor="mm")
-            draw.text((width // 2, category_y + 100), line2, fill=dark_text, font=category_font, anchor="mm")
-            name_y = category_y + 200
-        else:
-            draw.text((width // 2, category_y), category_name, fill=dark_text, font=category_font, anchor="mm")
-            name_y = category_y + 120
-
-        # --- Attendee Name ---
-        full_name = f"{registrant.title or ''} {registrant.first_name or ''} {registrant.second_name or ''}".strip()
-        draw.text((width // 2, name_y), full_name, fill=dark_text, font=name_font, anchor="mm")
-
-        # --- Organization & Job Title ---
-        org_text = registrant.other_organization_type or ""
-        job_text = registrant.job_title or ""
-
-        if org_text:
-            draw.text((width // 2, name_y + 70), org_text, fill=gray, font=info_font, anchor="mm")
-        if job_text:
-            draw.text((width // 2, name_y + 120), job_text, fill=gray, font=info_font, anchor="mm")
-
-        # --- Green Diagonal Section at Bottom ---
-        bottom_y = 730
-
-        draw.polygon(
-            [(0, bottom_y), (width, bottom_y + 130), (width, height), (0, height)],
-            fill=green
-        )
-
-        draw.polygon(
-            [
-                (width // 2 - 100, bottom_y + 30),
-                (width // 2 + 100, bottom_y + 100),
-                (width // 2 + 100, bottom_y + 130),
-                (width // 2 - 100, bottom_y + 60)
-            ],
-            fill="white"
-        )
-
-        draw.polygon(
-            [(width - 100, bottom_y + 160), (width, bottom_y + 130), (width, bottom_y + 200)],
-            fill=red
-        )
-
-        # --- Icon placeholders ---
-        icon_y = bottom_y + 90
-        draw.ellipse([(150, icon_y), (185, icon_y + 35)], fill="white", outline=green, width=2)
-        draw.ellipse([(230, icon_y), (265, icon_y + 35)], fill="white", outline=green, width=2)
-        draw.ellipse([(310, icon_y), (345, icon_y + 35)], fill="white", outline=green, width=2)
-
-        # --- Event Date and Venue ---
-        draw.text((100, bottom_y + 200), "10th - 12th", fill="white", font=date_font, anchor="lm")
-        draw.text((100, bottom_y + 250), "November 2025", fill="white", font=venue_font, anchor="lm")
-        draw.text((100, bottom_y + 290), "Bomas of Kenya, Nairobi", fill="white", font=small_font, anchor="lm")
-
-        # --- QR Code ---
-        qr_data = f"SUMMIT-2025\nID:{registrant.national_id_number}\nName:{full_name}\nCategory:{category_name}"
-        qr = qrcode.QRCode(box_size=5, border=1)
-        qr.add_data(qr_data)
-        qr.make()
-        qr_img = qr.make_image(fill_color="black", back_color="white")
-        qr_img = qr_img.resize((130, 130))
-        badge.paste(qr_img, (width - 185, bottom_y + 190))
 
         # --- Save ---
         badge.save(badge_path, quality=95)
