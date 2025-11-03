@@ -3,15 +3,17 @@
 
 {% block content %}
 <div class="container-fluid mt-4 px-4">
-<div class="container-fluid mt-4 px-4">
-  <h2 class="fw-bold mb-4 text-primary">
-    <i class="fas fa-tachometer-alt me-2"></i> Exhibitions Dashboard
+
+  <!-- Title -->
+  <h2 class="fw-bold mb-4 text-primary d-flex align-items-center gap-2">
+    <i class="fas fa-tachometer-alt"></i>
+    <span>Exhibitions Dashboard</span>
   </h2>
 
   <!-- ✅ Success messages -->
   {% if messages %}
     {% for message in messages %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
         <i class="fas fa-check-circle me-1"></i> {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
@@ -19,35 +21,33 @@
   {% endif %}
 
   <!-- Dashboard Settings -->
-  <div class="card p-4 mb-4 shadow-sm">
-    <h5 class="mb-3">Dashboard Settings</h5>
+  <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+    <h5 class="mb-3 fw-semibold"><i class="fas fa-cogs me-2 text-primary"></i> Dashboard Settings</h5>
 
-    <!-- 🧾 Validation (non-field errors) -->
     {% if form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger">
         {% for error in form.non_field_errors %}
           <div><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</div>
         {% endfor %}
       </div>
     {% endif %}
 
-    <form method="POST" class="row g-3">
+    <form method="POST" class="row g-3 align-items-end">
       {% csrf_token %}
       <div class="col-md-4">
         {{ form.max_count.label_tag }}
         {{ form.max_count }}
 
-        <!-- 🚨 Field-specific validation alert -->
         {% if form.max_count.errors %}
           {% for error in form.max_count.errors %}
-            <div class="alert alert-danger mt-2 py-2 px-3" role="alert">
+            <div class="alert alert-danger mt-2 py-2 px-3">
               <i class="fas fa-exclamation-triangle me-1"></i> {{ error }}
             </div>
           {% endfor %}
         {% endif %}
       </div>
 
-      <div class="col-md-2 align-self-end">
+      <div class="col-md-2">
         <button type="submit" class="btn btn-primary w-100">
           <i class="fas fa-save me-1"></i> Update
         </button>
@@ -56,66 +56,51 @@
   </div>
 
   <!-- 📢 Remaining Counts Alert -->
-  <div class="alert {{ alert_class }} shadow-sm" role="alert">
-    <strong>Notice:</strong> {{ alert_message }}
+  <div class="alert {{ alert_class }} shadow-sm border-0 rounded-3 mb-4">
+    <strong><i class="fas fa-info-circle me-1"></i> Notice:</strong> {{ alert_message }}
   </div>
-
-</div>
 
   <!-- Summary Cards -->
   <div class="row g-3 mb-4">
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
         <h6 class="text-muted mb-1">Total Exhibitors</h6>
         <h3 class="fw-bold text-primary">{{ total_exhibitors }}</h3>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
         <h6 class="text-muted mb-1">Total Booths</h6>
         <h3 class="fw-bold text-success">{{ max_count }}</h3>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
         <h6 class="text-muted mb-1">Available Booths</h6>
-        <h3 class="fs-4 text-success">
-            <h3 class="fw-bold text-success">{{ remaining }}</h3>
-        </h3>
+        <h3 id="remainingBoothsCount" class="fw-bold text-success">{{ remaining }}</h3>
       </div>
     </div>
-
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0 rounded-4 py-3">
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
         <h6 class="text-muted mb-1">Booked Booths</h6>
         <h3 class="fw-bold text-danger">{{ total_count }}</h3>
       </div>
     </div>
   </div>
 
-</div>
-
-
-
-
   <!-- Filters -->
   <div class="card shadow-sm border-0 rounded-4 mb-4">
-    <div class="card-header bg-light fw-semibold">
-      <i class="fas fa-filter me-2 text-primary"></i>Filters
+    <div class="card-header bg-light fw-semibold d-flex align-items-center">
+      <i class="fas fa-filter text-primary me-2"></i> Filters
     </div>
     <div class="card-body">
       <form method="GET" class="row g-3 align-items-center">
-        <div class="col-md-3">
-          <input
-            type="text"
-            name="q"
-            class="form-control"
-            placeholder="Search by name, email, phone, or organization..."
-            value="{{ query }}"
-          />
+        <div class="col-md-3 col-sm-6">
+          <input type="text" name="q" class="form-control" placeholder="Search by name, email, or organization..."
+            value="{{ query }}">
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2 col-sm-6">
           <select name="category" class="form-select">
             <option value="">Filter by Category</option>
             {% for value, label in categories %}
@@ -124,7 +109,7 @@
           </select>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2 col-sm-6">
           <select name="section" class="form-select">
             <option value="">Filter by Section</option>
             {% for s in sections %}
@@ -133,24 +118,22 @@
           </select>
         </div>
 
-        <div class="col-md-2">
-            <select name="country_of_registration" class="form-select">
-              <option value="">Filter by Country</option>
-              {% for code, name in available_countries %}
-                <option value="{{ code }}" {% if country_filter == code %}selected{% endif %}>
-                  {{ name }}
-                </option>
-              {% endfor %}
-            </select>
+        <div class="col-md-2 col-sm-6">
+          <select name="country_of_registration" class="form-select">
+            <option value="">Filter by Country</option>
+            {% for code, name in available_countries %}
+              <option value="{{ code }}" {% if country_filter == code %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
         </div>
 
-        <div class="col-md-1 d-grid">
+        <div class="col-md-1 col-sm-6 d-grid">
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-filter me-1"></i> Apply
           </button>
         </div>
 
-        <div class="col-md-2 d-grid">
+        <div class="col-md-2 col-sm-6 d-grid">
           <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">
             <i class="fas fa-undo me-1"></i> Reset
           </a>
@@ -159,239 +142,122 @@
     </div>
   </div>
 
-  <!-- Recent Exhibitors -->
+  <!-- Recent Exhibitors Table -->
   <div class="card shadow-sm border-0 rounded-4 mb-5">
-  <div class="card-header bg-primary text-white fw-semibold">
-    <i class="fas fa-users me-2"></i>Recent Exhibitors
-  </div>
-  <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Organization</th>
-          <th>Country</th>
-          <th>Job Title</th>
-          <th>Category</th>
-          <th>Booked booths</th>
-          <th>Approve status</th>
-          <th>Files</th>
-          <th>Email Attempts</th>
-          <th>Email Status</th>
-          <th>Last Sent</th>
-          <th>Date Registered</th>
-          <th class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for e in exhibitors %}
-        <tr data-exhibitor-id="{{ e.id }}">
-          <td>{{ e.get_full_name }}</td>
-          <td>{{ e.email }}</td>
-          <td>{{ e.phone }}</td>
-          <td>{{ e.organization_type }}</td>
-          <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
-          <td>{{ e.job_title|default:"—" }}</td>
-          <td>{{ e.get_category_display|default:"—" }}</td>
-          <td>{{ e.total_count|default:"0" }}</td>
-
-          <td>
-            <div class="btn-group">
-              {% if e.approval_status == "approved" %}
-                <span class="badge bg-success">Approved</span>
-              {% elif e.approval_status == "pending" %}
-                <button
-                  class="btn btn-sm btn-outline-success approve-btn"
-                  data-id="{{ e.id }}"
-                  data-name="{{ e.get_full_name }}"
-                  data-organization="{{ e.organization_type }}"
-                  data-email="{{ e.email|default:'N/A' }}"
-                  data-remaining="{{ remaining }}">
-                  <i class="fas fa-check"></i> Approve
-                </button>
-              {% else %}
-                <span class="badge bg-danger">Rejected</span>
-              {% endif %}
-            </div>
-          </td>
-          <td>
-            {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
-            {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
-            {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
-          </td>
-
-          <td class="text-center">{{ e.email_attempts|default:"0" }}</td>
-          <td class="text-center">
-            {% if e.email_status == "success" %}
-              <span class="badge bg-success">Sent</span>
-            {% elif e.email_status == "failed" %}
-              <span class="badge bg-danger">Failed</span>
-            {% else %}
-              <span class="badge bg-secondary">Pending</span>
-            {% endif %}
-          </td>
-          <td class="text-center">{{ e.email_last_sent|date:"M d, Y H:i" }}</td>
-          <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
-
-          <td>
-            <div class="btn-group">
-              <button
-                class="btn btn-sm btn-outline-primary edit-exhibitor-btn"
-                data-id="{{ e.id }}">
-                <i class="fas fa-edit"></i>
-              </button>
-
-              <form action="{% url 'resend_exhibitor_confirmation_email' e.id %}" method="post" class="resend-email-form" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-success resend-btn" title="Resend Email">
-                  <i class="fas fa-envelope"></i>
-                </button>
-              </form>
-              <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
-                <i class="fas fa-trash"></i>
-              </a>
-            </div>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="14" class="text-center text-muted py-3">No exhibitors registered.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="modal fade" id="dynamicModal" tabindex="-1">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content rounded-3 shadow-lg">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Exhibitor</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body p-4">
-        <!-- Form will load dynamically here -->
+    <div class="card-header bg-primary text-white fw-semibold d-flex align-items-center">
+      <i class="fas fa-users me-2"></i> Recent Exhibitors
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table id="registrants-table" class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Organization</th>
+              <th>Country</th>
+              <th>Job Title</th>
+              <th>Category</th>
+              <th>Booked Booths</th>
+              <th>Approve Status</th>
+              <th>Files</th>
+              <th>Email Attempts</th>
+              <th>Email Status</th>
+              <th>Last Sent</th>
+              <th>Date Registered</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for e in exhibitors %}
+            <tr data-exhibitor-id="{{ e.id }}">
+              <td>{{ e.get_full_name }}</td>
+              <td class="email-col">{{ e.email }}</td>
+              <td>{{ e.phone }}</td>
+              <td class="org-col">{{ e.organization_type }}</td>
+              <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
+              <td>{{ e.job_title|default:"—" }}</td>
+              <td>{{ e.get_category_display|default:"—" }}</td>
+              <td>{{ e.total_count|default:"0" }}</td>
+              <td>
+                {% if e.approval_status == "approved" %}
+                  <span class="badge bg-success px-3 py-2">Approved</span>
+                {% elif e.approval_status == "pending" %}
+                  <button class="btn btn-sm btn-outline-success approve-btn"
+                          data-id="{{ e.id }}"
+                          data-name="{{ e.get_full_name }}"
+                          data-organization="{{ e.organization_type }}"
+                          data-email="{{ e.email|default:'N/A' }}"
+                          data-remaining="{{ remaining }}">
+                    <i class="fas fa-check"></i> Approve
+                  </button>
+                {% else %}
+                  <span class="badge bg-danger px-3 py-2">Rejected</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
+                {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
+                {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
+              </td>
+              <td class="text-center email-attempts">{{ e.email_attempts|default:"0" }}</td>
+              <td class="text-center email-status">
+                {% if e.email_status == "success" %}
+                  <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
+                {% elif e.email_status == "failed" %}
+                  <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
+                {% else %}
+                  <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
+                {% endif %}
+              </td>
+              <td class="text-center email-last-sent">{{ e.email_last_sent|date:"M d, Y H:i" }}</td>
+              <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
+              <td class="text-center">
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary edit-exhibitor-btn" data-id="{{ e.id }}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <form action="{% url 'resend_exhibitor_confirmation_email' e.id %}" method="post" class="resend-email-form d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-success resend-btn" title="Resend Email">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                  </form>
+                  <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="15" class="text-center text-muted py-3">No exhibitors registered.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ✅ Approval Modal -->
-<div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg">
-
-      <!-- Header -->
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title">
-          <i class="bi bi-check-circle me-1"></i> Approve Exhibitor
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Body -->
-      <div class="modal-body">
-        <!-- ✅ Dynamic Exhibitor Info -->
-        <div class="mb-3">
-          <h5 id="exhibitorName" class="fw-bold text-primary mb-2"></h5>
-          <p class="mb-1"><strong>Organization:</strong> <span id="exhibitorOrganization">—</span></p>
-          <p class="mb-1"><strong>Email:</strong> <span id="exhibitorEmail">—</span></p>
-          <p class="text-muted"><strong>Remaining Booths:</strong> <span id="remainingBooths">0</span></p>
-        </div>
-
-        <!-- ✅ Approval Form -->
-        <form id="approveForm">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="boothCount" class="form-label">Booth Count to Approve</label>
-            <input type="number" id="boothCount" name="count" class="form-control" min="1" required>
-          </div>
-
-          <input type="hidden" id="approveExhibitorId" name="exhibitor_id">
-
-          <div class="d-flex justify-content-between align-items-center">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancel
-            </button>
-            <button type="submit" class="btn btn-success">
-              <i class="bi bi-check2-circle me-1"></i> Approve Exhibitor
-            </button>
-          </div>
-        </form>
-
-        <!-- ✅ Success Message (hidden by default) -->
-        <div id="approvalSuccess" class="alert alert-success mt-3 text-center d-none">
-          Exhibitor approved successfully!
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+  <!-- Modals -->
+  {% include "partials/exhibitor_edit.html" %}
+  {% include "partials/exhibitor_approve.html" %}
 
 </div>
 {% endblock %}
 
 {% block scripts %}
+{{ block.super }}
+
 <style>
-        #registrants-table {
-            width: 100% !important;
-            font-size: 0.9rem;
-            table-layout: auto;
-            border-spacing: 0 4px;
-        }
-
-        #registrants-table th, #registrants-table td {
-            padding: 0.55rem 0.75rem !important;
-            white-space: nowrap;
-        }
-
-        #registrants-table tfoot input {
-            width: 100%;
-            padding: 2px 6px;
-            font-size: 0.8rem;
-        }
-
-        .truncate {
-            max-width: 220px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .bg-success-subtle {
-            background-color: rgba(25, 135, 84, 0.1) !important;
-        }
-
-        .bg-danger-subtle {
-            background-color: rgba(220, 53, 69, 0.1) !important;
-        }
-
-        .bg-secondary-subtle {
-            background-color: rgba(108, 117, 125, 0.1) !important;
-        }
-
-        .bg-info-subtle {
-            background-color: rgba(13, 202, 240, 0.1) !important;
-        }
-        #editRegistrantModal .modal-content {
-          border-radius: 1rem;
-          overflow: hidden;
-        }
-
-        #editRegistrantModal .form-control,
-        #editRegistrantModal select {
-          border-radius: 0.5rem;
-          box-shadow: none !important;
-        }
-
-        .toast {
-          z-index: 20000;
-        }
-
+  /* Responsive tweaks for modals on small devices */
+  @media (max-width: 768px) {
+    #dynamicModal .modal-dialog,
+    #approveModal .modal-dialog {
+      max-width: 95%;
+      margin: 1rem auto;
+    }
+  }
 </style>
 
 <script>
@@ -614,6 +480,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
-
+<!-- All existing JS logic retained -->
+{{ super }}
 {% endblock %}
