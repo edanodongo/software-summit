@@ -200,6 +200,9 @@
                 {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
                 {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
                 {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
+                {% if e.business_registration_doc %}<a href="{{ e.business_registration_doc.url }}" target="_blank">Business registration doc</a><br>{% endif %}
+                {% if e.international_business_doc %}<a href="{{ e.international_business_doc.url }}" target="_blank">International business doc</a><br>{% endif %}
+                {% if e.beneficial_owner_doc %}<a href="{{ e.beneficial_owner_doc.url }}" target="_blank">Beneficial owner doc</a><br>{% endif %}
               </td>
               <td class="text-center email-attempts">{{ e.email_attempts|default:"0" }}</td>
               <td class="text-center email-status">
