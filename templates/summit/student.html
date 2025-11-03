@@ -150,6 +150,11 @@
                                 <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-warning edit-btn"
+                                                data-id="{{ registrant.id }}"
+                                                data-url="{% url 'edit_registrant_modal' registrant.id %}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <a href="{% url 'generate_badge' registrant.id %}"
                                            class="btn btn-sm btn-outline-primary" target="_blank" title="Badge">
                                             <i class="fas fa-id-badge"></i>
@@ -229,6 +234,27 @@
             </div>
         </div>
 
+
+        <!-- ✨ Edit Modal -->
+        <div class="modal fade" id="editRegistrantModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+              <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                  <i class="fas fa-user-edit"></i> Edit Registrant
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body" id="editRegistrantBody">
+                <div class="text-center py-5 text-muted">
+                  <i class="fas fa-spinner fa-spin fa-2x"></i>
+                  <p class="mt-2">Loading...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel"
              aria-hidden="true">
@@ -305,6 +331,17 @@
 
         .bg-info-subtle {
             background-color: rgba(13, 202, 240, 0.1) !important;
+        }
+
+        #editRegistrantModal .modal-content {
+          border-radius: 1rem;
+          overflow: hidden;
+        }
+
+        #editRegistrantModal .form-control,
+        #editRegistrantModal select {
+          border-radius: 0.5rem;
+          box-shadow: none !important;
         }
     </style>
 
@@ -384,6 +421,82 @@
             });
 
         });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
+        const modalBody = document.getElementById('editRegistrantBody');
+
+
+        // 🟡 Open modal and load form (with event delegation)
+        document.addEventListener('click', async (event) => {
+            const btn = event.target.closest('.edit-btn');
+            if (!btn) return;
+
+            const url = btn.getAttribute('data-url');
+            modalBody.innerHTML = `<div class="text-center py-5 text-muted">
+                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
+            modal.show();
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                modalBody.innerHTML = data.html_form;
+                attachFormSubmit();
+            } catch (error) {
+                modalBody.innerHTML = `<div class="text-danger text-center py-4">
+                    <i class="fas fa-exclamation-circle"></i> Failed to load form.
+                </div>`;
+            }
+        });
+
+        // 🟢 Handle form submission via AJAX
+        function attachFormSubmit() {
+            const form = document.getElementById('edit-registrant-form');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const action = form.getAttribute('action') || window.location.href;
+
+                const response = await fetch(action, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    modal.hide();
+                    const row = document.getElementById(`row-${data.id}`);
+                    if (row && data.row_html) {
+                        row.outerHTML = data.row_html;
+                    }
+                    showToast("✅ " + data.message, "success");
+                } else {
+                    modalBody.innerHTML = data.html_form;
+                    attachFormSubmit(); // rebind form
+                }
+            });
+        }
+
+    // 🔔 Toast feedback
+    function showToast(message, type) {
+        const toast = document.createElement("div");
+        toast.className = `toast align-items-center text-bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
+        toast.role = "alert";
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>`;
+        document.body.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        setTimeout(() => toast.remove(), 4000);
+    }
+});
 
         //approval
         function approvestudent(registrantId) {
