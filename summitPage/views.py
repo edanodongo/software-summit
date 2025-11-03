@@ -1,4 +1,6 @@
 # imports
+from collections import Counter
+
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
@@ -1862,43 +1864,73 @@ def main_dashboard_view(request):
     active_partners = SummitPartner.objects.filter(is_active=True).count()
     inactive_partners = total_partners - active_partners
 
-    # --- Approval stats for exhibitors ---
+    # --- Approval stats ---
     pending_approvals = Exhibitor.objects.filter(approval_status='pending').count()
     total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
     approved_booths_total = (
         Exhibitor.objects.filter(approval_status='approved')
-        .aggregate(total=Sum('total_count'))['total']
-        or 0
+        .aggregate(total=Sum('total_count'))['total'] or 0
     )
 
-    # --- Category breakdown (numeric or text compatible) ---
+    # --- Category breakdown ---
+    registrations = Registrant.objects.all().order_by("created_at")
+
+    total_users = Registrant.objects.filter(
+        Q(organization_type='Student') | Q(category='4')
+    ).count()
+
+    updates_count = Registrant.objects.filter(updates_opt_in=True).count()
+
+    category_lookup = {str(c.id): c.name for c in Category.objects.all()}
+    student_category_ids = [
+        str(cid)
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
+    ]
+
     CATEGORY_MAP = {
-        "1": "Delegate",
-        "2": "Student",
-        "3": "Secretariat",
-        "4": "Security",
-        "5": "Service Provider",
-        "6": "Press",
-        "7": "Moderator",
-        "8": "Speaker",
-        "9": "Panellist",
-        "10": "VIP",
-        "11": "VVIP",
-        "12": "Staff",
+        "1": "Delegate", "2": "Student", "3": "Secretariat", "4": "Security",
+        "5": "Service Provider", "6": "Press", "7": "Moderator",
+        "8": "Speaker", "9": "Panellist", "10": "VIP", "11": "VVIP",
     }
 
-    registrant_categories = Registrant.objects.values_list("category", flat=True).distinct()
+    def normalize_category(value):
+        if not value:
+            return None
+        raw = str(value).strip()
+        return category_lookup.get(raw) or CATEGORY_MAP.get(raw, raw.title())
+
+    student_filter = (
+        Q(category__in=student_category_ids)
+        | Q(category__iexact="Student")
+        | Q(category__icontains="student")
+        | Q(organization_type__icontains="student")
+    )
+
+    student_count = registrations.filter(student_filter).count()
+
     category_stats = []
-    for raw_value in registrant_categories:
-        if not raw_value:
-            continue
-        raw_str = str(raw_value).strip()
-        readable_name = CATEGORY_MAP.get(raw_str, raw_str)
-        count = Registrant.objects.filter(category=raw_value).count()
-        category_stats.append({"name": readable_name, "count": count})
+    if student_count > 0:
+        category_stats.append({"name": "Student", "count": student_count})
+
+    non_students = registrations.exclude(student_filter)
+    counts = Counter()
+
+    for raw_cat in non_students.values_list("category", flat=True):
+        cname = normalize_category(raw_cat)
+        if cname:
+            counts[cname] += 1
+
+    for name, count in counts.items():
+        if count > 0 and name.lower() != "student":
+            category_stats.append({"name": name, "count": count})
+
     category_stats = sorted(category_stats, key=lambda x: x["count"], reverse=True)
 
-    # --- Daily registration trend (last 7 days) ---
+    # --- Chart data for categories ---
+    category_labels = [c["name"] for c in category_stats]
+    category_counts = [c["count"] for c in category_stats]
+
+    # --- Daily trend ---
     daily_data = (
         Registrant.objects.filter(created_at__date__gte=week_ago)
         .annotate(day=TruncDate("created_at"))
@@ -1909,7 +1941,7 @@ def main_dashboard_view(request):
     daily_labels = [d["day"].strftime("%a") for d in daily_data]
     daily_counts = [d["count"] for d in daily_data]
 
-    # --- Monthly registration trend (last 12 months) ---
+    # --- Monthly trend ---
     monthly_data = (
         Registrant.objects.filter(created_at__gte=year_ago)
         .annotate(month=TruncMonth("created_at"))
@@ -1920,7 +1952,7 @@ def main_dashboard_view(request):
     monthly_labels = [m["month"].strftime("%b %Y") for m in monthly_data]
     monthly_counts = [m["count"] for m in monthly_data]
 
-    # --- Exhibitors by category ---
+    # --- Exhibitor & Org distribution ---
     exhibitor_dist = (
         Exhibitor.objects.values("category")
         .annotate(count=Count("id"))
@@ -1929,7 +1961,6 @@ def main_dashboard_view(request):
     exhibitor_labels = [e["category"] or "Uncategorized" for e in exhibitor_dist]
     exhibitor_counts = [e["count"] for e in exhibitor_dist]
 
-    # --- Organization type distribution ---
     org_dist = (
         Registrant.objects.values("organization_type")
         .annotate(count=Count("id"))
@@ -1938,12 +1969,11 @@ def main_dashboard_view(request):
     org_labels = [o["organization_type"] or "Other" for o in org_dist]
     org_counts = [o["count"] for o in org_dist]
 
-    # --- Recent activity ---
+    # --- Recent items ---
     recent_registrants = Registrant.objects.order_by("-created_at")[:5]
     recent_exhibitors = Exhibitor.objects.order_by("-created_at")[:5]
     recent_partners = SummitPartner.objects.order_by("-created_at")[:5]
     recent_sponsors = SummitSponsor.objects.order_by("-submitted_at")[:5]
-    recent_sessions = SummitSession.objects.order_by("-timeslot__day__date")[:5]
 
     # --- Engagement score ---
     engagement_score = 0
@@ -1953,10 +1983,9 @@ def main_dashboard_view(request):
         engagement_score += (new_exhibitors_month / total_exhibitors) * 50
     engagement_score = round(min(100, engagement_score), 1)
 
-    # --- Emails sent today ---
+    # --- Emails today ---
     emails_today = EmailLog.objects.filter(sent_at__date=today).count()
 
-    # --- Context ---
     context = {
         # Totals
         "total_registrants": total_registrants,
@@ -1987,16 +2016,16 @@ def main_dashboard_view(request):
         "remaining": remaining,
         "booth_utilization": booth_utilization,
 
-        # Partner breakdown
+        # Partner stats
         "active_partners": active_partners,
         "inactive_partners": inactive_partners,
 
-        # Exhibitor approval stats
+        # Exhibitor approvals
         "pending_approvals": pending_approvals,
         "total_approved_exhibitors": total_approved_exhibitors,
         "approved_booths_total": approved_booths_total,
 
-        # Trends & Charts
+        # Chart data
         "daily_labels": daily_labels,
         "daily_counts": daily_counts,
         "monthly_labels": monthly_labels,
@@ -2005,16 +2034,18 @@ def main_dashboard_view(request):
         "exhibitor_counts": exhibitor_counts,
         "org_labels": org_labels,
         "org_counts": org_counts,
+        # "category_labels": category_labels,
+        # "category_counts": category_counts,
 
-        # Breakdown
-        "category_stats": category_stats,
+        "category_labels": [c["name"] for c in category_stats],
+        "category_counts": [c["count"] for c in category_stats],
 
         # Lists
+        "category_stats": category_stats,
         "recent_registrants": recent_registrants,
         "recent_exhibitors": recent_exhibitors,
         "recent_partners": recent_partners,
         "recent_sponsors": recent_sponsors,
-        "recent_sessions": recent_sessions,
 
         # Misc
         "emails_today": emails_today,
@@ -2022,6 +2053,7 @@ def main_dashboard_view(request):
     }
 
     return render(request, "dashboard/stats_dashboard.html", context)
+
 
 
 def summit_sponsor_registration(request):
