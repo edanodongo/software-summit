@@ -157,28 +157,28 @@
     </div>
   </div>
 
-  <!-- ✅ REGISTRANT CATEGORIES -->
-  <h5 class="fw-bold text-primary mt-5 mb-3">Registrant Categories</h5>
-  <div class="row g-3 mb-4">
-    {% for item in category_stats %}
-    <div class="col-6 col-md-3 col-lg-2">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center h-100">
-        <div class="fw-semibold text-secondary">{{ item.name }}</div>
-        <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>
-      </div>
-    </div>
-    {% empty %}
-    <p class="text-muted text-center">No category data available.</p>
-    {% endfor %}
-  </div>
+<!--  &lt;!&ndash; ✅ REGISTRANT CATEGORIES &ndash;&gt;-->
+<!--  <h5 class="fw-bold text-primary mt-5 mb-3">Registrant Categories</h5>-->
+<!--  <div class="row g-3 mb-4">-->
+<!--    {% for item in category_stats %}-->
+<!--    <div class="col-6 col-md-3 col-lg-2">-->
+<!--      <div class="card shadow-sm border-0 rounded-4 p-3 text-center h-100">-->
+<!--        <div class="fw-semibold text-secondary">{{ item.name }}</div>-->
+<!--        <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    {% empty %}-->
+<!--    <p class="text-muted text-center">No category data available.</p>-->
+<!--    {% endfor %}-->
+<!--  </div>-->
 
 
-  <!-- ✅ Chart Container -->
-  <div class="card shadow-sm border-0 rounded-3 mb-4">
-    <div class="card-body">
-      <canvas id="categoryChart" style="max-height: 420px;"></canvas>
-    </div>
-  </div>
+<!--  &lt;!&ndash; ✅ Chart Container &ndash;&gt;-->
+<!--  <div class="card shadow-sm border-0 rounded-3 mb-4">-->
+<!--    <div class="card-body">-->
+<!--      <canvas id="categoryChart" style="max-height: 420px;"></canvas>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <!-- ✅ RECENT ACTIVITY -->
   <h5 class="fw-bold text-secondary mt-5 mb-3">Recent Activity</h5>
