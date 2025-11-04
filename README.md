@@ -1,7 +1,7 @@
 <p align="center">
 
-  ![Summit Logo](static/images/summit_logo_dark.png#gh-dark-mode-only)
-  ![Summit Logo](repo/images/summit_logo_light.png.png#gh-light-mode-only)
+  ![Summit Logo](https://github.com/edanodongo/software-summit/blob/main/static/images/summit_logo.png#gh-dark-mode-only)
+  ![Summit Logo](https://github.com/edanodongo/software-summit/blob/main/static/images/summit_logo.png#gh-light-mode-only)
 
 </p>
 
@@ -9,22 +9,34 @@
 
 <div align="center">
   [![](https://img.shields.io/github/issues/edanodongo/software-summit?style=for-the-badge)](https://github.com/edanodongo/software-summit/issues)
-  <!-- [![](https://img.shields.io/github/license/edanodongo/software-summit?style=for-the-badge)](https://github/nfoert/cardie/blob/main/LICENSE) -->
+  <!-- [![](https://img.shields.io/github/license/edanodongo/software-summit?style=for-the-badge)](https://github.com/edanodongo/software-summit/blob/main/LICENSE) -->
 
-
-  **The latest changes are available in the [main](https://github.com/edanodongo/software-summit/tree/main) branch! Please check there for the most up to date changes.**
-
+  **The latest changes are available in the [main](https://github.com/edanodongo/software-summit/tree/main) branch!**
 </div>
 
 
-Design a unlimited number of business or information cards about yourself, share a link or QR code to them, print it out, and save other people's cards to your virtual wallet for later. Once you've created a card you can get analytics data on how your cards are getting visited, you can edit your cards as things change, and you can keep cards private so only people with a link to your card can see it.
+---
+
+## 🧩 Overview
+
+The **Software Summit Portal** is a web application developed for the **Kenya Software Summit 2025**.  
+It provides a centralized system to:
+
+- 🧾 **Register participants** and manage attendee information  
+- 👤 **Manage user accounts** for both applicants and administrators  
+- 🪪 **Generate and print summit badges** dynamically (with color-coded categories)  
+- ℹ️ **Share event details** and updates about the summit  
+
+The system also logs all badge printing activities for audit and supports reprints when needed.
+
+---
 
 > [!IMPORTANT]
-> This Project is developed using the tools/languages below.
+> This project is developed using the tools and languages below.
 
 <div align="center">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=django,python,html,css,js,github,git,alpinejs"/>
+    <img src="https://skillicons.dev/icons?i=django,python,html,css,js,bootstrap,git,github" />
   </a>
 </div>
 
