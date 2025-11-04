@@ -3222,22 +3222,42 @@ def mark_printed(request, reg_id):
         user = request.user
         ip = get_client_ip(request)
 
-        registrant.is_printed = 1
-        registrant.save(update_fields=["is_printed"])
+        # Check if already printed
+        if not registrant.is_printed:
+            # First-time print
+            registrant.is_printed = 1
+            registrant.save(update_fields=["is_printed"])
 
-        PrintLog.objects.create(
-            record_id=registrant,
-            printed_by=user,
-            ip_address=ip,
-            timestamp=timezone.now()
-        )
+            PrintLog.objects.create(
+                record_id=registrant,
+                printed_by=user,
+                ip_address=ip,
+                timestamp=timezone.now(),
+                reprint=False
+            )
 
-        return JsonResponse({"success": True})
+            return JsonResponse({"success": True, "message": "First-time print Success."})
+
+        else:
+            # Reprint
+            PrintLog.objects.create(
+                record_id=registrant,
+                printed_by=user,
+                ip_address=ip,
+                timestamp=timezone.now(),
+                reprint=True
+            )
+
+            return JsonResponse({"success": True, "message": "Reprint Success."})
 
     except Registrant.DoesNotExist:
         return JsonResponse({"error": "Registrant not found"}, status=404)
+
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({
+            "error": str(e),
+            "type": type(e).__name__
+        }, status=500)
 
 
 def get_client_ip(request):
