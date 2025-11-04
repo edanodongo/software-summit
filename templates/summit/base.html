@@ -100,10 +100,14 @@
         <span>Summit Admin</span>
       </h2>
 
-      <!-- Delegate Dashboard -->
+      <a href="{% url 'main_dashboard_view' %}">
+        <i class="fas fa-chart-line"></i> <span> Statistics</span>
+      </a>
+
+      <!-- Registrations Dashboard -->
       <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#delegateSubmenu" role="button"
         aria-expanded="false" aria-controls="delegateSubmenu">
-        <i class="fas fa-users"></i> <span> Delegate Dashboard</span>
+        <i class="fas fa-users"></i> <span> Registrations </span>
       </a>
       <div class="collapse ps-4" id="delegateSubmenu">
         <a href="{% url 'dashboard' %}" class="d-block py-1 text-white-50">
@@ -117,7 +121,7 @@
       <!-- Exhibitors Dashboard -->
       <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#exhibitorSubmenu" role="button"
         aria-expanded="false" aria-controls="exhibitorSubmenu">
-        <i class="fas fa-store-alt"></i> <span> Exhibitors Dashboard</span>
+        <i class="fas fa-store-alt"></i> <span> Exhibitors </span>
       </a>
       <div class="collapse ps-4" id="exhibitorSubmenu">
         <a href="{% url 'admin_dashboard' %}" class="d-block py-1 text-white-50">
@@ -128,26 +132,24 @@
         </a>
       </div>
 
-      <a href="{% url 'sponsor_dashboard' %}">
-        <i class="fas fa-hand-holding-usd"></i> <span> Sponsor Dashboard</span>
+      <a href="{% url 'speaker_dashboard' %}">
+        <i class="fas fa-microphone-alt"></i> <span> Speaker profiles</span>
       </a>
-      <a href="{% url 'main_dashboard_view' %}">
-        <i class="fas fa-chart-line"></i> <span> Stats Dashboard</span>
+      <a href="{% url 'partner_dashboard' %}">
+        <i class="fas fa-handshake"></i> <span> Partner logos</span>
+      </a>
+
+      <a href="{% url 'sponsor_dashboard' %}">
+        <i class="fas fa-hand-holding-usd"></i> <span> Sponsor Applications</span>
+      </a>
+      <a href="{% url 'gallery_dashboard' %}">
+        <i class="fas fa-images"></i> <span> Gallery Uploads</span>
       </a>
       <a href="{% url 'categories' %}">
         <i class="fas fa-list-alt"></i> <span> Guest Categories</span>
       </a>
-      <a href="{% url 'gallery_dashboard' %}">
-        <i class="fas fa-images"></i> <span> Gallery Dashboard</span>
-      </a>
-      <a href="{% url 'partner_dashboard' %}">
-        <i class="fas fa-handshake"></i> <span> Partner Dashboard</span>
-      </a>
       <a href="{% url 'dashboard_home' %}">
         <i class="fas fa-calendar-alt"></i> <span> Agenda Dashboard</span>
-      </a>
-      <a href="{% url 'speaker_dashboard' %}">
-        <i class="fas fa-microphone-alt"></i> <span> Speaker Dashboard</span>
       </a>
       <a href="{% url 'mailme' %}">
         <i class="fas fa-envelope-open-text"></i> <span> Email Client</span>
