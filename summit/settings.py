@@ -1,12 +1,26 @@
 from pathlib import Path
-import json 
+import json
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Load configuration from config.json
-with open(BASE_DIR / 'config.json') as config_file: 
-    config = json.load(config_file)
+
+# Try loading config.json if it exists, otherwise use safe defaults (for CI)
+config_path = BASE_DIR / "config.json"
+
+if config_path.exists():
+    with open(config_path) as config_file:
+        config = json.load(config_file)
+else:
+    # Default configuration for GitHub Actions or local tests
+    config = {
+        "SECRET_KEY": os.getenv("SECRET_KEY", "dummy-key-for-tests"),
+        "DATABASE": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3"
+        }
+    }
 
 
 # Quick-start development settings - unsuitable for production
