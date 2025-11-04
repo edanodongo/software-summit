@@ -1967,8 +1967,11 @@ def main_dashboard_view(request):
 
     # --- Category breakdown ---
     registrations = Registrant.objects.all().order_by("created_at")
+    delegates = Registrant.objects.exclude(
+        Q(organization_type='Student') | Q(category='4')
+    ).count()
 
-    total_users = Registrant.objects.filter(
+    students = Registrant.objects.filter(
         Q(organization_type='Student') | Q(category='4')
     ).count()
 
@@ -2090,6 +2093,8 @@ def main_dashboard_view(request):
         "total_sessions": total_sessions,
         "total_days": total_days,
         "total_booths": total_booths,
+        "delegates": delegates,
+        "students": students,
 
         # Growth
         "new_registrants_month": new_registrants_month,

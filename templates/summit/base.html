@@ -100,6 +100,10 @@
         <span>Summit Admin</span>
       </h2>
 
+      <a href="{% url 'main_dashboard_view' %}">
+        <i class="fas fa-chart-line"></i> <span> Statistics</span>
+      </a>
+
       <!-- Delegate Dashboard -->
       <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#delegateSubmenu" role="button"
         aria-expanded="false" aria-controls="delegateSubmenu">
@@ -130,9 +134,6 @@
 
       <a href="{% url 'sponsor_dashboard' %}">
         <i class="fas fa-hand-holding-usd"></i> <span> Sponsor Dashboard</span>
-      </a>
-      <a href="{% url 'main_dashboard_view' %}">
-        <i class="fas fa-chart-line"></i> <span> Stats Dashboard</span>
       </a>
       <a href="{% url 'categories' %}">
         <i class="fas fa-list-alt"></i> <span> Guest Categories</span>
