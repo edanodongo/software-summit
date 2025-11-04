@@ -26,9 +26,9 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DJANGO_SETTINGS_MODULE: summit.settings
-      SECRET_KEY: dummy
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: 0
 
     steps:

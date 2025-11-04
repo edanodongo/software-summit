@@ -22,6 +22,7 @@ else:
         },
         "DEBUG": True,
         "ALLOWED_HOSTS": ["*"],
+        "REG_SERVICE_API_KEY":os.getenv("SECRET_KEY", "dummy-key-for-tests"),
     }
 
 
