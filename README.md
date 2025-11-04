@@ -67,7 +67,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-Now just run the server using the following command, or run the `Start server` task in your Visual Studio Code
+Now just run the server using the following command, or run the `Start server` task in your Editor/IDE
 ```bash
 python manage.py runserver
 ```
