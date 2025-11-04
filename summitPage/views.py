@@ -460,12 +460,12 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
             radius = (photo_w / 2) + 1
 
             # Inner white border
-            c.setLineWidth(1.5)
+            c.setLineWidth(2.2)
             c.setStrokeColor(colors.white)
             c.circle(center_x, center_y, radius, stroke=1, fill=0)
 
             # Outer green border
-            c.setLineWidth(2.2)
+            c.setLineWidth(1)
             c.setStrokeColor(colors.HexColor("#3aa655"))
             c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
 
@@ -3223,12 +3223,12 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
             radius = (photo_w / 2) + 1
 
             # Inner white border
-            c.setLineWidth(1.5)
+            c.setLineWidth(2.2)
             c.setStrokeColor(colors.white)
             c.circle(center_x, center_y, radius, stroke=1, fill=0)
 
             # Outer green border
-            c.setLineWidth(2.2)
+            c.setLineWidth(1)
             c.setStrokeColor(colors.HexColor("#3aa655"))
             c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
 
