@@ -279,10 +279,10 @@ from io import BytesIO
 from PIL import Image, ImageDraw
 import qrcode, os
 
-
+from reportlab.lib.units import mm
 @login_required
-def generate_badge(request, registrant_id):
-    """Generate a summit badge PDF for a given registrant."""
+def generate_badge(request, registrant_id, page_size=portrait(A7)):
+    """Generate a scalable summit badge PDF for a given registrant."""
 
     # --- Fetch registrant ---
     try:
@@ -290,18 +290,23 @@ def generate_badge(request, registrant_id):
     except Registrant.DoesNotExist:
         raise Http404("Registrant not found")
 
+    category_obj = Category.objects.only("name", "color").get(id=registrant.category)
+    badge_color = category_obj.color or colors.black
+
     # --- Core Data ---
     full_name = registrant.get_full_name() or ""
+    national_id = registrant.national_id_number or ""
     org_type = registrant.display_org_type() or ""
     job_title = registrant.job_title or ""
-    interests = registrant.display_interests() or ""
+    category = registrant.get_category_display() or ""
 
     # --- Generate QR Code ---
     qr_data = (
         f"Name: {full_name}\n"
+        f"National ID/ Passport NO: {national_id}\n"
         f"Organization: {org_type}\n"
         f"Job Title: {job_title}\n"
-        f"Interests: {interests}"
+        f"Category: {category}\n"
     )
     qr_img = qrcode.make(qr_data)
     qr_buffer = BytesIO()
@@ -311,20 +316,43 @@ def generate_badge(request, registrant_id):
 
     # --- PDF Setup ---
     pdf_buffer = BytesIO()
-    c = canvas.Canvas(pdf_buffer, pagesize=portrait(A7))
-    width, height = portrait(A7)
+    c = canvas.Canvas(pdf_buffer, pagesize=page_size)
+    width, height = page_size
+
+    # --- Scale constants based on size ---
+    base_width, base_height = portrait(A7)
+    scale_w = width / base_width
+    scale_h = height / base_height
+    scale = (scale_w + scale_h) / 2  # general scaling factor
+
+    def s(val):  # helper for scaling numeric values
+        return val * scale
 
     # --- Background ---
     c.setFillColor(colors.white)
     c.rect(0, 0, width, height, fill=1, stroke=0)
 
-    # --- Flag-inspired background accents ---
+    # --- Flag accents ---
     def draw_accent_shapes():
-        # Black base (left)
-        c.setFillColor(colors.black)
+        c.setFillColor(colors.HexColor("#3aa655"))
+        path = c.beginPath()
+        path.moveTo(width * 0.68, height * 0.18)
+        path.lineTo(width * 0.83, height * 0.28)
+        path.lineTo(width * 0.68, height * 0.36)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+        # Red parallel line
+        offset = s(45)
+        c.setStrokeColor("#d62612")
+        c.setLineWidth(s(0.5))
+        c.line(width * 0.5 - offset, 0, width - offset, height * 0.35)
+
+        # Black left base
+        c.setFillColor(badge_color)
         path = c.beginPath()
         path.moveTo(0, 0)
-        path.lineTo(width * 0.6, 0)
+        path.lineTo(width * 0.8, 0)
         path.lineTo(0, height * 0.4)
         path.close()
         c.drawPath(path, fill=1, stroke=0)
@@ -333,120 +361,160 @@ def generate_badge(request, registrant_id):
         c.setFillColor(colors.HexColor("#d62612"))
         path = c.beginPath()
         path.moveTo(width, 0)
-        path.lineTo(width, height * 0.3)
-        path.lineTo(width * 0.4, 0)
-        path.close()
-        c.drawPath(path, fill=1, stroke=0)
-
-        # Green mid accent
-        c.setFillColor(colors.HexColor("#3aa655"))
-        path = c.beginPath()
-        path.moveTo(width * 0.68, height * 0.25)
-        path.lineTo(width * 0.83, height * 0.35)
-        path.lineTo(width * 0.68, height * 0.43)
+        path.lineTo(width, height * 0.35)
+        path.lineTo(width * 0.5, 0)
         path.close()
         c.drawPath(path, fill=1, stroke=0)
 
     draw_accent_shapes()
 
-    # --- Summit Logo ---
-    logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-    if os.path.exists(logo_path):
-        logo = ImageReader(logo_path)
-        logo_w, logo_h = 100, 45
-        c.drawImage(
-            logo,
-            (width - logo_w) / 2,
-            height - logo_h - 15,
-            width=logo_w,
-            height=logo_h,
-            preserveAspectRatio=True,
-            mask="auto",
-        )
+    # --- Summit Logos ---
+    summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
 
-    # --- Summit Title ---
-    c.setFont("Helvetica-Bold", 8)
-    c.setFillColor(colors.black)
-    c.drawCentredString(width / 2, height - 65, "THE KENYA SOFTWARE & AI SUMMIT 2025")
+    logo_h = s(65)
+    spacing = s(5)
+    total_width = 0
+    images = []
 
-    # --- Passport Photo Setup ---
-    photo_w, photo_h = 65, 65
-    photo_x, photo_y = (width - photo_w) / 2, height - 150
+    if os.path.exists(partner_logo_path):
+        partner_logo = ImageReader(partner_logo_path)
+        partner_logo_w = s(80)
+        images.append((partner_logo, partner_logo_w))
+        total_width += partner_logo_w
+
+    if os.path.exists(summit_logo_path):
+        if images:
+            total_width += spacing
+        summit_logo = ImageReader(summit_logo_path)
+        summit_logo_w = s(120)
+        images.append((summit_logo, summit_logo_w))
+        total_width += summit_logo_w
+
+    if images:
+        start_x = (width - total_width) / 2
+        y_pos = height - logo_h - s(15)
+        for img, w in images:
+            c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
+                        preserveAspectRatio=True, mask="auto")
+            start_x += w + spacing
+
+
+    # --- Passport Photo (larger with same proportions) ---
+    photo_w, photo_h = 80, 80  # ↑ increased from 65x65
+    photo_x, photo_y = (width - photo_w) / 2, height - 160  # lowered slightly for balance
 
     def draw_placeholder():
-        """Draw a circular 'No Photo' placeholder."""
-        c.setFillColor(colors.lightgrey)
-        c.circle(width / 2, photo_y + photo_h / 2, photo_w / 2, fill=1, stroke=0)
-        c.setFillColor(colors.darkgrey)
-        c.setFont("Helvetica", 6)
-        c.drawCentredString(width / 2, photo_y + photo_h / 2 - 3, "No Photo")
+        """Draw circular 'No Photo' placeholder."""
 
     def draw_passport():
-        """Draw the registrant’s passport photo, circularly cropped."""
+        """Draw passport photo with white + green border and high quality."""
         try:
             if not (registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)):
                 return draw_placeholder()
 
             photo_path = default_storage.path(registrant.passport_photo.name)
-            img = Image.open(photo_path).convert("RGBA").resize((int(photo_w), int(photo_h)), Image.LANCZOS)
+            img = Image.open(photo_path).convert("RGBA")
 
-            # Circular crop mask
-            mask = Image.new("L", img.size, 0)
-            ImageDraw.Draw(mask).ellipse((0, 0, *img.size), fill=255)
-            circular = Image.new("RGBA", img.size)
+            # Enhance image & resize
+            img = img.point(lambda p: p * 1.03)
+            img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
+
+            # Crop to square with top headroom
+            min_side = min(img.size)
+            offset = int(min_side * 0.10)
+            left = (img.width - min_side) / 2
+            top = max((img.height - min_side) / 2 - offset, 0)
+            right = left + min_side
+            bottom = top + min_side
+            img = img.crop((left, top, right, bottom))
+
+            # Resize to fit final
+            final_size = (int(photo_w * 2), int(photo_h * 2))
+            img = img.resize(final_size, Image.LANCZOS)
+
+            # Circular mask
+            mask = Image.new("L", final_size, 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, *final_size), fill=255)
+
+            circular = Image.new("RGBA", final_size, (255, 255, 255, 0))
             circular.paste(img, (0, 0), mask=mask)
 
-            # Convert to buffer
             buffer = BytesIO()
-            circular.save(buffer, format="PNG")
+            circular.save(buffer, format="PNG", optimize=True, compress_level=0)
             buffer.seek(0)
 
-            # Draw the circular image
-            c.drawImage(ImageReader(buffer), photo_x, photo_y, width=photo_w, height=photo_h, mask="auto")
+            # Draw image
+            c.drawImage(
+                ImageReader(buffer),
+                photo_x,
+                photo_y,
+                width=photo_w,
+                height=photo_h,
+                mask="auto",
+            )
 
-            # Add white border
+            # --- Dual border: inner white + outer green ---
+            center_x = width / 2
+            center_y = photo_y + photo_h / 2
+            radius = (photo_w / 2) + 1
+
+            # Inner white border
             c.setLineWidth(1.5)
             c.setStrokeColor(colors.white)
-            c.circle(width / 2, photo_y + photo_h / 2, photo_w / 2 + 2)
-            c.stroke()
+            c.circle(center_x, center_y, radius, stroke=1, fill=0)
 
-        except Exception:
+            # Outer green border
+            c.setLineWidth(2.2)
+            c.setStrokeColor(colors.HexColor("#3aa655"))
+            c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
+
+
+        except Exception as e:
+            print("Error drawing passport:", e)
             draw_placeholder()
 
     draw_passport()
 
     # --- Registrant Info ---
-    text_y = photo_y - 15
+    text_y = photo_y - s(15)
     c.setFillColor(colors.black)
-
-    c.setFont("Helvetica-Bold", 10)
+    c.setFont("Helvetica-Bold", s(10))
     c.drawCentredString(width / 2, text_y, full_name[:35])
-
-    c.setFont("Helvetica-Bold", 9)
-    c.drawCentredString(width / 2, text_y - 13, org_type[:35])
-
-    c.setFont("Helvetica", 8)
-    c.setFillColor(colors.darkgray)
-    c.drawCentredString(width / 2, text_y - 26, job_title[:40])
+    c.setFont("Helvetica-Bold", s(15))
+    c.drawCentredString(width / 2, text_y - s(14), category[:35])
 
     # --- Date & Venue ---
     c.setFillColor(colors.white)
-    c.setFont("Helvetica-Bold", 6.5)
-    c.drawString(10, 25, "10th – 12th November 2025")
+    c.setFont("Helvetica-Bold", s(15.5))
+    c.drawCentredString(width / 4.5, s(40), "10th – 12th")
 
-    c.setFont("Helvetica", 5.8)
-    c.drawString(10, 15, "Moi University Annex Campus, Eldoret")
+    text = "November 2025"
+    text_x = width / 4.5
+    text_y = s(29.3)
+    c.setFont("Helvetica", s(11.5))
+    c.setFillColor(colors.whitesmoke)
+    c.drawCentredString(text_x, text_y, text)
+
+    text_width = c.stringWidth(text, "Helvetica", s(11.5))
+    c.setLineWidth(s(0.6))
+    c.setStrokeColor(colors.white)
+    c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
+
+    c.setFont("Helvetica", s(6.8))
+    c.drawCentredString(width / 4, s(17), "Moi University Annex Campus, ")
+    c.drawCentredString(width / 7.3, s(8), "Eldoret Kenya, ")
 
     # --- QR Code ---
-    qr_size = 45
-    c.drawImage(qr_reader, width - qr_size - 10, 10, width=qr_size, height=qr_size, mask="auto")
+    qr_size, qr_margin = s(45), s(5)
+    c.drawImage(qr_reader, width - qr_size - qr_margin, qr_margin,
+                width=qr_size, height=qr_size, mask="auto")
 
-    # --- Finalize PDF ---
+    # --- Finalize ---
     c.showPage()
     c.save()
     pdf_buffer.seek(0)
 
-    # --- Return as Download ---
     filename = f"{registrant.first_name}_{registrant.second_name}_Badge.pdf"
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
@@ -2964,252 +3032,270 @@ def ajax_approve_exhibitor(request, exhibitor_id):
         "remaining": max(max_count - approved_booths_total, 0),
     })
 
+from io import BytesIO
+import os
+import qrcode
+from PIL import Image
+from django.http import JsonResponse, Http404
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.contrib.auth.decorators import login_required
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import portrait, A7
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from pdf2image import convert_from_bytes
 
-def create_badge(request, reg_id):
+@login_required
+def create_badge(request, reg_id, page_size=portrait(A7)):
+    """Generate a scalable summit badge IMAGE (from PDF for perfect layout consistency)."""
+
+    # --- Fetch registrant ---
     try:
-        # Fetch registrant
-        registrant = (
-            Registrant.objects
-            .only(
-                "id", "title", "first_name", "second_name",
-                "national_id_number", "other_organization_type",
-                "job_title", "category"
-            )
-            .get(id=reg_id)
-        )
-
-        category_obj = Category.objects.only("name", "color").get(id=registrant.category)
-        badge_color = category_obj.color or "#8DC63F"
-        category_name = category_obj.name.upper()
-
-        # --- Badge dimensions (optimized for printing on A4/Letter) ---
-        # Standard conference badge: 4x6 inches at 200 DPI = 800x1200
-        width, height = 850, 1200
-        badge = Image.new("RGB", (width, height), "white")
-        draw = ImageDraw.Draw(badge)
-
-        # --- Colors ---
-        green = badge_color
-        red = "#E31E24"
-        gray = "#666666"
-        dark_text = "#1a1a1a"
-
-        # --- Ensure badge directory exists ---
-        badge_dir = os.path.join(settings.MEDIA_ROOT, "badges")
-        os.makedirs(badge_dir, exist_ok=True)
-        badge_path = os.path.join(badge_dir, f"badge_{reg_id}.png")
-
-        # --- Load Fonts with better fallbacks ---
-        try:
-            # Try Windows fonts first
-            title_large = ImageFont.truetype("arialbd.ttf", 34)
-            title_medium = ImageFont.truetype("arial.ttf", 24)
-            category_font = ImageFont.truetype("arialbd.ttf", 60)
-            name_font = ImageFont.truetype("arialbd.ttf", 38)
-            info_font = ImageFont.truetype("arial.ttf", 28)
-            date_font = ImageFont.truetype("arialbd.ttf", 40)
-            venue_font = ImageFont.truetype("arialbd.ttf", 28)
-            small_font = ImageFont.truetype("arial.ttf", 22)
-        except IOError:
-            try:
-                # Try Linux fonts
-                title_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 34)
-                title_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-                category_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 60)
-                name_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
-                info_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 28)
-                date_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 40)
-                venue_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
-                small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
-            except IOError:
-                # Ultimate fallback - use default font
-                default_font = ImageFont.load_default()
-                title_large = title_medium = category_font = default_font
-                name_font = info_font = date_font = venue_font = small_font = default_font
-
-        # --- Top Logos Section ---
-        logo_y = 40
-        logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-        kenya_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "kenya_coat_of_arms.png")
-
-        # Kenya coat of arms (left) - optional
-        if os.path.exists(kenya_logo_path):
-            try:
-                kenya_logo = Image.open(kenya_logo_path).convert("RGBA")
-                kenya_logo.thumbnail((80, 80), Image.Resampling.LANCZOS)
-                badge.paste(kenya_logo, (60, logo_y), kenya_logo)
-            except Exception as e:
-                print(f"Warning: Could not load Kenya logo: {e}")
-
-        # Summit logo (center) - optional
-        if os.path.exists(logo_path):
-            try:
-                logo = Image.open(logo_path).convert("RGBA")
-                logo.thumbnail((120, 80), Image.Resampling.LANCZOS)
-                logo_x = (width - logo.width) // 2
-                badge.paste(logo, (logo_x, logo_y), logo)
-            except Exception as e:
-                print(f"Warning: Could not load summit logo: {e}")
-
-        # --- Decorative circle element ---
-        circle_y = 160
-        circle_center = (width // 2, circle_y + 35)
-        circle_radius = 55
-
-        draw.ellipse(
-            [circle_center[0] - circle_radius, circle_center[1] - circle_radius,
-             circle_center[0] + circle_radius, circle_center[1] + circle_radius],
-            outline=red, width=5
-        )
-
-        draw.ellipse(
-            [circle_center[0] - 27, circle_center[1] - 27,
-             circle_center[0] + 27, circle_center[1] + 27],
-            outline=red, width=3
-        )
-
-        # --- Conference Title ---
-        title_y = circle_y + 100
-
-        draw.text(
-            (width // 2, title_y),
-            "THE KENYA",
-            fill=dark_text,
-            font=title_medium,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 40),
-            "SOFTWARE &",
-            fill=red,
-            font=title_large,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 80),
-            "AI SUMMIT",
-            fill=red,
-            font=title_large,
-            anchor="mm"
-        )
-        draw.text(
-            (width // 2, title_y + 120),
-            "2025",
-            fill=green,
-            font=title_large,
-            anchor="mm"
-        )
-
-        # --- Category/Role ---
-        category_y = title_y + 190
-
-        if len(category_name) > 15:
-            words = category_name.split()
-            mid = len(words) // 2
-            line1 = " ".join(words[:mid])
-            line2 = " ".join(words[mid:])
-            draw.text((width // 2, category_y), line1, fill=dark_text, font=category_font, anchor="mm")
-            draw.text((width // 2, category_y + 100), line2, fill=dark_text, font=category_font, anchor="mm")
-            name_y = category_y + 200
-        else:
-            draw.text((width // 2, category_y), category_name, fill=dark_text, font=category_font, anchor="mm")
-            name_y = category_y + 120
-
-        # --- Attendee Name ---
-        full_name = f"{registrant.title or ''} {registrant.first_name or ''} {registrant.second_name or ''}".strip()
-        draw.text((width // 2, name_y), full_name, fill=dark_text, font=name_font, anchor="mm")
-
-        # --- Organization & Job Title ---
-        org_text = registrant.other_organization_type or ""
-        job_text = registrant.job_title or ""
-
-        if org_text:
-            draw.text((width // 2, name_y + 70), org_text, fill=gray, font=info_font, anchor="mm")
-        if job_text:
-            draw.text((width // 2, name_y + 120), job_text, fill=gray, font=info_font, anchor="mm")
-
-        # --- Green Diagonal Section at Bottom ---
-        bottom_y = 730
-
-        draw.polygon(
-            [(0, bottom_y), (width, bottom_y + 130), (width, height), (0, height)],
-            fill=green
-        )
-
-        draw.polygon(
-            [
-                (width // 2 - 100, bottom_y + 30),
-                (width // 2 + 100, bottom_y + 100),
-                (width // 2 + 100, bottom_y + 130),
-                (width // 2 - 100, bottom_y + 60)
-            ],
-            fill="white"
-        )
-
-        draw.polygon(
-            [(width - 100, bottom_y + 160), (width, bottom_y + 130), (width, bottom_y + 200)],
-            fill=red
-        )
-
-        # --- Icon placeholders ---
-        icon_y = bottom_y + 90
-        draw.ellipse([(150, icon_y), (185, icon_y + 35)], fill="white", outline=green, width=2)
-        draw.ellipse([(230, icon_y), (265, icon_y + 35)], fill="white", outline=green, width=2)
-        draw.ellipse([(310, icon_y), (345, icon_y + 35)], fill="white", outline=green, width=2)
-
-        # --- Event Date and Venue ---
-        draw.text((100, bottom_y + 200), "10th - 12th", fill="white", font=date_font, anchor="lm")
-        draw.text((100, bottom_y + 250), "November 2025", fill="white", font=venue_font, anchor="lm")
-        draw.text((100, bottom_y + 290), "Bomas of Kenya, Nairobi", fill="white", font=small_font, anchor="lm")
-
-        # --- QR Code ---
-        qr_data = f"SUMMIT-2025\nID:{registrant.national_id_number}\nName:{full_name}\nCategory:{category_name}"
-        qr = qrcode.QRCode(box_size=5, border=1)
-        qr.add_data(qr_data)
-        qr.make()
-        qr_img = qr.make_image(fill_color="black", back_color="white")
-        qr_img = qr_img.resize((130, 130))
-        badge.paste(qr_img, (width - 185, bottom_y + 190))
-
-        # --- Save ---
-        badge.save(badge_path, quality=95)
-
-        # Generate URL
-        image_url = f"{settings.MEDIA_URL}badges/badge_{reg_id}.png"
-
-        return JsonResponse({
-            "success": True,
-            "image_url": image_url,
-            "registrant": full_name,
-            "category": category_name
-        })
-
+        registrant = Registrant.objects.get(pk=reg_id)
     except Registrant.DoesNotExist:
-        return JsonResponse({
-            "error": "Registrant not found",
-            "detail": f"No registrant with ID {reg_id}"
-        }, status=404)
+        raise Http404("Registrant not found")
 
-    except Category.DoesNotExist:
-        return JsonResponse({
-            "error": "Category not found",
-            "detail": f"Category for registrant {reg_id} does not exist"
-        }, status=404)
+    category_obj = Category.objects.only("name", "color").get(id=registrant.category)
+    badge_color = category_obj.color or colors.black
 
-    except Exception as e:
-        # Log the full traceback
-        error_traceback = traceback.format_exc()
-        print("=" * 50)
-        print("BADGE GENERATION ERROR:")
-        print(error_traceback)
-        print("=" * 50)
+    # --- Core Data ---
+    full_name = registrant.get_full_name() or ""
+    national_id = registrant.national_id_number or ""
+    org_type = registrant.display_org_type() or ""
+    job_title = registrant.job_title or ""
+    category = registrant.get_category_display() or ""
 
-        return JsonResponse({
-            "error": "Badge generation failed",
-            "detail": str(e),
-            "type": type(e).__name__
-        }, status=500)
+    # --- Generate QR Code ---
+    qr_data = (
+        f"Name: {full_name}\n"
+        f"National ID/ Passport NO: {national_id}\n"
+        f"Organization: {org_type}\n"
+        f"Job Title: {job_title}\n"
+        f"Category: {category}\n"
+    )
+    qr_img = qrcode.make(qr_data)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+    qr_reader = ImageReader(qr_buffer)
 
+    # --- PDF Setup ---
+    pdf_buffer = BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=page_size)
+    width, height = page_size
+
+    base_width, base_height = portrait(A7)
+    scale_w = width / base_width
+    scale_h = height / base_height
+    scale = (scale_w + scale_h) / 2
+
+    def s(val):
+        return val * scale
+
+    # --- Background ---
+    c.setFillColor(colors.white)
+    c.rect(0, 0, width, height, fill=1, stroke=0)
+
+    # --- Flag accents ---
+    def draw_accent_shapes():
+        c.setFillColor(colors.HexColor("#3aa655"))
+        path = c.beginPath()
+        path.moveTo(width * 0.68, height * 0.18)
+        path.lineTo(width * 0.83, height * 0.28)
+        path.lineTo(width * 0.68, height * 0.36)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+        offset = s(45)
+        c.setStrokeColor("#d62612")
+        c.setLineWidth(s(0.5))
+        c.line(width * 0.5 - offset, 0, width - offset, height * 0.35)
+
+        c.setFillColor(badge_color)
+        path = c.beginPath()
+        path.moveTo(0, 0)
+        path.lineTo(width * 0.8, 0)
+        path.lineTo(0, height * 0.4)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+        c.setFillColor(colors.HexColor("#d62612"))
+        path = c.beginPath()
+        path.moveTo(width, 0)
+        path.lineTo(width, height * 0.35)
+        path.lineTo(width * 0.5, 0)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+    draw_accent_shapes()
+
+    # --- Logos ---
+    summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+
+    logo_h = s(65)
+    spacing = s(5)
+    total_width = 0
+    images = []
+
+    if os.path.exists(partner_logo_path):
+        partner_logo = ImageReader(partner_logo_path)
+        partner_logo_w = s(80)
+        images.append((partner_logo, partner_logo_w))
+        total_width += partner_logo_w
+
+    if os.path.exists(summit_logo_path):
+        if images:
+            total_width += spacing
+        summit_logo = ImageReader(summit_logo_path)
+        summit_logo_w = s(120)
+        images.append((summit_logo, summit_logo_w))
+        total_width += summit_logo_w
+
+    if images:
+        start_x = (width - total_width) / 2
+        y_pos = height - logo_h - s(15)
+        for img, w in images:
+            c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
+                        preserveAspectRatio=True, mask="auto")
+            start_x += w + spacing
+
+
+    # --- Passport Photo (larger with same proportions) ---
+    photo_w, photo_h = 80, 80  # ↑ increased from 65x65
+    photo_x, photo_y = (width - photo_w) / 2, height - 160  # lowered slightly for balance
+
+    def draw_placeholder():
+        """Draw circular 'No Photo' placeholder."""
+
+
+    def draw_passport():
+        """Draw passport photo with white + green border and high quality."""
+        try:
+            if not (registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)):
+                return draw_placeholder()
+
+            photo_path = default_storage.path(registrant.passport_photo.name)
+            img = Image.open(photo_path).convert("RGBA")
+
+            # Enhance image & resize
+            img = img.point(lambda p: p * 1.03)
+            img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
+
+            # Crop to square with top headroom
+            min_side = min(img.size)
+            offset = int(min_side * 0.10)
+            left = (img.width - min_side) / 2
+            top = max((img.height - min_side) / 2 - offset, 0)
+            right = left + min_side
+            bottom = top + min_side
+            img = img.crop((left, top, right, bottom))
+
+            # Resize to fit final
+            final_size = (int(photo_w * 2), int(photo_h * 2))
+            img = img.resize(final_size, Image.LANCZOS)
+
+            # Circular mask
+            mask = Image.new("L", final_size, 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, *final_size), fill=255)
+
+            circular = Image.new("RGBA", final_size, (255, 255, 255, 0))
+            circular.paste(img, (0, 0), mask=mask)
+
+            buffer = BytesIO()
+            circular.save(buffer, format="PNG", optimize=True, compress_level=0)
+            buffer.seek(0)
+
+            # Draw image
+            c.drawImage(
+                ImageReader(buffer),
+                photo_x,
+                photo_y,
+                width=photo_w,
+                height=photo_h,
+                mask="auto",
+            )
+
+            # --- Dual border: inner white + outer green ---
+            center_x = width / 2
+            center_y = photo_y + photo_h / 2
+            radius = (photo_w / 2) + 1
+
+            # Inner white border
+            c.setLineWidth(1.5)
+            c.setStrokeColor(colors.white)
+            c.circle(center_x, center_y, radius, stroke=1, fill=0)
+
+            # Outer green border
+            c.setLineWidth(2.2)
+            c.setStrokeColor(colors.HexColor("#3aa655"))
+            c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
+
+
+        except Exception as e:
+            print("Error drawing passport:", e)
+            draw_placeholder()
+
+    draw_passport()
+
+    # --- Registrant Info ---
+    text_y = photo_y - s(15)
+    c.setFillColor(colors.black)
+    c.setFont("Helvetica-Bold", s(10))
+    c.drawCentredString(width / 2, text_y, full_name[:35])
+    c.setFont("Helvetica-Bold", s(15))
+    c.drawCentredString(width / 2, text_y - s(14), category[:35])
+
+    # --- Date & Venue ---
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", s(15.5))
+    c.drawCentredString(width / 4.5, s(40), "10th – 12th")
+
+    text = "November 2025"
+    text_x = width / 4.5
+    text_y = s(29.3)
+    c.setFont("Helvetica", s(11.5))
+    c.setFillColor(colors.whitesmoke)
+    c.drawCentredString(text_x, text_y, text)
+
+    text_width = c.stringWidth(text, "Helvetica", s(11.5))
+    c.setLineWidth(s(0.6))
+    c.setStrokeColor(colors.white)
+    c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
+
+    c.setFont("Helvetica", s(6.8))
+    c.drawCentredString(width / 4, s(17), "Moi University Annex Campus, ")
+    c.drawCentredString(width / 7.3, s(8), "Eldoret Kenya, ")
+
+    # --- QR Code ---
+    qr_size, qr_margin = s(45), s(5)
+    c.drawImage(qr_reader, width - qr_size - qr_margin, qr_margin,
+                width=qr_size, height=qr_size, mask="auto")
+
+    # --- Finalize PDF ---
+    c.showPage()
+    c.save()
+    pdf_buffer.seek(0)
+
+    # --- Convert PDF → PNG (identical look) ---
+    image_pages = convert_from_bytes(pdf_buffer.getvalue(), dpi=300)
+    image_buffer = BytesIO()
+    image_pages[0].save(image_buffer, format="PNG")
+    image_buffer.seek(0)
+
+    # --- Save to MEDIA directory ---
+    image_name = f"badges/{registrant.first_name}_{registrant.second_name}_badge.png"
+    image_path = default_storage.save(image_name, image_buffer)
+    image_url = default_storage.url(image_path)
+
+    # --- Return JSON ---
+    return JsonResponse({
+        "success": True,
+        "image_url": image_url,
+        "registrant": full_name,
+        "category": category
+    })
 
 @login_required
 @csrf_exempt  # optional: only if your AJAX doesn't send CSRF token
