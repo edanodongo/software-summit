@@ -881,6 +881,7 @@ class PrintLog(models.Model):
         blank=True,
         related_name='printed_records'
     )
+    reprint = models.BooleanField(default=False, null=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
