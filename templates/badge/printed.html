@@ -738,6 +738,7 @@
             }
         });
 
+        // Print all badges in a single print window with registrant details in filename
         // Print all badges in a single print window
         function printAllBadges(badges) {
             return new Promise((resolve, reject) => {
@@ -749,171 +750,143 @@
                     return;
                 }
 
+                // Create descriptive title for the file
+                let fileTitle = "Badges";
+                if (badges.length === 1) {
+                    // Try to extract name from image URL
+                    const namePart = badges[0].url
+                        .split("/")
+                        .pop()
+                        .replace(/\.[^/.]+$/, "")
+                        .replace(/_/g, " ")
+                        .replace(/-/g, " ");
+                    fileTitle = namePart || "Badge";
+                } else {
+                    const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
+                    fileTitle = `Badges_${timestamp}`;
+                }
+
                 // Generate HTML for all badges
                 const badgeImagesHTML = badges.map((badge, index) => `
-            <div class="badge-page">
-                <img src="${badge.url}" alt="Badge ${index + 1}" />
-            </div>
-        `).join('');
+                    <div class="badge-page">
+                        <img src="${badge.url}" alt="Badge ${index + 1}" />
+                    </div>
+                `).join('');
 
                 printWindow.document.open();
                 printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <title>Print ${badges.length} Badge${badges.length > 1 ? 's' : ''}</title>
-                    <style>
-                        * {
-                            margin: 0;
-                            padding: 0;
-                            box-sizing: border-box;
-                        }
+                    <!DOCTYPE html>
+                    <html>
+                        <head>
+                            <title>${fileTitle}</title>
+                            <style>
+                                * { margin: 0; padding: 0; box-sizing: border-box; }
 
-                        @media print {
-                            @page {
-                                margin: 0;
-                                size: auto;
-                            }
+                                @media print {
+                                    @page { margin: 0; size: auto; }
+                                    body { margin: 0; padding: 0; }
+                                    .badge-page {
+                                        page-break-after: always;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 100%;
+                                        height: 100vh;
+                                    }
+                                    img {
+                                        max-width: 100%;
+                                        max-height: 100vh;
+                                        display: block;
+                                        margin: auto;
+                                        -webkit-print-color-adjust: exact;
+                                        print-color-adjust: exact;
+                                    }
+                                    .print-header { display: none !important; }
+                                }
 
-                            body {
-                                margin: 0;
-                                padding: 0;
-                            }
+                                @media screen {
+                                    body {
+                                        margin: 0;
+                                        padding: 20px;
+                                        background: #f5f5f5;
+                                        font-family: Arial, sans-serif;
+                                    }
+                                    .print-header {
+                                        background: #2980b9;
+                                        color: white;
+                                        padding: 15px;
+                                        text-align: center;
+                                        margin-bottom: 20px;
+                                        border-radius: 8px;
+                                    }
+                                    .badge-page {
+                                        background: white;
+                                        margin-bottom: 20px;
+                                        padding: 20px;
+                                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                                        min-height: 200px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    }
+                                    img { max-width: 100%; height: auto; display: block; }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="print-header">
+                                <h2>${fileTitle}</h2>
+                                <p>Total: ${badges.length} badge${badges.length > 1 ? 's' : ''}</p>
+                            </div>
+                            ${badgeImagesHTML}
+                            <script>
+                                let imagesLoaded = 0;
+                                let printTriggered = false;
+                                const totalImages = ${badges.length};
+                                const images = document.querySelectorAll('img');
 
-                            .print-header {
-                                display: none !important;
-                            }
+                                images.forEach(img => {
+                                    if (img.complete) {
+                                        imagesLoaded++;
+                                    } else {
+                                        img.onload = () => { imagesLoaded++; checkAndPrint(); };
+                                        img.onerror = () => { imagesLoaded++; checkAndPrint(); };
+                                    }
+                                });
 
-                            .badge-page {
-                                page-break-before: auto;
-                                page-break-after: always;
-                                page-break-inside: avoid;
-                                margin: 0;
-                                padding: 0;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                width: 100%;
-                                height: 100vh;
-                            }
+                                if (imagesLoaded === totalImages) checkAndPrint();
 
-                            .badge-page:last-of-type {
-                                page-break-after: avoid;
-                            }
-
-                            img {
-                                display: block;
-                                max-width: 100%;
-                                max-height: 100vh;
-                                width: auto;
-                                height: auto;
-                                margin: auto;
-                            }
-                        }
-
-                        @media screen {
-                            body {
-                                margin: 0;
-                                padding: 20px;
-                                background: #f5f5f5;
-                                font-family: Arial, sans-serif;
-                            }
-
-                            .print-header {
-                                background: #2980b9;
-                                color: white;
-                                padding: 15px;
-                                text-align: center;
-                                margin-bottom: 20px;
-                                border-radius: 8px;
-                            }
-
-                            .badge-page {
-                                background: white;
-                                margin-bottom: 20px;
-                                padding: 20px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                                text-align: center;
-                                min-height: 200px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                            }
-
-                            img {
-                                max-width: 100%;
-                                height: auto;
-                                display: block;
-                            }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="print-header">
-                        <h2 style="margin: 0;">Badge Print Preview</h2>
-                        <p style="margin: 5px 0 0 0;">Total: ${badges.length} badge${badges.length > 1 ? 's' : ''}</p>
-                    </div>
-                    ${badgeImagesHTML}
-                    <script>
-                        let imagesLoaded = 0;
-                        let printTriggered = false;
-                        const totalImages = ${badges.length};
-                        const images = document.querySelectorAll('img');
-
-                        images.forEach(img => {
-                            if (img.complete) {
-                                imagesLoaded++;
-                            } else {
-                                img.onload = () => {
-                                    imagesLoaded++;
-                                    checkAndPrint();
-                                };
-                                img.onerror = () => {
-                                    imagesLoaded++;
-                                    console.error('Failed to load image');
-                                    checkAndPrint();
-                                };
-                            }
-                        });
-
-                        // Check if all images already loaded
-                        if (imagesLoaded === totalImages) {
-                            checkAndPrint();
-                        }
-
-                        function checkAndPrint() {
-                            if (imagesLoaded === totalImages && !printTriggered) {
-                                printTriggered = true;
-                                setTimeout(() => {
-                                    window.focus();
-                                    window.print();
-                                    setTimeout(() => {
-                                        window.opener.postMessage('print_complete', '*');
-                                    }, 500);
-                                }, 1000);
-                            }
-                        }
-                    <\/script>
-                </body>
-            </html>
-        `);
+                                function checkAndPrint() {
+                                    if (imagesLoaded === totalImages && !printTriggered) {
+                                        printTriggered = true;
+                                        setTimeout(() => {
+                                            document.title = "${fileTitle}";
+                                            window.focus();
+                                            window.print();
+                                            setTimeout(() => {
+                                                window.opener.postMessage('print_complete', '*');
+                                            }, 500);
+                                        }, 1000);
+                                    }
+                                }
+                            <\/script>
+                        </body>
+                    </html>
+                `);
                 printWindow.document.close();
 
-                // Wait for print completion message
                 const messageHandler = (event) => {
                     if (event.data === 'print_complete') {
                         window.removeEventListener('message', messageHandler);
                         resolve();
                     }
                 };
-
                 window.addEventListener('message', messageHandler);
 
-                // Timeout fallback
                 setTimeout(() => {
                     window.removeEventListener('message', messageHandler);
                     resolve();
-                }, 10000); // 10 seconds timeout for multiple badges
+                }, 10000);
             });
         }
 

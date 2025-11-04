@@ -3299,6 +3299,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
         "success": True,
         "image_url": image_url,
         "registrant": full_name,
+        "name": full_name,
         "category": category
     })
 
