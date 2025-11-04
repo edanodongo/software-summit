@@ -368,37 +368,52 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
 
     draw_accent_shapes()
 
-    # --- Summit Logos ---
+    # --- Summit Logos (Dynamic Scaling, Partner Slightly Smaller, With Margin) ---
     summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
     partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
-    logo_h = s(65)
-    spacing = s(5)
+    # Margins (adjusted to fit all badge sizes)
+    margin_x = width * 0.05  # 5% of badge width (left & right)
+    margin_top = height * 0.06  # 6% of badge height from the top
+
+    # Dynamically scale height and spacing based on badge dimensions
+    logo_h = height * 0.25  # slightly smaller to account for margin
+    spacing = width * 0.01  # 1% of badge width
     total_width = 0
     images = []
 
+    # Partner logo (slightly smaller than summit logo, but larger than before)
     if os.path.exists(partner_logo_path):
         partner_logo = ImageReader(partner_logo_path)
-        partner_logo_w = s(80)
+        partner_logo_w = width * 0.48  # adjusted to fit within margins
         images.append((partner_logo, partner_logo_w))
         total_width += partner_logo_w
 
+    # Summit logo (main logo, remains slightly larger)
     if os.path.exists(summit_logo_path):
         if images:
             total_width += spacing
         summit_logo = ImageReader(summit_logo_path)
-        summit_logo_w = s(120)
+        summit_logo_w = width * 0.52  # slightly larger but fits inside badge
         images.append((summit_logo, summit_logo_w))
         total_width += summit_logo_w
 
+    # Draw logos centered at the top with margins
     if images:
-        start_x = (width - total_width) / 2
-        y_pos = height - logo_h - s(15)
+        start_x = ((width - total_width) / 2)
+        # Ensure logos are drawn below top margin
+        y_pos = height - margin_top - logo_h
         for img, w in images:
-            c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
-                        preserveAspectRatio=True, mask="auto")
+            c.drawImage(
+                img,
+                start_x,
+                y_pos,
+                width=w,
+                height=logo_h,
+                preserveAspectRatio=True,
+                mask="auto"
+            )
             start_x += w + spacing
-
 
     # --- Passport Photo (larger with same proportions) ---
     photo_w, photo_h = 80, 80  # ↑ increased from 65x65
