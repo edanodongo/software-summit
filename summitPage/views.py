@@ -3044,7 +3044,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import portrait, A7
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
-from pdf2image import convert_from_bytes  # <-- Make sure to install this: pip install pdf2image
+from pdf2image import convert_from_bytes
 
 @login_required
 def create_badge(request, reg_id, page_size=portrait(A7)):
