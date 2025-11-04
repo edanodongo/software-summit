@@ -370,7 +370,7 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
 
     # --- Summit Logos ---
     summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
     logo_h = s(65)
     spacing = s(5)
@@ -3132,7 +3132,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
 
     # --- Logos ---
     summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
     logo_h = s(65)
     spacing = s(5)
