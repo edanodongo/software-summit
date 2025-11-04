@@ -27,6 +27,8 @@ It provides a centralized system to:
 
 The system also logs all badge printing activities for audit and supports reprints when needed.
 
+Visit the live site: 👉 [softwaresummit.go.ke](https://softwaresummit.go.ke)
+
 ---
 
 > [!IMPORTANT]
