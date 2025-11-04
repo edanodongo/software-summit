@@ -8,8 +8,6 @@
 ---
 
 <div align="center">
-  [![](https://img.shields.io/github/issues/edanodongo/software-summit?style=for-the-badge)](https://github.com/edanodongo/software-summit/issues)
-  <!-- [![](https://img.shields.io/github/license/edanodongo/software-summit?style=for-the-badge)](https://github.com/edanodongo/software-summit/blob/main/LICENSE) -->
 
   **The latest changes are available in the [main](https://github.com/edanodongo/software-summit/tree/main) branch!**
 </div>
