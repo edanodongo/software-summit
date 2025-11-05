@@ -3401,7 +3401,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     pdf_buffer.seek(0)
 
     # --- Convert PDF → PNG (identical look) ---
-    image_pages = convert_from_bytes(pdf_buffer.getvalue(), dpi=300)
+    image_pages = convert_from_bytes(pdf_buffer.getvalue(), dpi=300, use_cropbox=True,)
     image_buffer = BytesIO()
     image_pages[0].save(image_buffer, format="PNG")
     image_buffer.seek(0)
