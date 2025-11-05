@@ -77,6 +77,21 @@ from django.db.models.functions import TruncDate, TruncMonth
 from django.shortcuts import render
 from django.utils.timezone import now
 from datetime import timedelta
+from django.http import FileResponse
+from PIL import ImageDraw
+from io import BytesIO
+import os
+import qrcode
+from PIL import Image
+from django.http import JsonResponse, Http404
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.contrib.auth.decorators import login_required
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import portrait, A7
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from pdf2image import convert_from_bytes
 
 
 # begin your views here
@@ -283,12 +298,6 @@ def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold")
     while c.stringWidth(text, font_name, font_size) > max_width and font_size > 5:
         font_size -= 0.5
     return font_size
-
-
-from django.http import FileResponse
-from django.contrib.auth.decorators import login_required
-from reportlab.lib.pagesizes import portrait, A7
-from PIL import ImageDraw
 
 
 @login_required
@@ -3348,21 +3357,6 @@ def ajax_approve_exhibitor(request, exhibitor_id):
             "remaining": max(max_count - approved_booths_total, 0),
         }
     )
-
-
-from io import BytesIO
-import os
-import qrcode
-from PIL import Image
-from django.http import JsonResponse, Http404
-from django.conf import settings
-from django.core.files.storage import default_storage
-from django.contrib.auth.decorators import login_required
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import portrait, A7
-from reportlab.lib.utils import ImageReader
-from reportlab.lib import colors
-from pdf2image import convert_from_bytes
 
 
 @login_required
