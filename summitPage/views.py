@@ -1,21 +1,15 @@
 # imports
 from collections import Counter
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
 from openpyxl import Workbook
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import (
-    SimpleDocTemplate,
-    Table,
-    TableStyle,
-    Paragraph,
-    Image,
-    Spacer,
-)
+from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
+                                Table, TableStyle)
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -28,71 +22,43 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-from django.http import HttpResponse
-from datetime import datetime
-from django.contrib.auth.views import LogoutView
-from django.contrib.auth.views import LoginView
-from django.db.models import Case, When, Value, IntegerField
-from django.db import transaction
-
-from .models import Category
-from .forms import RegistrantEditForm
-from django.template.loader import render_to_string
-from .forms import ExhibitorEditForm
-
-from django.db.models import Max
-
-from summitPage.models import (
-    ExhibitionSection,
-    EmailLogs,
-)
-from summitPage.forms import DashboardSettingForm
-
-from summitPage.models import (
-    Registrant,
-    Exhibitor,
-    SummitPartner,
-    SummitSponsor,
-    SummitGallery,
-    SummitSpeaker,
-    SummitSession,
-    SummitScheduleDay,
-    Booth,
-    DashboardSetting,
-    EmailLog,
-)
-
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import (
-    csrf_exempt,
-)  # not needed if you use {% csrf_token %} via JS
-
-from django.db.models import OuterRef, Subquery
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from django.utils import timezone
-
-from django.db.models import Count, Sum, Q
-from django.db.models.functions import TruncDate, TruncMonth
-from django.shortcuts import render
-from django.utils.timezone import now
-from datetime import timedelta
-from django.http import FileResponse
-from PIL import ImageDraw
-from io import BytesIO
 import os
-import qrcode
-from PIL import Image
-from django.http import JsonResponse, Http404
-from django.conf import settings
-from django.core.files.storage import default_storage
-from django.contrib.auth.decorators import login_required
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import portrait, A7
-from reportlab.lib.utils import ImageReader
-from reportlab.lib import colors
-from pdf2image import convert_from_bytes
+from datetime import datetime, timedelta
+from io import BytesIO
 
+import qrcode
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
+from django.core.files.storage import default_storage
+from django.db import transaction
+from django.db.models import (Case, Count, IntegerField, Max, OuterRef, Q,
+                              Subquery, Sum, Value, When)
+from django.db.models.functions import TruncDate, TruncMonth
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.timezone import now
+from django.views.decorators.csrf import \
+    csrf_exempt  # not needed if you use {% csrf_token %} via JS
+from django.views.decorators.http import require_POST
+from pdf2image import convert_from_bytes
+from PIL import Image, ImageDraw
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A7, portrait
+from reportlab.lib.utils import ImageReader
+from reportlab.pdfgen import canvas
+
+from summitPage.forms import DashboardSettingForm
+from summitPage.models import (Booth, DashboardSetting, EmailLog, EmailLogs,
+                               ExhibitionSection, Exhibitor, Registrant,
+                               SummitGallery, SummitPartner, SummitScheduleDay,
+                               SummitSession, SummitSpeaker, SummitSponsor)
+
+from .forms import ExhibitorEditForm, RegistrantEditForm
+from .models import Category
 
 # begin your views here
 
@@ -110,9 +76,7 @@ def is_student_registrant(registrant: Registrant) -> bool:
         # 2️⃣ Check by category (compare to Category name "Student")
         student_category_ids = [
             str(cid)
-            for cid in Category.objects.filter(name__iexact="Student").values_list(
-                "id", flat=True
-            )
+            for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
         ]
         return str(registrant.category) in student_category_ids
 
@@ -158,27 +122,23 @@ def home(request):
                 messages.warning(request, "Registered, but confirmation email failed.")
 
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": True, "message": "Registration successful!"}
-                )
+                return JsonResponse({"success": True, "message": "Registration successful!"})
 
             messages.success(request, "Registration successful!")
             return redirect("home")
 
         else:
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": False, "errors": form.errors}, status=400
-                )
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
             messages.error(request, "There was a problem with your registration.")
 
     else:
         form = QuickRegistrationForm()
 
-    days = SummitScheduleDay.objects.prefetch_related(
-        "timeslots__sessions__panelists"
-    ).order_by("date")
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by(
+        "date"
+    )
 
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by("order")
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
@@ -255,27 +215,23 @@ def reg(request):
 
             # --- Return success response ---
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": True, "message": "Registration successful!"}
-                )
+                return JsonResponse({"success": True, "message": "Registration successful!"})
 
             messages.success(request, "Registration successful!")
             return redirect("home")
 
         else:
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": False, "errors": form.errors}, status=400
-                )
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
             messages.error(request, "There was a problem with your registration.")
 
     else:
         form = QuickRegistrationForm()
 
     # --- Extra context data ---
-    days = SummitScheduleDay.objects.prefetch_related(
-        "timeslots__sessions__panelists"
-    ).order_by("date")
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by(
+        "date"
+    )
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by("order")
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
@@ -389,12 +345,8 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
     draw_accent_shapes()
 
     # --- Summit Logos (Dynamic Scaling, Partner Slightly Smaller, With Margin) ---
-    summit_logo_path = os.path.join(
-        settings.BASE_DIR, "static", "images", "summit_logo.png"
-    )
-    partner_logo_path = os.path.join(
-        settings.BASE_DIR, "static", "images", "badge_partner.png"
-    )
+    summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
     # Margins (adjusted to fit all badge sizes)
     margin_x = width * 0.05  # 5% of badge width (left & right)
@@ -441,9 +393,7 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
 
     # --- Passport Photo (larger with same proportions) ---
     photo_w, photo_h = 80, 80  # ↑ increased from 65x65
-    photo_x, photo_y = (
-                               width - photo_w
-                       ) / 2, height - 160  # lowered slightly for balance
+    photo_x, photo_y = (width - photo_w) / 2, height - 160  # lowered slightly for balance
 
     def draw_placeholder():
         """Draw circular 'No Photo' placeholder."""
@@ -452,8 +402,7 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
         """Draw passport photo with white + green border and high quality."""
         try:
             if not (
-                    registrant.passport_photo
-                    and default_storage.exists(registrant.passport_photo.name)
+                registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)
             ):
                 return draw_placeholder()
 
@@ -542,9 +491,7 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
     text_width = c.stringWidth(text, "Helvetica", s(11.5))
     c.setLineWidth(s(0.6))
     c.setStrokeColor(colors.white)
-    c.line(
-        text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3)
-    )
+    c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
 
     c.setFont("Helvetica", s(6.8))
     c.drawCentredString(width / 4, s(17), "Moi University Annex Campus, ")
@@ -759,7 +706,9 @@ def export_registrants_pdf(request):
     # === Footer function ===
     def add_footer(canvas, doc):
         canvas.saveState()
-        footer_text = f"Generated on {now().strftime('%b %d, %Y %H:%M')} | Kenya Software Summit © 2025"
+        footer_text = (
+            f"Generated on {now().strftime('%b %d, %Y %H:%M')} | Kenya Software Summit © 2025"
+        )
         canvas.setFont("Helvetica", 8)
         canvas.drawCentredString(landscape(A4)[0] / 2, 20, footer_text)
         canvas.restoreState()
@@ -806,16 +755,13 @@ def dashboard_view(request):
     # Convert category IDs to strings because Registrant.category is a CharField
     student_category_ids = [
         str(cid)
-        for cid in Category.objects.filter(name__iexact="Student").values_list(
-            "id", flat=True
-        )
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
     ]
 
     # Exclude students (either via org_type or category)
     registrants = (
         Registrant.objects.exclude(
-            Q(organization_type__iexact="Student")
-            | Q(category__in=student_category_ids)
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
         )
         .order_by("-created_at")
         .annotate(
@@ -845,9 +791,7 @@ def dashboard_view(request):
 def dashboard_data(request):
     data = {
         "categories": list(
-            Registrant.objects.values("category")
-            .annotate(count=Count("id"))
-            .order_by("category")
+            Registrant.objects.values("category").annotate(count=Count("id")).order_by("category")
         ),
         "registrations_over_time": list(
             Registrant.objects.extra({"date": "date(created_at)"})
@@ -912,9 +856,7 @@ def delete_registrant(request, pk):
         registrant.delete()
         return JsonResponse({"success": True})
     except Registrant.DoesNotExist:
-        return JsonResponse(
-            {"success": False, "error": "Registrant not found"}, status=404
-        )
+        return JsonResponse({"success": False, "error": "Registrant not found"}, status=404)
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)}, status=400)
 
@@ -975,18 +917,13 @@ def register(request):
                 )
             else:
                 # Build errors dict: { field: [errors] }
-                errors = {
-                    field: [str(err) for err in errs]
-                    for field, errs in form.errors.items()
-                }
+                errors = {field: [str(err) for err in errs] for field, errs in form.errors.items()}
                 return JsonResponse({"success": False, "errors": errors})
 
         # 🔹 Non-AJAX fallback
         if form.is_valid():
             form.save()
-            messages.success(
-                request, " Registration successful! Thank you for registering."
-            )
+            messages.success(request, " Registration successful! Thank you for registering.")
             return redirect("register")
         else:
             messages.error(request, "⚠️ Please correct the errors below and try again.")
@@ -1030,9 +967,7 @@ def sendMail(request):
                 }
             )
         except Exception as e:
-            return JsonResponse(
-                {"status": "error", "message": f"Failed to send email: {str(e)}"}
-            )
+            return JsonResponse({"status": "error", "message": f"Failed to send email: {str(e)}"})
 
     # Invalid request method
     return JsonResponse({"status": "error", "message": "Invalid request method."})
@@ -1051,9 +986,7 @@ def gallery_dashboard(request):
             messages.success(request, "Gallery image added successfully!")
             return redirect("gallery_dashboard")
         else:
-            messages.error(
-                request, "Error adding gallery image. Please check the form."
-            )
+            messages.error(request, "Error adding gallery image. Please check the form.")
 
     return render(
         request,
@@ -1152,9 +1085,7 @@ def update_speaker(request, pk):
             return redirect("speaker_dashboard")
     else:
         form = SpeakerForm(instance=speaker)
-    return render(
-        request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"}
-    )
+    return render(request, "speaker/speaker_form.html", {"form": form, "title": "Update Speaker"})
 
 
 @login_required
@@ -1415,9 +1346,7 @@ def get_registrants(request):
     # --- Get sorting order ---
     sort_order = request.GET.get("sort", "desc").lower()
     if sort_order not in ["asc", "desc"]:
-        return JsonResponse(
-            {"detail": "Invalid sort order. Use 'asc' or 'desc'."}, status=400
-        )
+        return JsonResponse({"detail": "Invalid sort order. Use 'asc' or 'desc'."}, status=400)
 
     # --- Apply ordering ---
     order_field = "created_at" if sort_order == "asc" else "-created_at"
@@ -1438,13 +1367,9 @@ def get_registrants(request):
             "current_page": current_page.number,
             "page_size": limit,
             "sort_order": sort_order,
-            "next_page": (
-                current_page.next_page_number() if current_page.has_next() else None
-            ),
+            "next_page": (current_page.next_page_number() if current_page.has_next() else None),
             "previous_page": (
-                current_page.previous_page_number()
-                if current_page.has_previous()
-                else None
+                current_page.previous_page_number() if current_page.has_previous() else None
             ),
             "registrants": data,
         },
@@ -1558,9 +1483,7 @@ def save_category(request):
 
         try:
             # Save category in DB
-            Category.objects.create(
-                name=category_name, description=description, color=color
-            )
+            Category.objects.create(name=category_name, description=description, color=color)
 
             return JsonResponse(
                 {
@@ -1570,9 +1493,7 @@ def save_category(request):
             )
 
         except Exception as e:
-            return JsonResponse(
-                {"status": "error", "message": f"Failed to save details: {str(e)}"}
-            )
+            return JsonResponse({"status": "error", "message": f"Failed to save details: {str(e)}"})
 
     # Invalid request method
     return JsonResponse({"status": "error", "message": "Invalid request method."})
@@ -1709,16 +1630,11 @@ def exhibitor(request):
             try:
                 with transaction.atomic():
                     # Lock the DashboardSetting to prevent race conditions
-                    locked_setting = DashboardSetting.objects.select_for_update().get(
-                        id=1
-                    )
+                    locked_setting = DashboardSetting.objects.select_for_update().get(id=1)
                     total_sum_locked = (
-                            Exhibitor.objects.aggregate(total=Sum("total_count"))["total"]
-                            or 0
+                        Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
                     )
-                    remaining_locked = max(
-                        locked_setting.max_count - total_sum_locked, 0
-                    )
+                    remaining_locked = max(locked_setting.max_count - total_sum_locked, 0)
 
                     if selected_count > remaining_locked:
                         msg = f"Cannot register {selected_count} booths. Only {remaining_locked} remaining."
@@ -1748,9 +1664,7 @@ def exhibitor(request):
                 print("❌ Transaction error:", e)
                 msg = "An unexpected error occurred. Please try again."
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse(
-                        {"success": False, "errors": {"server": [msg]}}, status=500
-                    )
+                    return JsonResponse({"success": False, "errors": {"server": [msg]}}, status=500)
                 messages.error(request, msg)
                 return render(
                     request,
@@ -1775,15 +1689,11 @@ def exhibitor(request):
                             "message": "Registration successful, but confirmation email failed.",
                         }
                     )
-                messages.warning(
-                    request, "Registration saved, but email could not be sent."
-                )
+                messages.warning(request, "Registration saved, but email could not be sent.")
 
             # Success
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": True, "message": "Registration successful!"}
-                )
+                return JsonResponse({"success": True, "message": "Registration successful!"})
             messages.success(request, "Registration successful!")
             return redirect("home")
 
@@ -1927,21 +1837,15 @@ def admin_dashboard(request):
     pending_approvals = exhibitors.filter(privacy_agreed=False).count()
 
     # --- NEW: Approved stats ---
-    total_approved_exhibitors = Exhibitor.objects.filter(
-        approval_status="approved"
-    ).count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status="approved").count()
 
     # Counts booths linked to approved exhibitors
-    total_approved_booths = Booth.objects.filter(
-        exhibitor__approval_status="approved"
-    ).count()
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status="approved").count()
 
     categories = Exhibitor._meta.get_field("category").choices
 
     # --- Available countries ---
-    used_countries = Exhibitor.objects.values_list(
-        "country_of_registration", flat=True
-    ).distinct()
+    used_countries = Exhibitor.objects.values_list("country_of_registration", flat=True).distinct()
     countries = dict(Exhibitor._meta.get_field("country_of_registration").choices)
     available_countries = sorted(
         [(code, countries.get(code, code)) for code in used_countries if code],
@@ -2006,9 +1910,7 @@ def admin_exhibitor_delete(request, pk):
     exhibitor = get_object_or_404(Exhibitor, pk=pk)
     if request.method == "POST":
         exhibitor.delete()
-        messages.success(
-            request, f"Exhibitor '{exhibitor.get_full_name()}' deleted successfully."
-        )
+        messages.success(request, f"Exhibitor '{exhibitor.get_full_name()}' deleted successfully.")
         return redirect("admin_dashboard")
     return render(
         request,
@@ -2026,7 +1928,7 @@ def admin_exhibitor_delete(request, pk):
 # --------------------------------------------
 @login_required
 def admin_sections(request):
-    sections = ExhibitionSection.objects.all()
+    ExhibitionSection.objects.all()
     return redirect("admin_dashboard")
 
 
@@ -2098,9 +2000,7 @@ def admin_add_booth(request):
             return redirect("admin_booths")
     else:
         form = BoothForm()
-    return render(
-        request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"}
-    )
+    return render(request, "exhibitor/admin_booth_form.html", {"form": form, "title": "Add Booth"})
 
 
 @login_required
@@ -2161,9 +2061,7 @@ def main_dashboard_view(request):
     new_registrants_week = Registrant.objects.filter(created_at__gte=week_ago).count()
     new_exhibitors_month = Exhibitor.objects.filter(created_at__gte=month_ago).count()
     new_partners_month = SummitPartner.objects.filter(created_at__gte=month_ago).count()
-    new_sponsors_month = SummitSponsor.objects.filter(
-        submitted_at__gte=month_ago
-    ).count()
+    new_sponsors_month = SummitSponsor.objects.filter(submitted_at__gte=month_ago).count()
 
     # --- Engagement metrics ---
     verified_registrants = Registrant.objects.filter(privacy_agreed=True).count()
@@ -2173,9 +2071,7 @@ def main_dashboard_view(request):
     dashboard_setting, _ = DashboardSetting.objects.get_or_create(id=1)
     max_count = dashboard_setting.max_count or 0
     total_taken = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
-    total_taken += Exhibitor.objects.filter(
-        Q(total_count__isnull=True) | Q(total_count=0)
-    ).count()
+    total_taken += Exhibitor.objects.filter(Q(total_count__isnull=True) | Q(total_count=0)).count()
     remaining = max(max_count - total_taken, 0)
     booth_utilization = round((total_taken / max_count * 100), 1) if max_count else 0
 
@@ -2185,34 +2081,26 @@ def main_dashboard_view(request):
 
     # --- Approval stats ---
     pending_approvals = Exhibitor.objects.filter(approval_status="pending").count()
-    total_approved_exhibitors = Exhibitor.objects.filter(
-        approval_status="approved"
-    ).count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status="approved").count()
     approved_booths_total = (
-            Exhibitor.objects.filter(approval_status="approved").aggregate(
-                total=Sum("total_count")
-            )["total"]
-            or 0
+        Exhibitor.objects.filter(approval_status="approved").aggregate(total=Sum("total_count"))[
+            "total"
+        ]
+        or 0
     )
 
     # --- Category breakdown ---
     registrations = Registrant.objects.all().order_by("created_at")
-    delegates = Registrant.objects.exclude(
-        Q(organization_type="Student") | Q(category="4")
-    ).count()
+    delegates = Registrant.objects.exclude(Q(organization_type="Student") | Q(category="4")).count()
 
-    students = Registrant.objects.filter(
-        Q(organization_type="Student") | Q(category="4")
-    ).count()
+    students = Registrant.objects.filter(Q(organization_type="Student") | Q(category="4")).count()
 
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
     category_lookup = {str(c.id): c.name for c in Category.objects.all()}
     student_category_ids = [
         str(cid)
-        for cid in Category.objects.filter(name__iexact="Student").values_list(
-            "id", flat=True
-        )
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
     ]
 
     CATEGORY_MAP = {
@@ -2236,10 +2124,10 @@ def main_dashboard_view(request):
         return category_lookup.get(raw) or CATEGORY_MAP.get(raw, raw.title())
 
     student_filter = (
-            Q(category__in=student_category_ids)
-            | Q(category__iexact="Student")
-            | Q(category__icontains="student")
-            | Q(organization_type__icontains="student")
+        Q(category__in=student_category_ids)
+        | Q(category__iexact="Student")
+        | Q(category__icontains="student")
+        | Q(organization_type__icontains="student")
     )
 
     student_count = registrations.filter(student_filter).count()
@@ -2263,8 +2151,8 @@ def main_dashboard_view(request):
     category_stats = sorted(category_stats, key=lambda x: x["count"], reverse=True)
 
     # --- Chart data for categories ---
-    category_labels = [c["name"] for c in category_stats]
-    category_counts = [c["count"] for c in category_stats]
+    [c["name"] for c in category_stats]
+    [c["count"] for c in category_stats]
 
     # --- Daily trend ---
     daily_data = (
@@ -2290,9 +2178,7 @@ def main_dashboard_view(request):
 
     # --- Exhibitor & Org distribution ---
     exhibitor_dist = (
-        Exhibitor.objects.values("category")
-        .annotate(count=Count("id"))
-        .order_by("-count")
+        Exhibitor.objects.values("category").annotate(count=Count("id")).order_by("-count")
     )
     exhibitor_labels = [e["category"] or "Uncategorized" for e in exhibitor_dist]
     exhibitor_counts = [e["count"] for e in exhibitor_dist]
@@ -2314,9 +2200,7 @@ def main_dashboard_view(request):
     # --- Engagement score ---
     engagement_score = 0
     if total_registrants:
-        engagement_score = (
-                                   (opted_in_registrants + verified_registrants) / total_registrants
-                           ) * 50
+        engagement_score = ((opted_in_registrants + verified_registrants) / total_registrants) * 50
     if total_exhibitors:
         engagement_score += (new_exhibitors_month / total_exhibitors) * 50
     engagement_score = round(min(100, engagement_score), 1)
@@ -2438,9 +2322,7 @@ def delete_sponsor(request, sponsor_id):
     """Delete a sponsor record."""
     sponsor = get_object_or_404(SummitSponsor, id=sponsor_id)
     sponsor.delete()
-    messages.success(
-        request, f"Sponsor '{sponsor.organization_name}' deleted successfully."
-    )
+    messages.success(request, f"Sponsor '{sponsor.organization_name}' deleted successfully.")
     return redirect("sponsor_dashboard")
 
 
@@ -2456,16 +2338,13 @@ def dashboard_student_view(request):
     # Convert category IDs to strings because Registrant.category is a CharField
     student_category_ids = [
         str(cid)
-        for cid in Category.objects.filter(name__iexact="Student").values_list(
-            "id", flat=True
-        )
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
     ]
 
     # Include only students
     registrants = (
         Registrant.objects.filter(
-            Q(organization_type__iexact="Student")
-            | Q(category__in=student_category_ids)
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
         )
         .order_by("-created_at")
         .annotate(
@@ -2628,9 +2507,7 @@ def generate_exhibitor_badge(request, exhibitor_id):
     c.roundRect(6, header_y, width - 12, header_h, 8, fill=1, stroke=0)
 
     # --- Logo with white background ---
-    logo_path = os.path.join(
-        settings.BASE_DIR, "static", "images", "summit_logo_dark.webp"
-    )
+    logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo_dark.webp")
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
         logo_w, logo_h = 80, 34  # increased size
@@ -2781,27 +2658,23 @@ def protocol(request):
 
             # --- Return success response ---
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": True, "message": "Registration successful!"}
-                )
+                return JsonResponse({"success": True, "message": "Registration successful!"})
 
             messages.success(request, "Registration successful!")
             return redirect("home")
 
         else:
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"success": False, "errors": form.errors}, status=400
-                )
+                return JsonResponse({"success": False, "errors": form.errors}, status=400)
             messages.error(request, "There was a problem with your registration.")
 
     else:
         form = ProtocolRegistrationForm()
 
     # --- Extra context data ---
-    days = SummitScheduleDay.objects.prefetch_related(
-        "timeslots__sessions__panelists"
-    ).order_by("date")
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by(
+        "date"
+    )
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by("order")
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
@@ -2825,12 +2698,8 @@ def edit_registrant(request, registrant_id):
         form = RegistrantEditForm(request.POST, request.FILES, instance=registrant)
         if form.is_valid():
             form.save()
-            messages.success(
-                request, f"{registrant.get_full_name()} updated successfully."
-            )
-            return redirect(
-                "registrants_dashboard"
-            )  # adjust to your dashboard view name
+            messages.success(request, f"{registrant.get_full_name()} updated successfully.")
+            return redirect("registrants_dashboard")  # adjust to your dashboard view name
     else:
         form = RegistrantEditForm(instance=registrant)
 
@@ -2963,33 +2832,27 @@ def special_registration(request):
                             },
                             status=200,
                         )
-                    messages.warning(
-                        request, "Registered, but confirmation email failed."
-                    )
+                    messages.warning(request, "Registered, but confirmation email failed.")
 
                 # --- Return success response ---
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse(
-                        {"success": True, "message": "Registration successful!"}
-                    )
+                    return JsonResponse({"success": True, "message": "Registration successful!"})
 
                 messages.success(request, "Registration successful!")
                 return redirect("home")
 
             else:
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                    return JsonResponse(
-                        {"success": False, "errors": form.errors}, status=400
-                    )
+                    return JsonResponse({"success": False, "errors": form.errors}, status=400)
                 messages.error(request, "There was a problem with your registration.")
 
         else:
             form = ProtocolRegistrationForm()
 
     # --- Extra context data ---
-    days = SummitScheduleDay.objects.prefetch_related(
-        "timeslots__sessions__panelists"
-    ).order_by("date")
+    days = SummitScheduleDay.objects.prefetch_related("timeslots__sessions__panelists").order_by(
+        "date"
+    )
     gallery_items = SummitGallery.objects.filter(is_active=True).order_by("order")
     partners = SummitPartner.objects.filter(is_active=True).order_by("order")
 
@@ -3088,9 +2951,7 @@ def save_user(request):
                 }
             )
         except Exception as e:
-            return JsonResponse(
-                {"status": "error", "message": f"Failed to send email: {str(e)}"}
-            )
+            return JsonResponse({"status": "error", "message": f"Failed to send email: {str(e)}"})
 
     # Invalid request method
     return JsonResponse({"status": "error", "message": "Invalid request method."})
@@ -3115,9 +2976,7 @@ def auth_badge(request):
                 {"status": "success", "message": "Login successful! Redirecting..."}
             )
         else:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid username or password."}
-            )
+            return JsonResponse({"status": "error", "message": "Invalid username or password."})
 
     # If GET, just render the form normally
     return render(request, "badge/login.html")
@@ -3128,19 +2987,14 @@ def badge_dashboard(request):
     # Convert category IDs to strings because Registrant.category is a CharField
     student_category_ids = [
         str(cid)
-        for cid in Category.objects.filter(name__iexact="Student").values_list(
-            "id", flat=True
-        )
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
     ]
 
     registrants = Registrant.objects.filter(
         Q(is_printed__isnull=True)
         & (
-                Q(approved=True)
-                | ~Q(
-            Q(organization_type__iexact="Student")
-            | Q(category__in=student_category_ids)
-        )
+            Q(approved=True)
+            | ~Q(Q(organization_type__iexact="Student") | Q(category__in=student_category_ids))
         )
     ).order_by("-created_at")
 
@@ -3208,30 +3062,24 @@ def approve_exhibitor(request, exhibitor_id):
                         "message": "Registration successful, but confirmation email failed.",
                     }
                 )
-            messages.warning(
-                request, "Registration saved, but email could not be sent."
-            )
+            messages.warning(request, "Registration saved, but email could not be sent.")
 
         # Success
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
-            return JsonResponse(
-                {"success": True, "message": "Registration successful!"}
-            )
+            return JsonResponse({"success": True, "message": "Registration successful!"})
         messages.success(request, "Registration successful!")
 
         exhibitor.approve(count)
 
         # ✅ Recalculate after approval
         approved_booths_total = (
-                Exhibitor.objects.filter(approval_status="approved").aggregate(
-                    total=Sum("total_count")
-                )["total"]
-                or 0
+            Exhibitor.objects.filter(approval_status="approved").aggregate(
+                total=Sum("total_count")
+            )["total"]
+            or 0
         )
 
-        approved_exhibitors_count = Exhibitor.objects.filter(
-            approval_status="approved"
-        ).count()
+        approved_exhibitors_count = Exhibitor.objects.filter(approval_status="approved").count()
 
         messages.success(
             request,
@@ -3252,28 +3100,22 @@ def approve_exhibitor(request, exhibitor_id):
 
 @login_required
 def approved_exhibitors(request):
-    exhibitors = Exhibitor.objects.filter(approval_status="approved").order_by(
-        "-approved_at"
-    )
+    exhibitors = Exhibitor.objects.filter(approval_status="approved").order_by("-approved_at")
 
     # --- Stats for approved exhibitors view ---
     pending_approvals = Exhibitor.objects.filter(approval_status="pending").count()
-    total_approved_exhibitors = Exhibitor.objects.filter(
-        approval_status="approved"
-    ).count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status="approved").count()
     # --- Approved stats ---
 
     approved_booths_total = (
-            Exhibitor.objects.filter(approval_status="approved").aggregate(
-                total=Sum("total_count")
-            )["total"]
-            or 0
+        Exhibitor.objects.filter(approval_status="approved").aggregate(total=Sum("total_count"))[
+            "total"
+        ]
+        or 0
     )
 
     # Counts booths linked to approved exhibitors
-    total_approved_booths = Booth.objects.filter(
-        exhibitor__approval_status="approved"
-    ).count()
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status="approved").count()
 
     return render(
         request,
@@ -3305,9 +3147,7 @@ def ajax_approve_exhibitor(request, exhibitor_id):
         return JsonResponse({"success": False, "message": "Invalid booth count."})
 
     if count > remaining:
-        return JsonResponse(
-            {"success": False, "message": f"Only {remaining} booths remaining."}
-        )
+        return JsonResponse({"success": False, "message": f"Only {remaining} booths remaining."})
 
     # Approve exhibitor and send mail
     exhibitor.approve(count)
@@ -3332,10 +3172,10 @@ def ajax_approve_exhibitor(request, exhibitor_id):
 
     # ✅ Recalculate total approved booths
     approved_booths_total = (
-            Exhibitor.objects.filter(approval_status="approved").aggregate(
-                total=Sum("total_count")
-            )["total"]
-            or 0
+        Exhibitor.objects.filter(approval_status="approved").aggregate(total=Sum("total_count"))[
+            "total"
+        ]
+        or 0
     )
 
     approved_exhibitors = Exhibitor.objects.filter(approval_status="approved").count()
@@ -3444,12 +3284,8 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     draw_accent_shapes()
 
     # --- Logos ---
-    summit_logo_path = os.path.join(
-        settings.BASE_DIR, "static", "images", "summit_logo.png"
-    )
-    partner_logo_path = os.path.join(
-        settings.BASE_DIR, "static", "images", "badge_partner.png"
-    )
+    summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
     logo_h = s(65)
     spacing = s(5)
@@ -3495,8 +3331,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     def draw_passport():
         try:
             if not (
-                    registrant.passport_photo
-                    and default_storage.exists(registrant.passport_photo.name)
+                registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)
             ):
                 return draw_placeholder()
 
@@ -3619,9 +3454,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     text_width = c.stringWidth(text, "Helvetica", s(11))
     c.setLineWidth(s(0.6))
     c.setStrokeColor(colors.white)
-    c.line(
-        text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3)
-    )
+    c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
 
     # --- Venue line ---
     c.setFont("Helvetica", s(6))
@@ -3692,9 +3525,7 @@ def mark_printed(request, reg_id):
                 reprint=False,
             )
 
-            return JsonResponse(
-                {"success": True, "message": "First-time print Success."}
-            )
+            return JsonResponse({"success": True, "message": "First-time print Success."})
 
         else:
             # Reprint

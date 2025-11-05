@@ -1,8 +1,8 @@
-from django.utils import timezone
-from django.shortcuts import redirect
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.conf import settings
+from django.shortcuts import redirect
+from django.utils import timezone
 
 
 class AutoLogoutMiddleware:
@@ -30,9 +30,7 @@ class AutoLogoutMiddleware:
                     if elapsed > self.timeout:
                         logout(request)
                         request.session.flush()
-                        messages.warning(
-                            request, "You were logged out due to inactivity."
-                        )
+                        messages.warning(request, "You were logged out due to inactivity.")
                         return redirect("custom_login")  # ✅ redirect straight to login
                 except Exception:
                     request.session.pop("last_activity", None)

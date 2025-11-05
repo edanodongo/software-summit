@@ -1,11 +1,12 @@
 # models.py
 import os
+import uuid
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django_countries.fields import CountryField
 from PIL import Image
-import uuid
 
 
 class Category(models.Model):
@@ -29,9 +30,7 @@ def get_category_choices():
 def get_category_id():
     """Return category choices safely even if DB isn't ready."""
     try:
-        return [("", "Select Category")] + [
-            (str(c.id), c.name) for c in Category.objects.all()
-        ]
+        return [("", "Select Category")] + [(str(c.id), c.name) for c in Category.objects.all()]
     except Exception:
         return [("", "Select Category")]
 
@@ -90,18 +89,14 @@ class Registrant(models.Model):
     category = models.CharField(
         max_length=50, choices=get_category_id, verbose_name="Registration Category"
     )
-    privacy_agreed = models.BooleanField(
-        default=False, verbose_name="Agreed to Privacy Policy"
-    )
+    privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
 
     approved = models.BooleanField(default=False)
     accessibility_needs = models.TextField(blank=True, null=True)
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    unsubscribe_token = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True
-    )
+    unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     days_to_attend = models.CharField(max_length=150, blank=True, null=True)
     admn_number = models.CharField(
@@ -136,9 +131,7 @@ class Registrant(models.Model):
     def get_category_display(self):
         """Handle callable choices for category gracefully."""
         try:
-            choices = (
-                get_category_id() if callable(get_category_id) else get_category_id
-            )
+            choices = get_category_id() if callable(get_category_id) else get_category_id
             return dict(choices).get(self.category, self.category or "—")
         except Exception:
             return self.category or "—"
@@ -250,9 +243,7 @@ class Registration(models.Model):
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    unsubscribe_token = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True
-    )
+    unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     # ==== Display helpers ====
     def display_org_type(self):
@@ -312,21 +303,15 @@ class SummitPartner(models.Model):
     """Represents a sponsor or partner displayed on the website."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(
-        max_length=150, help_text="Official name of the partner or sponsor"
-    )
+    name = models.CharField(max_length=150, help_text="Official name of the partner or sponsor")
     logo = models.ImageField(
         upload_to="uploads/partners/logos/", help_text="Upload the partner's logo image"
     )
-    website = models.URLField(
-        blank=True, null=True, help_text="Optional: Link to partner website"
-    )
+    website = models.URLField(blank=True, null=True, help_text="Optional: Link to partner website")
     order = models.PositiveIntegerField(
         default=0, help_text="Order of display on the sponsors section"
     )
-    is_active = models.BooleanField(
-        default=True, help_text="Show or hide this partner on the site"
-    )
+    is_active = models.BooleanField(default=True, help_text="Show or hide this partner on the site")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -367,9 +352,7 @@ class SummitScheduleDay(models.Model):
 class SummitTimeSlot(models.Model):
     """Represents a time slot block on a given day."""
 
-    day = models.ForeignKey(
-        SummitScheduleDay, on_delete=models.CASCADE, related_name="timeslots"
-    )
+    day = models.ForeignKey(SummitScheduleDay, on_delete=models.CASCADE, related_name="timeslots")
     start_time = models.TimeField()
     end_time = models.TimeField(blank=True, null=True)
     label = models.CharField(
@@ -377,9 +360,7 @@ class SummitTimeSlot(models.Model):
         blank=True,
         help_text="Optional label like 'All Day' or 'Morning'",
     )
-    duration = models.CharField(
-        max_length=50, blank=True, null=True, help_text="e.g. 1 hr 30 min"
-    )
+    duration = models.CharField(max_length=50, blank=True, null=True, help_text="e.g. 1 hr 30 min")
 
     class Meta:
         ordering = ["start_time"]
@@ -408,21 +389,13 @@ class SummitSession(models.Model):
         ("other", "Other"),
     ]
 
-    timeslot = models.ForeignKey(
-        SummitTimeSlot, on_delete=models.CASCADE, related_name="sessions"
-    )
-    session_type = models.CharField(
-        max_length=50, choices=SESSION_TYPES, default="other"
-    )
-    title = models.CharField(
-        max_length=200, help_text="e.g. 'Software Ecosystem Landscape'"
-    )
+    timeslot = models.ForeignKey(SummitTimeSlot, on_delete=models.CASCADE, related_name="sessions")
+    session_type = models.CharField(max_length=50, choices=SESSION_TYPES, default="other")
+    title = models.CharField(max_length=200, help_text="e.g. 'Software Ecosystem Landscape'")
     description = models.TextField(blank=True, null=True)
     venue = models.CharField(max_length=100, blank=True, null=True)
     is_break = models.BooleanField(default=False)
-    order = models.PositiveIntegerField(
-        default=0, help_text="Order of appearance in the slot"
-    )
+    order = models.PositiveIntegerField(default=0, help_text="Order of appearance in the slot")
 
     class Meta:
         ordering = ["timeslot__start_time", "order"]
@@ -439,15 +412,11 @@ class SummitSession(models.Model):
 class SummitPanelist(models.Model):
     """Panelists or presenters associated with a session."""
 
-    session = models.ForeignKey(
-        SummitSession, on_delete=models.CASCADE, related_name="panelists"
-    )
+    session = models.ForeignKey(SummitSession, on_delete=models.CASCADE, related_name="panelists")
     role = models.CharField(
         max_length=150, help_text="e.g. 'Keynote Address', 'Presentation', 'Moderator'"
     )
-    name = models.CharField(
-        max_length=200, blank=True, null=True, help_text="e.g. 'Dr. Jane Doe'"
-    )
+    name = models.CharField(max_length=200, blank=True, null=True, help_text="e.g. 'Dr. Jane Doe'")
     organization = models.CharField(max_length=200, blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
 
@@ -528,9 +497,7 @@ class EmailLog(models.Model):
         ("pending", "Pending"),
     ]
 
-    registrant = models.ForeignKey(
-        "Registrant", on_delete=models.CASCADE, related_name="emaillog"
-    )
+    registrant = models.ForeignKey("Registrant", on_delete=models.CASCADE, related_name="emaillog")
     recipient = models.EmailField()
     subject = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
@@ -558,9 +525,7 @@ class EmailLogs(models.Model):
         ("pending", "Pending"),
     ]
 
-    exhibitor = models.ForeignKey(
-        "Exhibitor", on_delete=models.CASCADE, related_name="emaillog"
-    )
+    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="emaillog")
     recipient = models.EmailField()
     subject = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
@@ -636,13 +601,9 @@ class Booth(models.Model):
         ("custom", "Custom Booth"),
     ]
 
-    section = models.ForeignKey(
-        ExhibitionSection, on_delete=models.CASCADE, related_name="booths"
-    )
+    section = models.ForeignKey(ExhibitionSection, on_delete=models.CASCADE, related_name="booths")
     booth_number = models.CharField(max_length=20, unique=True)
-    booth_type = models.CharField(
-        max_length=20, choices=BOOTH_TYPE_CHOICES, default="standard"
-    )
+    booth_type = models.CharField(max_length=20, choices=BOOTH_TYPE_CHOICES, default="standard")
     size = models.CharField(max_length=50, help_text="e.g., 3m x 3m")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_booked = models.BooleanField(default=False)
@@ -663,12 +624,8 @@ class Booth(models.Model):
 # BOOTH BOOKING
 # --------------------------------------------
 class BoothBooking(models.Model):
-    exhibitor = models.ForeignKey(
-        "Exhibitor", on_delete=models.CASCADE, related_name="bookings"
-    )
-    booth = models.OneToOneField(
-        Booth, on_delete=models.CASCADE, related_name="booking"
-    )
+    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="bookings")
+    booth = models.OneToOneField(Booth, on_delete=models.CASCADE, related_name="booking")
     booked_at = models.DateTimeField(default=timezone.now)
     approved = models.BooleanField(default=False)
 
@@ -840,9 +797,7 @@ class Exhibitor(models.Model):
 
 
 class BeneficialOwner(models.Model):
-    exhibitor = models.ForeignKey(
-        Exhibitor, on_delete=models.CASCADE, related_name="owners"
-    )
+    exhibitor = models.ForeignKey(Exhibitor, on_delete=models.CASCADE, related_name="owners")
     full_name = models.CharField(max_length=255)
     nationality = models.CharField(max_length=500)
     identification_type = models.CharField(
@@ -876,9 +831,7 @@ class SummitSponsor(models.Model):
         null=True,
         help_text="Business registration number or PIN (optional)",
     )
-    sector = models.CharField(
-        max_length=150, help_text="Industry or sector of operation"
-    )
+    sector = models.CharField(max_length=150, help_text="Industry or sector of operation")
     website = models.URLField(blank=True, null=True)
     logo = models.ImageField(
         upload_to="uploads/sponsors/logos/",
@@ -962,9 +915,7 @@ class DashboardSetting(models.Model):
 
 
 class PrintLog(models.Model):
-    record_id = models.ForeignKey(
-        "Registrant", on_delete=models.CASCADE, related_name="print_logs"
-    )
+    record_id = models.ForeignKey("Registrant", on_delete=models.CASCADE, related_name="print_logs")
     printed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -977,9 +928,7 @@ class PrintLog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return (
-            f"Record {self.record_id} printed by {self.printed_by} on {self.timestamp}"
-        )
+        return f"Record {self.record_id} printed by {self.printed_by} on {self.timestamp}"
 
 
 class CategoryColor(models.Model):

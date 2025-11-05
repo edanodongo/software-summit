@@ -12,8 +12,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
-from .models import EmailLog, Category
-from .models import EmailLogs
+from .models import Category, EmailLog, EmailLogs
 
 from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
@@ -220,9 +219,7 @@ def send_confirmation_email(registrant, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {registrant.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {registrant.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:
@@ -408,9 +405,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {exhibitor.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {exhibitor.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:
@@ -445,7 +440,7 @@ def send_student_email(registrant, retries=3, delay=3):
     subject = "The Kenya Software & AI Summit Registration"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
-    current_year = datetime.now().year
+    datetime.now().year
     error_message = None
     success = False
     attempt_count = 0
@@ -577,9 +572,7 @@ def send_student_email(registrant, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {registrant.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {registrant.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:
@@ -611,7 +604,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
     subject = "Kenya Software & AI Summit Registration Successful"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
-    current_year = datetime.now().year
+    datetime.now().year
     error_message = None
     success = False
     attempt_count = 0
@@ -741,9 +734,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {registrant.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {registrant.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:
@@ -909,9 +900,7 @@ def send_protocol_confirmation_email(registrant, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {registrant.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {registrant.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:
@@ -1106,9 +1095,7 @@ def send_confirmation_booth_confirmation_mail(exhibitor, retries=3, delay=3):
             attempt_count = attempt
             try:
                 email.send(fail_silently=False)
-                print(
-                    f"✅ Email sent successfully to {exhibitor.email} (attempt {attempt})"
-                )
+                print(f"✅ Email sent successfully to {exhibitor.email} (attempt {attempt})")
                 success = True
                 break
             except Exception as send_error:

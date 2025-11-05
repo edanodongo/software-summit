@@ -4,15 +4,11 @@ from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django_countries.widgets import CountrySelectWidget
 
-from .models import Booth, ExhibitionSection
-from .models import Category
-from .models import DashboardSetting
-from .models import Exhibitor
-from .models import Registrant
-from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
-from .models import SummitSpeaker, Registration, SummitGallery, SummitPartner
-from .models import SummitSponsor
-from .models import get_category_choices
+from .models import (Booth, Category, DashboardSetting, ExhibitionSection,
+                     Exhibitor, Registrant, Registration, SummitGallery,
+                     SummitPanelist, SummitPartner, SummitScheduleDay,
+                     SummitSession, SummitSpeaker, SummitSponsor,
+                     SummitTimeSlot, get_category_choices)
 
 
 class QuickRegistrationForm(forms.ModelForm):
@@ -79,9 +75,7 @@ class QuickRegistrationForm(forms.ModelForm):
     privacy_agreed = forms.BooleanField(
         required=True,
         label="I have read and agree to the Privacy Policy",
-        error_messages={
-            "required": "You must agree to the Privacy Policy to register."
-        },
+        error_messages={"required": "You must agree to the Privacy Policy to register."},
     )
 
     DAY_CHOICES = [
@@ -223,20 +217,14 @@ class QuickRegistrationForm(forms.ModelForm):
         # Email confirmation
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
-        if (
-                email
-                and confirm_email
-                and email.strip().lower() != confirm_email.strip().lower()
-        ):
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
             self.add_error("confirm_email", "Email addresses do not match.")
 
         # Organization type and other org
         organization_type = cleaned_data.get("organization_type")
         other_organization_type = cleaned_data.get("other_organization_type")
         if organization_type == "other" and not other_organization_type:
-            self.add_error(
-                "other_organization_type", "Please specify your organization type."
-            )
+            self.add_error("other_organization_type", "Please specify your organization type.")
 
         # Interests
         interests = cleaned_data.get("interests") or []
@@ -255,15 +243,11 @@ class QuickRegistrationForm(forms.ModelForm):
         admn_number = cleaned_data.get("admn_number")
         try:
             if organization_type and organization_type.strip().lower() == "student":
-                student_category = Category.objects.filter(
-                    name__iexact="Student"
-                ).first()
+                student_category = Category.objects.filter(name__iexact="Student").first()
                 if student_category:
                     cleaned_data["category"] = str(student_category.id)
                 else:
-                    self.add_error(
-                        "category", "Student category not found in database."
-                    )
+                    self.add_error("category", "Student category not found in database.")
 
                 if not admn_number:
                     self.add_error(
@@ -271,15 +255,11 @@ class QuickRegistrationForm(forms.ModelForm):
                         "Student Registration Number is required for students.",
                     )
             else:
-                delegate_category = Category.objects.filter(
-                    name__iexact="Delegate"
-                ).first()
+                delegate_category = Category.objects.filter(name__iexact="Delegate").first()
                 if delegate_category:
                     cleaned_data["category"] = str(delegate_category.id)
                 else:
-                    self.add_error(
-                        "category", "Delegate category not found in database."
-                    )
+                    self.add_error("category", "Delegate category not found in database.")
                 cleaned_data["admn_number"] = admn_number or None
         except Exception as e:
             self.add_error("category", f"Error setting category automatically: {e}")
@@ -368,9 +348,7 @@ class RegistrantForm(forms.ModelForm):
 
         # Require other org type only when "other" is selected
         if organization_type == "other" and not other_organization_type:
-            self.add_error(
-                "other_organization_type", "Please specify your Institution type."
-            )
+            self.add_error("other_organization_type", "Please specify your Institution type.")
 
         # Require other interest only when "others" is selected
         if "others" in interests and not other_interest:
@@ -474,9 +452,7 @@ class SpeakerForm(forms.ModelForm):
             "track": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Track or Role"}
             ),
-            "topic": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Talk Topic"}
-            ),
+            "topic": forms.TextInput(attrs={"class": "form-control", "placeholder": "Talk Topic"}),
             "summary": forms.Textarea(
                 attrs={
                     "class": "form-control",
@@ -548,9 +524,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
             "privacy_agreed",
         ]
         widgets = {
-            "country_of_registration": CountrySelectWidget(
-                attrs={"class": "form-select"}
-            ),
+            "country_of_registration": CountrySelectWidget(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -598,8 +572,8 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         for name, field in self.fields.items():
             # Apply uniform Bootstrap classes
             if isinstance(
-                    field.widget,
-                    (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
+                field.widget,
+                (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
             ):
                 field.widget.attrs.update({"class": "form-control"})
             elif isinstance(field.widget, forms.Select):
@@ -644,11 +618,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
 
-        if (
-                email
-                and confirm_email
-                and email.strip().lower() != confirm_email.strip().lower()
-        ):
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
             self.add_error("confirm_email", "Email addresses do not match.")
 
         # =====================================
@@ -660,9 +630,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         country = cleaned_data.get("country_of_registration")
 
         if not country:
-            self.add_error(
-                "country_of_registration", "Please select the country of registration."
-            )
+            self.add_error("country_of_registration", "Please select the country of registration.")
 
         if id_number and len(id_number.strip()) < 8:
             self.add_error("national_id_number", "Invalid ID/Passport number.")
@@ -708,9 +676,7 @@ class BoothForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            if isinstance(
-                    field.widget, (forms.TextInput, forms.NumberInput, forms.Select)
-            ):
+            if isinstance(field.widget, (forms.TextInput, forms.NumberInput, forms.Select)):
                 field.widget.attrs.update({"class": "form-control"})
 
 
@@ -925,9 +891,7 @@ class ProtocolRegistrationForm(forms.ModelForm):
     privacy_agreed = forms.BooleanField(
         required=True,
         label="I have read and agree to the Privacy Policy",
-        error_messages={
-            "required": "You must agree to the Privacy Policy to register."
-        },
+        error_messages={"required": "You must agree to the Privacy Policy to register."},
     )
 
     DAY_CHOICES = [
@@ -1071,20 +1035,14 @@ class ProtocolRegistrationForm(forms.ModelForm):
         # Email confirmation
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
-        if (
-                email
-                and confirm_email
-                and email.strip().lower() != confirm_email.strip().lower()
-        ):
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
             self.add_error("confirm_email", "Email addresses do not match.")
 
         # Organization type and other org
         organization_type = cleaned_data.get("organization_type")
         other_organization_type = cleaned_data.get("other_organization_type")
         if organization_type == "other" and not other_organization_type:
-            self.add_error(
-                "other_organization_type", "Please specify your organization type."
-            )
+            self.add_error("other_organization_type", "Please specify your organization type.")
 
         # Interests
         interests = cleaned_data.get("interests") or []
@@ -1118,9 +1076,7 @@ class RegistrantEditForm(forms.ModelForm):
             "category": forms.Select(attrs={"class": "form-select"}),
             "days_to_attend": forms.TextInput(attrs={"class": "form-control"}),
             "national_id_number": forms.TextInput(attrs={"class": "form-control"}),
-            "national_id_scan": forms.ClearableFileInput(
-                attrs={"class": "form-control"}
-            ),
+            "national_id_scan": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "passport_photo": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "privacy_agreed": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
@@ -1128,9 +1084,7 @@ class RegistrantEditForm(forms.ModelForm):
     def clean_privacy_agreed(self):
         agreed = self.cleaned_data.get("privacy_agreed")
         if not agreed:
-            raise forms.ValidationError(
-                "You must agree to the Privacy Policy before saving."
-            )
+            raise forms.ValidationError("You must agree to the Privacy Policy before saving.")
         return agreed
 
 
@@ -1164,12 +1118,8 @@ class ExhibitorEditForm(forms.ModelForm):
             "privacy_agreed",
         ]
         widgets = {
-            "product_description": forms.Textarea(
-                attrs={"rows": 3, "class": "form-control"}
-            ),
-            "beneficial_owner_details": forms.Textarea(
-                attrs={"rows": 3, "class": "form-control"}
-            ),
+            "product_description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+            "beneficial_owner_details": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
         }
 
     def __init__(self, *args, **kwargs):

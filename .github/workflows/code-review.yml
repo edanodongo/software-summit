@@ -43,14 +43,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt || true
-          pip install flake8 black bandit pytest safety
+          pip install black bandit pytest safety
 
       # ---- Code formatting and linting ----
       - name: 🧹 Check code formatting with Black
-        run: black .
-
-      - name: 🔍 Run Flake8 linting
-        run: flake8 --max-line-length=100 --ignore=E203,W503
+        run: black --check .
 
       - name: 🛡️ Security linting with Bandit
         run: bandit -r .

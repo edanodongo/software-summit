@@ -1,9 +1,10 @@
-import os
 import json
+import os
+
 from django.apps import AppConfig
 from django.contrib.auth import get_user_model
+from django.db import OperationalError, ProgrammingError, connection
 from django.db.models.signals import post_migrate
-from django.db import connection, ProgrammingError, OperationalError
 
 
 def load_config():
@@ -41,9 +42,7 @@ def create_default_admin(sender, **kwargs):
     password = config.get("DJANGO_ADMIN_PASSWORD", None)
 
     if not password:
-        print(
-            "⚠️ DJANGO_ADMIN_PASSWORD missing in config.json. Skipping default admin creation."
-        )
+        print("⚠️ DJANGO_ADMIN_PASSWORD missing in config.json. Skipping default admin creation.")
         return
 
     try:
@@ -52,9 +51,7 @@ def create_default_admin(sender, **kwargs):
 
             # ✅ Delete existing superusers except the one defined in config
             deleted_count, _ = (
-                User.objects.filter(is_superuser=True)
-                .exclude(username=username)
-                .delete()
+                User.objects.filter(is_superuser=True).exclude(username=username).delete()
             )
             if deleted_count:
                 print(f"🗑️ Deleted {deleted_count} old admin user(s).")

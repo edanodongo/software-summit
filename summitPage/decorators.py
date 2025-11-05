@@ -86,9 +86,7 @@ def require_api_key(view_func):
                             status=status_code,
                         )
                     else:
-                        cache.set(
-                            endpoint_key, (count + 1, start_time), RATE_LIMIT_PERIOD
-                        )
+                        cache.set(endpoint_key, (count + 1, start_time), RATE_LIMIT_PERIOD)
                 else:
                     cache.set(endpoint_key, (1, current_time), RATE_LIMIT_PERIOD)
             else:
