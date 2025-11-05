@@ -1,34 +1,20 @@
-from django import forms
-from django.core.exceptions import ValidationError
-from .models import Registrant,get_category_choices
-from .models import SummitSpeaker, Registration, SummitGallery, SummitPartner
-from django_countries.widgets import CountrySelectWidget
-from .models import Exhibitor, Booth, ExhibitionSection
-
-from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
-from .models import Category
-from .models import ExhibitionCategory
-from django import forms
-from django_countries.widgets import CountrySelectWidget
-from django.db.models import Sum
-from .models import Exhibitor, DashboardSetting
-
-from django import forms
-from django.db.models import Sum
-from django.core.exceptions import ValidationError
-from django_countries.widgets import CountrySelectWidget
-from .models import Exhibitor, DashboardSetting
-from django import forms
-from .models import SummitSponsor
-from django import forms
-from django.db.models import Sum
-from django.core.exceptions import ValidationError
-from .models import DashboardSetting, Exhibitor
-from django import forms
-from .models import Registrant
+from .models import get_category_choices
 # forms.py
 from django import forms
+from django.core.exceptions import ValidationError
+from django.db.models import Sum
+from django_countries.widgets import CountrySelectWidget
+
+from .models import Booth, ExhibitionSection
+from .models import Category
+from .models import DashboardSetting
 from .models import Exhibitor
+from .models import Registrant
+from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
+from .models import SummitSpeaker, Registration, SummitGallery, SummitPartner
+from .models import SummitSponsor
+from .models import get_category_choices
+
 
 class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
@@ -140,8 +126,10 @@ class QuickRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
-            'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
+            'other_organization_type': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
+            'admn_number': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'category': forms.HiddenInput(),
             'accessibility_needs': forms.Textarea(attrs={
@@ -285,7 +273,8 @@ class RegistrantForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
-            'accessibility_needs': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
+            'accessibility_needs': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
         }
 
     def clean(self):
@@ -312,7 +301,6 @@ class RegistrantForm(forms.ModelForm):
         return cleaned_data
 
 
-
 # --------------------------------------------
 # Gallery
 # --------------------------------------------
@@ -328,6 +316,7 @@ class GalleryForm(forms.ModelForm):
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
+
 # --------------------------------------------
 # Partner
 # --------------------------------------------
@@ -338,8 +327,7 @@ class PartnerForm(forms.ModelForm):
         fields = ["name", "logo", "website", "order", "is_active"]
 
 
-
-#------------------------------------------
+# ------------------------------------------
 # Schedule
 # --------------------------------------------
 
@@ -350,6 +338,7 @@ class ScheduleDayForm(forms.ModelForm):
         fields = ["title", "date", "is_active"]
         widgets = {"date": forms.DateInput(attrs={"type": "date"})}
 
+
 class TimeSlotForm(forms.ModelForm):
     class Meta:
         model = SummitTimeSlot
@@ -359,10 +348,12 @@ class TimeSlotForm(forms.ModelForm):
             "end_time": forms.TimeInput(attrs={"type": "time"}),
         }
 
+
 class SessionForm(forms.ModelForm):
     class Meta:
         model = SummitSession
         fields = ["session_type", "title", "description", "venue", "is_break", "order"]
+
 
 class PanelistForm(forms.ModelForm):
     class Meta:
@@ -400,9 +391,6 @@ class SpeakerForm(forms.ModelForm):
             "linkedin_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "LinkedIn profile URL"}),
             "twitter_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "Twitter profile URL"}),
         }
-
-
-
 
 
 # --------------------------------------------
@@ -461,7 +449,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         remaining = max(max_count - total_sum, 0)
 
         if remaining > 0:
-            visible_limit = min(3, remaining)  #  show at most 3 options
+            visible_limit = min(3, remaining)  # show at most 3 options
             count_choices = [(i, str(i)) for i in range(1, visible_limit + 1)]
         else:
             count_choices = [(0, "No booths available")]
@@ -565,7 +553,6 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         return exhibitor
 
 
-
 # --------------------------------------------
 #  Booth Form
 # --------------------------------------------
@@ -596,7 +583,6 @@ class ExhibitionSectionForm(forms.ModelForm):
                 field.widget.attrs.update({'class': 'form-control'})
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({'class': 'form-control', 'rows': 3})
-
 
 
 # --------------------------------------------
@@ -660,14 +646,17 @@ class SummitSponsorForm(forms.ModelForm):
 
         widgets = {
             "organization_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Organization name"}),
-            "registration_number": forms.TextInput(attrs={"class": "form-control", "placeholder": "PIN or Registration Number"}),
+            "registration_number": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "PIN or Registration Number"}),
             "sector": forms.TextInput(attrs={"class": "form-control", "placeholder": "Industry / Sector"}),
             "website": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://example.com"}),
             "contact_full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full name"}),
-            "contact_designation": forms.TextInput(attrs={"class": "form-control", "placeholder": "Designation / Role"}),
+            "contact_designation": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Designation / Role"}),
             "contact_email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email address"}),
             "contact_phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone number"}),
-            "proposed_contribution": forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Describe proposed contribution"}),
+            "proposed_contribution": forms.Textarea(
+                attrs={"class": "form-control", "rows": 4, "placeholder": "Describe proposed contribution"}),
         }
 
     def clean_areas_of_interest(self):
@@ -816,8 +805,10 @@ class ProtocolRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
-            'admn_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
+            'other_organization_type': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
+            'admn_number': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
             'category': forms.HiddenInput(),
             'accessibility_needs': forms.Textarea(attrs={
@@ -899,8 +890,6 @@ class ProtocolRegistrationForm(forms.ModelForm):
         return cleaned_data
 
 
-
-
 class RegistrantEditForm(forms.ModelForm):
     class Meta:
         model = Registrant
@@ -927,7 +916,6 @@ class RegistrantEditForm(forms.ModelForm):
         if not agreed:
             raise forms.ValidationError("You must agree to the Privacy Policy before saving.")
         return agreed
-
 
 
 class ExhibitorEditForm(forms.ModelForm):
