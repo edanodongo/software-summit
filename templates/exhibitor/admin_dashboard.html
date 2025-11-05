@@ -88,6 +88,14 @@
     </div>
   </div>
 
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end mb-3 gap-2">
+        <a href="{% url 'export_print_exhibitors' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+            <i class="fas fa-print me-1"></i> Print View
+        </a>
+    </div>
+
   <!-- Filters -->
   <div class="card shadow-sm border-0 rounded-4 mb-4">
     <div class="card-header bg-light fw-semibold d-flex align-items-center">
@@ -152,6 +160,7 @@
         <table id="registrants-table" class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
@@ -172,6 +181,7 @@
           <tbody>
             {% for e in exhibitors %}
             <tr data-exhibitor-id="{{ e.id }}">
+              <td>{{ forloop.counter|default:"" }}</td>
               <td>{{ e.get_full_name }}</td>
               <td class="email-col">{{ e.email }}</td>
               <td>{{ e.phone }}</td>
