@@ -4874,6 +4874,248 @@ section,
     margin-bottom: 30px;
   }
 }
+/*--------------------------------------------------------------
+# Venue 2 Section
+--------------------------------------------------------------*/
+.venue-2 .venue-content h3 {
+  color: var(--heading-color);
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.venue-2 .venue-content .venue-address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.venue-2 .venue-content .venue-address i {
+  font-size: 1.2rem;
+}
+
+.venue-2 .venue-content p {
+  margin-bottom: 30px;
+  line-height: 1.7;
+}
+
+.venue-2 .venue-image {
+  position: relative;
+}
+
+.venue-2 .venue-image img {
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.venue-2 .venue-image .venue-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  padding: 8px 16px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.venue-2 .venue-features {
+  margin-bottom: 30px;
+}
+
+.venue-2 .venue-features .feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.venue-2 .venue-features .feature-item i {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  width: 20px;
+}
+
+.venue-2 .venue-features .feature-item span {
+  font-weight: 500;
+}
+
+.venue-2 .venue-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.venue-2 .venue-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.venue-2 .venue-actions .btn.btn-primary {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.venue-2 .venue-actions .btn.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--accent-color), black 10%);
+  border-color: color-mix(in srgb, var(--accent-color), black 10%);
+  transform: translateY(-2px);
+}
+
+.venue-2 .venue-actions .btn.btn-outline-primary {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.venue-2 .venue-actions .btn.btn-outline-primary:hover {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  transform: translateY(-2px);
+}
+
+.venue-2 .venue-map h4 {
+  color: var(--heading-color);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.venue-2 .venue-map .map-container {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.venue-2 .venue-map .map-container iframe {
+  width: 100%;
+  height: 400px;
+}
+
+.venue-2 .travel-info {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: var(--surface-color);
+  border-radius: 15px;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.venue-2 .travel-info:hover {
+  transform: translateY(-5px);
+}
+
+.venue-2 .travel-info .travel-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 10%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.venue-2 .travel-info .travel-icon i {
+  font-size: 1.8rem;
+  color: var(--contrast-color);
+}
+
+.venue-2 .travel-info h5 {
+  color: var(--heading-color);
+  margin-bottom: 15px;
+}
+
+.venue-2 .travel-info p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.venue-2 .accommodation-section h4 {
+  color: var(--heading-color);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.venue-2 .accommodation-section .hotel-card {
+  background-color: var(--surface-color);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.venue-2 .accommodation-section .hotel-card:hover {
+  transform: translateY(-5px);
+}
+
+.venue-2 .accommodation-section .hotel-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.venue-2 .accommodation-section .hotel-card .hotel-info {
+  padding: 20px;
+}
+
+.venue-2 .accommodation-section .hotel-card .hotel-info h6 {
+  color: var(--heading-color);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.venue-2 .accommodation-section .hotel-card .hotel-info .hotel-distance {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.venue-2 .accommodation-section .hotel-card .hotel-info .hotel-distance i {
+  color: var(--accent-color);
+  font-size: 0.8rem;
+}
+
+.venue-2 .accommodation-section .hotel-card .hotel-info .hotel-price {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .venue-2 .venue-actions {
+    justify-content: center;
+  }
+
+  .venue-2 .venue-actions .btn {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .venue-2 .venue-map .map-container iframe {
+    height: 300px;
+  }
+
+  .venue-2 .travel-info {
+    margin-bottom: 30px;
+  }
+
+  .venue-2 .hotel-card {
+    margin-bottom: 30px;
+  }
+}
 
 /*--------------------------------------------------------------
 # Sponsors Section
@@ -6533,4 +6775,38 @@ html {
 .text-muted {
   font-size: 1.05rem;
   line-height: 1.7;
+}
+.navmenu .btn {
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.navmenu .btn:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-2px);
+}
+
+.navmenu .btn.btn-primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+/* Make button look good in both desktop and collapsed nav */
+.navmenu .btn {
+  display: inline-block;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+
+/* Ensure full width button on mobile */
+@media (max-width: 991.98px) {
+  .navmenu .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
 }

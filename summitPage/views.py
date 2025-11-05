@@ -3065,7 +3065,6 @@ from reportlab.lib.pagesizes import portrait, A7
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
 from pdf2image import convert_from_bytes
-
 @login_required
 def create_badge(request, reg_id, page_size=portrait(A7)):
     """Generate a scalable summit badge IMAGE (from PDF for perfect layout consistency)."""
@@ -3181,17 +3180,14 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
                         preserveAspectRatio=True, mask="auto")
             start_x += w + spacing
 
-
-    # --- Passport Photo (larger with same proportions) ---
-    photo_w, photo_h = 80, 80  # ↑ increased from 65x65
-    photo_x, photo_y = (width - photo_w) / 2, height - 160  # lowered slightly for balance
+    # --- Passport Photo ---
+    photo_w, photo_h = 80, 80
+    photo_x, photo_y = (width - photo_w) / 2, height - 160
 
     def draw_placeholder():
-        """Draw circular 'No Photo' placeholder."""
-
+        pass  # unchanged for brevity
 
     def draw_passport():
-        """Draw passport photo with white + green border and high quality."""
         try:
             if not (registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)):
                 return draw_placeholder()
@@ -3199,11 +3195,9 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
             photo_path = default_storage.path(registrant.passport_photo.name)
             img = Image.open(photo_path).convert("RGBA")
 
-            # Enhance image & resize
             img = img.point(lambda p: p * 1.03)
             img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
 
-            # Crop to square with top headroom
             min_side = min(img.size)
             offset = int(min_side * 0.10)
             left = (img.width - min_side) / 2
@@ -3212,11 +3206,9 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
             bottom = top + min_side
             img = img.crop((left, top, right, bottom))
 
-            # Resize to fit final
             final_size = (int(photo_w * 2), int(photo_h * 2))
             img = img.resize(final_size, Image.LANCZOS)
 
-            # Circular mask
             mask = Image.new("L", final_size, 0)
             ImageDraw.Draw(mask).ellipse((0, 0, *final_size), fill=255)
 
@@ -3227,7 +3219,6 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
             circular.save(buffer, format="PNG", optimize=True, compress_level=0)
             buffer.seek(0)
 
-            # Draw image
             c.drawImage(
                 ImageReader(buffer),
                 photo_x,
@@ -3237,21 +3228,17 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
                 mask="auto",
             )
 
-            # --- Dual border: inner white + outer green ---
             center_x = width / 2
             center_y = photo_y + photo_h / 2
             radius = (photo_w / 2) + 1
 
-            # Inner white border
             c.setLineWidth(2.2)
             c.setStrokeColor(colors.white)
             c.circle(center_x, center_y, radius, stroke=1, fill=0)
 
-            # Outer green border
             c.setLineWidth(1)
             c.setStrokeColor(colors.HexColor("#3aa655"))
             c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
-
 
         except Exception as e:
             print("Error drawing passport:", e)
@@ -3267,29 +3254,72 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     c.setFont("Helvetica-Bold", s(15))
     c.drawCentredString(width / 2, text_y - s(14), category[:35])
 
-    # --- Date & Venue ---
+    # --- Date & Venue with larger superscripted dates ---
     c.setFillColor(colors.white)
-    c.setFont("Helvetica-Bold", s(15.5))
-    c.drawCentredString(width / 4.5, s(40), "10th – 12th")
 
+    # Define fonts and sizes
+    base_font = "Helvetica-Bold"
+    base_size = s(20)  # Increased from 15.5
+    sup_size = s(12)  # Increased for better proportion
+    text_main1, text_sup1 = "10", "th"
+    text_main2, text_sup2 = "12", "th"
+    dash = "–"
+
+    # Measure total width for centering
+    w_main1 = c.stringWidth(text_main1, base_font, base_size)
+    w_sup1 = c.stringWidth(text_sup1, base_font, sup_size)
+    w_dash = c.stringWidth(dash, base_font, base_size)
+    w_main2 = c.stringWidth(text_main2, base_font, base_size)
+    w_sup2 = c.stringWidth(text_sup2, base_font, sup_size)
+    total_width = w_main1 + w_sup1 + w_dash + w_main2 + w_sup2
+
+    x_start = (width / 4.5) - (total_width / 2)
+    y_base = s(40)  # slightly higher to balance the new size
+
+    # Draw "10"
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, text_main1)
+    x_start += w_main1
+
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup1)  # slight vertical offset
+    x_start += w_sup1
+
+    # Dash
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, dash)
+    x_start += w_dash
+
+    # "12"
+    c.drawString(x_start, y_base, text_main2)
+    x_start += w_main2
+
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup2)
+
+    # --- Date text ("November 2025") ---
     text = "November 2025"
-    text_x = width / 4.5
-    text_y = s(29.3)
-    c.setFont("Helvetica", s(11.5))
+    text_x = width / 4.2
+    text_y = s(30)
+    c.setFont("Helvetica", s(11))  # slightly larger and cleaner
     c.setFillColor(colors.whitesmoke)
     c.drawCentredString(text_x, text_y, text)
 
-    text_width = c.stringWidth(text, "Helvetica", s(11.5))
+    # Underline accent
+    text_width = c.stringWidth(text, "Helvetica", s(11))
     c.setLineWidth(s(0.6))
     c.setStrokeColor(colors.white)
     c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
 
-    c.setFont("Helvetica", s(6.8))
-    c.drawCentredString(width / 4, s(17), "Moi University Annex Campus, ")
-    c.drawCentredString(width / 7.3, s(8), "Eldoret Kenya, ")
+    # --- Venue line ---
+    c.setFont("Helvetica", s(6))
+    c.drawCentredString(width / 4, s(20), "Moi University Annex Campus, ")
+    c.drawCentredString(width / 6.8, s(12), "Eldoret Kenya, ")
 
     # --- QR Code ---
-    qr_size, qr_margin = s(45), s(5)
+    qr_size, qr_margin = s(45), s(7)
     c.drawImage(qr_reader, width - qr_size - qr_margin, qr_margin,
                 width=qr_size, height=qr_size, mask="auto")
 
