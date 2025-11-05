@@ -6841,7 +6841,7 @@ html {
   max-width: 150px;
   margin: 0 auto;
   object-fit: contain;
-  filter: grayscale(100%);
+
   transition: filter 0.4s ease, transform 0.3s ease;
 }
 
