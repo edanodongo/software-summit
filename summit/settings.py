@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
 
 LOGIN_URL = "custom_login"
-LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = "main_dashboard_view"
 LOGOUT_REDIRECT_URL = "custom_login"
 
 
