@@ -48,10 +48,15 @@ First, clone this repository using the following command
 git clone https://github.com/edanodongo/software-summit.git
 ```
 
-Then, navigate to that directory and create a new python virtual environment
+Then, navigate to that directory and create a new python virtual environment(macOS/Linux)
 ```bash
 cd software-summit
 python3 -m venv venv
+```
+Then, navigate to that directory and create a new python virtual environment(Windows)
+```bash
+cd software-summit
+python -m venv venv
 ```
 
 Activate the virtual environment using the command for your system (macOS/Linux) and install the required dependencies
