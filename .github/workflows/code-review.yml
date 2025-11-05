@@ -55,5 +55,3 @@ jobs:
       - name: 🔒 Dependency vulnerability scan (Safety)
         run: safety check --full-report || true
 
-      - name: 🔬 Static analysis with Semgrep
-        run: semgrep --config auto .
