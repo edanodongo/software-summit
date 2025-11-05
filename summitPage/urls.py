@@ -80,6 +80,7 @@ urlpatterns = [
     # SPEAKERS
 
     path("dashboard/speakers/", views.speaker_dashboard, name="speaker_dashboard"),
+    path("export/print/speakers/", views.export_print_speakers, name="export_print_speakers"),
     path("speakers/add/", views.speaker_create, name="speaker_create"),
     path("dashboard/speakers/<uuid:pk>/edit/", views.update_speaker, name="update_speaker"),
     path("dashboard/speakers/<uuid:pk>/delete/", views.delete_speaker, name="delete_speaker"),

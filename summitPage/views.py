@@ -766,6 +766,13 @@ def export_print_approved(request):
         "approved_booths_total": approved_booths_total,
     })
 
+@login_required
+def export_print_speakers(request):
+    speakers = SummitSpeaker.objects.all().order_by('full_name')
+
+    return render(request, "speaker/print_speakers.html", {
+        "speakers": speakers,
+    })
 
 @login_required
 def dashboard_view(request):
