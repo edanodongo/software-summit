@@ -178,11 +178,11 @@ def home(request):
     ).order_by('custom_order', 'full_name')
 
     sponsor_packages = {
-        "Partners ": partners.filter(order__lte=10),
-        "Gold ": partners.filter(order__range=(11, 20)),
+        "Platinum Partners": partners.filter(order__lte=10),
+        "Partners ": partners.filter(order__range=(11, 20)),
         "Silver ": partners.filter(order__range=(21, 30)),
         "Bronze ": partners.filter(order__range=(31, 40)),
-        "Platinum": partners.filter(order__gt=40),
+        "Partners": partners.filter(order__gt=40),
     }
 
     return render(request, "summit/home.html", {
