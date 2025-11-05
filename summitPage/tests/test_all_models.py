@@ -3,6 +3,7 @@ import pytest
 from django.apps import apps
 from model_bakery import baker
 
+
 @pytest.mark.django_db
 def test_all_models_with_bakery():
     """

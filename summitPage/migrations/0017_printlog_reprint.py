@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0016_exhibitor_approval_status_exhibitor_approved_at'),
+        ("summitPage", "0016_exhibitor_approval_status_exhibitor_approved_at"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='printlog',
-            name='reprint',
+            model_name="printlog",
+            name="reprint",
             field=models.BooleanField(default=False, null=True),
         ),
     ]

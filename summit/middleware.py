@@ -4,11 +4,13 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.conf import settings
 
+
 class AutoLogoutMiddleware:
     """
     Logs out users after a period of inactivity.
     Redirects directly to login with an inactivity message.
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
         self.timeout = getattr(settings, "AUTO_LOGOUT_TIMEOUT", 60 * 15)
@@ -28,7 +30,9 @@ class AutoLogoutMiddleware:
                     if elapsed > self.timeout:
                         logout(request)
                         request.session.flush()
-                        messages.warning(request, "You were logged out due to inactivity.")
+                        messages.warning(
+                            request, "You were logged out due to inactivity."
+                        )
                         return redirect("custom_login")  # ✅ redirect straight to login
                 except Exception:
                     request.session.pop("last_activity", None)

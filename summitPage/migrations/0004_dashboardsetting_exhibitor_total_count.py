@@ -6,24 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0003_exhibitor_logo_registrant_admn_number_and_more'),
+        ("summitPage", "0003_exhibitor_logo_registrant_admn_number_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DashboardSetting',
+            name="DashboardSetting",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('max_count', models.PositiveIntegerField(default=10)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("max_count", models.PositiveIntegerField(default=10)),
             ],
             options={
-                'verbose_name': 'Dashboard Setting',
-                'verbose_name_plural': 'Dashboard Settings',
+                "verbose_name": "Dashboard Setting",
+                "verbose_name_plural": "Dashboard Settings",
             },
         ),
         migrations.AddField(
-            model_name='exhibitor',
-            name='total_count',
+            model_name="exhibitor",
+            name="total_count",
             field=models.IntegerField(default=0),
         ),
     ]

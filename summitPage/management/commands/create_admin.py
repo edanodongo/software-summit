@@ -3,15 +3,21 @@ import os
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
+
 class Command(BaseCommand):
     help = "Create a default admin user using JSON config"
 
     def handle(self, *args, **options):
         # Adjust path to where your config.json is located
-        config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'config.json')
+        config_path = os.path.join(
+            os.path.dirname(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            ),
+            "config.json",
+        )
 
         try:
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 config = json.load(f)
         except Exception as e:
             self.stderr.write(f"❌ Could not load config.json: {e}")
@@ -28,10 +34,12 @@ class Command(BaseCommand):
         User = get_user_model()
         if not User.objects.filter(username=username).exists():
             User.objects.create_superuser(
-                username=username,
-                email=email,
-                password=password
+                username=username, email=email, password=password
             )
-            self.stdout.write(self.style.SUCCESS(f"✅ Default admin created: {username} / [hidden password]"))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"✅ Default admin created: {username} / [hidden password]"
+                )
+            )
         else:
             self.stdout.write(f"ℹ️ Admin user '{username}' already exists.")

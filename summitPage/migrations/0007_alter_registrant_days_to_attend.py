@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0006_alter_exhibitor_category'),
+        ("summitPage", "0006_alter_exhibitor_category"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='registrant',
-            name='days_to_attend',
-            field=models.CharField(blank=True, choices=[('', 'Select day to attend'), ('Day 1', 'Day 1'), ('Day 2', 'Day 2'), ('Day 3', 'Day 3'), ('all', 'All 3 Days')], max_length=100, null=True),
+            model_name="registrant",
+            name="days_to_attend",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("", "Select day to attend"),
+                    ("Day 1", "Day 1"),
+                    ("Day 2", "Day 2"),
+                    ("Day 3", "Day 3"),
+                    ("all", "All 3 Days"),
+                ],
+                max_length=100,
+                null=True,
+            ),
         ),
     ]

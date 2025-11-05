@@ -11,11 +11,13 @@ from urllib.parse import urlencode
 import traceback
 from .models import ApiAccessLog
 
+
 def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
-        return x_forwarded_for.split(',')[0]
-    return request.META.get('REMOTE_ADDR')
+        return x_forwarded_for.split(",")[0]
+    return request.META.get("REMOTE_ADDR")
+
 
 def log_api_access(request, status_code, token=None, method=None, query_params=None):
     try:
@@ -38,6 +40,7 @@ def require_api_key(view_func):
     Decorator to check for a valid API key, apply per-endpoint rate limiting,
     and (optionally) log API accesses excluding 200 OK responses.
     """
+
     def wrapper(request, *args, **kwargs):
         auth_header = request.headers.get("Authorization")
         token = None
@@ -50,7 +53,10 @@ def require_api_key(view_func):
             # --- API Key validation ---
             if not auth_header or not auth_header.startswith("Bearer "):
                 status_code = 401
-                return JsonResponse({"detail": "Authorization header missing or invalid."}, status=status_code)
+                return JsonResponse(
+                    {"detail": "Authorization header missing or invalid."},
+                    status=status_code,
+                )
 
             token = auth_header.split("Bearer ")[1].strip()
 
@@ -79,10 +85,12 @@ def require_api_key(view_func):
                                 "limit": RATE_LIMIT_REQUESTS,
                                 "period": RATE_LIMIT_PERIOD,
                             },
-                            status=status_code
+                            status=status_code,
                         )
                     else:
-                        cache.set(endpoint_key, (count + 1, start_time), RATE_LIMIT_PERIOD)
+                        cache.set(
+                            endpoint_key, (count + 1, start_time), RATE_LIMIT_PERIOD
+                        )
                 else:
                     cache.set(endpoint_key, (1, current_time), RATE_LIMIT_PERIOD)
             else:
@@ -102,7 +110,7 @@ def require_api_key(view_func):
                         status_code=status_code,
                         token=token,
                         method=method,
-                        query_params=extra_params
+                        query_params=extra_params,
                     )
             except Exception as e:
                 print(f"[API LOG ERROR] {e}")

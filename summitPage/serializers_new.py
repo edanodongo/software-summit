@@ -1,4 +1,6 @@
 from .utils import get_category_name_from_id
+
+
 # registration/serializers.py
 def serialize_registrant(registrant):
     """Return a safe dictionary representation of a registrant."""

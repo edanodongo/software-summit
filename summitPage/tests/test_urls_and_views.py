@@ -3,6 +3,7 @@ from django.urls import reverse, resolve
 from django.test import Client
 from django.contrib.auth.models import User
 
+
 @pytest.mark.django_db
 def test_all_urls(client):
     """
@@ -12,6 +13,7 @@ def test_all_urls(client):
 
     # Get all URL patterns from the main urlpatterns
     from django.urls import get_resolver
+
     resolver = get_resolver()
     urls = []
 
@@ -42,6 +44,9 @@ def test_all_urls(client):
 
         response = client.get(url)
 
-        assert response.status_code in [200, 302, 403, 404], (
-            f"❌ URL '{url}' returned {response.status_code}"
-        )
+        assert response.status_code in [
+            200,
+            302,
+            403,
+            404,
+        ], f"❌ URL '{url}' returned {response.status_code}"

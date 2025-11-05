@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0010_alter_registrant_admn_number_and_more'),
+        ("summitPage", "0010_alter_registrant_admn_number_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='registrant',
-            name='passport_photo',
-            field=models.ImageField(blank=True, null=True, upload_to='uploads/passport_photos/', verbose_name='Passport Photo (JPG/PDF)'),
+            model_name="registrant",
+            name="passport_photo",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to="uploads/passport_photos/",
+                verbose_name="Passport Photo (JPG/PDF)",
+            ),
         ),
     ]
