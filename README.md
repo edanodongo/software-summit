@@ -51,7 +51,7 @@ git clone https://github.com/edanodongo/software-summit.git
 Then, navigate to that directory and create a new python virtual environment
 ```bash
 cd software-summit
-python3 -m venv .venv
+python3 -m venv venv
 ```
 
 Activate the virtual environment using the command for your system (Linux is used here) and install the required dependencies
