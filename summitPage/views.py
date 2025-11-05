@@ -165,6 +165,23 @@ def home(request):
             "interest_choices": Registrant.INTEREST_CHOICES,
         },
     )
+    sponsor_packages = {
+        "Platinum Partners": partners.filter(order__lte=10),
+        "Partners ": partners.filter(order__range=(11, 20)),
+        "Silver ": partners.filter(order__range=(21, 30)),
+        "Bronze ": partners.filter(order__range=(31, 40)),
+        "Partners": partners.filter(order__gt=40),
+    }
+
+    return render(request, "summit/home.html", {
+        'form': form,
+        'gallery_items': gallery_items,
+        'partners': partners,
+        "sponsor_packages": sponsor_packages,
+        'days': days,
+        'speakers': summitspeakers,
+        'interest_choices': Registrant.INTEREST_CHOICES,
+    })
 
 
 def reg(request):
@@ -738,6 +755,42 @@ def print_registrants(request):
         },
     )
 
+@login_required
+def export_print_exhibitors(request):
+    exhibitors = Exhibitor.objects.all().order_by("created_at")
+
+    # Build merged org_type counts manually (instead of raw DB field)
+    org_type_counts = {}
+
+    return render(request, "exhibitor/print_exhibitors.html", {
+        "exhibitors": exhibitors,
+    })
+
+@login_required
+def export_print_approved(request):
+    exhibitors = Exhibitor.objects.filter(approval_status='approved').order_by('-approved_at')
+
+    # --- Stats for approved exhibitors view ---
+    pending_approvals = Exhibitor.objects.filter(approval_status='pending').count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+    # --- Approved stats ---
+
+    approved_booths_total = (
+            Exhibitor.objects.filter(approval_status='approved')
+            .aggregate(total=Sum('total_count'))['total']
+            or 0
+    )
+
+    # Counts booths linked to approved exhibitors
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status='approved').count()
+
+    return render(request, "exhibitor/print_approved.html", {
+        "exhibitors": exhibitors,
+        "pending_approvals": pending_approvals,
+        "total_approved_exhibitors": total_approved_exhibitors,
+        "approved_booths_total": approved_booths_total,
+    })
+
 
 @login_required
 def dashboard_view(request):
@@ -1113,6 +1166,34 @@ def partner_dashboard(request):
             "current_year": timezone.now().year,
         },
     )
+#
+# @login_required
+# def partner_dashboard(request):
+#     partners = SummitPartner.objects.all().order_by("order")
+#     return render(request, "partner/partner_dashboard.html", {
+#         "partners": partners,
+#         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+#         'current_year': timezone.now().year, })
+@login_required
+def partner_dashboard(request):
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
+
+    sponsor_packages = {
+        "Platinum Sponsors": partners.filter(order__lte=10),
+        "Gold Sponsors": partners.filter(order__range=(11, 20)),
+        "Silver Sponsors": partners.filter(order__range=(21, 30)),
+        "Bronze Sponsors": partners.filter(order__range=(31, 40)),
+        "Supporting Partners": partners.filter(order__gt=40),
+    }
+
+    context = {
+        "partners": partners,
+        "sponsor_packages": sponsor_packages,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+    return render(request, "partner/partner_dashboard.html", context)
+
 
 
 @login_required
