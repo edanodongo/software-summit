@@ -34,6 +34,12 @@
   </div>
 </div>
 
+<!-- Actions -->
+<div class="d-flex justify-content-end mb-3 gap-2">
+    <a href="{% url 'export_print_approved' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+        <i class="fas fa-print me-1"></i> Print View
+    </a>
+</div>
 
   <!-- Filters -->
   <div class="card shadow-sm border-0 rounded-4 mb-4">
@@ -106,6 +112,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>#</th>
         <th>Name</th>
         <th>Email</th>
         <th>Organization</th>
@@ -116,6 +123,7 @@
     <tbody>
       {% for e in exhibitors %}
       <tr>
+        <td>{{ forloop.counter|default:"" }}</td>
         <td>{{ e.get_full_name }}</td>
         <td>{{ e.email }}</td>
         <td>{{ e.organization_type }}</td>

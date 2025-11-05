@@ -721,6 +721,42 @@ def print_registrants(request):
         "org_type_counts": org_type_counts.items(),
     })
 
+@login_required
+def export_print_exhibitors(request):
+    exhibitors = Exhibitor.objects.all().order_by("created_at")
+
+    # Build merged org_type counts manually (instead of raw DB field)
+    org_type_counts = {}
+
+    return render(request, "exhibitor/print_exhibitors.html", {
+        "exhibitors": exhibitors,
+    })
+
+@login_required
+def export_print_approved(request):
+    exhibitors = Exhibitor.objects.filter(approval_status='approved').order_by('-approved_at')
+
+    # --- Stats for approved exhibitors view ---
+    pending_approvals = Exhibitor.objects.filter(approval_status='pending').count()
+    total_approved_exhibitors = Exhibitor.objects.filter(approval_status='approved').count()
+    # --- Approved stats ---
+
+    approved_booths_total = (
+            Exhibitor.objects.filter(approval_status='approved')
+            .aggregate(total=Sum('total_count'))['total']
+            or 0
+    )
+
+    # Counts booths linked to approved exhibitors
+    total_approved_booths = Booth.objects.filter(exhibitor__approval_status='approved').count()
+
+    return render(request, "exhibitor/print_approved.html", {
+        "exhibitors": exhibitors,
+        "pending_approvals": pending_approvals,
+        "total_approved_exhibitors": total_approved_exhibitors,
+        "approved_booths_total": approved_booths_total,
+    })
+
 
 @login_required
 def dashboard_view(request):
