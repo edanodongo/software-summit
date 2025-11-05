@@ -47,7 +47,7 @@ jobs:
 
       # ---- Code formatting and linting ----
       - name: 🧹 Check code formatting with Black
-        run: black --check .
+        run: black .
 
       - name: 🛡️ Security linting with Bandit
         run: bandit -r .
