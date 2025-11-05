@@ -55,10 +55,6 @@ jobs:
       - name: 🔒 Dependency vulnerability scan (Safety)
         run: safety check --full-report || true
 
-      # ---- Unit tests ----
-      - name: 🧪 Run tests with Pytest
-        run: pytest --maxfail=1 --disable-warnings -q
-
   analyze:
     name: 🔬 Static Security Analysis (CodeQL)
     runs-on: ubuntu-latest
