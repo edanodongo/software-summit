@@ -1,5 +1,3 @@
-from .models import get_category_choices
-
 # forms.py
 from django import forms
 from django.core.exceptions import ValidationError
@@ -226,9 +224,9 @@ class QuickRegistrationForm(forms.ModelForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         if (
-            email
-            and confirm_email
-            and email.strip().lower() != confirm_email.strip().lower()
+                email
+                and confirm_email
+                and email.strip().lower() != confirm_email.strip().lower()
         ):
             self.add_error("confirm_email", "Email addresses do not match.")
 
@@ -600,8 +598,8 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         for name, field in self.fields.items():
             # Apply uniform Bootstrap classes
             if isinstance(
-                field.widget,
-                (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
+                    field.widget,
+                    (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
             ):
                 field.widget.attrs.update({"class": "form-control"})
             elif isinstance(field.widget, forms.Select):
@@ -647,9 +645,9 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         confirm_email = cleaned_data.get("confirm_email")
 
         if (
-            email
-            and confirm_email
-            and email.strip().lower() != confirm_email.strip().lower()
+                email
+                and confirm_email
+                and email.strip().lower() != confirm_email.strip().lower()
         ):
             self.add_error("confirm_email", "Email addresses do not match.")
 
@@ -711,7 +709,7 @@ class BoothForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if isinstance(
-                field.widget, (forms.TextInput, forms.NumberInput, forms.Select)
+                    field.widget, (forms.TextInput, forms.NumberInput, forms.Select)
             ):
                 field.widget.attrs.update({"class": "form-control"})
 
@@ -1074,9 +1072,9 @@ class ProtocolRegistrationForm(forms.ModelForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         if (
-            email
-            and confirm_email
-            and email.strip().lower() != confirm_email.strip().lower()
+                email
+                and confirm_email
+                and email.strip().lower() != confirm_email.strip().lower()
         ):
             self.add_error("confirm_email", "Email addresses do not match.")
 

@@ -4,9 +4,7 @@ from collections import Counter
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
-from django.db.models.functions import TruncDate, TruncMonth
 from django.forms import inlineformset_factory
-from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet
@@ -30,46 +28,25 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-import qrcode
-from io import BytesIO
-from django.http import FileResponse, Http404, HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A7, portrait
-from reportlab.lib.utils import ImageReader
-from reportlab.lib import colors
-from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 from datetime import datetime
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.views import LoginView
 from django.db.models import Case, When, Value, IntegerField
 from django.db import transaction
-from django.utils.timezone import now, timedelta
 
-from summitPage.models import SummitSponsor
 from .models import Category
-from .models import Registrant
 from .forms import RegistrantEditForm
-from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import ExhibitorEditForm
 
-from django.db.models import Sum, Q, Count, OuterRef, Subquery, Max
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 
 from summitPage.models import (
-    Exhibitor,
-    Booth,
     ExhibitionSection,
     EmailLogs,
-    DashboardSetting,
 )
 from summitPage.forms import DashboardSettingForm
-from django.conf import settings
-from PIL import Image, ImageDraw, ImageFont
-import qrcode, os
 
 from summitPage.models import (
     Registrant,
@@ -85,29 +62,22 @@ from summitPage.models import (
     EmailLog,
 )
 
-from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import (
     csrf_exempt,
 )  # not needed if you use {% csrf_token %} via JS
 
-from django.db.models import Q, Sum, Count, OuterRef, Subquery
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.utils import timezone
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.db.models import OuterRef, Subquery
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.db.models import Sum
 from django.utils import timezone
 
 from django.db.models import Count, Sum, Q
 from django.db.models.functions import TruncDate, TruncMonth
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.timezone import now
 from datetime import timedelta
+
 
 # begin your views here
 
@@ -315,19 +285,10 @@ def _fit_text(c, text, max_width, start_font_size=9, font_name="Helvetica-Bold")
     return font_size
 
 
-from django.http import FileResponse, Http404
-from django.conf import settings
+from django.http import FileResponse
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import default_storage
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import portrait, A7
-from reportlab.lib import colors
-from reportlab.lib.utils import ImageReader
-from io import BytesIO
-from PIL import Image, ImageDraw
-import qrcode, os
-
-from reportlab.lib.units import mm
+from PIL import ImageDraw
 
 
 @login_required
@@ -472,8 +433,8 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
     # --- Passport Photo (larger with same proportions) ---
     photo_w, photo_h = 80, 80  # ↑ increased from 65x65
     photo_x, photo_y = (
-        width - photo_w
-    ) / 2, height - 160  # lowered slightly for balance
+                               width - photo_w
+                       ) / 2, height - 160  # lowered slightly for balance
 
     def draw_placeholder():
         """Draw circular 'No Photo' placeholder."""
@@ -482,8 +443,8 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
         """Draw passport photo with white + green border and high quality."""
         try:
             if not (
-                registrant.passport_photo
-                and default_storage.exists(registrant.passport_photo.name)
+                    registrant.passport_photo
+                    and default_storage.exists(registrant.passport_photo.name)
             ):
                 return draw_placeholder()
 
@@ -1743,8 +1704,8 @@ def exhibitor(request):
                         id=1
                     )
                     total_sum_locked = (
-                        Exhibitor.objects.aggregate(total=Sum("total_count"))["total"]
-                        or 0
+                            Exhibitor.objects.aggregate(total=Sum("total_count"))["total"]
+                            or 0
                     )
                     remaining_locked = max(
                         locked_setting.max_count - total_sum_locked, 0
@@ -2219,10 +2180,10 @@ def main_dashboard_view(request):
         approval_status="approved"
     ).count()
     approved_booths_total = (
-        Exhibitor.objects.filter(approval_status="approved").aggregate(
-            total=Sum("total_count")
-        )["total"]
-        or 0
+            Exhibitor.objects.filter(approval_status="approved").aggregate(
+                total=Sum("total_count")
+            )["total"]
+            or 0
     )
 
     # --- Category breakdown ---
@@ -2266,10 +2227,10 @@ def main_dashboard_view(request):
         return category_lookup.get(raw) or CATEGORY_MAP.get(raw, raw.title())
 
     student_filter = (
-        Q(category__in=student_category_ids)
-        | Q(category__iexact="Student")
-        | Q(category__icontains="student")
-        | Q(organization_type__icontains="student")
+            Q(category__in=student_category_ids)
+            | Q(category__iexact="Student")
+            | Q(category__icontains="student")
+            | Q(organization_type__icontains="student")
     )
 
     student_count = registrations.filter(student_filter).count()
@@ -2345,8 +2306,8 @@ def main_dashboard_view(request):
     engagement_score = 0
     if total_registrants:
         engagement_score = (
-            (opted_in_registrants + verified_registrants) / total_registrants
-        ) * 50
+                                   (opted_in_registrants + verified_registrants) / total_registrants
+                           ) * 50
     if total_exhibitors:
         engagement_score += (new_exhibitors_month / total_exhibitors) * 50
     engagement_score = round(min(100, engagement_score), 1)
@@ -3166,11 +3127,11 @@ def badge_dashboard(request):
     registrants = Registrant.objects.filter(
         Q(is_printed__isnull=True)
         & (
-            Q(approved=True)
-            | ~Q(
-                Q(organization_type__iexact="Student")
-                | Q(category__in=student_category_ids)
-            )
+                Q(approved=True)
+                | ~Q(
+            Q(organization_type__iexact="Student")
+            | Q(category__in=student_category_ids)
+        )
         )
     ).order_by("-created_at")
 
@@ -3253,10 +3214,10 @@ def approve_exhibitor(request, exhibitor_id):
 
         # ✅ Recalculate after approval
         approved_booths_total = (
-            Exhibitor.objects.filter(approval_status="approved").aggregate(
-                total=Sum("total_count")
-            )["total"]
-            or 0
+                Exhibitor.objects.filter(approval_status="approved").aggregate(
+                    total=Sum("total_count")
+                )["total"]
+                or 0
         )
 
         approved_exhibitors_count = Exhibitor.objects.filter(
@@ -3294,10 +3255,10 @@ def approved_exhibitors(request):
     # --- Approved stats ---
 
     approved_booths_total = (
-        Exhibitor.objects.filter(approval_status="approved").aggregate(
-            total=Sum("total_count")
-        )["total"]
-        or 0
+            Exhibitor.objects.filter(approval_status="approved").aggregate(
+                total=Sum("total_count")
+            )["total"]
+            or 0
     )
 
     # Counts booths linked to approved exhibitors
@@ -3320,7 +3281,6 @@ def approved_exhibitors(request):
 @login_required
 @require_POST
 def ajax_approve_exhibitor(request, exhibitor_id):
-
     exhibitor = get_object_or_404(Exhibitor, id=exhibitor_id)
     dashboard_setting = DashboardSetting.objects.first()
     max_count = dashboard_setting.max_count or 0
@@ -3363,10 +3323,10 @@ def ajax_approve_exhibitor(request, exhibitor_id):
 
     # ✅ Recalculate total approved booths
     approved_booths_total = (
-        Exhibitor.objects.filter(approval_status="approved").aggregate(
-            total=Sum("total_count")
-        )["total"]
-        or 0
+            Exhibitor.objects.filter(approval_status="approved").aggregate(
+                total=Sum("total_count")
+            )["total"]
+            or 0
     )
 
     approved_exhibitors = Exhibitor.objects.filter(approval_status="approved").count()
@@ -3541,8 +3501,8 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
     def draw_passport():
         try:
             if not (
-                registrant.passport_photo
-                and default_storage.exists(registrant.passport_photo.name)
+                    registrant.passport_photo
+                    and default_storage.exists(registrant.passport_photo.name)
             ):
                 return draw_placeholder()
 

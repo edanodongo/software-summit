@@ -1,7 +1,7 @@
 import pytest
-from django.urls import reverse, resolve
-from django.test import Client
 from django.contrib.auth.models import User
+from django.test import Client
+from django.urls import reverse
 
 
 @pytest.mark.django_db

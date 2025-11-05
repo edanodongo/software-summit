@@ -1,7 +1,7 @@
+import secrets
+import string
 import time
 import traceback
-import string
-import secrets
 from datetime import datetime
 from io import BytesIO
 

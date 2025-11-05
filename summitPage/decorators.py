@@ -1,14 +1,12 @@
-from django.conf import settings
-from django.http import JsonResponse
-from django.core.cache import cache
-from django.utils import timezone
-from django.db import connection
-from django.db import models
-from django.utils.timezone import now
-from django.db.models import Q
 import time
-from urllib.parse import urlencode
 import traceback
+from urllib.parse import urlencode
+
+from django.conf import settings
+from django.core.cache import cache
+from django.http import JsonResponse
+from django.utils import timezone
+
 from .models import ApiAccessLog
 
 
