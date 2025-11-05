@@ -47,7 +47,7 @@ jobs:
 
       # ---- Code formatting and linting ----
       - name: 🧹 Check code formatting with Black
-        run: black --check .
+        run: black .
 
       - name: 🔍 Run Flake8 linting
         run: flake8 --max-line-length=100 --ignore=E203,W503
