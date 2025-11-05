@@ -42,27 +42,40 @@
             <li><a href="#intro">ABOUT</a></li>
             <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                <li><a href="{% url 'register' %}">DELEGATE</a></li>
                 <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
-                 <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+                <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
               </ul>
             </li>
             <li><a href="#schedule">PROGRAM</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
-            <li><a href="{% url 'places' %}">VENUE</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
             <li><a href="#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="#gallery">GALLERY</a></li>
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-                 <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
               </ul>
             </li>
-            <li class="d-none d-md-block">
-              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
             </li>
 
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
           </ul>
+
           <div class="nav-extras d-flex align-items-center gap-2">
             <!-- Mobile nav toggle -->
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -76,7 +89,6 @@
             </div>
           </div>
         </nav>
-
 
       </div>
   </header>
