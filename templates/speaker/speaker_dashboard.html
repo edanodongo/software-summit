@@ -9,6 +9,14 @@
     <a href="{% url 'speaker_create' %}" class="btn btn-primary">➕ Add New Speaker</a>
   </div>
 
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end mb-3 gap-2">
+        <a href="{% url 'export_print_speakers' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+            <i class="fas fa-print me-1"></i> Print View
+        </a>
+    </div>
+
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -41,7 +49,7 @@
           <td>{{ speaker.topic }}</td>
           <td>
             <a href="{% url 'update_speaker' speaker.id %}" class="btn btn-sm btn-warning">Edit</a>
-            <a href="{% url 'delete_speaker' speaker.id %}" class="btn btn-sm btn-danger" 
+            <a href="{% url 'delete_speaker' speaker.id %}" class="btn btn-sm btn-danger"
                onclick="return confirm('Are you sure you want to delete this speaker?')">Delete</a>
           </td>
         </tr>
