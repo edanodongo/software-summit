@@ -6,18 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0015_category_color'),
+        ("summitPage", "0015_category_color"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exhibitor',
-            name='approval_status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='pending', max_length=20),
+            model_name="exhibitor",
+            name="approval_status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("approved", "Approved"),
+                    ("rejected", "Rejected"),
+                ],
+                default="pending",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='exhibitor',
-            name='approved_at',
+            model_name="exhibitor",
+            name="approved_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

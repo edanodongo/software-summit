@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0013_categorycolor_printlog'),
+        ("summitPage", "0013_categorycolor_printlog"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exhibitor',
-            name='approved',
+            model_name="exhibitor",
+            name="approved",
             field=models.BooleanField(default=False),
         ),
     ]

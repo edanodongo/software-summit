@@ -7,18 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0004_dashboardsetting_exhibitor_total_count'),
+        ("summitPage", "0004_dashboardsetting_exhibitor_total_count"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='apiaccesslog',
-            name='query_params',
+            model_name="apiaccesslog",
+            name="query_params",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='apiaccesslog',
-            name='timestamp',
+            model_name="apiaccesslog",
+            name="timestamp",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

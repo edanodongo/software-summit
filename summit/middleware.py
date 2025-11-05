@@ -1,14 +1,16 @@
-from django.utils import timezone
-from django.shortcuts import redirect
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.conf import settings
+from django.shortcuts import redirect
+from django.utils import timezone
+
 
 class AutoLogoutMiddleware:
     """
     Logs out users after a period of inactivity.
     Redirects directly to login with an inactivity message.
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
         self.timeout = getattr(settings, "AUTO_LOGOUT_TIMEOUT", 60 * 15)

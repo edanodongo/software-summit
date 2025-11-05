@@ -6,28 +6,49 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0002_exhibitioncategory_summitsponsor_and_more'),
+        ("summitPage", "0002_exhibitioncategory_summitsponsor_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exhibitor',
-            name='logo',
-            field=models.ImageField(blank=True, help_text='Optional logo upload', null=True, upload_to='uploads/exhibitors/logos/'),
+            model_name="exhibitor",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                help_text="Optional logo upload",
+                null=True,
+                upload_to="uploads/exhibitors/logos/",
+            ),
         ),
         migrations.AddField(
-            model_name='registrant',
-            name='admn_number',
-            field=models.CharField(blank=True, max_length=20, null=True, unique=True, verbose_name='National ID Number'),
+            model_name="registrant",
+            name="admn_number",
+            field=models.CharField(
+                blank=True,
+                max_length=20,
+                null=True,
+                unique=True,
+                verbose_name="National ID Number",
+            ),
         ),
         migrations.AddField(
-            model_name='registrant',
-            name='approved',
+            model_name="registrant",
+            name="approved",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='registrant',
-            name='days_to_attend',
-            field=models.CharField(blank=True, choices=[('Day 1', 'Day 1'), ('Day 2', 'Day 2'), ('Day 3', 'Day 3'), ('all', 'All 3 Days')], max_length=100, null=True),
+            model_name="registrant",
+            name="days_to_attend",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Day 1", "Day 1"),
+                    ("Day 2", "Day 2"),
+                    ("Day 3", "Day 3"),
+                    ("all", "All 3 Days"),
+                ],
+                max_length=100,
+                null=True,
+            ),
         ),
     ]

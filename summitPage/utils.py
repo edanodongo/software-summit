@@ -1,7 +1,7 @@
+import secrets
+import string
 import time
 import traceback
-import string
-import secrets
 from datetime import datetime
 from io import BytesIO
 
@@ -12,8 +12,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
-from .models import EmailLog, Category
-from .models import EmailLogs
+from .models import Category, EmailLog, EmailLogs
 
 from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
@@ -68,7 +67,9 @@ def sendmailer(subject, message, recipients):
 
         # --- Compose & send ---
         # Send to yourself in "To" field, hide recipients in BCC
-        email_obj = EmailMultiAlternatives(subject, plain_message, from_email, [from_email], bcc=recipients)
+        email_obj = EmailMultiAlternatives(
+            subject, plain_message, from_email, [from_email], bcc=recipients
+        )
         email_obj.attach_alternative(html_message, "text/html")
         email_obj.mixed_subtype = "related"
         email_obj.send(fail_silently=False)
@@ -248,12 +249,14 @@ def send_confirmation_email(registrant, retries=3, delay=3):
 
 # --------------------------------------------
 
+
 def get_category_name_from_id(category_id):
     try:
         category = Category.objects.get(id=category_id)
         return category.name
     except Category.DoesNotExist:
         return "Delegate"
+
 
 # --------------------------------------------
 # Exhibitor
@@ -431,11 +434,12 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
 # --------------------------------------------
 
+
 def send_student_email(registrant, retries=3, delay=3):
     subject = "The Kenya Software & AI Summit Registration"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
-    current_year = datetime.now().year
+    datetime.now().year
     error_message = None
     success = False
     attempt_count = 0
@@ -599,7 +603,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
     subject = "Kenya Software & AI Summit Registration Successful"
     from_email = "softwaresummit@ict.go.ke"
     to = [registrant.email]
-    current_year = datetime.now().year
+    datetime.now().year
     error_message = None
     success = False
     attempt_count = 0
@@ -755,6 +759,7 @@ def send_student_email_verify(registrant, retries=3, delay=3):
             attempts=attempt_count,
             sent_at=timezone.now(),
         )
+
 
 # --------------------------------------------
 # Registrants
@@ -922,7 +927,6 @@ def send_protocol_confirmation_email(registrant, retries=3, delay=3):
         )
 
 
-
 def generate_strong_password(length=8):
     """
     Generates a strong 8-character random password with uppercase,
@@ -933,7 +937,7 @@ def generate_strong_password(length=8):
 
     # Character sets
     letters = string.ascii_letters  # A-Z + a-z
-    digits = string.digits          # 0-9
+    digits = string.digits  # 0-9
     symbols = "!@#$%^&*()-_=+[]{};:,.<>?"
 
     # Ensure at least one of each
@@ -951,8 +955,7 @@ def generate_strong_password(length=8):
     # Shuffle to mix
     secrets.SystemRandom().shuffle(password)
 
-    return ''.join(password)
-
+    return "".join(password)
 
 
 # Exhibitor
@@ -990,7 +993,7 @@ def send_confirmation_booth_confirmation_mail(exhibitor, retries=3, delay=3):
             f"You have been officially allocated {exhibitor.total_count} booth(s) for the Kenya Software & AI Summit 2025, "
             "taking place from 10th November - 12th November, 2025 at Moi University Annex Campus, Eldoret City, "
             "Uasin Gishu County, Kenya.\n\n"
-            "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"            
+            "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "You will receive your exhibitor badge, booth access credentials, and an exhibitor’s pack containing your conference guide "
             "and full event programme.\n\n"
             "Thank you for being part of this transformative summit. We look forward to showcasing your innovations and contributions "

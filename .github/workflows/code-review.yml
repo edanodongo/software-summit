@@ -1,0 +1,81 @@
+name: Django Code Review & Security Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 3 * * 1'  # Weekly scan on Monday 3AM
+
+jobs:
+  review:
+    name: 🧾 Code Quality & Security Review
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+
+    steps:
+      - name: 🛎️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ⚡ Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install black bandit pytest safety
+
+      # ---- Code formatting and linting ----
+      - name: 🧹 Check code formatting with Black
+        run: black .
+
+      - name: 🛡️ Security linting with Bandit
+        run: bandit -r .
+
+      - name: 🔒 Dependency vulnerability scan (Safety)
+        run: safety check --full-report || true
+
+  analyze:
+    name: 🔬 Static Security Analysis (CodeQL)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+
+    steps:
+      - name: 🛎️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🧰 Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: 🔎 Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

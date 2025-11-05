@@ -1,17 +1,18 @@
-import os
 import json
+import os
+
 from django.apps import AppConfig
 from django.contrib.auth import get_user_model
+from django.db import OperationalError, ProgrammingError, connection
 from django.db.models.signals import post_migrate
-from django.db import connection, ProgrammingError, OperationalError
 
 
 def load_config():
     """Load admin credentials from config.json."""
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    config_path = os.path.join(base_dir, 'config.json')
+    config_path = os.path.join(base_dir, "config.json")
     try:
-        with open(config_path, 'r') as f:
+        with open(config_path, "r") as f:
             return json.load(f)
     except Exception as e:
         print(f"❌ Failed to load config.json: {e}")
@@ -21,12 +22,15 @@ def load_config():
 def table_exists(table_name):
     """Check if a table exists in the database."""
     with connection.cursor() as cursor:
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT EXISTS (
                 SELECT FROM information_schema.tables
                 WHERE table_name = %s
             )
-        """, [table_name])
+        """,
+            [table_name],
+        )
         return cursor.fetchone()[0]
 
 
@@ -42,11 +46,13 @@ def create_default_admin(sender, **kwargs):
         return
 
     try:
-        if table_exists('auth_user'):
+        if table_exists("auth_user"):
             User = get_user_model()
 
             # ✅ Delete existing superusers except the one defined in config
-            deleted_count, _ = User.objects.filter(is_superuser=True).exclude(username=username).delete()
+            deleted_count, _ = (
+                User.objects.filter(is_superuser=True).exclude(username=username).delete()
+            )
             if deleted_count:
                 print(f"🗑️ Deleted {deleted_count} old admin user(s).")
 
@@ -54,9 +60,9 @@ def create_default_admin(sender, **kwargs):
             admin, created = User.objects.update_or_create(
                 username=username,
                 defaults={
-                    'email': email,
-                    'is_superuser': True,
-                    'is_staff': True,
+                    "email": email,
+                    "is_superuser": True,
+                    "is_staff": True,
                 },
             )
             if created:
@@ -75,8 +81,8 @@ def create_default_admin(sender, **kwargs):
 
 
 class SummitpageConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'summitPage'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "summitPage"
 
     def ready(self):
         post_migrate.connect(create_default_admin, sender=self)

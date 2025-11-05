@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0011_alter_registrant_passport_photo'),
+        ("summitPage", "0011_alter_registrant_passport_photo"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='registrant',
-            name='is_printed',
+            model_name="registrant",
+            name="is_printed",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

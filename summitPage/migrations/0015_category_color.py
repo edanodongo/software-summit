@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0014_exhibitor_approved'),
+        ("summitPage", "0014_exhibitor_approved"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='category',
-            name='color',
+            model_name="category",
+            name="color",
             field=models.CharField(max_length=255, null=True),
         ),
     ]

@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0005_apiaccesslog_query_params_and_more'),
+        ("summitPage", "0005_apiaccesslog_query_params_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='exhibitor',
-            name='category',
-            field=models.CharField(choices=[('', 'Select Category'), ('startup', 'Startup'), ('corporate', 'Corporate'), ('government', 'Government Agency'), ('academic', 'Academic Institution'), ('ngo', 'Not for Profit'), ('other', 'Other')], max_length=50),
+            model_name="exhibitor",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    ("", "Select Category"),
+                    ("startup", "Startup"),
+                    ("corporate", "Corporate"),
+                    ("government", "Government Agency"),
+                    ("academic", "Academic Institution"),
+                    ("ngo", "Not for Profit"),
+                    ("other", "Other"),
+                ],
+                max_length=50,
+            ),
         ),
     ]

@@ -8,28 +8,63 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('summitPage', '0012_registrant_is_printed'),
+        ("summitPage", "0012_registrant_is_printed"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CategoryColor',
+            name="CategoryColor",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('color_hex_code', models.CharField(max_length=7)),
-                ('category_to_rep', models.TextField(help_text='Comma-separated category names')),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("color_hex_code", models.CharField(max_length=7)),
+                (
+                    "category_to_rep",
+                    models.TextField(help_text="Comma-separated category names"),
+                ),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='PrintLog',
+            name="PrintLog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ip_address', models.GenericIPAddressField(blank=True, null=True)),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-                ('printed_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='printed_records', to=settings.AUTH_USER_MODEL)),
-                ('record_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='print_logs', to='summitPage.registrant')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("ip_address", models.GenericIPAddressField(blank=True, null=True)),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
+                (
+                    "printed_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="printed_records",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "record_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="print_logs",
+                        to="summitPage.registrant",
+                    ),
+                ),
             ],
         ),
     ]

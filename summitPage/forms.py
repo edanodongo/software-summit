@@ -1,19 +1,14 @@
-from .models import get_category_choices
 # forms.py
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django_countries.widgets import CountrySelectWidget
 
-from .models import Booth, ExhibitionSection
-from .models import Category
-from .models import DashboardSetting
-from .models import Exhibitor
-from .models import Registrant
-from .models import SummitScheduleDay, SummitTimeSlot, SummitSession, SummitPanelist
-from .models import SummitSpeaker, Registration, SummitGallery, SummitPartner
-from .models import SummitSponsor
-from .models import get_category_choices
+from .models import (Booth, Category, DashboardSetting, ExhibitionSection,
+                     Exhibitor, Registrant, Registration, SummitGallery,
+                     SummitPanelist, SummitPartner, SummitScheduleDay,
+                     SummitSession, SummitSpeaker, SummitSponsor,
+                     SummitTimeSlot, get_category_choices)
 
 
 class QuickRegistrationForm(forms.ModelForm):
@@ -22,22 +17,24 @@ class QuickRegistrationForm(forms.ModelForm):
     # =====================================================
     national_id_number = forms.CharField(
         required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'National ID Number',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "National ID Number",
+            }
+        ),
     )
 
     national_id_scan = forms.FileField(
         required=True,
-        widget=forms.FileInput(attrs={'class': 'form-control'}),
-        label="Upload Scanned National ID (JPG/PDF)"
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Scanned National ID (JPG/PDF)",
     )
 
     passport_photo = forms.FileField(
         required=True,
-        widget=forms.FileInput(attrs={'class': 'form-control'}),
-        label="Upload Passport Photo (JPG/PDF)"
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Passport Photo (JPG/PDF)",
     )
 
     interests = forms.MultipleChoiceField(
@@ -49,32 +46,36 @@ class QuickRegistrationForm(forms.ModelForm):
 
     other_organization_type = forms.CharField(
         required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Please enter organization/institution name',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Please enter organization/institution name",
+            }
+        ),
     )
 
     other_interest = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={
-            'rows': 3,
-            'class': 'form-control',
-            'placeholder': 'Please specify...',
-        })
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "class": "form-control",
+                "placeholder": "Please specify...",
+            }
+        ),
     )
 
     category = forms.ChoiceField(
         choices=get_category_choices,
         required=True,
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label="Registration Category"
+        widget=forms.Select(attrs={"class": "form-select"}),
+        label="Registration Category",
     )
 
     privacy_agreed = forms.BooleanField(
         required=True,
-        label='I have read and agree to the Privacy Policy',
-        error_messages={'required': 'You must agree to the Privacy Policy to register.'},
+        label="I have read and agree to the Privacy Policy",
+        error_messages={"required": "You must agree to the Privacy Policy to register."},
     )
 
     DAY_CHOICES = [
@@ -86,19 +87,21 @@ class QuickRegistrationForm(forms.ModelForm):
     days_to_attend = forms.MultipleChoiceField(
         choices=DAY_CHOICES,
         required=True,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
         label="Select Days to Attend",
-        error_messages={'required': 'Please select day(s) to attend.'}
+        error_messages={"required": "Please select day(s) to attend."},
     )
 
     #  Add Confirm Email field (not stored in DB)
     confirm_email = forms.EmailField(
         label="Confirm Email",
         required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Re-enter your email address'
-        }),
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Re-enter your email address",
+            }
+        ),
     )
 
     # =====================================================
@@ -107,36 +110,61 @@ class QuickRegistrationForm(forms.ModelForm):
     class Meta:
         model = Registrant
         fields = [
-            'title', 'first_name', 'second_name',
-            'email', 'phone',
-            'organization_type', 'other_organization_type',
-            'job_title', 'category',
-            'interests', 'other_interest',
-            'accessibility_needs', 'updates_opt_in',
-            'privacy_agreed',
-            'admn_number', 'days_to_attend',
-            'national_id_number',
-            'national_id_scan',
-            'passport_photo',
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "other_organization_type",
+            "job_title",
+            "category",
+            "interests",
+            "other_interest",
+            "accessibility_needs",
+            "updates_opt_in",
+            "privacy_agreed",
+            "admn_number",
+            "days_to_attend",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
         ]
         widgets = {
-            'title': forms.Select(attrs={'class': 'form-select'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Names'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-            'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
-            'admn_number': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
-            'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
-            'category': forms.HiddenInput(),
-            'accessibility_needs': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 2,
-                'placeholder': 'Accessibility/Dietary Needs (optional)'
-            }),
+            "title": forms.Select(attrs={"class": "form-select"}),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "First Name"}
+            ),
+            "second_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Other Names"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email Address"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Phone Number"}
+            ),
+            "organization_type": forms.Select(attrs={"class": "form-select"}),
+            "other_organization_type": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Institution name"}
+            ),
+            "admn_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Student Registration Number",
+                }
+            ),
+            "job_title": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Job Title / Role"}
+            ),
+            "category": forms.HiddenInput(),
+            "accessibility_needs": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                    "placeholder": "Accessibility/Dietary Needs (optional)",
+                }
+            ),
         }
 
     # =====================================================
@@ -152,9 +180,11 @@ class QuickRegistrationForm(forms.ModelForm):
         max_size_mb = 2
         if file.size > max_size_mb * 1024 * 1024:
             raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
-        ext = file.name.split('.')[-1].lower()
+        ext = file.name.split(".")[-1].lower()
         if ext not in allowed_extensions:
-            raise ValidationError(f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}")
+            raise ValidationError(
+                f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}"
+            )
 
     def clean_national_id_scan(self):
         file = self.cleaned_data.get("national_id_scan")
@@ -171,7 +201,7 @@ class QuickRegistrationForm(forms.ModelForm):
         return file
 
     def clean_national_id_number(self):
-        id_number = self.cleaned_data.get('national_id_number', '').strip()
+        id_number = self.cleaned_data.get("national_id_number", "").strip()
         if not id_number:
             raise ValidationError("Please enter your National ID number.")
         if len(id_number) < 6:
@@ -204,7 +234,10 @@ class QuickRegistrationForm(forms.ModelForm):
 
         # Privacy policy agreement
         if not cleaned_data.get("privacy_agreed"):
-            self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
+            self.add_error(
+                "privacy_agreed",
+                "You must agree to the Privacy Policy before continuing.",
+            )
 
         # Category auto-set based on organization type
         admn_number = cleaned_data.get("admn_number")
@@ -217,7 +250,10 @@ class QuickRegistrationForm(forms.ModelForm):
                     self.add_error("category", "Student category not found in database.")
 
                 if not admn_number:
-                    self.add_error("admn_number", "Student Registration Number is required for students.")
+                    self.add_error(
+                        "admn_number",
+                        "Student Registration Number is required for students.",
+                    )
             else:
                 delegate_category = Category.objects.filter(name__iexact="Delegate").first()
                 if delegate_category:
@@ -233,6 +269,7 @@ class QuickRegistrationForm(forms.ModelForm):
 
 # --------------------------------------------
 
+
 class RegistrantForm(forms.ModelForm):
     interests = forms.MultipleChoiceField(
         choices=Registration.INTEREST_CHOICES,
@@ -242,39 +279,64 @@ class RegistrantForm(forms.ModelForm):
 
     other_organization_type = forms.CharField(
         required=False,  # always visible, required only if org_type == "other"
-        widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
-            'placeholder': 'Please specify...',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control mt-2",
+                "placeholder": "Please specify...",
+            }
+        ),
     )
     other_interest = forms.CharField(
         required=False,  # hidden by JS until "Others" is selected
-        widget=forms.TextInput(attrs={
-            'class': 'form-control mt-2',
-            'placeholder': 'Please specify...',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control mt-2",
+                "placeholder": "Please specify...",
+            }
+        ),
     )
 
     class Meta:
         model = Registration
         fields = [
-            'title', 'first_name', 'second_name',
-            'email', 'phone',
-            'organization_type', 'other_organization_type',
-            'job_title',
-            'interests', 'other_interest',
-            'accessibility_needs', 'updates_opt_in'
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "other_organization_type",
+            "job_title",
+            "interests",
+            "other_interest",
+            "accessibility_needs",
+            "updates_opt_in",
         ]
         widgets = {
-            'title': forms.Select(attrs={'class': 'form-select'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Names'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-            'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
-            'accessibility_needs': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Accessibility/Dietary Needs (optional)'}),
+            "title": forms.Select(attrs={"class": "form-select"}),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "First Name"}
+            ),
+            "second_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Other Names"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email Address"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Phone Number"}
+            ),
+            "organization_type": forms.Select(attrs={"class": "form-select"}),
+            "job_title": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Job Title / Role"}
+            ),
+            "accessibility_needs": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                    "placeholder": "Accessibility/Dietary Needs (optional)",
+                }
+            ),
         }
 
     def clean(self):
@@ -286,17 +348,11 @@ class RegistrantForm(forms.ModelForm):
 
         # Require other org type only when "other" is selected
         if organization_type == "other" and not other_organization_type:
-            self.add_error(
-                "other_organization_type",
-                "Please specify your Institution type."
-            )
+            self.add_error("other_organization_type", "Please specify your Institution type.")
 
         # Require other interest only when "others" is selected
         if "others" in interests and not other_interest:
-            self.add_error(
-                "other_interest",
-                "Please specify your interest."
-            )
+            self.add_error("other_interest", "Please specify your interest.")
 
         return cleaned_data
 
@@ -305,21 +361,23 @@ class RegistrantForm(forms.ModelForm):
 # Gallery
 # --------------------------------------------
 
+
 class GalleryForm(forms.ModelForm):
     class Meta:
         model = SummitGallery
-        fields = ['title', 'image', 'description', 'is_active', 'order']
+        fields = ["title", "image", "description", "is_active", "order"]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'order': forms.NumberInput(attrs={'class': 'form-control'}),
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "is_active": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "order": forms.NumberInput(attrs={"class": "form-control"}),
         }
 
 
 # --------------------------------------------
 # Partner
 # --------------------------------------------
+
 
 class PartnerForm(forms.ModelForm):
     class Meta:
@@ -365,6 +423,7 @@ class PanelistForm(forms.ModelForm):
 # speakers
 # --------------------------------------------
 
+
 class SpeakerForm(forms.ModelForm):
     class Meta:
         model = SummitSpeaker
@@ -381,15 +440,35 @@ class SpeakerForm(forms.ModelForm):
             "twitter_url",
         ]
         widgets = {
-            "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full name"}),
-            "position": forms.TextInput(attrs={"class": "form-control", "placeholder": "Position / Title"}),
-            "organization": forms.TextInput(attrs={"class": "form-control", "placeholder": "Organization"}),
-            "track": forms.TextInput(attrs={"class": "form-control", "placeholder": "Track or Role"}),
+            "full_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Full name"}
+            ),
+            "position": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Position / Title"}
+            ),
+            "organization": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Organization"}
+            ),
+            "track": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Track or Role"}
+            ),
             "topic": forms.TextInput(attrs={"class": "form-control", "placeholder": "Talk Topic"}),
-            "summary": forms.Textarea(attrs={"class": "form-control", "rows": 2, "placeholder": "Short summary"}),
-            "bio": forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Speaker bio"}),
-            "linkedin_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "LinkedIn profile URL"}),
-            "twitter_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "Twitter profile URL"}),
+            "summary": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                    "placeholder": "Short summary",
+                }
+            ),
+            "bio": forms.Textarea(
+                attrs={"class": "form-control", "rows": 4, "placeholder": "Speaker bio"}
+            ),
+            "linkedin_url": forms.URLInput(
+                attrs={"class": "form-control", "placeholder": "LinkedIn profile URL"}
+            ),
+            "twitter_url": forms.URLInput(
+                attrs={"class": "form-control", "placeholder": "Twitter profile URL"}
+            ),
         }
 
 
@@ -403,7 +482,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
 
     count = forms.ChoiceField(
         label="Select Booth",
-        widget=forms.Select(attrs={'class': 'form-select'}),
+        widget=forms.Select(attrs={"class": "form-select"}),
         required=True,
     )
 
@@ -411,26 +490,41 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     confirm_email = forms.EmailField(
         label="Confirm Email",
         required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Re-enter your email address'
-        }),
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Re-enter your email address",
+            }
+        ),
     )
 
     class Meta:
         model = Exhibitor
         fields = [
-            'title', 'first_name', 'second_name', 'email', 'phone',
-            'organization_type', 'job_title', 'category',
-            'logo', 'product_description',
-            'business_type', 'kra_pin', 'business_registration_doc',
-            'international_business_doc', 'country_of_registration',
-            'beneficial_owner_details', 'beneficial_owner_doc',
-            'national_id_number', 'national_id_scan', 'passport_photo',
-            'privacy_agreed',
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "job_title",
+            "category",
+            "logo",
+            "product_description",
+            "business_type",
+            "kra_pin",
+            "business_registration_doc",
+            "international_business_doc",
+            "country_of_registration",
+            "beneficial_owner_details",
+            "beneficial_owner_doc",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
+            "privacy_agreed",
         ]
         widgets = {
-            'country_of_registration': CountrySelectWidget(attrs={'class': 'form-select'}),
+            "country_of_registration": CountrySelectWidget(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -445,7 +539,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         except DashboardSetting.DoesNotExist:
             max_count = 0
 
-        total_sum = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+        total_sum = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
         remaining = max(max_count - total_sum, 0)
 
         if remaining > 0:
@@ -454,53 +548,65 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         else:
             count_choices = [(0, "No booths available")]
 
-        self.fields['count'].choices = count_choices
-        self.fields['count'].disabled = (remaining <= 0)
+        self.fields["count"].choices = count_choices
+        self.fields["count"].disabled = remaining <= 0
         self.remaining = remaining  # optional, useful for template display
 
         # =====================================
         # Form field styling and placeholders
         # =====================================
         placeholders = {
-            'first_name': "Enter your first name",
-            'second_name': "Enter your other names (optional)",
-            'email': "Enter your email address",
-            'confirm_email': "Re-enter your email address",
-            'phone': "Enter your phone number",
-            'organization_type': "Enter your organization or institution name",
-            'job_title': "Enter your job title or role",
-            'product_description': "Briefly describe your product or service",
-            'kra_pin': "Enter your KRA PIN (if Kenyan)",
-            'beneficial_owner_details': "List owners/directors with ownership percentages",
-            'national_id_number': "Enter your National ID or Passport number",
+            "first_name": "Enter your first name",
+            "second_name": "Enter your other names (optional)",
+            "email": "Enter your email address",
+            "confirm_email": "Re-enter your email address",
+            "phone": "Enter your phone number",
+            "organization_type": "Enter your organization or institution name",
+            "job_title": "Enter your job title or role",
+            "product_description": "Briefly describe your product or service",
+            "kra_pin": "Enter your KRA PIN (if Kenyan)",
+            "beneficial_owner_details": "List owners/directors with ownership percentages",
+            "national_id_number": "Enter your National ID or Passport number",
         }
 
         for name, field in self.fields.items():
             # Apply uniform Bootstrap classes
-            if isinstance(field.widget, (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput)):
-                field.widget.attrs.update({'class': 'form-control'})
+            if isinstance(
+                field.widget,
+                (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
+            ):
+                field.widget.attrs.update({"class": "form-control"})
             elif isinstance(field.widget, forms.Select):
-                field.widget.attrs.update({'class': 'form-select'})
+                field.widget.attrs.update({"class": "form-select"})
             elif isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs.update({'class': 'form-check-input'})
+                field.widget.attrs.update({"class": "form-check-input"})
 
             # Add placeholders
             if name in placeholders:
-                field.widget.attrs['placeholder'] = placeholders[name]
+                field.widget.attrs["placeholder"] = placeholders[name]
 
         # Mark required fields
         required_fields = [
-            'title', 'first_name', 'email', 'confirm_email', 'phone',
-            'organization_type', 'job_title', 'category',
-            'national_id_number', 'national_id_scan', 'passport_photo',
-            'country_of_registration', 'privacy_agreed'
+            "title",
+            "first_name",
+            "email",
+            "confirm_email",
+            "phone",
+            "organization_type",
+            "job_title",
+            "category",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
+            "country_of_registration",
+            "privacy_agreed",
         ]
         for f in required_fields:
             self.fields[f].required = True
 
         # Minimum lengths
-        self.fields['national_id_number'].widget.attrs['minlength'] = 8
-        self.fields['kra_pin'].widget.attrs['minlength'] = 11
+        self.fields["national_id_number"].widget.attrs["minlength"] = 8
+        self.fields["kra_pin"].widget.attrs["minlength"] = 11
 
     # =====================================
     # Validation logic
@@ -509,36 +615,42 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         #  Confirm Email validation
-        email = cleaned_data.get('email')
-        confirm_email = cleaned_data.get('confirm_email')
+        email = cleaned_data.get("email")
+        confirm_email = cleaned_data.get("confirm_email")
 
         if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
-            self.add_error('confirm_email', "Email addresses do not match.")
+            self.add_error("confirm_email", "Email addresses do not match.")
 
         # =====================================
         # Existing validation logic
         # =====================================
-        business_type = cleaned_data.get('business_type')
-        kra_pin = cleaned_data.get('kra_pin')
-        id_number = cleaned_data.get('national_id_number')
-        country = cleaned_data.get('country_of_registration')
+        business_type = cleaned_data.get("business_type")
+        kra_pin = cleaned_data.get("kra_pin")
+        id_number = cleaned_data.get("national_id_number")
+        country = cleaned_data.get("country_of_registration")
 
         if not country:
-            self.add_error('country_of_registration', "Please select the country of registration.")
+            self.add_error("country_of_registration", "Please select the country of registration.")
 
         if id_number and len(id_number.strip()) < 8:
-            self.add_error('national_id_number', "Invalid ID/Passport number.")
+            self.add_error("national_id_number", "Invalid ID/Passport number.")
 
-        if business_type == 'local':
+        if business_type == "local":
             if not kra_pin:
-                self.add_error('kra_pin', "KRA PIN is required for Kenyan businesses.")
+                self.add_error("kra_pin", "KRA PIN is required for Kenyan businesses.")
             elif len(kra_pin.strip()) < 11:
-                self.add_error('kra_pin', "Invalid KRA PIN.")
-            if not cleaned_data.get('business_registration_doc'):
-                self.add_error('business_registration_doc', "Upload your Business Registration Certificate.")
-        elif business_type == 'international':
-            if not cleaned_data.get('international_business_doc'):
-                self.add_error('international_business_doc', "Upload your Trade License or Registration Document.")
+                self.add_error("kra_pin", "Invalid KRA PIN.")
+            if not cleaned_data.get("business_registration_doc"):
+                self.add_error(
+                    "business_registration_doc",
+                    "Upload your Business Registration Certificate.",
+                )
+        elif business_type == "international":
+            if not cleaned_data.get("international_business_doc"):
+                self.add_error(
+                    "international_business_doc",
+                    "Upload your Trade License or Registration Document.",
+                )
 
         return cleaned_data
 
@@ -547,7 +659,7 @@ class ExhibitorRegistrationForm(forms.ModelForm):
     # =====================================
     def save(self, commit=True):
         exhibitor = super().save(commit=False)
-        exhibitor.total_count = int(self.cleaned_data.get('count', 0))
+        exhibitor.total_count = int(self.cleaned_data.get("count", 0))
         if commit:
             exhibitor.save()
         return exhibitor
@@ -565,7 +677,7 @@ class BoothForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if isinstance(field.widget, (forms.TextInput, forms.NumberInput, forms.Select)):
-                field.widget.attrs.update({'class': 'form-control'})
+                field.widget.attrs.update({"class": "form-control"})
 
 
 # --------------------------------------------
@@ -580,9 +692,9 @@ class ExhibitionSectionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput):
-                field.widget.attrs.update({'class': 'form-control'})
+                field.widget.attrs.update({"class": "form-control"})
             elif isinstance(field.widget, forms.Textarea):
-                field.widget.attrs.update({'class': 'form-control', 'rows': 3})
+                field.widget.attrs.update({"class": "form-control", "rows": 3})
 
 
 # --------------------------------------------
@@ -604,7 +716,7 @@ class SummitSponsorForm(forms.ModelForm):
         choices=AREAS_OF_INTEREST_CHOICES,
         widget=forms.CheckboxSelectMultiple,
         required=False,
-        label="Areas of Interest"
+        label="Areas of Interest",
     )
 
     consent_confirmation = forms.BooleanField(
@@ -612,7 +724,7 @@ class SummitSponsorForm(forms.ModelForm):
             "I hereby confirm that the information provided is accurate and that our "
             "organization agrees to comply with the Government of Kenya partnership guidelines."
         ),
-        required=True
+        required=True,
     )
 
     class Meta:
@@ -624,39 +736,57 @@ class SummitSponsorForm(forms.ModelForm):
             "sector",
             "website",
             "logo",
-
             # --- Contact Person ---
             "contact_full_name",
             "contact_designation",
             "contact_email",
             "contact_phone",
-
             # --- Sponsorship Details ---
             "areas_of_interest",
             "proposed_contribution",
             "proposal_file",
-
             # --- Supporting Documents ---
             "company_profile",
             "tax_compliance_certificate",
-
             # --- Consent ---
             "consent_confirmation",
         ]
 
         widgets = {
-            "organization_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Organization name"}),
+            "organization_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Organization name"}
+            ),
             "registration_number": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "PIN or Registration Number"}),
-            "sector": forms.TextInput(attrs={"class": "form-control", "placeholder": "Industry / Sector"}),
-            "website": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://example.com"}),
-            "contact_full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full name"}),
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "PIN or Registration Number",
+                }
+            ),
+            "sector": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Industry / Sector"}
+            ),
+            "website": forms.URLInput(
+                attrs={"class": "form-control", "placeholder": "https://example.com"}
+            ),
+            "contact_full_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Full name"}
+            ),
             "contact_designation": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Designation / Role"}),
-            "contact_email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email address"}),
-            "contact_phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone number"}),
+                attrs={"class": "form-control", "placeholder": "Designation / Role"}
+            ),
+            "contact_email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email address"}
+            ),
+            "contact_phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Phone number"}
+            ),
             "proposed_contribution": forms.Textarea(
-                attrs={"class": "form-control", "rows": 4, "placeholder": "Describe proposed contribution"}),
+                attrs={
+                    "class": "form-control",
+                    "rows": 4,
+                    "placeholder": "Describe proposed contribution",
+                }
+            ),
         }
 
     def clean_areas_of_interest(self):
@@ -670,22 +800,24 @@ class SummitSponsorForm(forms.ModelForm):
 class DashboardSettingForm(forms.ModelForm):
     class Meta:
         model = DashboardSetting
-        fields = ['max_count']
+        fields = ["max_count"]
         widgets = {
-            'max_count': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'min': 1,
-                'placeholder': 'Enter max count',
-            }),
+            "max_count": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "min": 1,
+                    "placeholder": "Enter max count",
+                }
+            ),
         }
         labels = {
-            'max_count': 'Maximum Count Limit',
+            "max_count": "Maximum Count Limit",
         }
 
     def clean_max_count(self):
         """Prevent setting max_count below the total already registered."""
-        new_max = self.cleaned_data.get('max_count')
-        total_used = Exhibitor.objects.aggregate(total=Sum('total_count'))['total'] or 0
+        new_max = self.cleaned_data.get("max_count")
+        total_used = Exhibitor.objects.aggregate(total=Sum("total_count"))["total"] or 0
 
         if new_max < total_used:
             raise ValidationError(
@@ -700,22 +832,24 @@ class ProtocolRegistrationForm(forms.ModelForm):
     # =====================================================
     national_id_number = forms.CharField(
         required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'National ID Number',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "National ID Number",
+            }
+        ),
     )
 
     national_id_scan = forms.FileField(
         required=True,
-        widget=forms.FileInput(attrs={'class': 'form-control'}),
-        label="Upload Scanned National ID (JPG/PDF)"
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Scanned National ID (JPG/PDF)",
     )
 
     passport_photo = forms.FileField(
         required=True,
-        widget=forms.FileInput(attrs={'class': 'form-control'}),
-        label="Upload Passport Photo (JPG/PDF)"
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Passport Photo (JPG/PDF)",
     )
 
     interests = forms.MultipleChoiceField(
@@ -728,32 +862,36 @@ class ProtocolRegistrationForm(forms.ModelForm):
 
     other_organization_type = forms.CharField(
         required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Please enter organization/institution name',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Please enter organization/institution name",
+            }
+        ),
     )
 
     other_interest = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={
-            'rows': 3,
-            'class': 'form-control',
-            'placeholder': 'Please specify...',
-        })
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "class": "form-control",
+                "placeholder": "Please specify...",
+            }
+        ),
     )
 
     category = forms.ChoiceField(
         choices=get_category_choices,
         required=True,
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label="Registration Category"
+        widget=forms.Select(attrs={"class": "form-select"}),
+        label="Registration Category",
     )
 
     privacy_agreed = forms.BooleanField(
         required=True,
-        label='I have read and agree to the Privacy Policy',
-        error_messages={'required': 'You must agree to the Privacy Policy to register.'},
+        label="I have read and agree to the Privacy Policy",
+        error_messages={"required": "You must agree to the Privacy Policy to register."},
     )
 
     DAY_CHOICES = [
@@ -765,19 +903,21 @@ class ProtocolRegistrationForm(forms.ModelForm):
     days_to_attend = forms.MultipleChoiceField(
         choices=DAY_CHOICES,
         required=True,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
         label="Select Days to Attend",
-        error_messages={'required': 'Please select day(s) to attend.'}
+        error_messages={"required": "Please select day(s) to attend."},
     )
 
     #  Add Confirm Email field (not stored in DB)
     confirm_email = forms.EmailField(
         label="Confirm Email",
         required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Re-enter your email address'
-        }),
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Re-enter your email address",
+            }
+        ),
     )
 
     # =====================================================
@@ -786,36 +926,61 @@ class ProtocolRegistrationForm(forms.ModelForm):
     class Meta:
         model = Registrant
         fields = [
-            'title', 'first_name', 'second_name',
-            'email', 'phone',
-            'organization_type', 'other_organization_type',
-            'job_title', 'category',
-            'interests', 'other_interest',
-            'accessibility_needs', 'updates_opt_in',
-            'privacy_agreed',
-            'admn_number', 'days_to_attend',
-            'national_id_number',
-            'national_id_scan',
-            'passport_photo',
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "other_organization_type",
+            "job_title",
+            "category",
+            "interests",
+            "other_interest",
+            "accessibility_needs",
+            "updates_opt_in",
+            "privacy_agreed",
+            "admn_number",
+            "days_to_attend",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
         ]
         widgets = {
-            'title': forms.Select(attrs={'class': 'form-select'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Names'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-            'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Institution name'}),
-            'admn_number': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Student Registration Number'}),
-            'job_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Job Title / Role'}),
-            'category': forms.HiddenInput(),
-            'accessibility_needs': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 2,
-                'placeholder': 'Accessibility/Dietary Needs (optional)'
-            }),
+            "title": forms.Select(attrs={"class": "form-select"}),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "First Name"}
+            ),
+            "second_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Other Names"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email Address"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Phone Number"}
+            ),
+            "organization_type": forms.Select(attrs={"class": "form-select"}),
+            "other_organization_type": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Institution name"}
+            ),
+            "admn_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Student Registration Number",
+                }
+            ),
+            "job_title": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Job Title / Role"}
+            ),
+            "category": forms.HiddenInput(),
+            "accessibility_needs": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                    "placeholder": "Accessibility/Dietary Needs (optional)",
+                }
+            ),
         }
 
     # =====================================================
@@ -831,9 +996,11 @@ class ProtocolRegistrationForm(forms.ModelForm):
         max_size_mb = 2
         if file.size > max_size_mb * 1024 * 1024:
             raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
-        ext = file.name.split('.')[-1].lower()
+        ext = file.name.split(".")[-1].lower()
         if ext not in allowed_extensions:
-            raise ValidationError(f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}")
+            raise ValidationError(
+                f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}"
+            )
 
     def clean_national_id_scan(self):
         file = self.cleaned_data.get("national_id_scan")
@@ -850,7 +1017,7 @@ class ProtocolRegistrationForm(forms.ModelForm):
         return file
 
     def clean_national_id_number(self):
-        id_number = self.cleaned_data.get('national_id_number', '').strip()
+        id_number = self.cleaned_data.get("national_id_number", "").strip()
         if not id_number:
             raise ValidationError("Please enter your National ID number.")
         if not id_number.isdigit():
@@ -885,7 +1052,10 @@ class ProtocolRegistrationForm(forms.ModelForm):
 
         # Privacy policy agreement
         if not cleaned_data.get("privacy_agreed"):
-            self.add_error("privacy_agreed", "You must agree to the Privacy Policy before continuing.")
+            self.add_error(
+                "privacy_agreed",
+                "You must agree to the Privacy Policy before continuing.",
+            )
 
         return cleaned_data
 
@@ -893,26 +1063,26 @@ class ProtocolRegistrationForm(forms.ModelForm):
 class RegistrantEditForm(forms.ModelForm):
     class Meta:
         model = Registrant
-        exclude = ['created_at', 'unsubscribe_token']
+        exclude = ["created_at", "unsubscribe_token"]
         widgets = {
-            'title': forms.Select(attrs={'class': 'form-select'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'second_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'organization_type': forms.Select(attrs={'class': 'form-select'}),
-            'other_organization_type': forms.TextInput(attrs={'class': 'form-control'}),
-            'job_title': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
-            'days_to_attend': forms.TextInput(attrs={'class': 'form-control'}),
-            'national_id_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'national_id_scan': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'passport_photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'privacy_agreed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            "title": forms.Select(attrs={"class": "form-select"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "second_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+            "organization_type": forms.Select(attrs={"class": "form-select"}),
+            "other_organization_type": forms.TextInput(attrs={"class": "form-control"}),
+            "job_title": forms.TextInput(attrs={"class": "form-control"}),
+            "category": forms.Select(attrs={"class": "form-select"}),
+            "days_to_attend": forms.TextInput(attrs={"class": "form-control"}),
+            "national_id_number": forms.TextInput(attrs={"class": "form-control"}),
+            "national_id_scan": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "passport_photo": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "privacy_agreed": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
     def clean_privacy_agreed(self):
-        agreed = self.cleaned_data.get('privacy_agreed')
+        agreed = self.cleaned_data.get("privacy_agreed")
         if not agreed:
             raise forms.ValidationError("You must agree to the Privacy Policy before saving.")
         return agreed
@@ -922,25 +1092,42 @@ class ExhibitorEditForm(forms.ModelForm):
     class Meta:
         model = Exhibitor
         fields = [
-            'title', 'first_name', 'second_name', 'email', 'phone',
-            'organization_type', 'job_title', 'category', 'product_description',
-            'exhibit_category', 'booth', 'section', 'national_id_number',
-            'national_id_scan', 'passport_photo', 'business_type', 'logo',
-            'kra_pin', 'business_registration_doc', 'international_business_doc',
-            'country_of_registration', 'beneficial_owner_details', 'beneficial_owner_doc',
-            'privacy_agreed'
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "job_title",
+            "category",
+            "product_description",
+            "exhibit_category",
+            "booth",
+            "section",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
+            "business_type",
+            "logo",
+            "kra_pin",
+            "business_registration_doc",
+            "international_business_doc",
+            "country_of_registration",
+            "beneficial_owner_details",
+            "beneficial_owner_doc",
+            "privacy_agreed",
         ]
         widgets = {
-            'product_description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
-            'beneficial_owner_details': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            "product_description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+            "beneficial_owner_details": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            css = 'form-control'
+            css = "form-control"
             if isinstance(field.widget, forms.CheckboxInput):
-                css = 'form-check-input'
+                css = "form-check-input"
             elif isinstance(field.widget, forms.Select):
-                css = 'form-select'
-            field.widget.attrs.update({'class': css})
+                css = "form-select"
+            field.widget.attrs.update({"class": css})
