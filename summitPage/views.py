@@ -177,10 +177,19 @@ def home(request):
         )
     ).order_by('custom_order', 'full_name')
 
+    sponsor_packages = {
+        "Partners ": partners.filter(order__lte=10),
+        "Gold ": partners.filter(order__range=(11, 20)),
+        "Silver ": partners.filter(order__range=(21, 30)),
+        "Bronze ": partners.filter(order__range=(31, 40)),
+        "Platinum": partners.filter(order__gt=40),
+    }
+
     return render(request, "summit/home.html", {
         'form': form,
         'gallery_items': gallery_items,
         'partners': partners,
+        "sponsor_packages": sponsor_packages,
         'days': days,
         'speakers': summitspeakers,
         'interest_choices': Registrant.INTEREST_CHOICES,
@@ -1111,14 +1120,34 @@ def delete_speaker(request, pk):
 
 
 # Partner
-
+#
+# @login_required
+# def partner_dashboard(request):
+#     partners = SummitPartner.objects.all().order_by("order")
+#     return render(request, "partner/partner_dashboard.html", {
+#         "partners": partners,
+#         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+#         'current_year': timezone.now().year, })
 @login_required
 def partner_dashboard(request):
-    partners = SummitPartner.objects.all().order_by("order")
-    return render(request, "partner/partner_dashboard.html", {
+    partners = SummitPartner.objects.filter(is_active=True).order_by("order")
+
+    sponsor_packages = {
+        "Platinum Sponsors": partners.filter(order__lte=10),
+        "Gold Sponsors": partners.filter(order__range=(11, 20)),
+        "Silver Sponsors": partners.filter(order__range=(21, 30)),
+        "Bronze Sponsors": partners.filter(order__range=(31, 40)),
+        "Supporting Partners": partners.filter(order__gt=40),
+    }
+
+    context = {
         "partners": partners,
+        "sponsor_packages": sponsor_packages,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
-        'current_year': timezone.now().year, })
+        "current_year": timezone.now().year,
+    }
+    return render(request, "partner/partner_dashboard.html", context)
+
 
 
 @login_required
