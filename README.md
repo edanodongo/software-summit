@@ -54,9 +54,14 @@ cd software-summit
 python3 -m venv venv
 ```
 
-Activate the virtual environment using the command for your system (Linux is used here) and install the required dependencies
+Activate the virtual environment using the command for your system (macOS/Linux) and install the required dependencies
 ```bash
-source ./.venv/bin/activate
+source venv/bin/activate
+pip install -r requirements.txt
+```
+Activate the virtual environment using the command for your system (for windows) and install the required dependencies
+```bash
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
