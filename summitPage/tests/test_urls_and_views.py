@@ -24,9 +24,11 @@ def test_all_urls(client):
                 print(f"Skipping pattern due to error: {e}")  # safer than silent continue
 
     # Create a test user for any views requiring login
-    user = User.objects.create_user(username="testuser", password="test_pass_123")
+    user = User.objects.create_user(  # nosec B106
+        username="testuser", password="test_pass_123"
+    )
     client = Client()
-    client.login(username="testuser", password="test_pass_123")
+    client.login(username="testuser", password="test_pass_123")  # nosec B106
 
     # Test each URL
     for url_name, url_pattern in urls:
@@ -37,12 +39,12 @@ def test_all_urls(client):
             else:
                 url = f"/{url_pattern.strip('^$')}"
         except Exception as e:
-            print(f"Skipping URL build error: {e}")  # no silent continue
+            print(f"Skipping URL build error: {e}")
             continue
 
         response = client.get(url)
 
         # Avoid Python `assert` — use pytest assert, which is safe
-        assert response.status_code in [200, 302, 403, 404], (
+        assert response.status_code in [200, 302, 403, 404], (  # nosec B101
             f"❌ URL '{url}' returned {response.status_code}"
         )
