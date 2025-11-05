@@ -294,8 +294,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
             "Eldoret City, Uasin Gishu County, Kenya.\n\n"
             "Theme: “Connecting Minds, Shaping Software, Driving Growth.”\n\n"
             "Please note that your booth booking is currently pending payment confirmation. "
-            "To secure your booth, kindly proceed to make the required payment as outlined "
-            "on the Summit Portal (https://softwaresummit.go.ke/). "
+            "You will be contacted with the payment details. "
             "Once payment has been received, you will receive a confirmation email along with "
             "your booth allocation details.\n\n"
             "For any assistance or clarification regarding payment or booth allocation, "
@@ -345,7 +344,7 @@ def send_confirmation_mail(exhibitor, retries=3, delay=3):
 
               <p style="color:#333; font-size:14px; margin-bottom:20px;">
                 Please note that your booth booking is currently <strong>pending payment confirmation</strong>. 
-                To secure your booth, kindly proceed to make the required payment. 
+                You will be contacted with the payment details. 
                 Once payment has been received, we will send you a confirmation email along with your booth allocation details.
               </p>
 
