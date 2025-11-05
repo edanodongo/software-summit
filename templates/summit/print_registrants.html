@@ -43,18 +43,6 @@
           </li>
         </ul>
 
-        <!-- Organization Breakdown
-        <h5 class="mt-3">Top Organization Types</h5>
-        <ul class="list-group">
-          {% for label, count in org_type_counts %}
-            <li class="list-group-item d-flex justify-content-between">
-              <span>{{ label }}:</span>
-              <strong>{{ count }}</strong>
-            </li>
-          {% empty %}
-            <li class="list-group-item">No organization data available</li>
-          {% endfor %}
-        </ul> -->
       </div>
     </div>
 
@@ -78,8 +66,8 @@
           <th>Email</th>
           <th>Phone</th>
           <th>Organization</th>
+          <th>Category</th>
           <th>Job Title</th>
-          <th>Interests</th>
         </tr>
       </thead>
       <tbody>
@@ -90,8 +78,8 @@
           <td>{{ reg.email }}</td>
           <td>{{ reg.phone }}</td>
           <td>{{ reg.display_org_type }}</td>
+          <td>{{ reg.get_category_display }}</td>
           <td>{{ reg.job_title|default:"—" }}</td>
-          <td>{{ reg.display_interests|default:"—" }}</td>
         </tr>
         {% endfor %}
       </tbody>
