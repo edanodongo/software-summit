@@ -176,36 +176,52 @@
           </div>
         </div>
 
+        <div class="row mt-5 align-items-stretch justify-content-center g-4">
 
-        <div class="row mt-5 align-items-center justify-content-center">
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-airplane-fill"></i>
+          <!-- Travel by Air -->
+          <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4 text-center travel-info h-100">
+              <div class="logo-wrapper mb-3">
+                <img src="{% static 'images/partners/jambojet_2.png' %}"
+                     alt="Jambojet Logo"
+                     class="travel-logo">
               </div>
-              <h5>By Air</h5>
-              <p>
-                  Jambo Jet Offer Ksh 8,300 one way for flights between 9th - 13th November.
-                  Bookings to be made through
-                  <a href="mailto:groups@jambojet.com" class="text-primary fw-semibold">
-                    groups@jambojet.com
-                  </a>.
-                </p>
+
+              <h5 class="fw-bold text-primary mb-2">Travel by Air</h5>
+
+              <p class="travel-text mb-1">
+                <span class="fw-semibold text-dark">Jambojet</span> offers flights at
+                <span class="text-primary fw-semibold">Ksh 8,300 one-way</span>
+                between <strong>9th – 13th November</strong>.
+              </p>
+              <p class="travel-text mb-0">
+                For bookings, contact:
+                <a href="mailto:groups@jambojet.com" class="fw-semibold text-decoration-none text-primary">
+                  groups@jambojet.com
+                </a>
+              </p>
             </div>
           </div>
 
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-car-front-fill"></i>
+          <!-- Travel by Road -->
+          <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4 text-center travel-info h-100">
+              <div class="logo-wrapper mb-3">
+                <div class="road-icon-wrapper">
+                  <i class="bi bi-car-front-fill text-primary"></i>
+                </div>
               </div>
-              <h5>By Road</h5>
-              <p>Eldoret City is 313km from Nairobi along the A104 a distance of 7 hours. Public Transport vehicles Operate on the route from Nairobi and other major town.</p>
+
+              <h5 class="fw-bold text-primary mb-2">Travel by Road</h5>
+
+              <p class="travel-text">
+                Eldoret City is <strong>313 km</strong> from Nairobi along the A104 — approximately a
+                <strong>7-hour drive</strong>. Public transport vehicles and private shuttles operate regularly from Nairobi and other major towns.
+              </p>
             </div>
           </div>
 
         </div>
-
 
         <div class="row mt-5">
           <div class="col-lg-12">
@@ -225,8 +241,6 @@
             </div>
           </div>
         </div>
-
-
 
       </div>
 

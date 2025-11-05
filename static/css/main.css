@@ -6484,3 +6484,53 @@ html {
 .hotel-card a:hover {
   text-decoration: underline;
 }
+
+.travel-info {
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.travel-info:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.travel-logo {
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.road-icon-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(13, 110, 253, 0.1);
+  box-shadow: inset 0 0 0 2px rgba(13, 110, 253, 0.2);
+}
+
+.road-icon-wrapper i {
+  font-size: 2rem;
+}
+
+/* 🌟 Improved paragraph styling */
+.travel-text {
+  font-size: 1.05rem;      /* Increased slightly from ~0.95rem */
+  line-height: 1.7;        /* Better readability */
+  color: #6c757d;          /* Matches text-muted tone */
+}
+
+.text-muted {
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
