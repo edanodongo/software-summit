@@ -215,14 +215,22 @@
                       <div class="visual-section">
                           <div class="image-wrapper position-relative">
                               <div class="ratio ratio-16x9">
-                                  <iframe
-                                      src="https://www.youtube.com/embed/jC6u_4COmuA"
-                                      loading="lazy"
-                                      title="YouTube video player"
-                                      frameborder="0"
-                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                      allowfullscreen>
-                                  </iframe>
+<!--                                  <iframe-->
+<!--                                      src="https://www.youtube.com/embed/jC6u_4COmuA"-->
+<!--                                      loading="lazy"-->
+<!--                                      title="YouTube video player"-->
+<!--                                      frameborder="0"-->
+<!--                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                                      allowfullscreen>-->
+<!--                                  </iframe>-->
+                                  <video
+                                    controls
+                                    width="100%"
+                                    preload="metadata"
+                                    poster="{% static 'images/video-thumbnail.jpeg' %}">
+                                    <source src="{% static 'videos/promo.mp4' %}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>
                               </div>
                               <div class="floating-badge" >
                                   <i class="bi bi-calendar-event"></i>
