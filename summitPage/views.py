@@ -3375,7 +3375,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
         })
 
     except Exception as e:
-        # Log the full traceback and error details 5
+        # Log the full traceback and error details 75
         logger.error("Error in create_badge (reg_id=%s): %s\n%s", reg_id, str(e), traceback.format_exc())
 
         # Optional: Return a JSON error (won’t break client)
