@@ -61,6 +61,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+from openpyxl import Workbook
+from django.http import HttpResponse
+from .models import Exhibitor
 
 # begin your views here
 
@@ -586,6 +589,43 @@ def export_registrants_excel(request):
     wb.save(response)
     return response
 
+
+
+def export_excel_exhibitors(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Exhibitors"
+
+    # Header row
+    headers = [
+        "Name", "Email", "Phone", "Organization", "Country",
+        "Job Title", "Category", "Booked Booths",
+        "Approval Status", "Email Attempts", "Email Status",
+        "Last Email Sent", "Date Registered"
+    ]
+    ws.append(headers)
+
+    exhibitors = Exhibitor.objects.all().order_by("-created_at")
+
+    for e in exhibitors:
+        ws.append([
+            e.get_full_name(),
+            e.email,
+            e.phone,
+            e.organization_type,
+            e.get_country_of_registration_display() or "",
+            e.job_title or "",
+            e.get_category_display() or "",
+            e.total_count,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = 'attachment; filename="exhibitors.xlsx"'
+
+    wb.save(response)
+    return response
 
 # --------------------------------------------
 # === PDF Export in Landscape ===

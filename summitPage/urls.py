@@ -188,4 +188,5 @@ urlpatterns = [
     # badge generation
     path("create_badge/<int:reg_id>/", views.create_badge, name="create_badge"),
     path("mark_printed/<int:reg_id>/", views.mark_printed, name="mark_printed"),
+    path("export-excel-exhibitors/", views.export_excel_exhibitors, name="export_excel_exhibitors"),
 ]
