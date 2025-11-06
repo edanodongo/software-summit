@@ -248,6 +248,43 @@
             {% endfor %}
           </tbody>
         </table>
+
+          <!-- Pagination -->
+        <div class="p-3">
+          {% if exhibitors.has_other_pages %}
+            <nav>
+              <ul class="pagination justify-content-center">
+
+                {% if exhibitors.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ exhibitors.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+
+                {% for i in exhibitors.paginator.page_range %}
+                  {% if exhibitors.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                  {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ i }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">{{ i }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+
+                {% if exhibitors.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ exhibitors.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+
+              </ul>
+            </nav>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
