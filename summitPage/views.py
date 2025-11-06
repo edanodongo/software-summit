@@ -1,5 +1,6 @@
 # imports
 from collections import Counter
+
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
@@ -13,6 +14,7 @@ from reportlab.platypus import (
 )
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from .decorators import require_api_key
 from .forms import *
 from .models import *

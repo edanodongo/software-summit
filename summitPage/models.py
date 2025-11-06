@@ -1,12 +1,12 @@
 # models.py
 import os
 import uuid
-
+from PIL import Image
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django_countries.fields import CountryField
-from PIL import Image
+
 
 
 class Category(models.Model):

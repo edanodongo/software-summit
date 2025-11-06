@@ -572,8 +572,8 @@ class ExhibitorRegistrationForm(forms.ModelForm):
         for name, field in self.fields.items():
             # Apply uniform Bootstrap classes
             if isinstance(
-                field.widget,
-                (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
+                    field.widget,
+                    (forms.TextInput, forms.EmailInput, forms.Textarea, forms.FileInput),
             ):
                 field.widget.attrs.update({"class": "form-control"})
             elif isinstance(field.widget, forms.Select):
