@@ -20,7 +20,8 @@
 The **Software Summit Portal** is a web application developed for the **Kenya Software Summit 2025**.  
 It provides a centralized system to:
 
-- 🧾 **Register participants** and manage attendee information  
+- 🧾 **Register participants** and manage attendee information 
+- 🧾 **Register Exhibitors and Sponsors**
 - 👤 **Manage user accounts** for both applicants and administrators  
 - 🪪 **Generate and print summit badges** dynamically (with color-coded categories)  
 - ℹ️ **Share event details** and updates about the summit  
