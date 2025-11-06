@@ -24,11 +24,10 @@ def table_exists(table_name):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            SELECT EXISTS (
-                SELECT FROM information_schema.tables
-                WHERE table_name = %s
-            )
-        """,
+            SELECT EXISTS (SELECT
+                           FROM information_schema.tables
+                           WHERE table_name = %s)
+            """,
             [table_name],
         )
         return cursor.fetchone()[0]
