@@ -1856,14 +1856,20 @@ def admin_dashboard(request):
             else "—"
         )
 
+    exhibitors_qs = Exhibitor.objects.all().order_by("-created_at")
+
+    paginator = Paginator(exhibitors_qs, 10)  # 10 per page
+    page_number = request.GET.get("page")
+    exhibitors = paginator.get_page(page_number)
     # --- Render template ---
+
     return render(
         request,
         "exhibitor/admin_dashboard.html",
         {
             "sections": sections,
             "booths": booths,
-            "exhibitors": exhibitors.order_by("-created_at")[:20],
+            "exhibitors": exhibitors,
             "total_exhibitors": total_exhibitors,
             "total_booths": total_booths,
             "booked_booths": booked_booths,
