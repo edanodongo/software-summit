@@ -94,279 +94,223 @@
       </div>
   </header>
 
+    <!-- ----------------------------------------------------------------------------------------------------------------- -->
+    <!-- New Speakers Section -->
     <main class="main">
 
       <!-- Page Title -->
-      <div class="page-title dark-background"  loading="lazy"  style="background-image: url(assets/img/events/showcase-9.webp);">
-        <div class="container position-relative">
-          <h1>Speakers</h1>
-          <p>Featured speakers in the Kenya Software & AI Summit 2025 Edition.</p>
+      <div class="page-title dark-background" style="background-image: url();">
+        <div class="container position-relative text-center text-light">
+          <h1 class="fw-bold mb-2">Speakers</h1>
+          <p class="lead mb-4">Featured speakers at the <strong>Kenya Software & AI Summit 2025</strong>.</p>
           <nav class="breadcrumbs">
-            <ol>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li class="current">Speakers</li>
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50">Home</a></li>
+              <li class="breadcrumb-item active text-light">Speakers</li>
             </ol>
           </nav>
         </div>
-      </div><!-- End Page Title -->
+      </div>
+      <!-- End Page Title -->
 
       <!-- Speakers Section -->
-      <section id="speakers" class="speakers section">
-
+      <section id="speakers" class="speakers section py-5 bg-light">
         <div class="container">
 
-          <div class="speakers-list">
+          <div class="row g-4">
+            {% for speaker in speakers %}
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{{ speaker.photo_url }}" loading="lazy" alt="{{ speaker.full_name }}"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">{{ speaker.track|default:"Speaker" }}</div>
+                </div>
 
-            <div class="row">
+                <h4 class="fw-semibold mb-1">{{ speaker.full_name }}</h4>
+                <p class="text-muted mb-1">{{ speaker.position }}</p>
+                <p class="fw-medium text-primary small mb-3">{{ speaker.organization }}</p>
 
-              {% for speaker in speakers %}
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img
-                        src="{{ speaker.photo_url }}"
-                        loading="lazy"
-                        alt="{{ speaker.full_name }}"
-                        class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>{{ speaker.full_name }}</h4>
-                      <span class="speaker-position">{{ speaker.position }}</span>
-                      <span class="speaker-org">{{ speaker.organization }}</span>
-                      {% if speaker.track %}
-                      <div class="speaker-track">{{ speaker.track }}</div>
-                      {% endif %}
-                    </div>
-                  </div>
+                {% if speaker.summary %}
+                <p class="speaker-summary small text-secondary mb-3">{{ speaker.summary }}</p>
+                {% endif %}
 
-                  <div class="speaker-details">
-                    {% if speaker.topic %}
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>{{ speaker.topic }}</span>
-                    </div> -->
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="{{ speaker.full_name }}"
+                     data-position="{{ speaker.position }}"
+                     data-org="{{ speaker.organization }}"
+                     data-photo="{{ speaker.photo_url }}"
+                     data-bio="{{ speaker.bio|escape }}">
+                    View Profile
+                  </a>
+
+                  <div class="speaker-social d-flex gap-2">
+                    {% if speaker.linkedin_url %}
+                    <a href="{{ speaker.linkedin_url }}" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
                     {% endif %}
-
-                    {% if speaker.summary %}
-                    <p class="speaker-summary">{{ speaker.summary }}</p>
+                    {% if speaker.twitter_url %}
+                    <a href="{{ speaker.twitter_url }}" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                     {% endif %}
-
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                        loading="lazy"
-                        data-name="{{ speaker.full_name }}"
-                        data-position="{{ speaker.position }}"
-                        data-org="{{ speaker.organization }}"
-                        data-photo="{{ speaker.photo_url }}"
-                        data-bio="{{ speaker.bio|escape }}">
-                        View Profile
-                      </a>
-
-                      <div class="speaker-social">
-                        {% if speaker.linkedin_url %}
-                          <a href="{{ speaker.linkedin_url }}" target="_blank" class="social-link">
-                            <i class="bi bi-linkedin"></i>
-                          </a>
-                        {% endif %}
-                        {% if speaker.twitter_url %}
-                          <a href="{{ speaker.twitter_url }}" target="_blank" class="social-link">
-                            <i class="bi bi-twitter"></i>
-                          </a>
-                        {% endif %}
-                      </div>
-                    </div>
                   </div>
                 </div>
-              </div><!-- End Speaker Entry -->
-              {% empty %}
-              <!-- <div class="col-12 text-center py-5">
-                <p>No speakers have been added yet.</p>
-              </div> -->
-              {% endfor %}
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+              <p>No speakers have been added yet.</p>
+            </div>
+            {% endfor %}
 
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}"  loading="lazy" alt="Speaker" class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>Mr. John OMO</h4>
-                      <span class="speaker-position">Secretary-General</span>
-                      <span class="speaker-org">African Telecommunications Union</span>
-                      <div class="speaker-track">Speaker</div>
-                    </div>
-                  </div>
-                  <div class="speaker-details">
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>Advanced Neural Networks in Real-World Applications</span>
-                    </div> -->
-                    <p class="speaker-summary">Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries.</p>
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                         loading="lazy"
-                        data-name="Mr. John OMO"
-                        data-position="Secretary-General"
-                        data-org="African Telecommunications Union"
-                        data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
-                        data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
+                </div>
+
+                <h4 class="fw-semibold mb-1">Mr. John OMO</h4>
+                <p class="text-muted mb-1">Secretary-General</p>
+                <p class="fw-medium text-primary small mb-3">African Telecommunications Union</p>
+
+                <p class="speaker-summary small text-secondary mb-3">Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries.</p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="Mr. John OMO"
+                     data-position="Secretary-General"
+                     data-org="African Telecommunications Union"
+                     data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
+                     data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
                           Mr. Omo has 31 years’ experience as a lawyer and has contributed immensely to the development of local and international policies, legislation, agreements and treaties in all areas of public service, but mainly in the area of ICTs.
                           Prior to his election for his first term in 2018, he worked with the Communications Authority of Kenya, Kenya's ICT regulator, where he provided leadership over the Authority’s legal matters and strategies. Before that, he worked in the public/civil service.
                           He holds a Master of Law degree in International and Commercial law from the University of Sheffield – UK; a Bachelor of Law from the University of Nairobi – Kenya; a Diploma in Human Rights Law from the UN Human Rights Centre, Geneva, and ILO Centre Turin and another diploma in Legal Practice and Ethics from the Kenya School of Law amongst other professional courses.">
-                        View Profile
-                      </a>
+                    View Profile
+                  </a>
 
-                      <div class="speaker-social">
-                        <a href="https://ke.linkedin.com/in/john-omo-2130021b3" class="social-link"><i class="bi bi-linkedin"></i></a>
-<!--                        <a href="https://x.com/honkabogo" class="social-link"><i class="bi bi-twitter"></i></a>-->
-                      </div>
-                    </div>
+                  <div class="speaker-social">
+                    <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                   </div>
                 </div>
-              </div><!-- End Speaker Entry -->
+              </div>
+            </div>
 
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/S_A_Kakai.webp' %}"  loading="lazy" alt="Speaker" class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>Mr S. A Kakai</h4>
-                      <span class="speaker-position">Director</span>
-                      <span class="speaker-org">Virtual Assets Chamber of Commerce, Web3Club Foundation</span>
-                      <div class="speaker-track">Speaker</div>
-                    </div>
-                  </div>
-                  <div class="speaker-details">
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>Advanced Neural Networks in Real-World Applications</span>
-                    </div> -->
-                    <p class="speaker-summary">S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce, </p>
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                         loading="lazy"
-                        data-name="Mr S. A Kakai"
-                        data-position="Director"
-                        data-org="Virtual Assets Chamber of Commerce, Web3Club Foundation"
-                        data-photo="{% static 'images/speakers/S_A_Kakai.webp' %}"
-                        data-bio="S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce,
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/S_A_Kakai.webp' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
+                </div>
+
+                <h4 class="fw-semibold mb-1">Mr S. A Kakai</h4>
+                <p class="text-muted mb-1">Director</p>
+                <p class="fw-medium text-primary small mb-3">Virtual Assets Chamber of Commerce, Web3Club Foundation</p>
+
+                <p class="speaker-summary small text-secondary mb-3">S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce, </p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="Mr S. A Kakai"
+                     data-position="Director"
+                     data-org="Virtual Assets Chamber of Commerce, Web3Club Foundation"
+                     data-photo="{% static 'images/speakers/S_A_Kakai.webp' %}"
+                     data-bio="S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce,
                           he has been at the forefront of advancing policy dialogue and stakeholder engagement around blockchain technology and virtual asset regulation in Kenya.
                           Through this role, he has worked with global stablecoin issuers, multinational virtual asset service providers, decentralized finance (DeFi) protocols, and international exchanges, as well as Pan-African startups and local entrepreneurs.
                           His efforts focus on designing business and policy use cases, promoting consumer adoption, conducting product and regulatory research, and supporting the responsible adoption of blockchain and virtual assets across the continent.
                           In parallel, Kakai serves as a Director at the Web3Club Foundation, a hub that empowers software and blockchain developers to upskill and innovate within the Web3 ecosystem.
                           Through this role, he has collaborated with leading global protocols such as Ethereum (via the Ethereum Foundation), Scroll (through the Scroll Foundation), and Hedera (through the Hashgraph Foundation) to empower builders and strengthen Africa’s developer community.
                           His work centers on nurturing local talent, attracting foreign direct investment, and supporting entrepreneurs to create sustainable, blockchain-driven solutions that advance Kenya’s economic and technological growth.">
-                        View Profile
-                      </a>
+                    View Profile
+                  </a>
 
-                      <div class="speaker-social">
-                        <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" class="social-link"><i class="bi bi-linkedin"></i></a>
-<!--                        <a href="https://x.com/honkabogo" class="social-link"><i class="bi bi-twitter"></i></a>-->
-                      </div>
-                    </div>
+                  <div class="speaker-social">
+                    <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                   </div>
                 </div>
-              </div><!-- End Speaker Entry -->
+              </div>
+            </div>
 
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}"  loading="lazy" alt="Speaker" class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>H.E.Hon.William Kabogo Gitau</h4>
-                      <span class="speaker-position">Cabinet Secretary</span>
-                      <span class="speaker-org">Ministry of Information,Communication and The Digital Economy</span>
-                      <div class="speaker-track">Host</div>
-                    </div>
-                  </div>
-                  <div class="speaker-details">
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>Advanced Neural Networks in Real-World Applications</span>
-                    </div> -->
-                    <p class="speaker-summary">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, </p>
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                         loading="lazy"
-                        data-name="H.E.Hon.William Kabogo Gitau"
-                        data-position="Cabinet Secretary"
-                        data-org="Ministry of ICT & Digital Economy (MICDE), Government of
-                                          the Republic of Kenya"
-                        data-photo="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}"
-                        data-bio="Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. While in Parliament, Hon. Kabogo was ranked fifth nationally for effective utilization of Constituency Development Fund (CDF) allocations. Hon. Kabogo holds a Bachelor of Commerce (B. Com) degree in Accounting and Finance from Punjab University in India. He has additional certifications in accounting and audit.">
-                        View Profile
-                      </a>
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Host </div>
+                </div>
 
-                      <div class="speaker-social">
-                        <a href="https://ke.linkedin.com/in/william-kabogo-92537040" class="social-link"><i class="bi bi-linkedin"></i></a>
-                        <a href="https://x.com/honkabogo" class="social-link"><i class="bi bi-twitter"></i></a>
-                      </div>
-                    </div>
+                <h4 class="fw-semibold mb-1">H.E.Hon.William Kabogo Gitau</h4>
+                <p class="text-muted mb-1">Cabinet Secretary</p>
+                <p class="fw-medium text-primary small mb-3">Ministry of Information,Communication and The Digital Economy</p>
+
+                <p class="speaker-summary small text-secondary mb-3">Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, </p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="H.E.Hon.William Kabogo Gitau"
+                     data-position="Cabinet Secretary"
+                     data-org="Ministry of ICT & Digital Economy (MICDE), Government of the Republic of Kenya"
+                     data-photo="{% static 'images/speakers/Hon_William_Kabogo_Gitau.webp' %}"
+                     data-bio="Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. While in Parliament, Hon. Kabogo was ranked fifth nationally for effective utilization of Constituency Development Fund (CDF) allocations. Hon. Kabogo holds a Bachelor of Commerce (B. Com) degree in Accounting and Finance from Punjab University in India. He has additional certifications in accounting and audit.">
+                    View Profile
+                  </a>
+
+                  <div class="speaker-social">
+                    <a href="https://ke.linkedin.com/in/william-kabogo-92537040" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://x.com/honkabogo" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                   </div>
                 </div>
-              </div><!-- End Speaker Entry -->
+              </div>
+            </div>
 
-              <div class="col-lg-6 speaker-entry">
-                <div class="speaker-profile">
-                  <div class="speaker-meta">
-                    <div class="speaker-photo">
-                      <img src="{% static 'images/speakers/Eng_John_Tanui.webp' %}" loading="lazy"  alt="Speaker" class="img-fluid">
-                    </div>
-                    <div class="speaker-info">
-                      <h4>Eng.John Tanui,CBS</h4>
-                      <span class="speaker-position">Principal Secretary</span>
-                      <span class="speaker-org">State Department of ICT and Digital Economy, Government
-                                          of Kenya</span>
-                      <div class="speaker-track">Host</div>
-                    </div>
-                  </div>
-                  <div class="speaker-details">
-                    <!-- <div class="speaker-topic">
-                      <i class="bi bi-mic"></i>
-                      <span>Decentralized Finance: Building the Future</span>
-                    </div> -->
-                    <p class="speaker-summary">I am an engineer with over 24 years of experience in the technology sector globally, </p>
-                    <div class="speaker-actions">
-                      <a href="#"
-                        class="profile-btn"
-                         loading="lazy"
-                        data-name="Eng.John Tanui,CBS"
-                        data-position="Principal Secretary"
-                        data-org="State Department of ICT and Digital Economy, Government
-                                          of Kenya"
-                        data-photo="{% static 'images/speakers/Eng_John_Tanui.webp' %}"
-                        data-bio="I am an engineer with over 24 years of experience in the technology sector globally, keen on leveraging innovative technologies to solve the most pressing challenges facing economies. I am passionate about mentoring the next generation of technology and business leaders.">
-                        View Profile
-                      </a>
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/Eng_John_Tanui.webp' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Host </div>
+                </div>
 
-                      <div class="speaker-social">
-                        <a href="https://ke.linkedin.com/in/johntanui" class="social-link"><i class="bi bi-linkedin"></i></a>
-                        <a href="https://x.com/tanuijohn/" class="social-link"><i class="bi bi-twitter"></i></a>
-                      </div>
-                    </div>
+                <h4 class="fw-semibold mb-1">Eng.John Tanui,CBS</h4>
+                <p class="text-muted mb-1">Principal Secretary</p>
+                <p class="fw-medium text-primary small mb-3">State Department of ICT and Digital Economy, Government of Kenya</p>
+
+                <p class="speaker-summary small text-secondary mb-3">I am an engineer with over 24 years of experience in the technology sector globally, </p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="Eng.John Tanui,CBS"
+                     data-position="Principal Secretary"
+                     data-org="State Department of ICT and Digital Economy, Government of Kenya"
+                     data-photo="{% static 'images/speakers/Eng_John_Tanui.webp' %}"
+                     data-bio="I am an engineer with over 24 years of experience in the technology sector globally, keen on leveraging innovative technologies to solve the most pressing challenges facing economies. I am passionate about mentoring the next generation of technology and business leaders.">
+                    View Profile
+                  </a>
+
+                  <div class="speaker-social d-flex gap-2">
+                      <a href="https://ke.linkedin.com/in/johntanui" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                      <a href="https://x.com/tanuijohn/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                   </div>
                 </div>
-              </div><!-- End Speaker Entry -->
-
+              </div>
             </div>
 
           </div>
 
         </div>
-
-      </section><!-- /Speakers Section -->
+      </section>
 
     </main>
+
 
 
 <!-- Biography Modal -->

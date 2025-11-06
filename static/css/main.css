@@ -9,7 +9,7 @@
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
+:root {
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #40372e; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #281a0c; /* Color for headings, subheadings and title throughout the website */
@@ -20,34 +20,51 @@
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
-  --nav-color: #ffffff;  /* The default color of the main navmenu links */
-  --nav-hover-color: #CE171C; /* Applied to main navmenu links when they are hovered over or active */
-  --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
-  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
-  --nav-dropdown-color: #40372e; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #CE171C; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-color: #ffffff;
+  --nav-hover-color: #CE171C;
+  --nav-mobile-background-color: #ffffff;
+  --nav-dropdown-background-color: #ffffff;
+  --nav-dropdown-color: #40372e;
+  --nav-dropdown-hover-color: #CE171C;
 
+  --primary-color: #CE171C;
+  --secondary-color: #cd5155ff;
+  --accent-color: #CE171C;
+  --success-color: #027437ff;
+  --warning-color: #d69e2e;
+  --danger-color: #e53e3e;
+  --info-color: #CE171C;
+  --light-bg: #f7fafc;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-    --primary-color: #CE171C;
-    --secondary-color: #cd5155ff;
-    --accent-color: #CE171C;
-    --success-color: #027437ff;
-    --warning-color: #d69e2e;
-    --danger-color: #e53e3e;
-    --info-color: #CE171C;
-    --light-bg: #f7fafc;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --primary-red: #CE171C;
+  --primary-green: #01873F;
+  --primary-blue: rgba(2, 52, 79, 0.8);
+  --primary-dark: #1C1C18;
+  --gradient-primary: linear-gradient(135deg, #CE171C 0%, #01873F 100%);
+  --gradient-secondary: linear-gradient(135deg, #01873F 0%, #1C1C18 100%);
 
-    
-    --primary-red: #CE171C;
-    --primary-green: #01873F;
-    --primary-blue: rgba(2, 52, 79, 0.8);
-    --primary-dark: #1C1C18;
-    --gradient-primary: linear-gradient(135deg, #CE171C 0%, #01873F 100%);
-    --gradient-secondary: linear-gradient(135deg, #01873F 0%, #1C1C18 100%);
+  /* Bootstrap primary override */
+  --bs-primary: var(--accent-color);
+  --bs-primary-rgb: 206, 23, 28;
 }
-
+.btn-outline-primary {
+  --bs-btn-color: var(--accent-color);
+  --bs-btn-border-color: var(--accent-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--accent-color);
+  --bs-btn-hover-border-color: var(--accent-color);
+  --bs-btn-focus-shadow-rgb: 206, 23, 28; /* RGB of #CE171C */
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--accent-color);
+  --bs-btn-active-border-color: var(--accent-color);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--accent-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--accent-color);
+  --bs-gradient: none;
+}
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
 
 .light-background {
@@ -6506,7 +6523,7 @@ section,
 
 
 
-    /* --- Biography Modal Styles --- *//* --- Biography Modal Styles --- */
+ /* --- Biography Modal Styles --- *//* --- Biography Modal Styles --- */
 .bio-modal {
   display: none;
   position: fixed;
@@ -6859,4 +6876,42 @@ html {
   .package-section h3 {
     font-size: 1.1rem;
   }
+}
+
+.speaker-card {
+  transition: all 0.3s ease;
+}
+
+.speaker-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.speaker-photo img {
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 3px var(--bs-primary);
+  transition: all 0.3s ease;
+}
+
+.speaker-photo img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px var(--bs-primary);
+}
+
+
+.speaker-track {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.speaker-summary {
+  min-height: 60px;
+}
+
+.bio-modal .modal-body p {
+  line-height: 1.6;
+}
+
+.speaker-card{
 }
