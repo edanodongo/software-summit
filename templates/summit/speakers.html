@@ -117,6 +117,12 @@
       <section id="speakers" class="speakers section py-5 bg-light">
         <div class="container">
 
+          <!-- Section Title -->
+          <div class="container section-title">
+              <h2>Featured Speakers</h2>
+              <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
+          </div><!-- End Section Title -->
+
           <div class="row g-4">
             {% for speaker in speakers %}
             <div class="col-md-6 col-lg-4">
@@ -163,80 +169,21 @@
             </div>
             {% endfor %}
 
-            <div class="col-md-6 col-lg-4">
-              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
-                <div class="speaker-photo mx-auto mb-3 position-relative">
-                  <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}" loading="lazy" alt="Speaker"
-                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
-                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
-                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
-                </div>
+          </div>
 
-                <h4 class="fw-semibold mb-1">Mr. John OMO</h4>
-                <p class="text-muted mb-1">Secretary-General</p>
-                <p class="fw-medium text-primary small mb-3">African Telecommunications Union</p>
+        </div>
+      </section>
 
-                <p class="speaker-summary small text-secondary mb-3">Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries.</p>
+      <!-- Speakers Section -->
+      <section id="speakers" class="speakers section py-5 bg-light">
+        <div class="container">
 
-                <div class="d-flex justify-content-center align-items-center gap-3">
-                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
-                     data-name="Mr. John OMO"
-                     data-position="Secretary-General"
-                     data-org="African Telecommunications Union"
-                     data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
-                     data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
-                          Mr. Omo has 31 years’ experience as a lawyer and has contributed immensely to the development of local and international policies, legislation, agreements and treaties in all areas of public service, but mainly in the area of ICTs.
-                          Prior to his election for his first term in 2018, he worked with the Communications Authority of Kenya, Kenya's ICT regulator, where he provided leadership over the Authority’s legal matters and strategies. Before that, he worked in the public/civil service.
-                          He holds a Master of Law degree in International and Commercial law from the University of Sheffield – UK; a Bachelor of Law from the University of Nairobi – Kenya; a Diploma in Human Rights Law from the UN Human Rights Centre, Geneva, and ILO Centre Turin and another diploma in Legal Practice and Ethics from the Kenya School of Law amongst other professional courses.">
-                    View Profile
-                  </a>
+          <!-- Section Title -->
+          <div class="container section-title">
+              <h2>Host Speakers</h2>
+          </div><!-- End Section Title -->
 
-                  <div class="speaker-social">
-                    <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
-                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
-                <div class="speaker-photo mx-auto mb-3 position-relative">
-                  <img src="{% static 'images/speakers/S_A_Kakai.webp' %}" loading="lazy" alt="Speaker"
-                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
-                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
-                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
-                </div>
-
-                <h4 class="fw-semibold mb-1">Mr S. A Kakai</h4>
-                <p class="text-muted mb-1">Director</p>
-                <p class="fw-medium text-primary small mb-3">Virtual Assets Chamber of Commerce, Web3Club Foundation</p>
-
-                <p class="speaker-summary small text-secondary mb-3">S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce, </p>
-
-                <div class="d-flex justify-content-center align-items-center gap-3">
-                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
-                     data-name="Mr S. A Kakai"
-                     data-position="Director"
-                     data-org="Virtual Assets Chamber of Commerce, Web3Club Foundation"
-                     data-photo="{% static 'images/speakers/S_A_Kakai.webp' %}"
-                     data-bio="S.A. Kakai is a Kenyan legal and policy advocate with over four years of experience in the digital and virtual assets sector. As a Director at the Virtual Assets Chamber of Commerce,
-                          he has been at the forefront of advancing policy dialogue and stakeholder engagement around blockchain technology and virtual asset regulation in Kenya.
-                          Through this role, he has worked with global stablecoin issuers, multinational virtual asset service providers, decentralized finance (DeFi) protocols, and international exchanges, as well as Pan-African startups and local entrepreneurs.
-                          His efforts focus on designing business and policy use cases, promoting consumer adoption, conducting product and regulatory research, and supporting the responsible adoption of blockchain and virtual assets across the continent.
-                          In parallel, Kakai serves as a Director at the Web3Club Foundation, a hub that empowers software and blockchain developers to upskill and innovate within the Web3 ecosystem.
-                          Through this role, he has collaborated with leading global protocols such as Ethereum (via the Ethereum Foundation), Scroll (through the Scroll Foundation), and Hedera (through the Hashgraph Foundation) to empower builders and strengthen Africa’s developer community.
-                          His work centers on nurturing local talent, attracting foreign direct investment, and supporting entrepreneurs to create sustainable, blockchain-driven solutions that advance Kenya’s economic and technological growth.">
-                    View Profile
-                  </a>
-
-                  <div class="speaker-social">
-                    <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
-                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="row g-4 justify-content-center">
 
             <div class="col-md-6 col-lg-4">
               <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
@@ -274,6 +221,53 @@
             <div class="col-md-6 col-lg-4">
               <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
                 <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/Mr_John_OMO.webp' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
+                </div>
+
+                <h4 class="fw-semibold mb-1">Mr. John OMO</h4>
+                <p class="text-muted mb-1">Secretary-General</p>
+                <p class="fw-medium text-primary small mb-3">African Telecommunications Union</p>
+
+                <p class="speaker-summary small text-secondary mb-3">Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries.</p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="Mr. John OMO"
+                     data-position="Secretary-General"
+                     data-org="African Telecommunications Union"
+                     data-photo="{% static 'images/speakers/Mr_John_OMO.webp' %}"
+                     data-bio="Mr. John OMO is the Secretary-General of the African Telecommunications Union (ATU) having been re-elected for a second term in 2022 at the ATU Conference of Plenipotentiaries. He leads the continental body entrusted with building consensus within African countries in the development of ICT policies, systems and services, and also in coordinating African participation in international ICT for Africa.
+                          Mr. Omo has 31 years’ experience as a lawyer and has contributed immensely to the development of local and international policies, legislation, agreements and treaties in all areas of public service, but mainly in the area of ICTs.
+                          Prior to his election for his first term in 2018, he worked with the Communications Authority of Kenya, Kenya's ICT regulator, where he provided leadership over the Authority’s legal matters and strategies. Before that, he worked in the public/civil service.
+                          He holds a Master of Law degree in International and Commercial law from the University of Sheffield – UK; a Bachelor of Law from the University of Nairobi – Kenya; a Diploma in Human Rights Law from the UN Human Rights Centre, Geneva, and ILO Centre Turin and another diploma in Legal Practice and Ethics from the Kenya School of Law amongst other professional courses.">
+                    View Profile
+                  </a>
+
+                  <div class="speaker-social">
+                    <a href="https://ke.linkedin.com/in/s-a-kakai-08b54015b" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Speakers Section -->
+      <section id="speakers" class="speakers section py-5 bg-light">
+        <div class="container">
+
+          <div class="row g-4 justify-content-center">
+
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
                   <img src="{% static 'images/speakers/Eng_John_Tanui.webp' %}" loading="lazy" alt="Speaker"
                      class="rounded-circle img-fluid shadow background: var(--accent-color);"
                      style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
@@ -299,6 +293,46 @@
                   <div class="speaker-social d-flex gap-2">
                       <a href="https://ke.linkedin.com/in/johntanui" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
                       <a href="https://x.com/tanuijohn/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="speaker-card h-100 text-center p-4 bg-white shadow-sm rounded-4 border-0">
+                <div class="speaker-photo mx-auto mb-3 position-relative">
+                  <img src="{% static 'images/speakers/Ms_Regina_Akoth_Ombam.jpg' %}" loading="lazy" alt="Speaker"
+                     class="rounded-circle img-fluid shadow background: var(--accent-color);"
+                     style="width: 130px; height: 130px; object-fit: cover; object-position: top;">
+                  <div class="speaker-track position-absolute bottom-0 start-50 translate-middle-x badge bg-primary px-3 py-1 small text-uppercase ">Speaker </div>
+                </div>
+
+                <h4 class="fw-semibold mb-1">Ms. Regina Akoth Ombam</h4>
+                <p class="text-muted mb-1">Principal Secretary</p>
+                <p class="fw-medium text-primary small mb-3">State Department for Trade</p>
+
+                <p class="speaker-summary small text-secondary mb-3">Ms. Ombam is a distinguished economist and public policy expert with extensive experience in economic modeling, trade policy, transport economics, </p>
+
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  <a href="#" class="btn btn-outline-primary btn-sm rounded-pill profile-btn"
+                     data-name="Ms. Regina Akoth Ombam"
+                     data-position="Principal Secretary"
+                     data-org="State Department for Trade"
+                     data-photo="{% static 'images/speakers/Ms_Regina_Akoth_Ombam.jpg' %}"
+                     data-bio="Ms. Ombam is a distinguished economist and public policy expert with extensive experience in economic modeling, trade policy, transport economics, health financing and strategic planning.
+                                    Her career spans roles in both national, regional and global institutions. As a former Regional Health Financing Expert at the East African Community (EAC) Secretariat, she played a pivotal role in advancing sustainable healthcare funding across member states in the African region. Her leadership as an EAC Health Financing Dialogue Facilitator saw her working alongside Ministers of Health and Finance to establish the region’s Health Financing Hub and advocate for increased domestic investments in health through high level health financing dialogues in the Regional Economic Communities ( EAC, SADC, IGAD, ECOWAS) in Africa.
+                                    Previously, she served as Deputy Director for HIV Investments at Kenya’s National AIDS Control Council (NACC), where she was instrumental in mobilizing domestic and international resources for the  HIV/AIDS program in the country as well as developing evidence based investment cases for health. Ms. Ombam also served as one of the Technical Experts at the Council of Governors Secretariat on matters Health Financing in the context of Devolution.
+                                    Her advocacy efforts significantly influenced national, regional and global  health financing frameworks and strengthened Kenya’s presence on global health platforms particularly when she served as the Vice Chair of the Technical Review Panel of the Global Fund and Advisor to the World Bank President and UNAIDS Executive Director on Sustainable Financing for Health.
+                                    Ms. Ombam’s expertise extends across extensive macroeconomic and microeconomic analysis, implementation science, negotiations, results-based management and institutional governance.
+                                    Her strategic insight has made her a key driver in enhancing trade policy, fostering public-private partnerships, and promoting economic integration across the continent, including engagements at the African Union, European Union and with other Bilateral partners.
+                                    Ms. Ombam holds a Bachelor of Arts degree in Anthropology  and a Master of Arts degree in Economics from the University of Nairobi and a Masters Degree in Public Administration from Columbia University.
+                                    With a proven track record in economic policy and strategic planning her leadership at the State Department is instrumental in enhancing Kenya's trade environment, attract  investment and strengthen economic ties both regionally and globally.">
+                    View Profile
+                  </a>
+
+                  <div class="speaker-social">
+                    <a href="https://ke.linkedin.com/in/" target="_blank" class="text-primary fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://x.com/" target="_blank" class="fs-5" style="color: var(--accent-color);"> <i class="fa-brands fa-x-twitter"></i> </a>
                   </div>
                 </div>
               </div>
