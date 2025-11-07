@@ -3758,6 +3758,18 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
         "category": category
     })
 
+    #if we need to log errors again add try: at the top
+    # add this at  the bottom after the final JsonResponse
+    # except Exception as e:
+    #         # Log the full traceback and error details 75
+    #         logger.error("Error in create_badge (reg_id=%s): %s\n%s", reg_id, str(e), traceback.format_exc())
+    #
+    #         # Optional: Return a JSON error (won’t break client)
+    #         return JsonResponse({
+    #             "success": False,
+    #             "error": str(e)
+    #         }, status=500)
+
 
 @login_required
 @csrf_exempt  # optional: only if your AJAX doesn't send CSRF token
