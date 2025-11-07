@@ -1065,7 +1065,7 @@ def sendMail(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email'
             })
 
     # Invalid request method
@@ -1643,7 +1643,7 @@ def edit_category(request):
             return JsonResponse({'status': 'success', 'message': message})
 
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
+            return JsonResponse({'status': 'error', 'message': f'Error: loghere'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
@@ -2479,7 +2479,7 @@ def resend_exhibitor_confirmation_email(request, exhibitor_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "log here",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
@@ -3934,8 +3934,7 @@ def mark_printed(request, reg_id):
 
     except Exception as e:
         return JsonResponse({
-            "error": str(e),
-            "type": type(e).__name__
+            "error": "Internal server error"
         }, status=500)
 
 
