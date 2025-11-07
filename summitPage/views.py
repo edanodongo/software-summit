@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
-from openpyxl import Workbook
 from reportlab.lib.pagesizes import A4, landscape, A8
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
@@ -26,7 +25,7 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-from django.http import HttpResponse, FileResponse, JsonResponse, Http404
+from django.http import FileResponse, JsonResponse, Http404
 from datetime import datetime, timedelta
 from django.contrib.auth.views import LogoutView, LoginView
 from django.db.models import Case, When, Value, IntegerField, Max, OuterRef, Subquery, Count, Sum, Q
@@ -34,7 +33,7 @@ from django.db import transaction
 from django.template.loader import render_to_string
 from summitPage.forms import DashboardSettingForm
 from summitPage.models import (
-    ExhibitionSection, EmailLogs, Registrant, Exhibitor, SummitPartner, SummitSponsor,
+    ExhibitionSection, EmailLogs, Registrant, SummitPartner, SummitSponsor,
     SummitGallery, SummitSpeaker, SummitSession,
     SummitScheduleDay, Booth, DashboardSetting, EmailLog
 )
@@ -49,7 +48,6 @@ from PIL import ImageDraw, Image
 from io import BytesIO
 import os
 import qrcode
-import traceback
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
@@ -62,10 +60,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 from openpyxl import Workbook
 from django.http import HttpResponse
 from .models import Exhibitor
+
 
 # begin your views here
 
@@ -635,7 +633,6 @@ def export_registrants_excel(request):
     return response
 
 
-
 def export_excel_exhibitors(request):
     wb = Workbook()
     ws = wb.active
@@ -671,6 +668,7 @@ def export_excel_exhibitors(request):
 
     wb.save(response)
     return response
+
 
 # --------------------------------------------
 # === PDF Export in Landscape ===
@@ -2483,8 +2481,8 @@ def generate_exhibitor_badge(request, exhibitor_id):
     filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
-def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
 
+def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     category_obj = Category.objects.only("name", "color").get(id=exhib.category)
     badge_color = category_obj.color or colors.black
 
@@ -2519,7 +2517,9 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     scale_w = width / base_width
     scale_h = height / base_height
     scale = (scale_w + scale_h) / 2
-    def s(val): return val * scale
+
+    def s(val):
+        return val * scale
 
     ###############################################################
     # ======================== PAGE 1 =============================
@@ -2546,13 +2546,17 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
 
         c.setFillColor(badge_color)
         path = c.beginPath()
-        path.moveTo(0, 0); path.lineTo(width * 0.8, 0); path.lineTo(0, height * 0.4)
+        path.moveTo(0, 0);
+        path.lineTo(width * 0.8, 0);
+        path.lineTo(0, height * 0.4)
         path.close()
         c.drawPath(path, fill=1, stroke=0)
 
         c.setFillColor(colors.HexColor("#d62612"))
         path = c.beginPath()
-        path.moveTo(width, 0); path.lineTo(width, height * 0.35); path.lineTo(width * 0.5, 0)
+        path.moveTo(width, 0);
+        path.lineTo(width, height * 0.35);
+        path.lineTo(width * 0.5, 0)
         path.close()
         c.drawPath(path, fill=1, stroke=0)
 
@@ -2600,7 +2604,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
         c.roundRect(photo_x, photo_y, photo_w, photo_h, 6, fill=1)
         c.setFillColor(colors.darkgrey)
         c.setFont("Helvetica", 6)
-        c.drawCentredString(width/2, photo_y + photo_h/2 - 2, "No Photo")
+        c.drawCentredString(width / 2, photo_y + photo_h / 2 - 2, "No Photo")
 
     def draw_passport():
         try:
@@ -2616,14 +2620,14 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
             offset = int(min_side * 0.10)
             left = (img.width - min_side) / 2
             top = max((img.height - min_side) / 2 - offset, 0)
-            img = img.crop((left, top, left+min_side, top+min_side))
+            img = img.crop((left, top, left + min_side, top + min_side))
             img = img.resize((photo_w * 2, photo_h * 2), Image.LANCZOS)
 
             mask = Image.new("L", img.size, 0)
-            ImageDraw.Draw(mask).ellipse((0,0,img.size[0],img.size[1]), fill=255)
+            ImageDraw.Draw(mask).ellipse((0, 0, img.size[0], img.size[1]), fill=255)
 
             circ = Image.new("RGBA", img.size)
-            circ.paste(img, (0,0), mask=mask)
+            circ.paste(img, (0, 0), mask=mask)
 
             buf = BytesIO()
             circ.save(buf, format="PNG")
@@ -2632,16 +2636,16 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
             c.drawImage(ImageReader(buf), photo_x, photo_y,
                         width=photo_w, height=photo_h, mask="auto")
 
-            center_x = width/2
-            center_y = photo_y + photo_h/2
+            center_x = width / 2
+            center_y = photo_y + photo_h / 2
 
             c.setLineWidth(1.6)
             c.setStrokeColor(colors.white)
-            c.circle(center_x, center_y, (photo_w/2) + 1)
+            c.circle(center_x, center_y, (photo_w / 2) + 1)
 
             c.setLineWidth(0.8)
             c.setStrokeColor(colors.HexColor("#3aa655"))
-            c.circle(center_x, center_y, (photo_w/2) + 2)
+            c.circle(center_x, center_y, (photo_w / 2) + 2)
 
         except Exception:
             draw_placeholder()
@@ -2652,10 +2656,10 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     text_y = photo_y - s(12)
     c.setFillColor(colors.white)
     c.setFont("Helvetica-Bold", s(8.5))
-    c.drawCentredString(width/2, text_y, full_name[:35])
+    c.drawCentredString(width / 2, text_y, full_name[:35])
 
     c.setFont("Helvetica-Bold", s(13))
-    c.drawCentredString(width/2, text_y - s(11), category[:35])
+    c.drawCentredString(width / 2, text_y - s(11), category[:35])
 
     # Define fonts and sizes
     base_font = "Helvetica-Bold"
@@ -2823,7 +2827,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     text_w = c.stringWidth(text, "Helvetica", s(11))
     c.setLineWidth(s(0.6))
     c.setStrokeColor(colors.white)
-    c.line(text_x - text_w/2, text_y - s(3), text_x + text_w/2, text_y - s(3))
+    c.line(text_x - text_w / 2, text_y - s(3), text_x + text_w / 2, text_y - s(3))
 
     # --- Venue ---
     c.setFont("Helvetica", s(6))
@@ -2853,8 +2857,8 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
         rows = math.ceil(num_logos / cols)
 
         grid_top = height - s(75)
-        grid_height = s(95)          # was s(80)
-        grid_width = width * 0.95    # was width * 0.9
+        grid_height = s(95)  # was s(80)
+        grid_width = width * 0.95  # was width * 0.9
 
         start_x = (width - grid_width) / 2
         start_y = grid_top - grid_height
@@ -2875,8 +2879,8 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
                 c.drawImage(img,
                             x + padding,
                             y + padding,
-                            width=cell_w - padding*2,
-                            height=cell_h - padding*2,
+                            width=cell_w - padding * 2,
+                            height=cell_h - padding * 2,
                             preserveAspectRatio=True,
                             mask="auto")
             except Exception:
@@ -2889,6 +2893,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     c.save()
     pdf_buffer.seek(0)
     return pdf_buffer
+
 
 @login_required
 def generate_all_reg_badges(request):
@@ -3575,296 +3580,296 @@ def ajax_approve_exhibitor(request, exhibitor_id):
 def create_badge(request, reg_id, page_size=portrait(A7)):
     """Generate a scalable summit badge IMAGE (from PDF for perfect layout consistency)."""
 
+    # --- Fetch registrant ---
     try:
+        registrant = Registrant.objects.get(pk=reg_id)
+    except Registrant.DoesNotExist:
+        raise Http404("Registrant not found")
 
-        # --- Fetch registrant ---
-        try:
-            registrant = Registrant.objects.get(pk=reg_id)
-        except Registrant.DoesNotExist:
-            raise Http404("Registrant not found")
+    category_obj = Category.objects.only("name", "color").get(id=registrant.category)
+    badge_color = category_obj.color or colors.black
 
-        category_obj = Category.objects.only("name", "color").get(id=registrant.category)
-        badge_color = category_obj.color or colors.black
+    # --- Core Data ---
+    full_name = registrant.get_full_name() or ""
+    national_id = registrant.national_id_number or ""
+    org_type = registrant.display_org_type() or ""
+    job_title = registrant.job_title or ""
+    category = registrant.get_category_display() or ""
 
-        # --- Core Data ---
-        full_name = registrant.get_full_name() or ""
-        national_id = registrant.national_id_number or ""
-        org_type = registrant.display_org_type() or ""
-        job_title = registrant.job_title or ""
-        category = registrant.get_category_display() or ""
+    # --- Generate QR Code ---
+    qr_data = (
+        f"Name: {full_name}\n"
+        f"National ID/ Passport NO: {national_id}\n"
+        f"Organization: {org_type}\n"
+        f"Job Title: {job_title}\n"
+        f"Category: {category}\n"
+    )
+    qr_img = qrcode.make(qr_data)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+    qr_reader = ImageReader(qr_buffer)
 
-        # --- Generate QR Code ---
-        qr_data = (
-            f"Name: {full_name}\n"
-            f"National ID/ Passport NO: {national_id}\n"
-            f"Organization: {org_type}\n"
-            f"Job Title: {job_title}\n"
-            f"Category: {category}\n"
-        )
-        qr_img = qrcode.make(qr_data)
-        qr_buffer = BytesIO()
-        qr_img.save(qr_buffer, format="PNG")
-        qr_buffer.seek(0)
-        qr_reader = ImageReader(qr_buffer)
+    # --- PDF Setup ---
+    pdf_buffer = BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=page_size)
+    width, height = page_size
 
-        # --- PDF Setup ---
-        pdf_buffer = BytesIO()
-        c = canvas.Canvas(pdf_buffer, pagesize=page_size)
-        width, height = page_size
+    base_width, base_height = portrait(A7)
+    scale_w = width / base_width
+    scale_h = height / base_height
+    scale = (scale_w + scale_h) / 2
 
-        base_width, base_height = portrait(A7)
-        scale_w = width / base_width
-        scale_h = height / base_height
-        scale = (scale_w + scale_h) / 2
+    def s(val):
+        return val * scale
 
-        def s(val):
-            return val * scale
+    # --- Background ---
+    c.setFillColor(colors.white)
+    c.rect(0, 0, width, height, fill=1, stroke=0)
 
-        # --- Background ---
-        c.setFillColor(colors.white)
-        c.rect(0, 0, width, height, fill=1, stroke=0)
+    # --- Flag accents ---
+    def draw_accent_shapes():
+        c.setFillColor(colors.HexColor("#3aa655"))
+        path = c.beginPath()
+        path.moveTo(width * 0.68, height * 0.18)
+        path.lineTo(width * 0.83, height * 0.28)
+        path.lineTo(width * 0.68, height * 0.36)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
 
-        # --- Flag accents ---
-        def draw_accent_shapes():
-            c.setFillColor(colors.HexColor("#3aa655"))
-            path = c.beginPath()
-            path.moveTo(width * 0.68, height * 0.18)
-            path.lineTo(width * 0.83, height * 0.28)
-            path.lineTo(width * 0.68, height * 0.36)
-            path.close()
-            c.drawPath(path, fill=1, stroke=0)
+        offset = s(45)
+        c.setStrokeColor("#d62612")
+        c.setLineWidth(s(0.5))
+        c.line(width * 0.5 - offset, 0, width - offset, height * 0.35)
 
-            offset = s(45)
-            c.setStrokeColor("#d62612")
-            c.setLineWidth(s(0.5))
-            c.line(width * 0.5 - offset, 0, width - offset, height * 0.35)
+        c.setFillColor(badge_color)
+        path = c.beginPath()
+        path.moveTo(0, 0)
+        path.lineTo(width * 0.8, 0)
+        path.lineTo(0, height * 0.4)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
 
-            c.setFillColor(badge_color)
-            path = c.beginPath()
-            path.moveTo(0, 0)
-            path.lineTo(width * 0.8, 0)
-            path.lineTo(0, height * 0.4)
-            path.close()
-            c.drawPath(path, fill=1, stroke=0)
+        c.setFillColor(colors.HexColor("#d62612"))
+        path = c.beginPath()
+        path.moveTo(width, 0)
+        path.lineTo(width, height * 0.35)
+        path.lineTo(width * 0.5, 0)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
 
-            c.setFillColor(colors.HexColor("#d62612"))
-            path = c.beginPath()
-            path.moveTo(width, 0)
-            path.lineTo(width, height * 0.35)
-            path.lineTo(width * 0.5, 0)
-            path.close()
-            c.drawPath(path, fill=1, stroke=0)
+    draw_accent_shapes()
 
-        draw_accent_shapes()
+    # --- Logos ---
+    summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
+    partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
 
-        # --- Logos ---
-        summit_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "summit_logo.png")
-        partner_logo_path = os.path.join(settings.BASE_DIR, "static", "images", "badge_partner.png")
+    logo_h = s(65)
+    spacing = s(5)
+    total_width = 0
+    images = []
 
-        logo_h = s(65)
-        spacing = s(5)
-        total_width = 0
-        images = []
+    if os.path.exists(partner_logo_path):
+        partner_logo = ImageReader(partner_logo_path)
+        partner_logo_w = s(80)
+        images.append((partner_logo, partner_logo_w))
+        total_width += partner_logo_w
 
-        if os.path.exists(partner_logo_path):
-            partner_logo = ImageReader(partner_logo_path)
-            partner_logo_w = s(80)
-            images.append((partner_logo, partner_logo_w))
-            total_width += partner_logo_w
-
-        if os.path.exists(summit_logo_path):
-            if images:
-                total_width += spacing
-            summit_logo = ImageReader(summit_logo_path)
-            summit_logo_w = s(120)
-            images.append((summit_logo, summit_logo_w))
-            total_width += summit_logo_w
-
+    if os.path.exists(summit_logo_path):
         if images:
-            start_x = (width - total_width) / 2
-            y_pos = height - logo_h - s(15)
-            for img, w in images:
-                c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
-                            preserveAspectRatio=True, mask="auto")
-                start_x += w + spacing
+            total_width += spacing
+        summit_logo = ImageReader(summit_logo_path)
+        summit_logo_w = s(120)
+        images.append((summit_logo, summit_logo_w))
+        total_width += summit_logo_w
 
-        # --- Passport Photo ---
-        photo_w, photo_h = 80, 80
-        photo_x, photo_y = (width - photo_w) / 2, height - 160
+    if images:
+        start_x = (width - total_width) / 2
+        y_pos = height - logo_h - s(15)
+        for img, w in images:
+            c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
+                        preserveAspectRatio=True, mask="auto")
+            start_x += w + spacing
 
-        def draw_placeholder():
-            pass  # unchanged for brevity
+    # --- Passport Photo ---
+    photo_w, photo_h = 80, 80
+    photo_x, photo_y = (width - photo_w) / 2, height - 160
 
-        def draw_passport():
-            try:
-                if not (registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)):
-                    return draw_placeholder()
+    def draw_placeholder():
+        pass  # unchanged for brevity
 
-                photo_path = default_storage.path(registrant.passport_photo.name)
-                img = Image.open(photo_path).convert("RGBA")
+    def draw_passport():
+        try:
+            if not (registrant.passport_photo and default_storage.exists(registrant.passport_photo.name)):
+                return draw_placeholder()
 
-                img = img.point(lambda p: p * 1.03)
-                img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
+            photo_path = default_storage.path(registrant.passport_photo.name)
+            img = Image.open(photo_path).convert("RGBA")
 
-                min_side = min(img.size)
-                offset = int(min_side * 0.10)
-                left = (img.width - min_side) / 2
-                top = max((img.height - min_side) / 2 - offset, 0)
-                right = left + min_side
-                bottom = top + min_side
-                img = img.crop((left, top, right, bottom))
+            img = img.point(lambda p: p * 1.03)
+            img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
 
-                final_size = (int(photo_w * 2), int(photo_h * 2))
-                img = img.resize(final_size, Image.LANCZOS)
+            min_side = min(img.size)
+            offset = int(min_side * 0.10)
+            left = (img.width - min_side) / 2
+            top = max((img.height - min_side) / 2 - offset, 0)
+            right = left + min_side
+            bottom = top + min_side
+            img = img.crop((left, top, right, bottom))
 
-                mask = Image.new("L", final_size, 0)
-                ImageDraw.Draw(mask).ellipse((0, 0, *final_size), fill=255)
+            final_size = (int(photo_w * 2), int(photo_h * 2))
+            img = img.resize(final_size, Image.LANCZOS)
 
-                circular = Image.new("RGBA", final_size, (255, 255, 255, 0))
-                circular.paste(img, (0, 0), mask=mask)
+            mask = Image.new("L", final_size, 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, *final_size), fill=255)
 
-                buffer = BytesIO()
-                circular.save(buffer, format="PNG", optimize=True, compress_level=0)
-                buffer.seek(0)
+            circular = Image.new("RGBA", final_size, (255, 255, 255, 0))
+            circular.paste(img, (0, 0), mask=mask)
 
-                c.drawImage(
-                    ImageReader(buffer),
-                    photo_x,
-                    photo_y,
-                    width=photo_w,
-                    height=photo_h,
-                    mask="auto",
-                )
+            buffer = BytesIO()
+            circular.save(buffer, format="PNG", optimize=True, compress_level=0)
+            buffer.seek(0)
 
-                center_x = width / 2
-                center_y = photo_y + photo_h / 2
-                radius = (photo_w / 2) + 1
+            c.drawImage(
+                ImageReader(buffer),
+                photo_x,
+                photo_y,
+                width=photo_w,
+                height=photo_h,
+                mask="auto",
+            )
 
-                c.setLineWidth(2.2)
-                c.setStrokeColor(colors.white)
-                c.circle(center_x, center_y, radius, stroke=1, fill=0)
+            center_x = width / 2
+            center_y = photo_y + photo_h / 2
+            radius = (photo_w / 2) + 1
 
-                c.setLineWidth(1)
-                c.setStrokeColor(colors.HexColor("#3aa655"))
-                c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
+            c.setLineWidth(2.2)
+            c.setStrokeColor(colors.white)
+            c.circle(center_x, center_y, radius, stroke=1, fill=0)
 
-            except Exception as e:
-                print("Error drawing passport:", e)
-                draw_placeholder()
+            c.setLineWidth(1)
+            c.setStrokeColor(colors.HexColor("#3aa655"))
+            c.circle(center_x, center_y, radius + 2, stroke=1, fill=0)
 
-        draw_passport()
+        except Exception as e:
+            print("Error drawing passport:", e)
+            draw_placeholder()
 
-        # --- Registrant Info ---
-        text_y = photo_y - s(15)
-        c.setFillColor(colors.black)
-        c.setFont("Helvetica-Bold", s(10))
-        c.drawCentredString(width / 2, text_y, full_name[:35])
-        c.setFont("Helvetica-Bold", s(15))
-        c.drawCentredString(width / 2, text_y - s(14), category[:35])
+    draw_passport()
 
-        # --- Date & Venue with larger superscripted dates ---
-        c.setFillColor(colors.white)
+    # --- Registrant Info ---
+    text_y = photo_y - s(15)
+    c.setFillColor(colors.black)
+    c.setFont("Helvetica-Bold", s(10))
+    c.drawCentredString(width / 2, text_y, full_name[:35])
+    c.setFont("Helvetica-Bold", s(15))
+    c.drawCentredString(width / 2, text_y - s(14), category[:35])
 
-        # Define fonts and sizes
-        base_font = "Helvetica-Bold"
-        base_size = s(20)  # Increased from 15.5
-        sup_size = s(12)  # Increased for better proportion
-        text_main1, text_sup1 = "10", "th"
-        text_main2, text_sup2 = "12", "th"
-        dash = "–"
+    # --- Date & Venue with larger superscripted dates ---
+    c.setFillColor(colors.white)
 
-        # Measure total width for centering
-        w_main1 = c.stringWidth(text_main1, base_font, base_size)
-        w_sup1 = c.stringWidth(text_sup1, base_font, sup_size)
-        w_dash = c.stringWidth(dash, base_font, base_size)
-        w_main2 = c.stringWidth(text_main2, base_font, base_size)
-        w_sup2 = c.stringWidth(text_sup2, base_font, sup_size)
-        total_width = w_main1 + w_sup1 + w_dash + w_main2 + w_sup2
+    # Define fonts and sizes
+    base_font = "Helvetica-Bold"
+    base_size = s(20)  # Increased from 15.5
+    sup_size = s(12)  # Increased for better proportion
+    text_main1, text_sup1 = "10", "th"
+    text_main2, text_sup2 = "12", "th"
+    dash = "–"
 
-        x_start = (width / 4.5) - (total_width / 2)
-        y_base = s(40)  # slightly higher to balance the new size
+    # Measure total width for centering
+    w_main1 = c.stringWidth(text_main1, base_font, base_size)
+    w_sup1 = c.stringWidth(text_sup1, base_font, sup_size)
+    w_dash = c.stringWidth(dash, base_font, base_size)
+    w_main2 = c.stringWidth(text_main2, base_font, base_size)
+    w_sup2 = c.stringWidth(text_sup2, base_font, sup_size)
+    total_width = w_main1 + w_sup1 + w_dash + w_main2 + w_sup2
 
-        # Draw "10"
-        c.setFont(base_font, base_size)
-        c.drawString(x_start, y_base, text_main1)
-        x_start += w_main1
+    x_start = (width / 4.5) - (total_width / 2)
+    y_base = s(40)  # slightly higher to balance the new size
 
-        # Superscript "th"
-        c.setFont(base_font, sup_size)
-        c.drawString(x_start, y_base + s(7), text_sup1)  # slight vertical offset
-        x_start += w_sup1
+    # Draw "10"
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, text_main1)
+    x_start += w_main1
 
-        # Dash
-        c.setFont(base_font, base_size)
-        c.drawString(x_start, y_base, dash)
-        x_start += w_dash
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup1)  # slight vertical offset
+    x_start += w_sup1
 
-        # "12"
-        c.drawString(x_start, y_base, text_main2)
-        x_start += w_main2
+    # Dash
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, dash)
+    x_start += w_dash
 
-        # Superscript "th"
-        c.setFont(base_font, sup_size)
-        c.drawString(x_start, y_base + s(7), text_sup2)
+    # "12"
+    c.drawString(x_start, y_base, text_main2)
+    x_start += w_main2
 
-        # --- Date text ("November 2025") ---
-        text = "November 2025"
-        text_x = width / 4.2
-        text_y = s(30)
-        c.setFont("Helvetica", s(11))  # slightly larger and cleaner
-        c.setFillColor(colors.whitesmoke)
-        c.drawCentredString(text_x, text_y, text)
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup2)
 
-        # Underline accent
-        text_width = c.stringWidth(text, "Helvetica", s(11))
-        c.setLineWidth(s(0.6))
-        c.setStrokeColor(colors.white)
-        c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
+    # --- Date text ("November 2025") ---
+    text = "November 2025"
+    text_x = width / 4.2
+    text_y = s(30)
+    c.setFont("Helvetica", s(11))  # slightly larger and cleaner
+    c.setFillColor(colors.whitesmoke)
+    c.drawCentredString(text_x, text_y, text)
 
-        # --- Venue line ---
-        c.setFont("Helvetica", s(6))
-        c.drawCentredString(width / 4, s(20), "Moi University Annex Campus, ")
-        c.drawCentredString(width / 6.8, s(12), "Eldoret Kenya, ")
+    # Underline accent
+    text_width = c.stringWidth(text, "Helvetica", s(11))
+    c.setLineWidth(s(0.6))
+    c.setStrokeColor(colors.white)
+    c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
 
-        # --- QR Code ---
-        qr_size, qr_margin = s(45), s(7)
-        c.drawImage(qr_reader, width - qr_size - qr_margin, qr_margin,
-                    width=qr_size, height=qr_size, mask="auto")
+    # --- Venue line ---
+    c.setFont("Helvetica", s(6))
+    c.drawCentredString(width / 4, s(20), "Moi University Annex Campus, ")
+    c.drawCentredString(width / 6.8, s(12), "Eldoret Kenya, ")
 
-        # --- Finalize PDF ---
-        c.showPage()
-        c.save()
-        pdf_buffer.seek(0)
+    # --- QR Code ---
+    qr_size, qr_margin = s(45), s(7)
+    c.drawImage(qr_reader, width - qr_size - qr_margin, qr_margin,
+                width=qr_size, height=qr_size, mask="auto")
 
-        # --- Convert PDF → PNG (identical look) ---
-        image_pages = convert_from_bytes(pdf_buffer.getvalue(), dpi=300, use_cropbox=True, )
-        image_buffer = BytesIO()
-        image_pages[0].save(image_buffer, format="PNG")
-        image_buffer.seek(0)
+    # --- Finalize PDF ---
+    c.showPage()
+    c.save()
+    pdf_buffer.seek(0)
 
-        # --- Save to MEDIA directory ---
-        image_name = f"badges/{registrant.first_name}_{registrant.second_name}_badge.png"
-        image_path = default_storage.save(image_name, image_buffer)
-        image_url = default_storage.url(image_path)
+    # --- Convert PDF → PNG (identical look) ---
+    image_pages = convert_from_bytes(pdf_buffer.getvalue(), dpi=300, use_cropbox=True, )
+    image_buffer = BytesIO()
+    image_pages[0].save(image_buffer, format="PNG")
+    image_buffer.seek(0)
 
-        # --- Return JSON ---
-        return JsonResponse({
-            "success": True,
-            "image_url": image_url,
-            "registrant": full_name,
-            "name": full_name,
-            "category": category
-        })
+    # --- Save to MEDIA directory ---
+    image_name = f"badges/{registrant.first_name}_{registrant.second_name}_badge.png"
+    image_path = default_storage.save(image_name, image_buffer)
+    image_url = default_storage.url(image_path)
 
-    except Exception as e:
-        # Log the full traceback and error details 75
-        logger.error("Error in create_badge (reg_id=%s): %s\n%s", reg_id, str(e), traceback.format_exc())
+    # --- Return JSON ---
+    return JsonResponse({
+        "success": True,
+        "image_url": image_url,
+        "registrant": full_name,
+        "name": full_name,
+        "category": category
+    })
 
-        # Optional: Return a JSON error (won’t break client)
-        return JsonResponse({
-            "success": False,
-            "error": str(e)
-        }, status=500)
+    #if we need to log errors again add try: at the top
+    # add this at  the bottom after the final JsonResponse
+    # except Exception as e:
+    #         # Log the full traceback and error details 75
+    #         logger.error("Error in create_badge (reg_id=%s): %s\n%s", reg_id, str(e), traceback.format_exc())
+    #
+    #         # Optional: Return a JSON error (won’t break client)
+    #         return JsonResponse({
+    #             "success": False,
+    #             "error": str(e)
+    #         }, status=500)
 
 
 @login_required
