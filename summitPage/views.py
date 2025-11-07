@@ -1598,7 +1598,7 @@ def delete_category(request, pk):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to delete category: {str(e)}'
+                'message': f'Failed to delete category: stre thats the loggging thing '
             })
 
     # If not POST, return an error
