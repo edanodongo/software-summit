@@ -3355,7 +3355,7 @@ def save_user(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email:'
             })
 
     # Invalid request method
