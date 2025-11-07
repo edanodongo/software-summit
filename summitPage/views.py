@@ -154,8 +154,8 @@ def home(request):
     ).order_by('custom_order', 'full_name')
 
     sponsor_packages = {
-        "Platinum Partners": partners.filter(order__lte=10),
-        "Partners ": partners.filter(order__range=(11, 20)),
+        "Platinum Sponsors": partners.filter(order__lte=10),
+        "Sponsors ": partners.filter(order__range=(11, 20)),
         "Silver ": partners.filter(order__range=(21, 30)),
         "Bronze ": partners.filter(order__range=(31, 40)),
         "Partners": partners.filter(order__gt=40),
