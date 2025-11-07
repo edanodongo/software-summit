@@ -952,7 +952,7 @@ def delete_registrant(request, pk):
     except Registrant.DoesNotExist:
         return JsonResponse({"success": False, "error": "Registrant not found"}, status=404)
     except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=400)
+        return JsonResponse({"success": False, "error": "Error in deleting registrant"})
 
 
 def privacy(request):
