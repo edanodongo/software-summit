@@ -2891,7 +2891,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     return pdf_buffer
 
 @login_required
-def generate_all_exhibitor_badges(request):
+def generate_all_reg_badges(request):
     if not request.user.is_superuser:
         logout(request)
         return redirect("custom_login")
@@ -2914,6 +2914,107 @@ def generate_all_exhibitor_badges(request):
             "Content-Disposition": "attachment; filename=All_Exhibitor_Badges.zip"
         }
     )
+
+from io import BytesIO
+import zipfile
+from math import ceil
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from django.utils import timezone
+from .models import Registrant
+
+@login_required
+def generate_all_exhibitor_badges(request):
+    if not request.user.is_superuser:
+        logout(request)
+        return redirect("custom_login")
+
+    # --- Parameters ---
+    batch_size = int(request.GET.get("batch_size", 5))  # user can specify in URL or dashboard
+    # --- Filter by date if provided ---
+    exhibitors = Registrant.objects.all().order_by("created_at")
+
+    start_date = request.GET.get("start_date")
+    end_date = request.GET.get("end_date")
+
+    if start_date and end_date:
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)
+
+        # Convert to timezone-aware datetimes
+        start = timezone.make_aware(start)
+        end = timezone.make_aware(end)
+
+        exhibitors = Registrant.objects.filter(created_at__range=(start, end)).order_by("created_at")
+    else:
+        exhibitors = Registrant.objects.all().order_by("created_at")
+
+    total = exhibitors.count()
+    if total == 0:
+        return HttpResponse("No exhibitors found for that range.", content_type="text/plain")
+
+    total_batches = ceil(total / batch_size)
+    master_zip_buffer = BytesIO()
+
+    # --- Master ZIP containing batch zips ---
+    with zipfile.ZipFile(master_zip_buffer, "w", zipfile.ZIP_DEFLATED) as master_zip:
+        for batch_num in range(total_batches):
+            start = batch_num * batch_size
+            end = start + batch_size
+            batch_exhibitors = exhibitors[start:end]
+
+            # --- Create an in-memory batch zip ---
+            batch_zip_buffer = BytesIO()
+            with zipfile.ZipFile(batch_zip_buffer, "w", zipfile.ZIP_DEFLATED) as batch_zip:
+                for exhib in batch_exhibitors:
+                    pdf_buffer = build_exhibitor_badge_pdf(exhib)
+                    filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
+                    batch_zip.writestr(filename, pdf_buffer.getvalue())
+
+            batch_zip_buffer.seek(0)
+            batch_name = f"Batch_{batch_num+1:03d}.zip"
+            master_zip.writestr(batch_name, batch_zip_buffer.getvalue())
+
+    master_zip_buffer.seek(0)
+
+    timestamp = timezone.now().strftime("%Y%m%d-%H%M%S")
+    return HttpResponse(
+        master_zip_buffer,
+        content_type="application/zip",
+        headers={
+            "Content-Disposition": f"attachment; filename=All_Exhibitor_Batches_{timestamp}.zip"
+        },
+    )
+
+from django.http import JsonResponse
+from django.utils.dateparse import parse_date
+
+@login_required
+def count_registrations_in_range(request):
+    """Return count of exhibitors registered between start_date and end_date."""
+
+    start_date = request.GET.get("start_date")
+    end_date = request.GET.get("end_date")
+
+    if start_date and end_date:
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)
+
+        # Convert to timezone-aware datetimes
+        start = timezone.make_aware(start)
+        end = timezone.make_aware(end)
+
+        exhibitors = Registrant.objects.filter(created_at__range=(start, end)).order_by("created_at")
+    else:
+        exhibitors = Registrant.objects.all().order_by("created_at")
+
+    if not start or not end:
+        return JsonResponse({"count": 0})
+
+    count = Registrant.objects.filter(created_at__date__range=(start, end)).count()
+    return JsonResponse({"count": count})
 
 
 def protocol(request):
