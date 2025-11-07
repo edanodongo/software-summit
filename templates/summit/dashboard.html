@@ -43,15 +43,22 @@
         </div>
 
         <!-- Actions -->
-        <div class="d-flex justify-content-end mb-3 gap-2">
+        <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
+
             <a href="{% url 'export_print' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
                 <i class="fas fa-print me-1"></i> Print View
             </a>
-            <a href="{% url 'generate_all_exhibitor_badges' %}" class="btn btn-primary">
-                Download All Exhibitor Badges (ZIP)
+            <!-- Batch ZIP Button -->
+            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#batchModal">
+              <i class="fas fa-layer-group me-1"></i> Generate Batch ZIPs
             </a>
 
+            <!-- Optional: fallback All download -->
+            <a href="{% url 'generate_all_reg_badges' %}" class="btn btn-secondary btn-sm shadow-sm">
+                <i class="fas fa-archive me-1"></i> Download All
+            </a>
         </div>
+
 
         <!-- Registrants Table -->
         <div class="card shadow-sm border-0 rounded-4">
@@ -269,6 +276,58 @@
             </div>
         </div>
     </div>
+
+
+<!-- Batch Generation Modal -->
+<div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="batchForm" method="get" action="{% url 'generate_all_exhibitor_badges' %}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="batchModalLabel">Generate Exhibitor Badge Batches</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="start_date" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">End Date</label>
+            <input type="date" name="end_date" class="form-control" required>
+          </div>
+
+            <div class="text-muted small mt-1" id="countDisplay">
+              Select a date range to see how many registrations are included.
+            </div>
+
+          <div class="mb-3">
+            <label class="form-label">Badges per Batch</label>
+            <input type="number" name="batch_size" class="form-control" min="1" max="100" value="5" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-download me-1"></i> Generate ZIPs
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Spinner Overlay -->
+<div id="spinnerOverlay"
+     class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none justify-content-center align-items-center flex-column"
+     style="z-index: 2000;">
+  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+  <p class="mt-3 text-primary fw-bold">Generating badges... Please wait.</p>
+</div>
+
+
 {% endblock %}
 
 {% block scripts %}
@@ -514,6 +573,68 @@
         setTimeout(() => toast.remove(), 4000);
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('batchForm');
+  const spinner = document.getElementById('spinnerOverlay');
+  const batchModal = document.getElementById('batchModal');
+
+  form.addEventListener('submit', () => {
+    // Show spinner overlay
+    spinner.classList.remove('d-none');
+    spinner.classList.add('d-flex');
+
+    // Close modal
+    const modalInstance = bootstrap.Modal.getInstance(batchModal);
+    if (modalInstance) modalInstance.hide();
+
+    // Hide spinner when the browser window loses focus (download dialog opens)
+    const hideSpinner = () => {
+      spinner.classList.add('d-none');
+      spinner.classList.remove('d-flex');
+      window.removeEventListener('blur', hideSpinner);
+    };
+    window.addEventListener('blur', hideSpinner);
+
+    // Fallback: hide spinner after 30s
+    setTimeout(hideSpinner, 30000);
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const startInput = document.querySelector('input[name="start_date"]');
+  const endInput = document.querySelector('input[name="end_date"]');
+  const countDisplay = document.getElementById('countDisplay');
+
+  async function updateCount() {
+    const start = startInput.value;
+    const end = endInput.value;
+    if (!start || !end) {
+      countDisplay.textContent = "Select a date range to see how many registrations are included.";
+      return;
+    }
+
+    countDisplay.textContent = "Checking registrations...";
+    try {
+      const response = await fetch(
+        `{% url 'count_registrations_in_range' %}?start_date=${start}&end_date=${end}`
+      );
+      const data = await response.json();
+      if (data.count === 0) {
+        countDisplay.innerHTML = `<span class="text-danger">No registrations found for this range.</span>`;
+      } else {
+        countDisplay.innerHTML = `<span class="text-success fw-semibold">${data.count}</span> registrations found in this range.`;
+      }
+    } catch (error) {
+      countDisplay.textContent = "Unable to fetch count.";
+    }
+  }
+
+  startInput.addEventListener('change', updateCount);
+  endInput.addEventListener('change', updateCount);
+});
 </script>
+
 
 {% endblock %}

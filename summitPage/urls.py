@@ -191,5 +191,6 @@ urlpatterns = [
     path("export-excel-exhibitors/", views.export_excel_exhibitors, name="export_excel_exhibitors"),
 
     path("badges/exhibitors/all/", generate_all_exhibitor_badges, name="generate_all_exhibitor_badges"),
-
+    path("badges/registrants/all/", generate_all_reg_badges, name="generate_all_reg_badges"),
+    path("count_registrations_in_range/", views.count_registrations_in_range, name="count_registrations_in_range"),
 ]
