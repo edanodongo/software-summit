@@ -1526,7 +1526,7 @@ def resend_confirmation_email(request, registrant_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "here theres an error log it at this point",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
