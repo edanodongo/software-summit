@@ -8,4 +8,4 @@ def generate_api_key(length=32):
 
 # Example usage
 api_key = generate_api_key()
-print("Your new API key:", api_key)
+# Use the API key programmatically, don’t print or log it
