@@ -471,26 +471,69 @@ def generate_badge(request, registrant_id, page_size=portrait(A7)):
     c.setFont("Helvetica-Bold", s(15))
     c.drawCentredString(width / 2, text_y - s(14), category[:35])
 
-    # --- Date & Venue ---
+    # --- Date & Venue with larger superscripted dates ---
     c.setFillColor(colors.white)
-    c.setFont("Helvetica-Bold", s(15.5))
-    c.drawCentredString(width / 4.5, s(40), "10th – 12th")
 
+    # Define fonts and sizes
+    base_font = "Helvetica-Bold"
+    base_size = s(20)  # Increased from 15.5
+    sup_size = s(12)  # Increased for better proportion
+    text_main1, text_sup1 = "10", "th"
+    text_main2, text_sup2 = "12", "th"
+    dash = "–"
+
+    # Measure total width for centering
+    w_main1 = c.stringWidth(text_main1, base_font, base_size)
+    w_sup1 = c.stringWidth(text_sup1, base_font, sup_size)
+    w_dash = c.stringWidth(dash, base_font, base_size)
+    w_main2 = c.stringWidth(text_main2, base_font, base_size)
+    w_sup2 = c.stringWidth(text_sup2, base_font, sup_size)
+    total_width = w_main1 + w_sup1 + w_dash + w_main2 + w_sup2
+
+    x_start = (width / 4.3) - (total_width / 2)
+    y_base = s(40)  # slightly higher to balance the new size
+
+    # Draw "10"
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, text_main1)
+    x_start += w_main1
+
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup1)  # slight vertical offset
+    x_start += w_sup1
+
+    # Dash
+    c.setFont(base_font, base_size)
+    c.drawString(x_start, y_base, dash)
+    x_start += w_dash
+
+    # "12"
+    c.drawString(x_start, y_base, text_main2)
+    x_start += w_main2
+
+    # Superscript "th"
+    c.setFont(base_font, sup_size)
+    c.drawString(x_start, y_base + s(7), text_sup2)
+
+    # --- Date text ("November 2025") ---
     text = "November 2025"
-    text_x = width / 4.5
-    text_y = s(29.3)
-    c.setFont("Helvetica", s(11.5))
+    text_x = width / 4.2
+    text_y = s(30)
+    c.setFont("Helvetica", s(11))  # slightly larger and cleaner
     c.setFillColor(colors.whitesmoke)
     c.drawCentredString(text_x, text_y, text)
 
-    text_width = c.stringWidth(text, "Helvetica", s(11.5))
+    # Underline accent
+    text_width = c.stringWidth(text, "Helvetica", s(11))
     c.setLineWidth(s(0.6))
     c.setStrokeColor(colors.white)
     c.line(text_x - text_width / 2, text_y - s(3), text_x + text_width / 2, text_y - s(3))
 
-    c.setFont("Helvetica", s(6.8))
-    c.drawCentredString(width / 4, s(17), "Moi University Annex Campus, ")
-    c.drawCentredString(width / 7.3, s(8), "Eldoret Kenya, ")
+    # --- Venue line ---
+    c.setFont("Helvetica", s(6))
+    c.drawCentredString(width / 4, s(20), "Moi University Annex Campus, ")
+    c.drawCentredString(width / 6.8, s(12), "Eldoret Kenya, ")
 
     # --- QR Code ---
     qr_size, qr_margin = s(45), s(5)
