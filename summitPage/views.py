@@ -1569,7 +1569,7 @@ def save_category(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to save details: {str(e)}'
+                'message': f'Failed to save details:'
             })
 
     # Invalid request method
