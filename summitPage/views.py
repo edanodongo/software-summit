@@ -952,7 +952,7 @@ def delete_registrant(request, pk):
     except Registrant.DoesNotExist:
         return JsonResponse({"success": False, "error": "Registrant not found"}, status=404)
     except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=400)
+        return JsonResponse({"success": False, "error": "Error in deleting registrant"})
 
 
 def privacy(request):
@@ -1065,7 +1065,7 @@ def sendMail(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email'
             })
 
     # Invalid request method
@@ -1526,7 +1526,7 @@ def resend_confirmation_email(request, registrant_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "here theres an error log it at this point",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
@@ -1569,7 +1569,7 @@ def save_category(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to save details: {str(e)}'
+                'message': f'Failed to save details:'
             })
 
     # Invalid request method
@@ -1598,7 +1598,7 @@ def delete_category(request, pk):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to delete category: {str(e)}'
+                'message': f'Failed to delete category: stre thats the loggging thing '
             })
 
     # If not POST, return an error
@@ -1643,7 +1643,7 @@ def edit_category(request):
             return JsonResponse({'status': 'success', 'message': message})
 
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
+            return JsonResponse({'status': 'error', 'message': f'Error: loghere'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
@@ -2479,7 +2479,7 @@ def resend_exhibitor_confirmation_email(request, exhibitor_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "log here",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
@@ -3355,7 +3355,7 @@ def save_user(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email:'
             })
 
     # Invalid request method
@@ -3934,8 +3934,7 @@ def mark_printed(request, reg_id):
 
     except Exception as e:
         return JsonResponse({
-            "error": str(e),
-            "type": type(e).__name__
+            "error": "Internal server error"
         }, status=500)
 
 
