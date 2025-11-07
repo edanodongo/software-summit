@@ -1,9 +1,8 @@
 # imports
 import math
-import zipfile
 from collections import Counter
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
@@ -25,32 +24,28 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-from django.http import FileResponse, JsonResponse, Http404
-from datetime import datetime, timedelta
+from django.http import FileResponse, Http404
 from django.contrib.auth.views import LogoutView, LoginView
 from django.db.models import Case, When, Value, IntegerField, Max, OuterRef, Subquery, Count, Sum, Q
 from django.db import transaction
 from django.template.loader import render_to_string
 from summitPage.forms import DashboardSettingForm
 from summitPage.models import (
-    ExhibitionSection, EmailLogs, Registrant, SummitPartner, SummitSponsor,
+    ExhibitionSection, EmailLogs, SummitPartner, SummitSponsor,
     SummitGallery, SummitSpeaker, SummitSession,
     SummitScheduleDay, Booth, DashboardSetting, EmailLog
 )
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
-from django.utils import timezone
 from django.db.models.functions import TruncDate, TruncMonth
 from django.utils.timezone import now
 from PIL import ImageDraw, Image
-from io import BytesIO
 import os
 import qrcode
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.contrib.auth.decorators import login_required
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import portrait, A7
 from reportlab.lib.utils import ImageReader
@@ -61,14 +56,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 from openpyxl import Workbook
-from django.http import HttpResponse
 from .models import Exhibitor
 from django.shortcuts import redirect
 from math import ceil
 from io import BytesIO
 import zipfile
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .models import Registrant, Category
 from datetime import datetime, timedelta
@@ -2935,8 +2928,6 @@ def generate_all_reg_badges(request):
     )
 
 
-
-
 @login_required
 def generate_all_exhibitor_badges(request):
     """Generate all exhibitor badges, optionally filtered by date and/or category, and grouped into batch ZIP files."""
@@ -3008,9 +2999,6 @@ def generate_all_exhibitor_badges(request):
     )
 
 
-
-
-
 @login_required
 def count_registrations_in_range(request):
     """Return count of exhibitors registered between start_date and end_date, optionally filtered by category."""
@@ -3039,6 +3027,7 @@ def count_registrations_in_range(request):
     count = exhibitors.count()
 
     return JsonResponse({"count": count})
+
 
 def protocol(request):
     if request.method == 'POST':
@@ -3877,7 +3866,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
         "category": category
     })
 
-    #if we need to log errors again add try: at the top
+    # if we need to log errors again add try: at the top
     # add this at  the bottom after the final JsonResponse
     # except Exception as e:
     #         # Log the full traceback and error details 75
