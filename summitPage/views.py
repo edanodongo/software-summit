@@ -2601,7 +2601,7 @@ def generate_exhibitor_badge(request, exhibitor_id):
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
 
-def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
+def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
     category_obj = Category.objects.only("name", "color").get(id=exhib.category)
     badge_color = category_obj.color or colors.black
 
@@ -2716,7 +2716,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
 
     # --- Passport Photo ---
     photo_w, photo_h = 65, 65
-    photo_x, photo_y = (width - photo_w) / 2, height - 120
+    photo_x, photo_y = (width - photo_w) / 2, height - 150
 
     def draw_placeholder():
         c.setFillColor(colors.lightgrey)
@@ -3637,7 +3637,7 @@ def ajax_approve_exhibitor(request, exhibitor_id):
 
 
 @login_required
-def create_badge(request, reg_id, page_size=portrait(A8)):
+def create_badge(request, reg_id, page_size=portrait(A7)):
     """Generate a scalable summit badge IMAGE (from PDF for perfect layout consistency)."""
 
     # --- Fetch registrant ---
