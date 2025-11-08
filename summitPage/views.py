@@ -2926,11 +2926,9 @@ def generate_all_reg_badges(request):
             "Content-Disposition": "attachment; filename=All_Registration_Badges.zip"
         }
     )
-
-
 @login_required
 def generate_all_exhibitor_badges(request):
-    """Generate all exhibitor badges, optionally filtered by date and/or category, and grouped into batch ZIP files."""
+    """Generate all exhibitor badges, optionally filtered by date and/or category, grouped into batch ZIP files."""
     if not request.user.is_superuser:
         logout(request)
         return redirect("custom_login")
@@ -2939,30 +2937,35 @@ def generate_all_exhibitor_badges(request):
     batch_size = int(request.GET.get("batch_size", 5))
     start_date = request.GET.get("start_date")
     end_date = request.GET.get("end_date")
-    category = request.GET.get("category")  # <-- category is a CharField, not an ID
+    category = request.GET.get("category")
 
     # --- Base queryset ---
     exhibitors = Registrant.objects.all().order_by("created_at")
 
-    # --- Filter by date range if provided ---
+    # --- Filter by date range ---
     if start_date and end_date:
         start = datetime.strptime(start_date, "%Y-%m-%d")
         end = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)
-
-        # Convert to timezone-aware datetimes
         start = timezone.make_aware(start)
         end = timezone.make_aware(end)
-
         exhibitors = exhibitors.filter(created_at__range=(start, end))
 
-    # --- Filter by category if provided ---
-    if category and category != "all":  # ✅ handle 'all' gracefully
-        exhibitors = exhibitors.filter(category=category)
+    # --- Filter by category ---
+    if category and category.lower() != "all":
+        # ✅ Handle Student category safely regardless of stored value
+        # You can replace "1" with your actual stored key if different
+        if category.lower() in ["student", "1", "stu"]:
+            exhibitors = exhibitors.filter(approved=True, category__iexact=category)
+        else:
+            exhibitors = exhibitors.filter(category=category)
 
-    # --- If no results, return message ---
+    # --- Handle empty queryset ---
     total = exhibitors.count()
     if total == 0:
-        return HttpResponse("No exhibitors found for the specified filters.", content_type="text/plain")
+        return HttpResponse(
+            "No exhibitors found for the specified filters.",
+            content_type="text/plain",
+        )
 
     total_batches = ceil(total / batch_size)
     master_zip_buffer = BytesIO()
@@ -2974,7 +2977,6 @@ def generate_all_exhibitor_badges(request):
             end_idx = start_idx + batch_size
             batch_exhibitors = exhibitors[start_idx:end_idx]
 
-            # --- Create in-memory batch zip ---
             batch_zip_buffer = BytesIO()
             with zipfile.ZipFile(batch_zip_buffer, "w", zipfile.ZIP_DEFLATED) as batch_zip:
                 for exhib in batch_exhibitors:
@@ -2982,21 +2984,23 @@ def generate_all_exhibitor_badges(request):
                     filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
                     batch_zip.writestr(filename, pdf_buffer.getvalue())
 
+            # Add batch ZIP into master ZIP
             batch_zip_buffer.seek(0)
             batch_name = f"Batch_{batch_num + 1:03d}.zip"
             master_zip.writestr(batch_name, batch_zip_buffer.getvalue())
 
+    # --- Finalize ZIP and prepare response ---
     master_zip_buffer.seek(0)
+    zip_bytes = master_zip_buffer.getvalue()
 
-    # --- Download response ---
     timestamp = timezone.now().strftime("%Y%m%d-%H%M%S")
     filename = f"All_Registration_Batches_{timestamp}.zip"
 
-    return HttpResponse(
-        master_zip_buffer,
-        content_type="application/zip",
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
-    )
+    response = HttpResponse(zip_bytes, content_type="application/zip")
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    response["Content-Length"] = str(len(zip_bytes))
+
+    return response
 
 
 @login_required
