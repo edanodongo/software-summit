@@ -12,33 +12,33 @@
         <!-- Summary Cards -->
         <div class="row row-cols-1 row-cols-md-2 g-4">
 
-          <!-- Total Students Card -->
-          <div class="col">
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-              <div class="card-body text-center py-4">
-                <h5 class="text-muted mb-2">Total Students</h5>
-                <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
-                <h6 class="text-secondary mb-0">
-                  Updates Opt-in:
-                  <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
-                </h6>
-              </div>
+            <!-- Total Students Card -->
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+                    <div class="card-body text-center py-4">
+                        <h5 class="text-muted mb-2">Total Students</h5>
+                        <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
+                        <h6 class="text-secondary mb-0">
+                            Updates Opt-in:
+                            <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
+                        </h6>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <!-- Total Registrations Card -->
-          <div class="col">
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-              <div class="card-body text-center py-4">
-                <h5 class="text-muted mb-2">Total Registrations</h5>
-                <p class="display-5 fw-bold text-primary mb-1">{{ registrations.count }}</p>
-                <h6 class="text-secondary mb-0">
-                  Updates Opt-in:
-                  <span class="fw-semibold text-success">{{ updates_count }}</span>
-                </h6>
-              </div>
+            <!-- Total Registrations Card -->
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+                    <div class="card-body text-center py-4">
+                        <h5 class="text-muted mb-2">Total Registrations</h5>
+                        <p class="display-5 fw-bold text-primary mb-1">{{ registrations.count }}</p>
+                        <h6 class="text-secondary mb-0">
+                            Updates Opt-in:
+                            <span class="fw-semibold text-success">{{ updates_count }}</span>
+                        </h6>
+                    </div>
+                </div>
             </div>
-          </div>
 
         </div>
 
@@ -57,9 +57,17 @@
             </div>
             <div class="card-body p-3">
                 <div class="table-responsive">
+                    <div class="mb-3 d-flex justify-content-between">
+                        <button id="massPrintBtn" class="btn btn-success btn-sm">
+                            <i class="fas fa-thumbs-up"></i> Approve Selected
+                        </button>
+                    </div>
                     <table id="registrants-table" class="table table-hover align-middle table-borderless w-100">
                         <thead class="table-primary text-white">
                         <tr>
+                            <th style="width: 40px;">
+                                <input type="checkbox" id="select-all" title="Select All">
+                            </th>
                             <th>#</th>
                             <th>Name</th>
                             <th>Approval status</th>
@@ -85,6 +93,9 @@
                         <tbody>
                         {% for registrant in registrants %}
                             <tr id="row-{{ registrant.id }}">
+                                <td class="text-center">
+                                    <input type="checkbox" class="select-item" value="{{ registrant.id }}">
+                                </td>
                                 <td>{{ forloop.counter }}</td>
                                 <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                                 <td>
@@ -172,7 +183,7 @@
                                         {% if not registrant.approved %}
                                             <a href="#" class="btn btn-sm btn-outline-success approve-btn"
                                                onclick="approvestudent('{{ registrant.id }}')" title="Approve Student">
-                                            <i class="fas fa-check"></i>
+                                                <i class="fas fa-check"></i>
                                             </a>
                                         {% else %}
                                             <button class="btn btn-sm btn-success" disabled title="Approved">
@@ -182,7 +193,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        {% empty %}
+                            {% empty %}
                             <tr>
                                 <td colspan="18" class="text-center py-4 text-muted">No registrations yet.</td>
                             </tr>
@@ -237,22 +248,22 @@
 
         <!-- ✨ Edit Modal -->
         <div class="modal fade" id="editRegistrantModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-              <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                  <i class="fas fa-user-edit"></i> Edit Registrant
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body" id="editRegistrantBody">
-                <div class="text-center py-5 text-muted">
-                  <i class="fas fa-spinner fa-spin fa-2x"></i>
-                  <p class="mt-2">Loading...</p>
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-edit"></i> Edit Registrant
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="editRegistrantBody">
+                        <div class="text-center py-5 text-muted">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p class="mt-2">Loading...</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
 
         <!-- Delete Confirmation Modal -->
@@ -334,14 +345,14 @@
         }
 
         #editRegistrantModal .modal-content {
-          border-radius: 1rem;
-          overflow: hidden;
+            border-radius: 1rem;
+            overflow: hidden;
         }
 
         #editRegistrantModal .form-control,
         #editRegistrantModal select {
-          border-radius: 0.5rem;
-          box-shadow: none !important;
+            border-radius: 0.5rem;
+            box-shadow: none !important;
         }
     </style>
 
@@ -420,83 +431,159 @@
                 });
             });
 
-        });
 
+            const selectAll = document.getElementById("select-all");
+            const checkboxes = document.querySelectorAll(".select-item");
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
-        const modalBody = document.getElementById('editRegistrantBody');
+            // Initialize Notyf
+            const notyf = new Notyf({
+                duration: 2500,
+                position: {x: "right", y: "top"},
+            });
 
+            // Toggle all checkboxes
+            selectAll.addEventListener("change", function () {
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            });
 
-        // 🟡 Open modal and load form (with event delegation)
-        document.addEventListener('click', async (event) => {
-            const btn = event.target.closest('.edit-btn');
-            if (!btn) return;
+            // Handle Mass Approve Button
+            document.getElementById("massPrintBtn").addEventListener("click", async function () {
+                const selected = Array.from(document.querySelectorAll(".select-item:checked"))
+                    .map(cb => cb.value);
 
-            const url = btn.getAttribute('data-url');
-            modalBody.innerHTML = `<div class="text-center py-5 text-muted">
-                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
-            modal.show();
+                if (selected.length === 0) {
+                    notyf.error("Please select at least one record.");
+                    return;
+                }
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                modalBody.innerHTML = data.html_form;
-                attachFormSubmit();
-            } catch (error) {
-                modalBody.innerHTML = `<div class="text-danger text-center py-4">
-                    <i class="fas fa-exclamation-circle"></i> Failed to load form.
-                </div>`;
-            }
-        });
+                notyf.success(`Approving ${selected.length} record(s)...`);
 
-        // 🟢 Handle form submission via AJAX
-        function attachFormSubmit() {
-            const form = document.getElementById('edit-registrant-form');
-            if (!form) return;
+                // Track progress
+                let successCount = 0;
+                let failCount = 0;
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const action = form.getAttribute('action') || window.location.href;
+                // Use Promise.all to handle all requests
+                await Promise.all(selected.map(id =>
+                    fetch(`/mass_approve_student/${id}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": getCookie("csrftoken"),
+                        },
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === "success") successCount++;
+                            else failCount++;
+                        })
+                        .catch(() => failCount++)
+                ));
 
-                const response = await fetch(action, {
-                    method: 'POST',
-                    body: formData,
-                });
+                // Notify result
+                if (successCount > 0)
+                    notyf.success(`${successCount} record(s) approved successfully.`);
+                if (failCount > 0)
+                    notyf.error(`${failCount} record(s) failed to approve.`);
 
-                const data = await response.json();
-
-                if (data.success) {
-                    modal.hide();
-                    const row = document.getElementById(`row-${data.id}`);
-                    if (row && data.row_html) {
-                        row.outerHTML = data.row_html;
-                    }
-                    showToast("✅ " + data.message, "success");
-                } else {
-                    modalBody.innerHTML = data.html_form;
-                    attachFormSubmit(); // rebind form
+                // Reload after 1.5s if any approvals succeeded
+                if (successCount > 0) {
+                    setTimeout(() => window.location.reload(), 1500);
                 }
             });
-        }
 
-    // 🔔 Toast feedback
-    function showToast(message, type) {
-        const toast = document.createElement("div");
-        toast.className = `toast align-items-center text-bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
-        toast.role = "alert";
-        toast.innerHTML = `
+            // Helper to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    for (let cookie of cookies) {
+                        cookie = cookie.trim();
+                        if (cookie.startsWith(name + "=")) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
+            const modalBody = document.getElementById('editRegistrantBody');
+
+
+            // 🟡 Open modal and load form (with event delegation)
+            document.addEventListener('click', async (event) => {
+                const btn = event.target.closest('.edit-btn');
+                if (!btn) return;
+
+                const url = btn.getAttribute('data-url');
+                modalBody.innerHTML = `<div class="text-center py-5 text-muted">
+                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
+                modal.show();
+
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    modalBody.innerHTML = data.html_form;
+                    attachFormSubmit();
+                } catch (error) {
+                    modalBody.innerHTML = `<div class="text-danger text-center py-4">
+                    <i class="fas fa-exclamation-circle"></i> Failed to load form.
+                </div>`;
+                }
+            });
+
+            // 🟢 Handle form submission via AJAX
+            function attachFormSubmit() {
+                const form = document.getElementById('edit-registrant-form');
+                if (!form) return;
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(form);
+                    const action = form.getAttribute('action') || window.location.href;
+
+                    const response = await fetch(action, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        modal.hide();
+                        const row = document.getElementById(`row-${data.id}`);
+                        if (row && data.row_html) {
+                            row.outerHTML = data.row_html;
+                        }
+                        showToast("✅ " + data.message, "success");
+                    } else {
+                        modalBody.innerHTML = data.html_form;
+                        attachFormSubmit(); // rebind form
+                    }
+                });
+            }
+
+            // 🔔 Toast feedback
+            function showToast(message, type) {
+                const toast = document.createElement("div");
+                toast.className = `toast align-items-center text-bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
+                toast.role = "alert";
+                toast.innerHTML = `
             <div class="d-flex">
                 <div class="toast-body">${message}</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>`;
-        document.body.appendChild(toast);
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-        setTimeout(() => toast.remove(), 4000);
-    }
-});
+                document.body.appendChild(toast);
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                setTimeout(() => toast.remove(), 4000);
+            }
+        });
 
         //approval
         function approvestudent(registrantId) {

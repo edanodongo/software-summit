@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("dashboard/student/", views.dashboard_student_view, name="student"),
+    path("dashboard/student-approved/", views.student_approved, name="student_approved"),
     path("mailme/", views.mailme_view, name="mailme"),
     # path("protocol/", views.protocol, name="protocol"),
     path("register-org/", views.special_registration, name="special_registration"),
@@ -84,6 +85,13 @@ urlpatterns = [
         views.approve_student,
         name="approve_student",
     ),
+
+    path(
+        "mass_approve_student/<int:registrant_id>/",
+        views.mass_approve_student,
+        name="mass_approve_student",
+    ),
+
     path("delete/<int:pk>/", views.delete_registrant, name="delete_registrant"),
     path("dashboard/data/", views.dashboard_data, name="dashboard_data"),
     # SHEDULE
