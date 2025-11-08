@@ -2715,8 +2715,8 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
             start_x += w + spacing
 
     # --- Passport Photo ---
-    photo_w, photo_h = 65, 65
-    photo_x, photo_y = (width - photo_w) / 2, height - 150
+    photo_w, photo_h = 80, 80
+    photo_x, photo_y = (width - photo_w) / 2, height - 165
 
     def draw_placeholder():
         c.setFillColor(colors.lightgrey)
