@@ -2997,7 +2997,7 @@ def generate_all_exhibitor_badges(request):
         return redirect("custom_login")
 
     # --- Parameters ---
-    batch_size = int(request.GET.get("batch_size", 100))
+    batch_size = int(request.GET.get("batch_size", 5))
     start_date = request.GET.get("start_date")
     end_date = request.GET.get("end_date")
     category = request.GET.get("category")

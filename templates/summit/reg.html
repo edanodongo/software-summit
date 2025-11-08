@@ -130,203 +130,203 @@
                             </div>
                         </div>
 
-                        <div class="alert alert-warning text-center py-5 rounded-3 shadow-sm">
-                          <h4 class="fw-bold text-uppercase mb-2">Registration Closed</h4>
-                          <p class="mb-0">Thank you for your interest in the <strong>Kenya Software & AI Summit 2025</strong>.
-                          Registration is now closed.</p>
-                        </div>
+<!--                        <div class="alert alert-warning text-center py-5 rounded-3 shadow-sm">-->
+<!--                          <h4 class="fw-bold text-uppercase mb-2">Registration Closed</h4>-->
+<!--                          <p class="mb-0">Thank you for your interest in the <strong>Kenya Software & AI Summit 2025</strong>. -->
+<!--                          Registration is now closed.</p>-->
+<!--                        </div>-->
 
 
-<!--                        <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>-->
-<!--                            {% csrf_token %}-->
+                        <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
+                            {% csrf_token %}
 
-<!--                            &lt;!&ndash; Title, First Name, Second Name &ndash;&gt;-->
-<!--                            <div class="row g-2">-->
-<!--                                <div class="col-md-12 mb-2">-->
-<!--                                    <label for="title" class="form-label fw-semibold dark mb-1">Title</label>-->
-<!--                                    {{ form.title }}-->
-<!--                                </div>-->
-<!--                                <div class="col-md-6 mb-2">-->
-<!--                                    <label for="id_first_name" class="form-label fw-semibold dark mb-1">First-->
-<!--                                        Name</label>-->
-<!--                                    {{ form.first_name }}-->
-<!--                                </div>-->
-<!--                                <div class="col-md-6 mb-2">-->
-<!--                                    <label for="id_second_name" class="form-label fw-semibold dark mb-1">Other-->
-<!--                                        Names</label>-->
-<!--                                    {{ form.second_name }}-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!-- Title, First Name, Second Name -->
+                            <div class="row g-2">
+                                <div class="col-md-12 mb-2">
+                                    <label for="title" class="form-label fw-semibold dark mb-1">Title</label>
+                                    {{ form.title }}
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_first_name" class="form-label fw-semibold dark mb-1">First
+                                        Name</label>
+                                    {{ form.first_name }}
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_second_name" class="form-label fw-semibold dark mb-1">Other
+                                        Names</label>
+                                    {{ form.second_name }}
+                                </div>
+                            </div>
 
-<!--                            &lt;!&ndash; Email + Confirm Email + Phone &ndash;&gt;-->
-<!--                              <div class="mt-3 mb-3">-->
-<!--                                <label for="id_email" class="form-label fw-semibold dark mb-1">Email</label>-->
-<!--                                {{ form.email }}-->
-<!--                              </div>-->
+                            <!-- Email + Confirm Email + Phone -->
+                              <div class="mt-3 mb-3">
+                                <label for="id_email" class="form-label fw-semibold dark mb-1">Email</label>
+                                {{ form.email }}
+                              </div>
 
-<!--                            <div class="row g-2 mt-2">-->
-<!--                              <div class="col-md-6 mb-2">-->
-<!--                                <label for="id_confirm_email" class="form-label fw-semibold dark mb-1">Confirm Email</label>-->
-<!--                                {{ form.confirm_email }}-->
-<!--                                {% if form.confirm_email.errors %}-->
-<!--                                  <div class="text-danger small mt-1">{{ form.confirm_email.errors }}</div>-->
-<!--                                {% endif %}-->
-<!--                              </div>-->
-<!--                            &lt;!&ndash; Phone &ndash;&gt;-->
-<!--                              <div class="col-md-6 mb-2">-->
-<!--                                <label for="id_phone" class="form-label fw-semibold dark mb-1">Phone</label>-->
-<!--                                {{ form.phone }}-->
-<!--                              </div>-->
-<!--                            </div>-->
+                            <div class="row g-2 mt-2">
+                              <div class="col-md-6 mb-2">
+                                <label for="id_confirm_email" class="form-label fw-semibold dark mb-1">Confirm Email</label>
+                                {{ form.confirm_email }}
+                                {% if form.confirm_email.errors %}
+                                  <div class="text-danger small mt-1">{{ form.confirm_email.errors }}</div>
+                                {% endif %}
+                              </div>
+                            <!-- Phone -->
+                              <div class="col-md-6 mb-2">
+                                <label for="id_phone" class="form-label fw-semibold dark mb-1">Phone</label>
+                                {{ form.phone }}
+                              </div>
+                            </div>
 
-<!--                            &lt;!&ndash; Organization Type &ndash;&gt;-->
-<!--                            <div class="row g-2 mt-2">-->
-<!--                                <div class="col-md-6 mb-2">-->
-<!--                                    <label for="id_organization_type" class="form-label fw-semibold dark mb-1">Organization</label>-->
-<!--                                    {{ form.organization_type }}-->
-<!--                                    <small class="text-muted d-block mt-1">-->
-<!--                                        Select student or organization-->
-<!--                                    </small>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-6 mb-2" id="other-org-type">-->
-<!--                                    <label for="id_other_organization_type" class="form-label fw-semibold dark mb-1">Institution-->
-<!--                                        name</label>-->
-<!--                                    {{ form.other_organization_type }}-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!-- Organization Type -->
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_organization_type" class="form-label fw-semibold dark mb-1">Organization</label>
+                                    {{ form.organization_type }}
+                                    <small class="text-muted d-block mt-1">
+                                        Select student or organization
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mb-2" id="other-org-type">
+                                    <label for="id_other_organization_type" class="form-label fw-semibold dark mb-1">Institution
+                                        name</label>
+                                    {{ form.other_organization_type }}
+                                </div>
+                            </div>
 
-<!--                            <div class="mt-3 mb-3">-->
-<!--                                <div class="mt-3 mb-3">-->
-<!--                                    <label for="id_category" class="form-label fw-semibold dark mb-1">Category</label>-->
-<!--                                    {{ form.category }}-->
-<!--                                    {% if form.category.errors %}-->
-<!--                                        <div class="text-danger small mt-1">{{ form.category.errors }}</div>-->
-<!--                                    {% endif %}-->
-<!--                                    <small class="text-muted d-block mt-1">-->
-<!--                                        Register as either delegate or student-->
-<!--                                    </small>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="mt-3 mb-3">
+                                <div class="mt-3 mb-3">
+                                    <label for="id_category" class="form-label fw-semibold dark mb-1">Category</label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}
+                                        <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                                    {% endif %}
+                                    <small class="text-muted d-block mt-1">
+                                        Register as either delegate or student
+                                    </small>
+                                </div>
+                            </div>
 
-<!--                            &lt;!&ndash; student registration number &ndash;&gt;-->
-<!--                            <div class="mt-3 mb-3">-->
-<!--                                <label for="id_admn_number" class="form-label fw-semibold dark mb-1">Student Registration Number</label>-->
-<!--                                {{ form.admn_number }}-->
-<!--                            </div>-->
+                            <!-- student registration number -->
+                            <div class="mt-3 mb-3">
+                                <label for="id_admn_number" class="form-label fw-semibold dark mb-1">Student Registration Number</label>
+                                {{ form.admn_number }}
+                            </div>
 
-<!--                            <div class="row g-2 mt-2">-->
-<!--                                &lt;!&ndash; Job Title &ndash;&gt;-->
-<!--                                <div class="col-md-6 mb-2">-->
-<!--                                    <label for="id_job_title" class="form-label fw-semibold dark mb-1">-->
-<!--                                        Job Title / Role-->
-<!--                                    </label>-->
-<!--                                    {{ form.job_title }}-->
-<!--                                </div>-->
+                            <div class="row g-2 mt-2">
+                                <!-- Job Title -->
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_job_title" class="form-label fw-semibold dark mb-1">
+                                        Job Title / Role
+                                    </label>
+                                    {{ form.job_title }}
+                                </div>
 
-<!--                                &lt;!&ndash; Days to Attend &ndash;&gt;-->
-<!--                                <div class="col-md-6 mb-2">-->
-<!--                                    <label class="form-label fw-semibold dark mb-1">Days to attend</label>-->
+                                <!-- Days to Attend -->
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-semibold dark mb-1">Days to attend</label>
 
-<!--                                    <div class="form-check-group">-->
-<!--                                        {% for checkbox in form.days_to_attend %}-->
-<!--                                            <div class="form-check form-check-inline">-->
-<!--                                                {{ checkbox.tag }}-->
-<!--                                                <label class="form-check-label ms-1" for="{{ checkbox.id_for_label }}">-->
-<!--                                                    {{ checkbox.choice_label }}-->
-<!--                                                </label>-->
-<!--                                            </div>-->
-<!--                                        {% endfor %}-->
-<!--                                    </div>-->
+                                    <div class="form-check-group">
+                                        {% for checkbox in form.days_to_attend %}
+                                            <div class="form-check form-check-inline">
+                                                {{ checkbox.tag }}
+                                                <label class="form-check-label ms-1" for="{{ checkbox.id_for_label }}">
+                                                    {{ checkbox.choice_label }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
 
-<!--                                    {% if form.days_to_attend.errors %}-->
-<!--                                        <div class="text-danger small mt-1">-->
-<!--                                            {{ form.days_to_attend.errors.as_text }}-->
-<!--                                        </div>-->
-<!--                                    {% endif %}-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-<!--                            &lt;!&ndash; Interests &ndash;&gt;-->
-<!--                            <div class="mt-4 mb-2">-->
-<!--                                <label class="form-label fw-semibold dark mb-1">Areas of Interest</label>-->
-<!--                                <div id="id_interests" class="d-flex flex-wrap gap-2">-->
-<!--                                    {% for checkbox in form.interests %}-->
-<!--                                        <div class="form-check mb-1">-->
-<!--                                            {{ checkbox.tag }}  &lt;!&ndash; ✅ Let Django render the correct value &ndash;&gt;-->
-<!--                                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">-->
-<!--                                                {{ checkbox.choice_label }}-->
-<!--                                            </label>-->
-<!--                                        </div>-->
-<!--                                    {% endfor %}-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Other Interest &ndash;&gt;-->
-<!--                            <div class="mt-2 mb-2" id="other-interest" style="display:none;">-->
-<!--                                <label for="id_other_interest" class="form-label fw-semibold dark mb-1">Please-->
-<!--                                    specify</label>-->
-<!--                                {{ form.other_interest }}-->
-<!--                            </div>-->
+                                    {% if form.days_to_attend.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.days_to_attend.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
 
 
-<!--                            &lt;!&ndash; National ID and Passport &ndash;&gt;-->
-<!--                            <div class="mt-3 mb-3">-->
-<!--                                <label for="id_national_id_number" class="form-label fw-semibold dark mb-1">National ID-->
-<!--                                    /Passport Number</label>-->
-<!--                                {{ form.national_id_number }}-->
-<!--                            </div>-->
+                            <!-- Interests -->
+                            <div class="mt-4 mb-2">
+                                <label class="form-label fw-semibold dark mb-1">Areas of Interest</label>
+                                <div id="id_interests" class="d-flex flex-wrap gap-2">
+                                    {% for checkbox in form.interests %}
+                                        <div class="form-check mb-1">
+                                            {{ checkbox.tag }}  <!-- ✅ Let Django render the correct value -->
+                                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                                {{ checkbox.choice_label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
 
-<!--                            <div class="mt-3 mb-3">-->
-<!--                                <label for="id_national_id_scan" class="form-label fw-semibold dark mb-1">Upload Scanned-->
-<!--                                    National ID/Passport</label>-->
-<!--                                {{ form.national_id_scan }}-->
-<!--                                <small class="text-muted d-block mt-1">-->
-<!--                                    Accepted formats: .jpg, .png, .pdf | Max size: 2 MB-->
-<!--                                </small>-->
-<!--                                <div id="id_scan_preview" class="mt-3"></div>-->
-<!--                            </div>-->
-
-<!--                            <div class="mt-3 mb-3">-->
-<!--                                <label for="id_passport_photo" class="form-label fw-semibold dark mb-1">Upload Passport-->
-<!--                                    Photo (JPG or PNG)</label>-->
-<!--                                {{ form.passport_photo }}-->
-<!--                                <small class="text-muted d-block mt-1">-->
-<!--                                    Accepted formats: .jpg, .png | Max size: 2 MB-->
-<!--                                </small>-->
-<!--                                <div id="passport_preview" class="mt-3"></div>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Privacy Agreement &ndash;&gt;-->
-<!--                            <div class="mt-3 mb-2 form-check text-center">-->
-<!--                                <input-->
-<!--                                        type="checkbox"-->
-<!--                                        class="form-check-input"-->
-<!--                                        name="{{ form.privacy_agreed.name }}"-->
-<!--                                        id="id_privacy_agreed"-->
-<!--                                        value="true"-->
-<!--                                        {% if form.privacy_agreed.value %}checked{% endif %}-->
-<!--                                        required-->
-<!--                                >-->
-<!--                                <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">-->
-<!--                                    I have read and agree to the-->
-<!--                                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *-->
-<!--                                </label>-->
-
-<!--                                {% if form.privacy_agreed.errors %}-->
-<!--                                    <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>-->
-<!--                                {% endif %}-->
-<!--                            </div>-->
+                            <!-- Other Interest -->
+                            <div class="mt-2 mb-2" id="other-interest" style="display:none;">
+                                <label for="id_other_interest" class="form-label fw-semibold dark mb-1">Please
+                                    specify</label>
+                                {{ form.other_interest }}
+                            </div>
 
 
-<!--                            &lt;!&ndash; Submit &ndash;&gt;-->
-<!--                            <div class="d-grid mt-3">-->
-<!--                                <button type="submit" id="submit-btn"-->
-<!--                                        class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark">-->
-<!--                                    <i class="fa fa-paper-plane me-2"></i> Register Now-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </form>-->
+                            <!-- National ID and Passport -->
+                            <div class="mt-3 mb-3">
+                                <label for="id_national_id_number" class="form-label fw-semibold dark mb-1">National ID
+                                    /Passport Number</label>
+                                {{ form.national_id_number }}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label for="id_national_id_scan" class="form-label fw-semibold dark mb-1">Upload Scanned
+                                    National ID/Passport</label>
+                                {{ form.national_id_scan }}
+                                <small class="text-muted d-block mt-1">
+                                    Accepted formats: .jpg, .png, .pdf | Max size: 2 MB
+                                </small>
+                                <div id="id_scan_preview" class="mt-3"></div>
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label for="id_passport_photo" class="form-label fw-semibold dark mb-1">Upload Passport
+                                    Photo (JPG or PNG)</label>
+                                {{ form.passport_photo }}
+                                <small class="text-muted d-block mt-1">
+                                    Accepted formats: .jpg, .png | Max size: 2 MB
+                                </small>
+                                <div id="passport_preview" class="mt-3"></div>
+                            </div>
+
+                            <!-- Privacy Agreement -->
+                            <div class="mt-3 mb-2 form-check text-center">
+                                <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        name="{{ form.privacy_agreed.name }}"
+                                        id="id_privacy_agreed"
+                                        value="true"
+                                        {% if form.privacy_agreed.value %}checked{% endif %}
+                                        required
+                                >
+                                <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
+                                    I have read and agree to the
+                                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                                </label>
+
+                                {% if form.privacy_agreed.errors %}
+                                    <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
+                                {% endif %}
+                            </div>
+
+
+                            <!-- Submit -->
+                            <div class="d-grid mt-3">
+                                <button type="submit" id="submit-btn"
+                                        class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark">
+                                    <i class="fa fa-paper-plane me-2"></i> Register Now
+                                </button>
+                            </div>
+                        </form>
 
                         <!-- Alerts -->
                         <div id="alert-container" class="mt-2"></div>
