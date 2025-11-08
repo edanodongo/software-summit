@@ -635,7 +635,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData(form);
     const params = new URLSearchParams(formData).toString();
-    const url = `{% url 'generate_all_exhibitor_badges' %}?${params}`;
+    const batchSize = form.querySelector('input[name="batch_size"]').value;
+    const url = `{% url 'generate_all_exhibitor_badges' %}?batch_size=${batchSize}&start_date=${startDate.value}&end_date=${endDate.value}&category=${categorySelect.value}`;
+
 
     // Show spinner immediately
     spinner.classList.remove("d-none");
