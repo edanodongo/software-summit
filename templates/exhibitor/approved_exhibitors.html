@@ -1,0 +1,341 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-4 px-4">
+<div class="container-fluid mt-4 px-4">
+  <h2 class="fw-bold mb-4 text-primary">
+    <i class="fas fa-tachometer-alt me-2"></i>Approved Exhibitors
+  </h2>
+
+</div>
+
+  <!-- Summary Cards -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Total Approved Exhibitors</h5>
+      <h2 class="text-success fw-bold">{{ total_approved_exhibitors }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Total Approved Booths</h5>
+      <h2 class="text-primary fw-bold">{{ approved_booths_total }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h5 class="text-muted mb-1">Exhibitors Pending Approval</h5>
+      <h2 class="text-danger fw-bold">{{ pending_approvals }}</h2>
+    </div>
+  </div>
+</div>
+
+<!-- Actions -->
+<div class="d-flex justify-content-end mb-3 gap-2">
+    <a href="{% url 'export_print_approved' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+        <i class="fas fa-print me-1"></i> Print View
+    </a>
+</div>
+
+  <!-- Filters -->
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-header bg-light fw-semibold">
+      <i class="fas fa-filter me-2 text-primary"></i>Filters
+    </div>
+    <div class="card-body">
+      <form method="GET" class="row g-3 align-items-center">
+        <div class="col-md-3">
+          <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Search by name, email, phone, or organization..."
+            value="{{ query }}"
+          />
+        </div>
+
+        <div class="col-md-2">
+          <select name="category" class="form-select">
+            <option value="">Filter by Category</option>
+            {% for value, label in categories %}
+              <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <select name="section" class="form-select">
+            <option value="">Filter by Section</option>
+            {% for s in sections %}
+              <option value="{{ s.id }}" {% if section_filter|add:'' == s.id|add:'' %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="country_of_registration" class="form-select">
+              <option value="">Filter by Country</option>
+              {% for code, name in available_countries %}
+                <option value="{{ code }}" {% if country_filter == code %}selected{% endif %}>
+                  {{ name }}
+                </option>
+              {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-1 d-grid">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-filter me-1"></i> Apply
+          </button>
+        </div>
+
+        <div class="col-md-2 d-grid">
+          <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-undo me-1"></i> Reset
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Recent Exhibitors -->
+  <div class="card shadow-sm border-0 rounded-4 mb-5">
+  <div class="card-header bg-primary text-white fw-semibold">
+    <i class="fas fa-users me-2"></i>Recent Exhibitors
+  </div>
+  <div class="card-body p-0">
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Organization</th>
+        <th>Booths Approved</th>
+        <th>Approved On</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in exhibitors %}
+      <tr>
+        <td>{{ forloop.counter|default:"" }}</td>
+        <td>{{ e.get_full_name }}</td>
+        <td>{{ e.email }}</td>
+        <td>{{ e.organization_type }}</td>
+        <td>{{ e.total_count }}</td>
+        <td>{{ e.approved_at|date:"M d, Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No approved exhibitors yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="modal fade" id="dynamicModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Exhibitor</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <!-- Form will load dynamically here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+/* ============================
+   Exhibitor Edit Modal Styling
+   ============================ */
+#edit-exhibitor-form label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  display: block;
+}
+
+#edit-exhibitor-form .form-control,
+#edit-exhibitor-form .form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#edit-exhibitor-form .form-control:focus,
+#edit-exhibitor-form .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+#edit-exhibitor-form .form-check {
+  margin-top: 1rem;
+  padding-left: 1.8rem;
+}
+
+#edit-exhibitor-form .form-check-input {
+  margin-left: -1.8rem;
+  margin-top: 0.25rem;
+}
+
+#edit-exhibitor-form small.text-muted {
+  font-size: 0.85rem;
+}
+
+#edit-exhibitor-form img {
+  border: 1px solid #ddd;
+  padding: 2px;
+  background-color: #fafafa;
+  border-radius: 0.5rem;
+}
+
+#edit-exhibitor-form .btn-primary {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #edit-exhibitor-form .col-md-6,
+  #edit-exhibitor-form .col-md-4,
+  #edit-exhibitor-form .col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+#edit-exhibitor-form input[type="file"] {
+  background: #f8f9fa;
+  border: 1px dashed #ccc;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        if (!alert.classList.contains('alert-danger')) {
+          alert.classList.add('fade');
+          setTimeout(() => alert.remove(), 500);
+        }
+      });
+    }, 4000); // 4 seconds
+  });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const forms = document.querySelectorAll(".resend-email-form");
+
+  forms.forEach(form => {
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault(); // Stop normal page reload
+
+      const button = form.querySelector(".resend-btn");
+      const tr = form.closest("tr");
+      const attemptsCell = tr.querySelector(".email-attempts");
+      const statusCell = tr.querySelector(".email-status");
+      const lastSentCell = tr.querySelector(".email-last-sent");
+
+      // Show loading spinner
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value
+          }
+        });
+        const data = await response.json();
+
+        // ✅ Update UI dynamically
+        if (data.success) {
+          attemptsCell.textContent = data.attempts ?? "—";
+          lastSentCell.textContent = data.last_sent ?? "—";
+
+          if (data.status === "success") {
+            statusCell.innerHTML = '<span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>';
+          } else if (data.status === "failed") {
+            statusCell.innerHTML = '<span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>';
+          } else {
+            statusCell.innerHTML = `<span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">${data.status}</span>`;
+          }
+
+          // Small success highlight
+          tr.style.transition = "background-color 0.3s";
+          tr.style.backgroundColor = "#e6ffed";
+          setTimeout(() => (tr.style.backgroundColor = ""), 1000);
+        } else {
+          alert("❌ " + (data.error || "Email failed to send."));
+        }
+      } catch (err) {
+        alert("⚠️ Error sending email. Please try again.");
+      } finally {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-envelope"></i>';
+      }
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("dynamicModal");
+  const modalBody = modal.querySelector(".modal-body");
+
+  // Open edit modal
+  document.querySelectorAll(".edit-exhibitor-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      const res = await fetch(`/edit-exhibitor/${id}/`);
+      const data = await res.json();
+      modalBody.innerHTML = data.html_form;
+      new bootstrap.Modal(modal).show();
+
+      bindExhibitorForm();
+    });
+  });
+
+  function bindExhibitorForm() {
+    const form = modalBody.querySelector("#edit-exhibitor-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const row = document.querySelector(`tr[data-exhibitor-id="${data.id}"]`);
+        row.outerHTML = data.row_html;
+        bootstrap.Modal.getInstance(modal).hide();
+      } else {
+        modalBody.innerHTML = data.html_form;
+        bindExhibitorForm();
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

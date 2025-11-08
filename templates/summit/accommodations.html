@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+</head>
+
+
+<body class="venue-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                  <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
+                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="#">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>
+
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
+
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
+          </ul>
+
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
+      <div class="container position-relative">
+        <h1>Accommodations</h1>
+        <p>Recommended accommodations in Eldoret</p>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="current">Venue</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Venue 2 Section -->
+    <section id="venue-2" class="venue-2 section">
+
+      <div class="container">
+        <div class="row mt-5">
+          <div class="col-lg-12">
+            <div class="accommodation-section">
+              <h4 class="fw-bold mb-4">Recommended Accommodations</h4>
+
+              <div class="row">
+
+                <!-- Eka Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/eka_hotel.avif' %}" alt="Eka Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Eka Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://ekaeldoret.com" target="_blank" class=" text-decoration-none">ekaeldoret.com</a></div>
+                        <div><i class="bi bi-tspeakerselephone"></i> <a href="tel:+254793465505 " class="text-dark text-decoration-none">+254 111 150 000 / +254 793 465 505 </a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Boma Inn -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Facade_of_Boma_Inn_Eldoret.webp' %}" alt="Boma Inn Eldoret" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Boma Inn Eldoret</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://theboma.co.ke/inn-eldoret/" target="_blank" class=" text-decoration-none">theboma.co.ke/eldoret</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254719025500" class="text-dark text-decoration-none">+254 719 025 500 / +254 719 025 500</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TJS Boutique Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/TJS_Boutique_Hotel.jpg' %}" alt="TJS Boutique Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> TJS Boutique Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://tjsboutiquehotel.co.ke/" target="_blank" class=" text-decoration-none">tjsboutiquehotel.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254768054455" class="text-dark text-decoration-none">+254 768 054 455 / +020 240 0799</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Noble Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/noble_hotel.jpg' %}" alt="The Noble Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> The Noble Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://thenoble.co.ke/" target="_blank" class=" text-decoration-none">thenoble.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254716291935" class="text-dark text-decoration-none">+254 716 291 935 / +254 731 418 309</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Poa Place -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/poa_place_resort.jpg' %}" alt="Poa Place Resort" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Poa Place Resort</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://poaplace.co.ke/" target="_blank" class=" text-decoration-none">poaplace.co.ke</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254707156146" class="text-dark text-decoration-none">+254 707 156 146 / +254 707 394 384 </a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- The Grand Empire -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/The_Grand_Empire.jpg' %}" alt="The Grand Empire Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> The Grand Empire Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://thegrandempirehotel.net/" class=" text-decoration-none">thegrandempirehotel.net</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254710528589" class="text-dark text-decoration-none">+254 710 528 589</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sirikwa Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Sirikwa_Hotel.jpg' %}" alt="Sirikwa Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Sirikwa Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://sirikwahotel.com/" target="_blank" class=" text-decoration-none">sirikwahotel.com</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254728680000" class="text-dark text-decoration-none">+254 728 680 000</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cicada Hotel -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="hotel-card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                    <img src="{% static 'images/venue/Cicada_Hotel.jpeg' %}" alt="Cicada Hotel" class="img-fluid w-100" style="object-fit: cover; height: 200px;">
+                    <div class="p-3">
+                      <h5 class="fw-bold  mb-1"><i class="bi bi-building"></i> Cicada Hotel</h5>
+                      <span class="badge bg-warning text-dark mb-2"><i class="bi bi-star-fill"></i> Gold Standard Accredited</span>
+                      <div class="border-top pt-2">
+                        <div class="mb-1"><i class="bi bi-globe"></i> <a href="https://cicadalodgesandhotels.com/" class="text-decoration-none">cicadalodgesandhotels.com</a></div>
+                        <div><i class="bi bi-telephone"></i> <a href="tel:+254719183124" class="text-dark text-decoration-none">+254 719 183 124 / +254 733 907 640</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div> <!-- end row -->
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section><!-- /Venue 2 Section -->
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative dark-background">
+
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> The Kenya Software & AI Summit 2025</span>
+                  </a>
+
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
+
+                  </div>
+              </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+              <li><a href="{% url 'places' %}">Venue</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="#">Accommodations</a></li>
+            </ul>
+          </div>
+
+          </div>
+      </div>
+
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit 2025</strong>
+              <span>All Rights Reserved. </span></p>
+
+      </div>
+
+  </footer>
+
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <!-- Light mode logo -->
+      <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+      <!-- Dark mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+    </div>
+
+
+
+      <!-- Scripts -->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+      <script src="{% static 'vendor/aos/aos.js' %}"></script>
+      <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+      <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+      <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+      <script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+      <script src="{% static 'js/translate.js' %}" ></script>
+      <script src="{% static 'js/translater.js' %}" defer></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <script src="{% static 'js/custom/main.js' %}"></script>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,64 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="card my-5 mx-auto" style="max-width: 100%;">
+        <div class="card-body">
+            <h3 class="text-center mb-4"><b>Add Color</b></h3>
+
+            <form id="category_form" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" id="category" name="category"
+                           placeholder="Enter the category name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                              placeholder="Enter category description..."></textarea>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('category_form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch("{% url 'save_color' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        notyf.success(data.message);
+                        document.getElementById('category_form').reset();
+
+                        // Redirect after short delay (e.g., 1.5 seconds)
+                        setTimeout(() => {
+                            window.location.href = '/color/';
+                        }, 1500);
+
+                    } else {
+                        notyf.error(data.message);
+                    }
+
+                })
+                .catch(() => {
+                    notyf.error('Something went wrong. Try again later.');
+                });
+        });
+    </script>
+
+{% endblock %}

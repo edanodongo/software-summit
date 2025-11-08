@@ -1,0 +1,539 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-4 px-4">
+
+  <!-- Title -->
+  <h2 class="fw-bold mb-4 text-primary d-flex align-items-center gap-2">
+    <i class="fas fa-tachometer-alt"></i>
+    <span>Exhibitions Dashboard</span>
+  </h2>
+
+  <!-- ✅ Success messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-1"></i> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Dashboard Settings -->
+  <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+    <h5 class="mb-3 fw-semibold"><i class="fas fa-cogs me-2 text-primary"></i> Dashboard Settings</h5>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+          <div><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" class="row g-3 align-items-end">
+      {% csrf_token %}
+      <div class="col-md-4">
+        {{ form.max_count.label_tag }}
+        {{ form.max_count }}
+
+        {% if form.max_count.errors %}
+          {% for error in form.max_count.errors %}
+            <div class="alert alert-danger mt-2 py-2 px-3">
+              <i class="fas fa-exclamation-triangle me-1"></i> {{ error }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+          <i class="fas fa-save me-1"></i> Update
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 📢 Remaining Counts Alert -->
+  <div class="alert {{ alert_class }} shadow-sm border-0 rounded-3 mb-4">
+    <strong><i class="fas fa-info-circle me-1"></i> Notice:</strong> {{ alert_message }}
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
+        <h6 class="text-muted mb-1">Total Exhibitors</h6>
+        <h3 class="fw-bold text-primary">{{ total_exhibitors }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
+        <h6 class="text-muted mb-1">Total Booths</h6>
+        <h3 class="fw-bold text-success">{{ max_count }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
+        <h6 class="text-muted mb-1">Available Booths</h6>
+        <h3 id="remainingBoothsCount" class="fw-bold text-success">{{ remaining }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center border-0 shadow-sm rounded-4 py-3">
+        <h6 class="text-muted mb-1">Booked Booths</h6>
+        <h3 class="fw-bold text-danger">{{ total_count }}</h3>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end mb-3 gap-2">
+        <a href="{% url 'export_excel_exhibitors' %}" class="btn btn-outline-success btn-sm shadow-sm">
+            <i class="fas fa-file-excel me-1"></i> Export Excel
+        </a>
+
+        <a href="{% url 'export_print_exhibitors' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+            <i class="fas fa-print me-1"></i> Print View
+        </a>
+    </div>
+
+  <!-- Filters -->
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-header bg-light fw-semibold d-flex align-items-center">
+      <i class="fas fa-filter text-primary me-2"></i> Filters
+    </div>
+    <div class="card-body">
+      <form method="GET" class="row g-3 align-items-center">
+        <div class="col-md-3 col-sm-6">
+          <input type="text" name="q" class="form-control" placeholder="Search by name, email, or organization..."
+            value="{{ query }}">
+        </div>
+
+        <div class="col-md-2 col-sm-6">
+          <select name="category" class="form-select">
+            <option value="">Filter by Category</option>
+            {% for value, label in categories %}
+              <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-2 col-sm-6">
+          <select name="section" class="form-select">
+            <option value="">Filter by Section</option>
+            {% for s in sections %}
+              <option value="{{ s.id }}" {% if section_filter|add:'' == s.id|add:'' %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-2 col-sm-6">
+          <select name="country_of_registration" class="form-select">
+            <option value="">Filter by Country</option>
+            {% for code, name in available_countries %}
+              <option value="{{ code }}" {% if country_filter == code %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-1 col-sm-6 d-grid">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-filter me-1"></i> Apply
+          </button>
+        </div>
+
+        <div class="col-md-2 col-sm-6 d-grid">
+          <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-undo me-1"></i> Reset
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Recent Exhibitors Table -->
+  <div class="card shadow-sm border-0 rounded-4 mb-5">
+    <div class="card-header bg-primary text-white fw-semibold d-flex align-items-center">
+      <i class="fas fa-users me-2"></i> Recent Exhibitors
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table id="registrants-table" class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Organization</th>
+              <th>Country</th>
+              <th>Job Title</th>
+              <th>Category</th>
+              <th>Booked Booths</th>
+              <th>Approve Status</th>
+              <th>Files</th>
+              <th>Email Attempts</th>
+              <th>Email Status</th>
+              <th>Last Sent</th>
+              <th>Date Registered</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for e in exhibitors %}
+            <tr data-exhibitor-id="{{ e.id }}">
+              <td>{{ forloop.counter|default:"" }}</td>
+              <td>{{ e.get_full_name }}</td>
+              <td class="email-col">{{ e.email }}</td>
+              <td>{{ e.phone }}</td>
+              <td class="org-col">{{ e.organization_type }}</td>
+              <td>{{ e.get_country_of_registration_display|default:"—" }}</td>
+              <td>{{ e.job_title|default:"—" }}</td>
+              <td>{{ e.get_category_display|default:"—" }}</td>
+              <td>{{ e.total_count|default:"0" }}</td>
+              <td>
+                {% if e.approval_status == "approved" %}
+                  <span class="badge bg-success px-3 py-2">Approved</span>
+                {% elif e.approval_status == "pending" %}
+                  <button class="btn btn-sm btn-outline-success approve-btn"
+                          data-id="{{ e.id }}"
+                          data-name="{{ e.get_full_name }}"
+                          data-organization="{{ e.organization_type }}"
+                          data-email="{{ e.email|default:'N/A' }}"
+                          data-remaining="{{ remaining }}">
+                    <i class="fas fa-check"></i> Approve
+                  </button>
+                {% else %}
+                  <span class="badge bg-danger px-3 py-2">Rejected</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if e.logo %}<a href="{{ e.logo.url }}" target="_blank">Logo</a><br>{% endif %}
+                {% if e.passport_photo %}<a href="{{ e.passport_photo.url }}" target="_blank">Passport</a><br>{% endif %}
+                {% if e.national_id_scan %}<a href="{{ e.national_id_scan.url }}" target="_blank">ID</a><br>{% endif %}
+                {% if e.business_registration_doc %}<a href="{{ e.business_registration_doc.url }}" target="_blank">Business registration doc</a><br>{% endif %}
+                {% if e.international_business_doc %}<a href="{{ e.international_business_doc.url }}" target="_blank">International business doc</a><br>{% endif %}
+                {% if e.beneficial_owner_doc %}<a href="{{ e.beneficial_owner_doc.url }}" target="_blank">Beneficial owner doc</a><br>{% endif %}
+              </td>
+              <td class="text-center email-attempts">{{ e.email_attempts|default:"0" }}</td>
+              <td class="text-center email-status">
+                {% if e.email_status == "success" %}
+                  <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
+                {% elif e.email_status == "failed" %}
+                  <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
+                {% else %}
+                  <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
+                {% endif %}
+              </td>
+              <td class="text-center email-last-sent">{{ e.email_last_sent|date:"M d, Y H:i" }}</td>
+              <td>{{ e.created_at|date:"M d, Y H:i" }}</td>
+              <td class="text-center">
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary edit-exhibitor-btn" data-id="{{ e.id }}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <form action="{% url 'resend_exhibitor_confirmation_email' e.id %}" method="post" class="resend-email-form d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-success resend-btn" title="Resend Email">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                  </form>
+                  <a href="{% url 'admin_exhibitor_delete' e.id %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="15" class="text-center text-muted py-3">No exhibitors registered.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+          <!-- Pagination -->
+        <div class="p-3">
+          {% if exhibitors.has_other_pages %}
+            <nav>
+              <ul class="pagination justify-content-center">
+
+                {% if exhibitors.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ exhibitors.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+
+                {% for i in exhibitors.paginator.page_range %}
+                  {% if exhibitors.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                  {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ i }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">{{ i }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+
+                {% if exhibitors.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ exhibitors.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if section_filter %}&section={{ section_filter }}{% endif %}{% if country_filter %}&country_of_registration={{ country_filter }}{% endif %}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+
+              </ul>
+            </nav>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  {% include "partials/exhibitor_edit.html" %}
+  {% include "partials/exhibitor_approve.html" %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<style>
+  /* Responsive tweaks for modals on small devices */
+  @media (max-width: 768px) {
+    #dynamicModal .modal-dialog,
+    #approveModal .modal-dialog {
+      max-width: 95%;
+      margin: 1rem auto;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        if (!alert.classList.contains('alert-danger')) {
+          alert.classList.add('fade');
+          setTimeout(() => alert.remove(), 500);
+        }
+      });
+    }, 4000); // 4 seconds
+  });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const forms = document.querySelectorAll(".resend-email-form");
+
+  forms.forEach(form => {
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault(); // Stop normal page reload
+
+      const button = form.querySelector(".resend-btn");
+      const tr = form.closest("tr");
+      const attemptsCell = tr.querySelector(".email-attempts");
+      const statusCell = tr.querySelector(".email-status");
+      const lastSentCell = tr.querySelector(".email-last-sent");
+
+      // Show loading spinner
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value
+          }
+        });
+        const data = await response.json();
+
+        // ✅ Update UI dynamically
+        if (data.success) {
+          attemptsCell.textContent = data.attempts ?? "—";
+          lastSentCell.textContent = data.last_sent ?? "—";
+
+          if (data.status === "success") {
+            statusCell.innerHTML = '<span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>';
+          } else if (data.status === "failed") {
+            statusCell.innerHTML = '<span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>';
+          } else {
+            statusCell.innerHTML = `<span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">${data.status}</span>`;
+          }
+
+          // Small success highlight
+          tr.style.transition = "background-color 0.3s";
+          tr.style.backgroundColor = "#e6ffed";
+          setTimeout(() => (tr.style.backgroundColor = ""), 1000);
+        } else {
+          alert("❌ " + (data.error || "Email failed to send."));
+        }
+      } catch (err) {
+        alert("⚠️ Error sending email. Please try again.");
+      } finally {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-envelope"></i>';
+      }
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("dynamicModal");
+  const modalBody = modal.querySelector(".modal-body");
+
+  // Open edit modal
+  document.querySelectorAll(".edit-exhibitor-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      const res = await fetch(`/edit-exhibitor/${id}/`);
+      const data = await res.json();
+      modalBody.innerHTML = data.html_form;
+      new bootstrap.Modal(modal).show();
+
+      bindExhibitorForm();
+    });
+  });
+
+  function bindExhibitorForm() {
+    const form = modalBody.querySelector("#edit-exhibitor-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const row = document.querySelector(`tr[data-exhibitor-id="${data.id}"]`);
+        row.outerHTML = data.row_html;
+        bootstrap.Modal.getInstance(modal).hide();
+      } else {
+        modalBody.innerHTML = data.html_form;
+        bindExhibitorForm();
+      }
+    });
+  }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const approveModal = new bootstrap.Modal(document.getElementById("approveModal"));
+  const approveForm = document.getElementById("approveForm");
+
+  const exhibitorName = document.getElementById("exhibitorName");
+  const exhibitorOrganization = document.getElementById("exhibitorOrganization");
+  const exhibitorEmail = document.getElementById("exhibitorEmail");
+  const remainingBooths = document.getElementById("remainingBooths");
+
+  const boothCount = document.getElementById("boothCount");
+  const approveExhibitorId = document.getElementById("approveExhibitorId");
+  const approveButton = approveForm.querySelector("button[type='submit']");
+
+  // ✅ Open modal when clicking "Approve"
+  document.querySelectorAll(".approve-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const row = this.closest("tr");
+
+      // Extract data from dataset or table columns
+      const name = row.querySelector("td:first-child").textContent.trim();
+      const organization = this.dataset.organization || row.querySelector(".org-col")?.textContent?.trim() || "N/A";
+      const email = this.dataset.email || row.querySelector(".email-col")?.textContent?.trim() || "N/A";
+      const remaining = this.dataset.remaining || document.getElementById("remainingBoothsCount")?.textContent || "—";
+
+      // Fill modal fields
+      exhibitorName.textContent = `Approve ${name}?`;
+      exhibitorOrganization.textContent = organization;
+      exhibitorEmail.textContent = email;
+      remainingBooths.textContent = remaining;
+
+      approveExhibitorId.value = this.dataset.id;
+      boothCount.value = 1; // default booth count
+
+      approveModal.show();
+    });
+  });
+
+  // ✅ Submit approval via AJAX
+  approveForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const exhibitorId = approveExhibitorId.value;
+    const count = boothCount.value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // --- Loading spinner ---
+    approveButton.disabled = true;
+    const originalText = approveButton.innerHTML;
+    approveButton.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Approving...`;
+
+    try {
+      const response = await fetch(`/ajax/approve/${exhibitorId}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ count }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // ✅ Update exhibitor row instantly
+        const row = document.querySelector(`tr[data-exhibitor-id='${data.id}']`);
+        if (row) {
+          row.querySelector("td:nth-child(8)").textContent = data.total_count;
+          row.querySelector(".approve-btn").outerHTML = `
+            <span class="badge bg-success px-3 py-2">Approved</span>
+          `;
+        }
+
+        // ✅ Update dashboard stats (if visible)
+        const approvedExhibitorsCount = document.getElementById("approvedExhibitorsCount");
+        const approvedBoothsTotal = document.getElementById("approvedBoothsTotal");
+        const remainingEl = document.getElementById("remainingBoothsCount");
+
+        if (approvedExhibitorsCount)
+          approvedExhibitorsCount.textContent = parseInt(approvedExhibitorsCount.textContent || 0) + 1;
+
+        if (approvedBoothsTotal)
+          approvedBoothsTotal.textContent = parseInt(approvedBoothsTotal.textContent || 0) + parseInt(data.total_count);
+
+        if (remainingEl)
+          remainingEl.textContent = parseInt(data.remaining);
+
+        // ✅ Button success feedback
+        approveButton.innerHTML = `<i class="bi bi-check-circle"></i> Approved!`;
+        approveButton.classList.replace("btn-success", "btn-primary");
+
+        // ✅ Close modal after short delay
+        setTimeout(() => {
+          approveModal.hide();
+          approveForm.reset();
+          approveButton.disabled = false;
+          approveButton.innerHTML = originalText;
+          approveButton.classList.replace("btn-primary", "btn-success");
+        }, 1000);
+      } else {
+        alert(data.message || "Approval failed.");
+        approveButton.disabled = false;
+        approveButton.innerHTML = originalText;
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Error approving exhibitor.");
+      approveButton.disabled = false;
+      approveButton.innerHTML = originalText;
+    }
+  });
+});
+
+</script>
+<!-- All existing JS logic retained -->
+{{ super }}
+{% endblock %}

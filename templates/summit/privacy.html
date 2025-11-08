@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
     <!-- Fontawesome -->
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
@@ -28,52 +28,71 @@
 
 <body class="privacy-page">
 
-<header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="#hero" class="logo d-flex align-items-center">
-        <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
-          <div class="logo-divider mx-2"></div>
-        <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
-      </a>
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
+        </a>
 
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                  <li><a href="#exhibitor">EXHIBITOR</a></li>
+                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
+                <li><a href="#">PRIVACY</a></li>
+              </ul>
+            </li>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-          <li><a href="{% url 'home' %}">ABOUT</a></li>
-          <li><a href="{% url 'home' %}">REGISTER</a></li>
-          <li><a href="{% url 'home' %}">AGENDA</a></li>
-          <li><a href="{% url 'home' %}">SPEAKERS</a></li>
-          <li><a href="{% url 'home' %}">FEATURES</a></li>
-          <li><a href="{% url 'home' %}">PARTNERS</a></li>
-          <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#gallery">MEDIA</a></li>
-              <li><a href="{% url 'not_found' %}">VENUE</a></li>
-              <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-            </ul>
-          </li>  
-        </ul>
-        <div class="nav-extras d-flex align-items-center gap-2">
-          <!-- Mobile nav toggle -->
-           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
 
-          <!-- Translate Globe (mobile only) -->
-          <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
+          </ul>
 
-          <!-- Translation widget (popover, hidden by default) -->
-          <div class="translate-popover d-none">
-            <div class="gtranslate_wrapper"></div>
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-
-      <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
-
-    </div>
-</header>
+      </div>
+  </header>
 
   <main class="main">
 
@@ -105,108 +124,134 @@
         </div>
 
         <!-- Main Content -->
-        <div class="privacy-content">
+          <div class="privacy-content">
+
           <!-- Introduction -->
           <div class="content-section">
-            <h2>1. Introduction</h2>
-            <p>Your privacy is protected under Article 31 of the Constitution of Kenya, 2010, which guarantees every individual the right to privacy. We also comply with the provisions of the Data Protection Act, 2019, which regulates how personal data is collected, processed, stored, and shared in Kenya.</p>
+              <h2>1. Introduction</h2>
+              <p>Your right to privacy is protected under <strong>Article 31 of the Constitution of Kenya (2010)</strong>, which guarantees every individual the right to privacy. We also comply with the provisions of the <strong>Data Protection Act (2019)</strong>, which regulates the collection, processing, storage, and sharing of personal data in Kenya.</p>
           </div>
 
-          <!-- Information Collection -->
-          <div class="content-section">
-            <h2>2. Information We Collect</h2>
-            <p>When you register for the Summit, we collect the following information:</p>
-            <ul>
-              <li>Title, First name, and Other names</li>
-              <li>Email address and phone number</li>
-              <li>Organization and Institution name</li>
-              <li>Job title or role</li>
-              <li>Areas of professional or personal interest</li>
-              <li>Other information you choose to provide (such as “Other Interests”)</li>
-            </ul>
-            <p>We may also automatically collect technical information (such as browser type, device, and usage statistics) to help us improve the website and user experience.</p>
-          </div>
+        <!-- Information Collection -->
+        <div class="content-section">
+          <h2>2. Information We Collect</h2>
+          <p>
+            When you register for the Summit, we collect the following personal information
+            to facilitate your participation and event management:
+          </p>
+          <ul>
+            <li>Title, First Name, and Other Names</li>
+            <li>Email address and Phone number</li>
+            <li>Organization type and Institution name (if applicable)</li>
+            <li>Job title or role</li>
+            <li>Registration category (e.g., Exhibitor, Delegate, Speaker, or Student)</li>
+            <li>Areas of professional or personal interest, including any Other Interests you specify</li>
+            <li>National ID or Passport Number</li>
+            <li>Scanned copy of your National ID or Passport</li>
+            <li>Passport photograph</li>
+            <li>Accessibility or dietary needs (if provided)</li>
+            <li>Preference for receiving updates and communications</li>
+            <li>Confirmation of consent to this Privacy Policy</li>
+            <li>
+              <strong>Media Notice:</strong> Please note that photography and videography will take place
+              during the Summit. By attending, you acknowledge that you may appear in official event photos,
+              videos, or live streams used for documentation, publicity, and promotional purposes.
+            </li>
+          </ul>
+        </div>
 
-          <!-- Use of Information -->
-          <div class="content-section">
-            <h2>3. How We Use Your Information</h2>
-            <p>Your information is used to:</p>
-            <ul>
-              <li>Process and confirm your event registration</li>
-              <li>Communicate event updates, reminders, and logistical details</li>
-              <li>Personalize your Summit experience based on your areas of interest</li>
-              <li>Facilitate networking and professional engagement opportunities (only with your consent)</li>
-              <li>Improve our services and plan for future events</li>
-            </ul>
-          </div>
+        <!-- Use of Information -->
+        <div class="content-section">
+          <h2>3. How We Use Your Information</h2>
+          <p>Your personal data is processed for the following lawful purposes:</p>
+          <ul>
+            <li>To register, verify, and confirm your participation in the Summit</li>
+            <li>To communicate event updates, schedules, and logistical information</li>
+            <li>To personalize your Summit experience according to your interests and category</li>
+            <li>To facilitate professional networking and engagement (with your consent)</li>
+            <li>To comply with applicable legal, regulatory, and contractual obligations</li>
+            <li>To evaluate and improve our event management systems and related services</li>
+            <li>
+              To document and promote the Summit through photography, videography, and media coverage,
+              including sharing content on official platforms, social media, and post-event publications.
+            </li>
+          </ul>
+        </div>
 
           <!-- Information Sharing -->
           <div class="content-section">
-            <h2>4. Information Sharing and Disclosure</h2>
-            <p>We do not sell or rent your personal information. We may share your information only under the following circumstances:</p>
-            <ul>
-              <li><strong>With your consent:</strong> For example, sharing your professional profile with other participants to facilitate networking if you agree.</li>
-              <li><strong>With service providers:</strong> Such as email communication platforms, event management tools, or payment processors, strictly for the purposes of delivering event services.</li>
-              <li><strong>Legal compliance:</strong> If required to comply with applicable law, court orders, or regulations, including the Data Protection Act (2019).</li>
-            </ul>
+              <h2>4. Information Sharing and Disclosure</h2>
+              <p>We do not sell, rent, or lease your personal information to any third parties. Your data may only be shared in the following limited circumstances:</p>
+              <ul>
+                <li><strong>With your explicit consent:</strong> For example, to include your professional details in an event directory or networking platform.</li>
+                <li><strong>With authorized service providers:</strong> Such as email communication tools, event platforms, or data processors, solely for operational purposes under binding confidentiality and data protection agreements.</li>
+                <li><strong>For legal or regulatory compliance:</strong> When required by law, court order, or government directive, including obligations under the Data Protection Act (2019).</li>
+              </ul>
           </div>
 
           <!-- Data Security -->
           <div class="content-section">
-            <h2>5. Data Security</h2>
-            <p>We adopt reasonable organizational and technical measures to protect your personal data, including:</p>
-            <ul>
-              <li>Secure Sockets Layer (SSL) encryption for data transmission</li>
-              <li>Restricted access to personal information to authorized staff only</li>
-              <li>Regular review of our information storage and processing systems</li>
-            </ul>
+              <h2>5. Data Security</h2>
+              <p>We implement reasonable organizational and technical safeguards to protect personal data from unauthorized access, alteration, disclosure, or destruction. These measures include:</p>
+              <ul>
+                <li>Secure Sockets Layer (SSL) encryption for all online data transmission</li>
+                <li>Limited access to personal data by authorized personnel only</li>
+                <li>Periodic system audits and reviews of our data handling practices</li>
+              </ul>
           </div>
 
           <!-- Your Rights -->
           <div class="content-section">
-            <h2>6. Your Rights</h2>
-            <p>In line with the Constitution of Kenya (2010) and the Data Protection Act (2019), you have the right to:</p>
-            <ul>
-              <li>Access the personal information we hold about you</li>
-              <li>Request correction of inaccurate or incomplete information</li>
-              <li>Request deletion of your information once it is no longer necessary</li>
-              <li>Object to or restrict the processing of your personal data</li>
-              <li>Withdraw consent for communications or marketing</li>
-              <li>Lodge a complaint with the Office of the Data Protection Commissioner (ODPC) if your data rights are violated</li>
-            </ul>
+              <h2>6. Your Rights</h2>
+              <p>In accordance with the <strong>Constitution of Kenya (2010)</strong> and the <strong>Data Protection Act (2019)</strong>, you have the following rights regarding your personal data:</p>
+              <ul>
+                <li><strong>Right to access</strong> – to request a copy of the data we hold about you</li>
+                <li><strong>Right to rectification</strong> – to correct inaccurate or incomplete information</li>
+                <li><strong>Right to erasure</strong> – to request deletion of your personal data where appropriate</li>
+                <li><strong>Right to restriction</strong> – to request limitation of how your data is processed</li>
+                <li><strong>Right to object</strong> – to object to certain types of processing, including direct marketing</li>
+                <li><strong>Right to withdraw consent</strong> – to withdraw your consent for communications or data processing at any time</li>
+                <li><strong>Right to lodge a complaint</strong> – to the Office of the Data Protection Commissioner (ODPC) if you believe your data rights have been violated</li>
+              </ul>
           </div>
 
           <!-- Data Retention -->
           <div class="content-section">
-            <h2>7. Data Retention</h2>
-            <p>We retain your personal information only as long as necessary to fulfill the purposes outlined in this policy. Data may be retained for record-keeping, compliance with legal obligations, or to inform you about future Summit events (if you have consented). Once the retention period ends, your information will be securely deleted.</p>
+              <h2>7. Data Retention</h2>
+              <p>We retain your personal data only for as long as is necessary to fulfill the purposes for which it was collected, or as required by law. Retention periods may vary depending on statutory obligations, record-keeping needs, or consent for future event communications. Upon expiry of the retention period, personal data will be securely deleted, destroyed, or anonymized.</p>
           </div>
 
           <!-- Policy Updates -->
           <div class="content-section">
-            <h2>8. Changes to This Policy</h2>
-            <p>We may update this Privacy Policy from time to time to reflect legal, operational, or service-related changes. Any updates will be posted on this page with the effective date revised accordingly. Continued use of our services after such updates indicates your acceptance.</p>
+              <h2>8. Changes to This Policy</h2>
+              <p>We may amend this Privacy Policy periodically to reflect legal, operational, or service changes. Updates will be posted on this page with a revised <strong>“Last Updated”</strong> date. Continued use of our registration platform or participation in the Summit after such changes constitutes your acknowledgment and acceptance of the updated policy.</p>
           </div>
 
           <!-- Legal Compliance -->
           <div class="content-section">
-            <h2>9. Compliance with Kenyan Law</h2>
-            <p>Our data practices are guided by:</p>
-            <ul>
-              <li><strong>Article 31 of the Constitution of Kenya (2010):</strong> which protects your right to privacy.</li>
-              <li><strong>The Data Protection Act, 2019:</strong> which sets out principles of data protection, rights of data subjects, and obligations for data controllers and processors.</li>
-            </ul>
+              <h2>9. Compliance with Kenyan Law</h2>
+              <p>This Privacy Policy is governed by the laws of Kenya and aligns with:</p>
+              <ul>
+                <li><strong>Article 31 of the Constitution of Kenya (2010):</strong> Protection of the right to privacy.</li>
+                <li><strong>The Data Protection Act, 2019:</strong> Regulation of personal data collection, processing, and protection within Kenya.</li>
+              </ul>
           </div>
+
+          <!-- Data Controller Contact -->
+          <div class="content-section">
+              <h2>Contact Us</h2>
+              <p>For any questions, data access requests, or concerns regarding this Privacy Policy or how your personal data is processed, please contact Ministry of Information, Communications & The Digital Economy:</p>
+              <ul>
+                <li><strong>Email:</strong> <a href="mailto:softwaresummit@ict.go.ke">softwaresummit@ict.go.ke</a></li>
+                <li><strong>Address:</strong> GPO Telposta Towers, Koinange Street</li>
+                <li><strong>Postal Address:</strong> P.O. Box 30025-00100, Nairobi, Kenya</li>
+                <li><strong>Attention:</strong> Software Summit team</li>
+              </ul>
+          </div>
+
         </div>
 
-        <!-- Contact Section -->
-        <div class="privacy-contact">
-          <h2>Contact Us</h2>
-          <p>If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact us:</p>
-          <div class="contact-details">
-            <p><strong>Email:</strong> softwaresummit@ict.go.ke"</p>
-          </div>
-        </div>
+
 
       </div>
 
@@ -215,78 +260,95 @@
 
   </main>
 
-<footer id="footer" class="footer position-relative dark-background">
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative dark-background">
 
-    <div class="container footer-top">
-        <div class="row gy-4 justify-content-evenly">
-            <div class="col-lg-4 col-md-6 footer-about">
-                <a href="index.html" class="logo d-flex align-items-center">
-                    <span class="sitename"> Kenya Software Summit</span>
-                </a>
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> The Kenya Software & AI Summit 2025</span>
+                  </a>
 
-                <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
-                    Africa’s digital economy through collaboration, talent development, and innovation.</p>
-                <div class="social-links d-flex mt-3">
-                    <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
-                        <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
-                        <i class="bi bi-facebook"></i>
-                    </a>
-                    <a aria-label="Connect with us on LinkedIn"
-                       href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
-                       target="_blank">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
-                       target="_blank">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">About</a></li>
-            <li><a href="{% url 'home' %}">Speakers</a></li>
-            <li><a href="{% url 'home' %}">Agenda</a></li>
-            <li><a href="{% url 'home' %}">Register</a></li>
-          </ul>
-        </div>
+                  </div>
+              </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">Features</a></li>
-            <li><a href="{% url 'home' %}">Partners</a></li>
-            <li><a href="{% url 'home' %}">Media</a></li>
-            <li><a href="{% url 'privacy' %}">Privacy</a></li>
-          </ul>
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
+          </div>
 
-        </div>
-    </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'places' %}">Venue</a></li>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
+          </div>
 
-    <div class="container copyright text-center mt-4">
-        <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
-            Software Summit. </strong> <span>All Rights Reserved. </span></p>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
+            </ul>
+          </div>
 
-    </div>
+          </div>
+      </div>
 
-</footer>
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit 2025 </strong>
+              <span>All Rights Reserved. </span></p>
+
+      </div>
+
+  </footer>
 
 
   <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+          class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Preloader -->
-  <div id="preloader">
-    <!-- Light mode logo -->
-    <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
-    <!-- Dark mode logo -->
-    <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
-  </div>
+
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <!-- Light mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp'  %}" alt="Summit Logo" class="logo-loader light-logo">
+      <!-- Dark mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+    </div>
 
 
 
@@ -303,21 +365,39 @@
     <script src="{% static 'js/translate.js' %}" ></script>
     <script src="{% static 'js/translater.js' %}" defer></script>
 
+    <!-- Main JS File -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script src="{% static 'js/custom/main.js' %}"></script>
 
 
-<!-- Main JS File -->
-<script src="{% static 'js/main.js' %}"></script>
+    <script>
+      // modal
+      document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("bioModal");
+      const closeBtn = document.querySelector(".bio-close");
 
-<script src="{% static 'js/custom/main.js' %}"></script>
+      document.querySelectorAll(".btn-speaker").forEach(btn => {
+        btn.addEventListener("click", function(e) {
+          e.preventDefault();
+          document.getElementById("bioName").textContent = this.dataset.name;
+          document.getElementById("bioPosition").textContent = this.dataset.position;
+          document.getElementById("bioOrg").textContent = this.dataset.org;
+          document.getElementById("bioPhoto").src = this.dataset.photo;
+          document.getElementById("bioText").textContent = this.dataset.bio;
+          modal.style.display = "flex";
+        });
+      });
 
-<script>
-    // Initialize AOS
-    AOS.init({
-        duration: 800,
-        once: true
+      // Close modal
+      closeBtn.addEventListener("click", () => modal.style.display = "none");
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+
     });
-</script>
+    </script>
 
-</body>
+  </body>
 
 </html>

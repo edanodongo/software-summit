@@ -1,32 +1,4 @@
 
-// Theme toggle logic
-function setTheme(dark) {
-    const toggleIcon = document.getElementById('themeToggle').querySelector('i');
-
-    // if (dark) {
-    //     document.body.classList.add('dark-theme');
-    //     toggleIcon.className = 'fas fa-sun'; // white sun icon
-    //     localStorage.setItem('theme', 'dark');
-    // } else {
-    //     document.body.classList.remove('dark-theme');
-    //     toggleIcon.className = 'fas fa-moon'; // white moon icon
-    //     localStorage.setItem('theme', 'light');
-    // }
-}
-
-
-document.getElementById('themeToggle').addEventListener('click', function () {
-    const isDark = !document.body.classList.contains('dark-theme');
-    setTheme(isDark);
-});
-
-// Apply saved theme on page load
-(function () {
-    const theme = localStorage.getItem('theme');
-    setTheme(theme === 'dark');
-})();
-
-
 // Minimal dark theme CSS
 const darkStyle = document.createElement('style');
 darkStyle.textContent = `
@@ -119,31 +91,20 @@ window.addEventListener('scroll', function () {
     const navbar = document.querySelector('.navbar');
     const scrollTop = window.pageYOffset;
 
-    if (scrollTop > 50) {
-        navbar.style.background = 'rgba(28, 28, 24, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
-    } else {
-        navbar.style.background = 'rgba(28, 28, 24, 0.95)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-    }
 });
 
 // Scroll to top functionality
-const scrollToTopBtn = document.getElementById('scrollToTop');
+document.addEventListener("DOMContentLoaded", function () {
+  const scrollToTopBtn = document.getElementById("scrollToTop");
 
-window.addEventListener('scroll', function () {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.classList.add('show');
-    } else {
-        scrollToTopBtn.classList.remove('show');
-    }
-});
-
-scrollToTopBtn.addEventListener('click', function () {
-    window.scrollTo({
+  if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener("click", function () {
+      window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth"
+      });
     });
+  }
 });
 
 // Form submission with AJAX
@@ -178,14 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Handle Organization Type ---
-  function handleOrgTypeChange() {
-    if (orgTypeSelect && orgTypeSelect.value) {
-      toggleVisibility(otherOrgWrapper, otherOrgInput, true);
-    } else {
-      toggleVisibility(otherOrgWrapper, otherOrgInput, false);
-    }
-  }
 
   // --- Handle Interests ---
   function handleInterestChange() {

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
     <!-- Fontawesome -->
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
@@ -28,52 +28,71 @@
 
 <body class="gallery-page">
 
-<header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="#hero" class="logo d-flex align-items-center">
-        <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
-          <div class="logo-divider mx-2"></div>
-        <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
-      </a>
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
+        </a>
 
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                  <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
+                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#">GALLERY</a></li>
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{% url 'home' %}" class="active">HOME</a></li>
-          <li><a href="{% url 'home' %}">ABOUT</a></li>
-          <li><a href="{% url 'home' %}">REGISTER</a></li>
-          <li><a href="{% url 'home' %}">AGENDA</a></li>
-          <li><a href="{% url 'home' %}">SPEAKERS</a></li>
-          <li><a href="{% url 'home' %}">FEATURES</a></li>
-          <li><a href="{% url 'home' %}">PARTNERS</a></li>
-          <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#gallery">MEDIA</a></li>
-              <li><a href="{% url 'not_found' %}">VENUE</a></li>
-              <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
-            </ul>
-          </li>  
-        </ul>
-        <div class="nav-extras d-flex align-items-center gap-2">
-          <!-- Mobile nav toggle -->
-           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
 
-          <!-- Translate Globe (mobile only) -->
-          <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
+          </ul>
 
-          <!-- Translation widget (popover, hidden by default) -->
-          <div class="translate-popover d-none">
-            <div class="gtranslate_wrapper"></div>
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-
-      <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
-
-    </div>
-</header>
+      </div>
+  </header>
 
   <main class="main">
 
@@ -98,85 +117,34 @@
 
         <div class="row gy-4 justify-content-center">
 
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 1" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+          {% for item in gallery_items %}
+            {% if item.is_active %}
+              <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="gallery-item h-100">
+                  <img
+                    src="{{ item.image.url }}"
+                    loading="lazy"
+                    class="img-fluid rounded shadow-sm"
+                    alt="{{ item.title|default:'Event Image' }}"
+                  >
+                  <div class="gallery-links d-flex align-items-center justify-content-center">
+                    <a
+                      href="{{ item.image.url }}"
+                      class="glightbox preview-link"
+                      title="{{ item.title|default:'Event Photo' }}"
+                    >
+                      <i class="bi bi-arrows-angle-expand"></i>
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div><!-- End Gallery Item -->
+            {% endif %}
+          {% empty %}
+<!--            <div class="col-12 text-center">-->
+<!--              <h3 class="text-muted mt-3">No event highlights available yet. Please check back soon!</h3>-->
+<!--            </div>-->
+          {% endfor %} <!-- End Gallery Item -->
 
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 2" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 3" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 4" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 5" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 6" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 7" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="gallery-item h-100">
-              <img src="" class="img-fluid" alt="">
-              <div class="gallery-links d-flex align-items-center justify-content-center">
-                <a href="" title="Gallery 8" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-              </div>
-            </div>
-          </div><!-- End Gallery Item -->
 
         </div>
 
@@ -186,80 +154,95 @@
 
   </main>
 
-<footer id="footer" class="footer position-relative dark-background">
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative dark-background">
 
-    <div class="container footer-top">
-        <div class="row gy-4 justify-content-evenly">
-            <div class="col-lg-4 col-md-6 footer-about">
-                <a href="{% url 'home' %}" class="logo d-flex align-items-center">
-                    <span class="sitename"> Kenya Software Summit</span>
-                </a>
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> The Kenya Software & AI Summit 2025</span>
+                  </a>
 
-                <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
-                    Africa’s digital economy through collaboration, talent development, and innovation.</p>
-                <div class="social-links d-flex mt-3">
-                    <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
-                        <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
-                        <i class="bi bi-facebook"></i>
-                    </a>
-                    <a aria-label="Connect with us on LinkedIn"
-                       href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
-                       target="_blank">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
-                       target="_blank">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">About</a></li>
-            <li><a href="{% url 'speakers' %}">Speakers</a></li>
-            <li><a href="{% url 'home' %}">Agenda</a></li>
-            <li><a href="{% url 'home' %}">Register</a></li>
-          </ul>
-        </div>
+                  </div>
+              </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="{% url 'home' %}">Features</a></li>
-            <li><a href="{% url 'home' %}">Partners</a></li>
-            <li><a href="{% url 'media' %}">Media</a></li>
-            <li><a href="{% url 'privacy' %}">Privacy</a></li>
-          </ul>
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
+          </div>
 
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'places' %}">Venue</a></li>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
+            </ul>
+          </div>
+
+          </div>
+      </div>
+
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit 2025 </strong>
+              <span>All Rights Reserved. </span></p>
+
+      </div>
+
+  </footer>
+
+
+  <!-- Scroll Top -->
+  <a id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+          class="bi bi-arrow-up-short"></i></a>
+
+
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <!-- Light mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp'  %}" alt="Summit Logo" class="logo-loader light-logo">
+      <!-- Dark mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
     </div>
-
-    <div class="container copyright text-center mt-4">
-        <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
-            Software Summit. </strong> <span>All Rights Reserved. </span></p>
-
-    </div>
-
-</footer>
-
-<!-- Scroll Top -->
-<a id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
-
-
-
-  <!-- Preloader -->
-  <div id="preloader">
-    <!-- Light mode logo -->
-    <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
-    <!-- Dark mode logo -->
-    <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
-  </div>
 
 
 
@@ -276,14 +259,39 @@
     <script src="{% static 'js/translate.js' %}" ></script>
     <script src="{% static 'js/translater.js' %}" defer></script>
 
+    <!-- Main JS File -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script src="{% static 'js/custom/main.js' %}"></script>
 
 
-<!-- Main JS File -->
-<script src="{% static 'js/main.js' %}"></script>
+    <script>
+      // modal
+      document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("bioModal");
+      const closeBtn = document.querySelector(".bio-close");
 
-<script src="{% static 'js/custom/main.js' %}"></script>
+      document.querySelectorAll(".btn-speaker").forEach(btn => {
+        btn.addEventListener("click", function(e) {
+          e.preventDefault();
+          document.getElementById("bioName").textContent = this.dataset.name;
+          document.getElementById("bioPosition").textContent = this.dataset.position;
+          document.getElementById("bioOrg").textContent = this.dataset.org;
+          document.getElementById("bioPhoto").src = this.dataset.photo;
+          document.getElementById("bioText").textContent = this.dataset.bio;
+          modal.style.display = "flex";
+        });
+      });
 
+      // Close modal
+      closeBtn.addEventListener("click", () => modal.style.display = "none");
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
 
-</body>
+    });
+    </script>
+
+  </body>
 
 </html>

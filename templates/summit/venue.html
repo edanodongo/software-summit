@@ -1,94 +1,97 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Venue - Evently Bootstrap Template</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Favicons -->
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
 
-  <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: Evently
-  * Template URL: https://bootstrapmade.com/evently-bootstrap-events-template/
-  * Updated: Jul 19 2025 with Bootstrap v5.3.7
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
+
 
 <body class="venue-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
-        <h1 class="sitename">Evently</h1>
-      </a>
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
+        </a>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="speakers.html">Speakers</a></li>
-          <li><a href="venue.html" class="active">Venue</a></li>
-          <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="speaker-details.html">Speaker Details</a></li>
-              <li><a href="tickets.html">Tickets</a></li>
-              <li><a href="buy-tickets.html">Buy Tickets</a></li>
-              <li><a href="gallery.html">Gallery</a></li>
-              <li><a href="terms.html">Terms</a></li>
-              <li><a href="privacy.html">Privacy</a></li>
-              <li><a href="404.html">404</a></li>
-            </ul>
-          </li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                  <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
+                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>
 
-      <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a>
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
 
-    </div>
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
+          </ul>
+
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
+          </div>
+        </nav>
+
+      </div>
   </header>
 
   <main class="main">
@@ -96,11 +99,11 @@
     <!-- Page Title -->
     <div class="page-title dark-background" style="background-image: url(assets/img/events/showcase-9.webp);">
       <div class="container position-relative">
-        <h1>Venue</h1>
-        <p>Esse dolorum voluptatum ullam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias.</p>
+        <h1>Venue </h1>
+        <p>Logistics to Moi University, Annex Campus, Eldoret</p>
         <nav class="breadcrumbs">
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
             <li class="current">Venue</li>
           </ol>
         </nav>
@@ -116,7 +119,7 @@
 
           <div class="col-lg-6">
             <div class="venue-image">
-              <img src="assets/img/events/venue-1.webp" alt="Event Venue" class="img-fluid rounded">
+              <img src="{% static 'images/gallery/mugate.webp'  %} " alt="Event Venue" class="img-fluid rounded">
               <div class="venue-badge">
                 <i class="bi bi-geo-alt-fill"></i>
                 <span>Main Venue</span>
@@ -126,20 +129,25 @@
 
           <div class="col-lg-6">
             <div class="venue-content">
-              <h3>Grand Metropolitan Conference Center</h3>
+              <h3>Moi University Annex</h3>
               <div class="venue-address">
                 <i class="bi bi-geo-alt"></i>
-                <span>125 Innovation Boulevard, Chicago, IL 60601</span>
+                <span>Eldoret - Nakuru Rd, Kapseret</span>
               </div>
 
-              <p>Located in the heart of downtown Chicago, the Grand Metropolitan Conference Center offers a prestigious setting for innovative gatherings. This state-of-the-art facility spans 50,000 square feet and can accommodate up to 2,500 attendees across multiple interconnected halls.</p>
+              <p>
+                  Located along the Eldoret–Kapsabet Road, Moi University Annex Campus offers a vibrant academic environment within the fast-growing town of Eldoret, Kenya.
+                  This modern campus combines accessibility with a serene setting, providing an ideal atmosphere for learning, innovation, and professional events.
+                  With well-equipped lecture halls, conference spaces, and advanced ICT infrastructure, the Annex Campus serves as a hub for research, training, and collaboration,
+                  accommodating both local and international participants in a dynamic and inspiring environment.
+              </p>
 
               <div class="venue-features">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="feature-item">
                       <i class="bi bi-people-fill"></i>
-                      <span>2,500 Capacity</span>
+                      <span>Capacity</span>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -151,7 +159,7 @@
                   <div class="col-md-6">
                     <div class="feature-item">
                       <i class="bi bi-p-square-fill"></i>
-                      <span>Valet Parking</span>
+                      <span>Parking</span>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -164,120 +172,15 @@
               </div>
 
               <div class="venue-actions">
-                <a href="#" class="btn btn-primary">
+                <a href="https://www.google.com/maps/place/Moi+University+Annex/@0.4811243,35.2984819,17z/data=!3m1!4b1!4m6!3m5!1s0x1780fe08d95d9633:0x7080e30866256693!8m2!3d0.4811243!4d35.2984819!16s%2Fg%2F1tf4tnm1?entry=ttu&g_ep=EgoyMDI1MTAxNC4wIKXMDSoASAFQAw%3D%3D"
+                   class="btn btn-primary">
                   <i class="bi bi-map"></i>
                   Get Directions
                 </a>
-                <a href="#" class="btn btn-outline-primary">
-                  <i class="bi bi-building"></i>
-                  Nearby Hotels
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row mt-5">
-          <div class="col-lg-12">
-            <div class="venue-map">
-              <h4>Venue Location</h4>
-              <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2970.7736193!2d-87.6298!3d41.8781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDUyJzQxLjIiTiA4N8KwMzknNDcuMyJX!5e0!3m2!1sen!2sus!4v1234567890123" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-5">
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-airplane-fill"></i>
-              </div>
-              <h5>By Air</h5>
-              <p>O'Hare International Airport is 45 minutes away. Direct shuttle service available every 30 minutes from Terminal 1.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-train-front-fill"></i>
-              </div>
-              <h5>By Train</h5>
-              <p>Union Station is just 8 blocks away. Take the Blue Line directly from the airport or downtown connections.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="travel-info">
-              <div class="travel-icon">
-                <i class="bi bi-car-front-fill"></i>
-              </div>
-              <h5>By Car</h5>
-              <p>Convenient access via I-90 and I-94. Complimentary valet parking available for all registered attendees.</p>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row mt-5">
-          <div class="col-lg-12">
-            <div class="accommodation-section">
-              <h4>Recommended Accommodations</h4>
-              <div class="row">
-
-                <div class="col-lg-4">
-                  <div class="hotel-card">
-                    <img src="assets/img/hotel/room-1.webp" alt="The Metropolitan Hotel" class="img-fluid">
-                    <div class="hotel-info">
-                      <h6>The Metropolitan Hotel</h6>
-                      <div class="hotel-distance">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>0.2 miles from venue</span>
-                      </div>
-                      <div class="hotel-price">
-                        <span>From $189/night</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4">
-                  <div class="hotel-card">
-                    <img src="assets/img/hotel/room-3.webp" alt="Downtown Plaza Suites" class="img-fluid">
-                    <div class="hotel-info">
-                      <h6>Downtown Plaza Suites</h6>
-                      <div class="hotel-distance">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>0.5 miles from venue</span>
-                      </div>
-                      <div class="hotel-price">
-                        <span>From $159/night</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-4">
-                  <div class="hotel-card">
-                    <img src="assets/img/hotel/room-7.webp" alt="Business Inn Chicago" class="img-fluid">
-                    <div class="hotel-info">
-                      <h6>Business Inn Chicago</h6>
-                      <div class="hotel-distance">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>0.8 miles from venue</span>
-                      </div>
-                      <div class="hotel-price">
-                        <span>From $139/night</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+<!--                <a href="#" class="btn btn-outline-primary">-->
+<!--                  <i class="bi bi-building"></i>-->
+<!--                  Nearby Hotels-->
+<!--                </a>-->
               </div>
             </div>
           </div>
@@ -287,106 +190,190 @@
 
     </section><!-- /Venue 2 Section -->
 
+    <!-- Venue 2 Section -->
+    <section id="jambo" class="venue-2 section">
+
+      <div class="container">
+
+        <div class="row align-items-stretch justify-content-center g-4">
+
+          <!-- Travel by Air -->
+          <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4 text-center travel-info h-100">
+              <div class="logo-wrapper mb-3">
+                <img src="{% static 'images/partners/jambojet_2.png' %}"
+                     alt="Jambojet Logo"
+                     class="travel-logo">
+              </div>
+
+              <h5 class="fw-bold text-primary mb-2">Travel by Air</h5>
+
+              <p class="travel-text mb-1">
+                <span class="fw-semibold text-dark">Jambojet</span> offers flights at
+                <span class="text-primary fw-semibold">Ksh 8,300 one-way</span>
+                between <strong>9th – 13th November</strong>.
+              </p>
+              <p class="travel-text mb-0">
+                For bookings, contact:
+                <a href="mailto:groups@jambojet.com" class="fw-semibold text-decoration-none text-primary">
+                  groups@jambojet.com
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Travel by Road -->
+          <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4 text-center travel-info h-100">
+              <div class="logo-wrapper mb-3">
+                <div class="road-icon-wrapper">
+                  <i class="bi bi-car-front-fill text-primary"></i>
+                </div>
+              </div>
+
+              <h5 class="fw-bold text-primary mb-2">Travel by Road</h5>
+
+              <p class="travel-text">
+                Eldoret City is <strong>313 km</strong> from Nairobi along the A104 — approximately a
+                <strong>7-hour drive</strong> from Nairobi. Public transport vehicles and private shuttles operate regularly from Nairobi and other major towns.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-lg-12">
+            <div class="venue-map text-center">
+              <h4 class="mb-3">Venue Location</h4>
+              <div class="map-container" style="position: relative; width: 100%; height: 400px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.5806067470894!2d35.29629357514978!3d0.4811243636750136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1780fe08d95d9633%3A0x7080e30866256693!2sMoi%20University%20Annex!5e0!3m2!1sen!2ske!4v1697550000000!5m2!1sen!2ske"
+                  width="100%"
+                  height="100%"
+                  style="border:0;"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Venue 2 Section -->
   </main>
 
+  <!-- Footer -->
   <footer id="footer" class="footer position-relative dark-background">
 
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Evently</span>
-          </a>
-          <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> The Kenya Software & AI Summit 2025</span>
+                  </a>
+
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
+
+                  </div>
+              </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
           </div>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">Venue</a></li>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
           </div>
-        </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
+            </ul>
+          </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
+          </div>
+      </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Hic solutasetp</h4>
-          <ul>
-            <li><a href="#">Molestiae accusamus iure</a></li>
-            <li><a href="#">Excepturi dignissimos</a></li>
-            <li><a href="#">Suscipit distinctio</a></li>
-            <li><a href="#">Dilecta</a></li>
-            <li><a href="#">Sit quas consectetur</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Nobis illum</h4>
-          <ul>
-            <li><a href="#">Ipsam</a></li>
-            <li><a href="#">Laudantium dolorum</a></li>
-            <li><a href="#">Dinera</a></li>
-            <li><a href="#">Trodelas</a></li>
-            <li><a href="#">Flexo</a></li>
-          </ul>
-        </div>
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit 2025</strong>
+              <span>All Rights Reserved. </span></p>
 
       </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">MyWebsite</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
 
   </footer>
 
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Preloader -->
-  <div id="preloader"></div>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <!-- Preloader -->
+    <div id="preloader">
+      <!-- Light mode logo -->
+      <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+      <!-- Dark mode logo -->
+      <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+    </div>
+
+
+
+      <!-- Scripts -->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+      <script src="{% static 'vendor/aos/aos.js' %}"></script>
+      <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+      <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+      <script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+      <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+      <script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+      <script src="{% static 'js/translate.js' %}" ></script>
+      <script src="{% static 'js/translater.js' %}" defer></script>
 
   <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
 
-</body>
+  <script src="{% static 'js/custom/main.js' %}"></script>
+
+
+  </body>
 
 </html>

@@ -1,10 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
 
     <!-- Fontawesome -->
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
@@ -33,27 +33,49 @@
         <a href="{% url 'home' %}" class="logo d-flex align-items-center">
           <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
             <div class="logo-divider mx-2"></div>
-          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" >
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
         </a>
-
 
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="{% url 'home' %}" class="active">HOME</a></li>
             <li><a href="#intro">ABOUT</a></li>
-            <li><a href="#register">REGISTER</a></li>
-            <li><a href="#schedule">AGENDA</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'register' %}">DELEGATE</a></li>
+                <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
+                <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="#schedule">PROGRAM</a></li>
             <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
-            <li><a href="#features">FEATURES</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
             <li><a href="#partners">PARTNERS</a></li>
             <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#gallery">MEDIA</a></li>
-                <!-- <li><a href="{% url 'not_found' %}">VENUE</a></li> -->
+                <li><a href="#gallery">GALLERY</a></li>
                 <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
               </ul>
-            </li>  
+            </li>
+
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
+
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
           </ul>
+
           <div class="nav-extras d-flex align-items-center gap-2">
             <!-- Mobile nav toggle -->
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -66,14 +88,7 @@
               <div class="gtranslate_wrapper"></div>
             </div>
           </div>
-
-
-
-
         </nav>
-
-
-        <!-- <a class="btn-getstarted" href="buy-tickets.html">Buy Tickets</a> -->
 
       </div>
   </header>
@@ -95,17 +110,13 @@
 
                           <div class="hero-text">
 
-                              <h1 class="hero-title">Kenya Software&nbsp;<br>Summit 2025</h1>
+                              <h1 class="hero-title">The Kenya Software <br>& AI Summit 2025</h1>
 
                               <p class="hero-subtitle">
-                                  Connecting minds.  
-                                  Shaping software.  
+                                  Connecting minds.
+                                  Shaping software.
                                   Driving growth
                               </p>
-                              <!-- <p class="hero-subtitle">
-                                Join Africa's premier software development conference where innovation meets opportunity.
-                                Connect with global tech leaders, showcase your projects, and shape the future of technology in Africa.
-                              </p> -->
 
                               <div class="event-details">
                                   <div class="detail-item">
@@ -114,7 +125,7 @@
                                   </div>
                                   <div class="detail-item">
                                       <i class="bi bi-geo-alt"></i>
-                                      <span>Eldoret City, Kenya</span>
+                                      <span>Moi University, Annex Campus, Eldoret</span>
                                   </div>
                               </div>
 
@@ -145,42 +156,40 @@
 
                           </div>
 
-                          <div class="cta-section ">
-                              <div class="d-flex gap-3 justify-content-center">
-                                  <div class="cta-buttons">
-                                      <a href="#register" class="btn btn-secondary btn-cta">Register</a>
-                                  </div>
-                                  <div class="cta-buttons">
-                                      <a href="#featured-speakers" class="btn btn-secondary btn-cta">View Speakers</a>
-                                  </div>
-                              </div>
+                        <div class="cta-section">
+                          <div class="d-flex gap-3 justify-content-center">
 
+                            <!-- Register Dropdown -->
+                            <div class="dropdown drop-auto cta-buttons">
+                              <button class="btn btn-secondary btn-cta dropdown-toggle" type="button"
+                                      id="registerDropdown"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">
+                                Register to Attend
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-cta" aria-labelledby="registerDropdown">
+                                <li><a class="dropdown-item" href="{% url 'register' %}">Delegate</a></li>
+                                <li><a class="dropdown-item" href="{% url 'exhibitor' %}">Exhibitor</a></li>
+                                <li><a class="dropdown-item" href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+                              </ul>
+                            </div>
 
-
-                              <!-- <p class="cta-note">Limited to 200 executive participants • Early bird pricing ends September 30th</p> -->
+                            <!-- View Speakers Button -->
+                            <div class="cta-buttons">
+                              <a href="{% url 'speakers' %}" class="btn btn-secondary btn-cta">View Speakers</a>
+                            </div>
+                            <!-- Jambojet Offer Button -->
+                            <div class="cta-buttons">
+                              <a href="{% url 'places' %}#jambo" class="btn btn-secondary btn-cta">Jambojet Offer</a>
+                            </div>
 
                           </div>
+                        </div>
+
 
                       </div><!-- End col-lg-10 -->
 
                   </div><!-- End row -->
-
-                  <div class="sponsors-section">
-
-                      <p class="sponsors-label">Proudly supported by </p>
-
-                      <div class="sponsors-logos">
-                          <img src="{% static 'images/partners/micde_logo.png' %}" alt="Konza Logo"
-                              class="sponsor-logo">
-                          <img src="{% static 'images/partners/konza_logo.png' %}" alt="Konza Logo"
-                              class="sponsor-logo">
-                          <img src="{% static 'images/partners/odpc_logo.png' %}" alt="ODPC Logo"
-                              class="sponsor-logo">
-                          <img src="{% static 'images/partners/icta_logo.png' %}" alt="ICTA Logo"
-                              class="sponsor-logo">
-                      </div>
-
-                  </div><!-- End sponsors-section -->
 
               </div><!-- End container -->
 
@@ -197,64 +206,35 @@
 
                   <div class="col-lg-6">
                       <div class="content">
-                          <h2>The Definitive Tech Innovation Summit</h2>
-                          <p class="lead">
-                              The global economy is being transformed by software development,
-                              artificial intelligence (AI), cloud technologies, and digital entrepreneurship. Kenya, with
-                              its
-                              dynamic youth population, thriving ICT sector, and fast-growing digital economy, is
-                              strategically
-                              positioned to lead Africa's next wave of digital transformation.
+                          <h2>The Flagship Software & AI Summit</h2>
+                          <p class="lead dark">
+                              Kenya's and Africa's digital transformation agenda presents a unique opportunity to leapfrog development stages, increased opportunities for innovation and entrepreneurship, fostering  inclusive growth as well as strengthen competitiveness in the global digital economy. </br></br>
+                              This is anchored on talented youthful population, thriving ICT sector and fast-growing digital economy supported by Government Policies, Private Sector initiatives, Academia and development partners support, strategically positioning Kenya to lead Africa’s next wave of digital transformation.</br></br>
+                              To realize this agenda, the Ministry of Information, Communications and the Digital Economy in partners with Africa Telecommunications Union is hosting The Kenya Software & AI Summit, an annual event attracting stakeholders from various sectors all over the world.
                           </p>
-                          <p>The Kenya Software Summit aligns with Kenya's vision of decentralizing innovation and
-                              fostering
-                              the digital economy.</p>
-
-                          <!-- <div class="stats-grid">
-                            <div class="stat-item">
-                              <div class="stat-number">3</div>
-                              <div class="stat-label">Days</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">8</div>
-                              <div class="stat-label">Tracks</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">150+</div>
-                              <div class="stat-label">Speakers</div>
-                            </div>
-                            <div class="stat-item">
-                              <div class="stat-number">3500+</div>
-                              <div class="stat-label">Attendees</div>
-                            </div>
-                          </div> -->
-
-                          <div class="cta-section">
-                              <a href="#schedule" class="btn btn-primary">View Full Agenda</a>
-                              <a href="#featured-speakers" class="btn btn-outline">Meet the Speakers</a>
-                          </div>
                       </div>
                   </div>
 
                   <div class="col-lg-6">
                       <div class="visual-section">
-                          <!-- <div class="image-wrapper">
-                              <img src="{% static 'images/gallery/photo_1_2.jpg' %}" alt="Tech Summit" class="img-fluid">
-                              <!-- <div class="gradient-overlay"></div> 
-                              <div class="floating-badge">
-                                  <i class="bi bi-calendar-event"></i>
-                                  <span>November 10-12 2025</span>
-                              </div>
-                          </div> -->
                           <div class="image-wrapper position-relative">
                               <div class="ratio ratio-16x9">
-                                  <iframe 
-                                      src="https://www.youtube.com/embed/jC6u_4COmuA" 
-                                      title="YouTube video player" 
-                                      frameborder="0"
-                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                      allowfullscreen>
-                                  </iframe>
+<!--                                  <iframe-->
+<!--                                      src="https://www.youtube.com/embed/jC6u_4COmuA"-->
+<!--                                      loading="lazy"-->
+<!--                                      title="YouTube video player"-->
+<!--                                      frameborder="0"-->
+<!--                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                                      allowfullscreen>-->
+<!--                                  </iframe>-->
+                                  <video
+                                    controls
+                                    width="100%"
+                                    preload="metadata"
+                                    poster="{% static 'images/video-thumbnail.jpeg' %}">
+                                    <source src="{% static 'videos/promo.mp4' %}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>
                               </div>
                               <div class="floating-badge" >
                                   <i class="bi bi-calendar-event"></i>
@@ -262,239 +242,28 @@
                               </div>
                           </div>
 
-
-                          <div class="highlight-cards">
-                              <div class="highlight-card">
-                                  <i class="bi bi-people-fill"></i>
-                                  <h4>Talent Networking</h4>
-                                  <p>Develop software and AI talent, providing direct linkages between Kenyan developers
-                                      and
-                                      global technology players.</p>
-                              </div>
-                              <div class="highlight-card">
-                                  <i class="bi bi-lightbulb-fill"></i>
-                                  <h4>Innovation Showcase</h4>
-                                  <p>Discover cutting-edge technologies and startups</p>
-                              </div>
-                          </div>
+                      </div>
+                      <div class="content">
+                          <p class="lead dark mt-4"></br>The summit provides a platform for dialogue,
+                              knowledge exchange and partnership building in the Software, Artificial Intelligence and other emerging technologies Sectors. </br></br>
+                              This Year 2025, the Summit will be held at Moi University, Annex Campus Eldoret City.</p>
                       </div>
                   </div>
 
               </div>
-
-              <!-- <div class="founder-quote">
-                <div class="row align-items-center">
-                  <div class="col-lg-3 text-center">
-                    <img src="assets/img/person/person-m-8.webp" alt="Sarah Johnson" class="founder-img">
-                  </div>
-                  <div class="col-lg-9">
-                    <blockquote>
-                      <p>"Our mission has always been to bridge the gap between visionary ideas and practical implementation. This summit represents the culmination of years of bringing together the brightest minds in technology."</p>
-                      <cite>
-                        <strong>Sarah Johnson</strong>
-                        <span>Founder &amp; Event Director</span>
-                      </cite>
-                    </blockquote>
-                  </div>
-                </div>
-              </div> -->
 
           </div>
 
       </section><!-- /Intro Section -->
 
 
-      <!-- Featured Speakers Section -->
-      <section id="featured-speakers" class="featured-speakers section">
-
-          <!-- Section Title -->
-          <div class="container section-title">
-              <h2>Featured Speakers</h2>
-              <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
-          </div><!-- End Section Title -->
-
-          <div class="container">
-
-              <div class="row gy-4">
-
-                <!-- Featured Speaker 1 -->
-                <div class="col-lg-6">
-                    <div class="speaker-card featured">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="speaker-image">
-                                    <img src="{% static 'images/speakers/william_kabogo_gitau.jpg' %}"
-                                        alt="Cabinet Secretary" class="img-fluid">
-                                    <div class="speaker-social">
-                                        <a href="https://ke.linkedin.com/in/william-kabogo-92537040" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                        <a href="https://x.com/honkabogo" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="speaker-content">
-                                    <span class="speaker-category">Keynote Speaker</span>
-                                    <h3 class="speaker-name">Hon. William Kabogo Gitau</h3>
-                                    <p class="speaker-title">Cabinet Secretary</p>
-                                    <p class="speaker-company">Ministry of ICT & Digital Economy (MICDE), Government of
-                                        the Republic of Kenya</p>
-                                    <!-- <div class="speaker-session">
-                                      <h4>Session: "The Future of AI in Business"</h4>
-                                    </div> -->
-                                                          
-                                    <a href="#"
-                                      class="btn-speaker"
-                                      data-name="Hon. William Kabogo Gitau"
-                                      data-position="Cabinet Secretary"
-                                      data-org="Ministry of ICT & Digital Economy (MICDE), Government of
-                                        the Republic of Kenya"
-                                      data-photo="{% static 'images/speakers/william_kabogo_gitau.jpg' %}"
-                                      data-bio="Hon. William Kabogo Gitau is the pioneer Governor of Kiambu County, a role in which he dedicated his visionary leadership and business acumen, leading to the recognition of the County as the second-best performing county in revenue collection in the Financial Year 2016-2017. Prior to being elected Governor, Hon. Kabogo had served as Member of Parliament for Juja Constituency for two terms, Chief Executive Officer for Toto Industries, and an auditor in the Office of the Auditor General. While in Parliament, Hon. Kabogo was ranked fifth nationally for effective utilization of Constituency Development Fund (CDF) allocations. Hon. Kabogo holds a Bachelor of Commerce (B. Com) degree in Accounting and Finance from Punjab University in India. He has additional certifications in accounting and audit.">
-                                      View Profile
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End Featured Speaker 1 -->
-
-                <!-- Featured Speaker 2 -->
-                <div class="col-lg-6">
-                    <div class="speaker-card featured">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="speaker-image">
-                                    <img src="{% static 'images/speakers/eng_john_tanui.jpg' %}"
-                                        alt="Principal Secretary" class="img-fluid">
-                                    <div class="speaker-social">
-                                        <a href="https://ke.linkedin.com/in/johntanui" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                        <a href="https://x.com/tanuijohn/" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="speaker-content">
-                                    <span class="speaker-category">Keynote Speaker</span>
-                                    <h3 class="speaker-name">Eng John Tanui</h3>
-                                    <p class="speaker-title">Principal Secretary</p>
-                                    <p class="speaker-company">State Department of ICT and Digital Economy, Government
-                                        of Kenya</p>
-                                    <!-- <div class="speaker-session">
-                                      <h4>Session: "Digital Transformation Strategies"</h4>
-                                    </div> -->
-                                      <!-- <a href="#" class="btn-speaker">View Profile</a> -->
-                                    <a href="#"
-                                      class="btn-speaker"
-                                      data-name="Eng John Tanui"
-                                      data-position="Principal Secretary"
-                                      data-org="State Department of ICT and Digital Economy, Government
-                                        of Kenya"
-                                      data-photo="{% static 'images/speakers/eng_john_tanui.jpg' %}"
-                                      data-bio="I am an engineer with over 24 years of experience in the technology sector globally, keen on leveraging innovative technologies to solve the most pressing challenges facing economies. I am passionate about mentoring the next generation of technology and business leaders.">
-                                      View Profile
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End Featured Speaker 2 -->
-
-          <!-- Additional Speakers Grid
-
-          <div class="row gy-4 mt-4">
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/Kerema_Mary.jpg' %}" alt="Mary N. Kerema, OGW" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mary N. Kerema, OGW</h4>
-                  <p class="speaker-title">Secretary ICT, E-Government</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Design Thinking Workshop"</span>
-                </div>
-              </div>
-            </div><!-- End Speaker
-
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="David Wilson" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mr. Washington Okoth</h4>
-                  <p class="speaker-title">Secretary ICT Infrastructure</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Big Data Analytics"</span>
-                </div>
-              </div>
-            </div><!-- End Speaker
-
-
-            <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="{% static 'images/speakers/placeholder.jpg' %}" alt="Mr. Emmanuel Kata Kimeu" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="speaker-content">
-                  <h4 class="speaker-name">Mr. Emmanuel Kata Kimeu</h4>
-                  <p class="speaker-title">Secretary, ICT - Security and Audit Control</p>
-                  <p class="speaker-company">State Department of ICT and Digital Economy, Government of Kenya</p>
-
-                  <!-- <span class="speaker-topic">"Digital Marketing Trends"</span>
-
-                </div>
-              </div>
-            </div><!-- End Speaker -->
-
-            <!-- <div class="col-lg-3 col-md-6">
-              <div class="speaker-card compact">
-                <div class="speaker-image">
-                  <img src="assets/img/events/speaker-9.webp" alt="James Parker" class="img-fluid">
-                  <div class="speaker-overlay">
-                    <div class="speaker-social">
-                      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                      <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-
-                    </div>
-                  </div>End Speaker -->
-
-              </div>
-
-
-          </div>
-
-      </section><!-- /Featured Speakers Section -->
-
       <!-- Schedule Section -->
       <section id="schedule" class="schedule section light-background">
 
         <!-- Section Title -->
         <div class="container section-title">
-          <h2>Agenda</h2>
-          <p class="lead text-muted dark"><strong>Explore a dynamic schedule packed with keynotes, panels, hackathons, workshops, and networking events. </strong></p>
+          <h2>Program</h2>
+          <p class="lead text-muted dark"><strong>Explore a dynamic schedule packed with keynote address, panel Discussions, Technical workshops, and Business match making & Networking event. </strong></p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -520,21 +289,6 @@
             <!-- Day 1 Schedule -->
             <div class="tab-pane fade show active" id="schedule-day1">
 
-              <!-- Track Headers 
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i> 
-                  <span>Government Policy Frameworks & Enabling Ecosystem</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i> 
-                  <span>Talent, Startups & Innovation Pipelines</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i> 
-                  <span>Investment, Partnerships & Long-term Growth</span>
-                </div>
-              </div> -->
 
               <div class="schedule-timeline">
 
@@ -592,14 +346,14 @@
                         <!-- <i class="bi bi-megaphone"></i> -->
                         <span>Tone</span>
                       </div>
-                      <h4>Setting the tone</h4>
+                      <h4>Official opening</h4>
                       <!-- <p>Multi-stakeholder perspectives on regulatory design, enabling infrastructure, and public-private collaboration to support software development and exports. </p> -->
                       <div class="panelists-container">
                           <div class="panelist-card">
                               <div class="panelist-role">Cultural entertainment</div>
                               <!-- <div class="panelist-name">KoTDA Digital Solutions</div> -->
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">National Anthem & Prayer</div>
                               <!-- <div class="panelist-name">Cloud, AI & Data Building resilient Global-ready software</div> -->
                           </div>
@@ -613,7 +367,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
 
@@ -636,7 +390,7 @@
                               <div class="panelist-role">Presentation 1</div>
                               <div class="panelist-name">Kenya Software Ecosystem Baseline survey report</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Presentation 2</div>
                               <div class="panelist-name">The Global software economy: Trends, risks & opportunities</div>
                           </div>
@@ -646,7 +400,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
 
@@ -689,7 +443,7 @@
                               <div class="panelist-role">Presentation 1</div>
                               <div class="panelist-name">Software Quality Assurance Frameworks</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Presentation 2</div>
                               <div class="panelist-name">Software & Intellectual properties, Patents & Copyright policy</div>
                           </div>
@@ -699,7 +453,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Time Slot 5 -->
@@ -762,7 +516,7 @@
                               <div class="panelist-role">Sponsor Workshop Side Event 1</div>
                               <div class="panelist-name">KoTDA Digital Solutions</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Sponsor Workshop Side Event 2</div>
                               <div class="panelist-name">Cloud, AI & Data Building resilient Global-ready software</div>
                           </div>
@@ -772,7 +526,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Time Slot 7 -->
@@ -801,22 +555,7 @@
 
             <!-- Day 2 Schedule -->
             <div class="tab-pane fade" id="schedule-day2">
-              
-              <!-- Track Headers 
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i> 
-                  <span>Development Track</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i> 
-                  <span>Design Track</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i> 
-                  <span>Business Track</span>
-                </div>
-              </div> -->
+
 
               <div class="schedule-timeline">
 
@@ -902,7 +641,7 @@
                               <div class="panelist-role">Keynote Address</div>
                               <div class="panelist-name">Talent of the future: Strategies and opportunities for software talent - Higher Education</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Keynote Address</div>
                               <div class="panelist-name">Talent of the future: Strategies and opportunities for software talent - TVET</div>
                           </div>
@@ -912,7 +651,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Break -->
@@ -954,7 +693,7 @@
                               <div class="panelist-role">Keynote Address</div>
                               <div class="panelist-name">Future of jobs report 2025</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Presentation</div>
                               <div class="panelist-name">Digital labour rights</div>
                           </div>
@@ -968,7 +707,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Time Slot 5 -->
@@ -990,7 +729,7 @@
                               <div class="panelist-role">Presentation</div>
                               <div class="panelist-name">Virtual assets in Kenya: Bridging gaps and unlocking opportunities, legal framework</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Q&A Session</div>
                               <!-- <div class="panelist-name"></div> -->
                           </div>
@@ -1004,7 +743,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Lunch -->
@@ -1047,7 +786,7 @@
                               <div class="panelist-role">Presentation</div>
                               <div class="panelist-name">DevSecOps, cybersecurity, privacy and digital trust in the global software economy</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Software for the creative economy</div>
                               <div class="panelist-name">Gaming, Film and Digital media innovation</div>
                           </div>
@@ -1061,9 +800,9 @@
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
-                
+
                 <!-- Time Slot 7 -->
                 <div class="time-slot">
                   <div class="time-label">
@@ -1090,22 +829,7 @@
 
             <!-- Day 3 Schedule -->
             <div class="tab-pane fade" id="schedule-day3">
-              
-              <!-- Track Headers 
-              <div class="track-headers">
-                <div class="track-header development" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-code-slash"></i> 
-                  <span>Development Track</span>
-                </div>
-                <div class="track-header design" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-palette"></i> 
-                  <span>Design Track</span>
-                </div>
-                <div class="track-header business" style="background: var(--primary-green);">
-                  <!-- <i class="bi bi-briefcase"></i> 
-                  <span>Business Track</span>
-                </div>
-              </div> -->
+
 
               <div class="schedule-timeline">
 
@@ -1191,13 +915,13 @@
                               <div class="panelist-role">Keynote Address</div>
                               <div class="panelist-name">Unlocking Kenya's next generation of developers and startups</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Startup Support </div>
                               <div class="panelist-name">Funding the software ecosystem </div>
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Break -->
@@ -1239,13 +963,13 @@
                               <div class="panelist-role">Keynote Address</div>
                               <div class="panelist-name">From Nairobi to Global Stage: Building software for export </div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Panel Discussion</div>
                               <div class="panelist-name">Creating an enabling environment for software export  </div>
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
 
@@ -1309,25 +1033,25 @@
                               <div class="panelist-role">Keynote </div>
                               <div class="panelist-name">Global outlook - What's next for software</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Call to Action</div>
                               <div class="panelist-name">Signing of Call to Action</div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Speeches</div>
                               <!-- <div class="panelist-name">Signing of Call to Action</div> -->
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Official Closing Ceremony</div>
                               <div class="panelist-name">Closing ceremony </div>
                           </div>
-                          <div class="panelist-card"> 
+                          <div class="panelist-card">
                               <div class="panelist-role">Press conference</div>
                               <!-- <div class="panelist-name">Closing ceremony </div> -->
                           </div>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
 
                 <!-- Break -->
@@ -1355,27 +1079,132 @@
 
           </div>
 
-          <!-- Download CTA
+           <!-- Download CTA -->
           <div class="text-center">
             <div class="download-cta">
-              <h4>Get the Complete Schedule</h4>
-              <p>Download the full agenda as PDF or add events to your calendar</p>
+              <h4>Download program and add event to calendar</h4>
+              <p>Download the program or add event to your calendar</p>
               <div class="cta-buttons">
-                <a href="#" class="btn btn-primary">
-                  <i class="bi bi-download"></i>
-                  Download PDF
+<!--                <a href="{% static 'files/schedule.pdf' %}" class="btn btn-primary" download>-->
+                <a href="#" class="btn btn-primary" download>
+                  <i class="bi bi-download"></i> Download Programme
                 </a>
-                <a href="#" class="btn btn-outline-primary">
-                  <i class="bi bi-calendar-plus"></i>
-                  Add to Calendar
+
+                <a href="{% url 'add_to_calendar' %}" class="btn btn-outline-primary">
+                  <i class="bi bi-calendar-plus"></i> Add to Calendar
                 </a>
+
               </div>
             </div>
-          </div> -->
+          </div>
+
+        </div>
+
+
+        <div class="container">
+
+          <!-- Day Selector -->
+          <div class="schedule-tabs">
+            <ul class="nav nav-pills justify-content-center mb-5">
+              {% for day in days %}
+                <li class="nav-item">
+                  <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="pill"
+                    data-bs-target="#schedule-day{{ day.id }}">
+                    {{ day.title }}
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Schedule Content -->
+          <div class="tab-content schedule-content">
+            {% for day in days %}
+              <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="schedule-day{{ day.id }}">
+                <div class="schedule-timeline">
+
+                  {% for slot in day.timeslots.all %}
+                    <div class="time-slot {% if slot.label|lower == 'break' %}break-slot{% endif %}">
+                      <div class="time-label">
+                        <span class="time">
+                          {% if slot.label %}
+                            {{ slot.label }}
+                          {% else %}
+                            {{ slot.start_time|time:"g:i A" }}
+                          {% endif %}
+                        </span>
+                        {% if slot.duration %}
+                          <span class="duration">{{ slot.duration }}</span>
+                        {% endif %}
+                      </div>
+
+                      <div class="sessions-row">
+                        {% for session in slot.sessions.all %}
+                          <div class="session-card {{ session.session_type|lower }}" colspan="0">
+                            {% if not session.is_break %}
+                              {% if session.session_type %}
+                                <div class="session-type">
+                                  <span>{{ session.get_session_type_display }}</span>
+                                </div>
+                              {% endif %}
+                              <h4>{{ session.title }}</h4>
+                              {% if session.description %}
+                                <p>{{ session.description }}</p>
+                              {% endif %}
+
+                              <div class="session-meta">
+                                {% if session.venue %}
+                                  <span class="venue">{{ session.venue }}</span>
+                                {% endif %}
+                              </div>
+
+                              {% if session.panelists.all %}
+                                <div class="panelists-container">
+                                  {% for panelist in session.panelists.all %}
+                                    <div class="panelist-card">
+                                      {% if panelist.role %}
+                                        <div class="panelist-role">{{ panelist.role }}</div>
+                                      {% endif %}
+                                      {% if panelist.name %}
+                                        <div class="panelist-name">{{ panelist.name }}</div>
+                                      {% endif %}
+                                    </div>
+                                  {% endfor %}
+                                </div>
+                              {% endif %}
+                            {% else %}
+                              <div class="session-type">
+                                <i class="bi bi-cup-hot"></i>
+                                <span>Break</span>
+                              </div>
+                              <h4>{{ session.title }}</h4>
+                            {% endif %}
+                          </div>
+                        {% empty %}
+                          <div class="session-card">
+                            <!-- <h4>No sessions scheduled for this time slot.</h4> -->
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% empty %}
+                    <!-- <p>No time slots added for this day yet.</p> -->
+                  {% endfor %}
+
+                </div>
+              </div><!-- End Day Tab -->
+            {% empty %}
+              <!-- <div class="text-center text-muted py-5">
+                <p>No schedule data available yet.</p>
+              </div> -->
+            {% endfor %}
+          </div>
 
         </div>
 
       </section><!-- /Schedule Section -->
+
+
 
 
       <!-- Features Section -->
@@ -1384,7 +1213,7 @@
 
               <!-- Section Title -->
               <div class="container section-title">
-                  <h2>Summit Features</h2>
+                  <h2>Activities</h2>
               </div><!-- End Section Title -->
 
               <div class="row g-4 justify-content-center">
@@ -1395,7 +1224,7 @@
                               <i class="fas fa-laptop-code"></i>
                           </div>
                           <h4 class="fw-bold mb-2">Hackathons & Challenges</h4>
-                          <p class="text-secondary">24-hour intensive coding sessions to solve real-world problems across
+                          <p class="text-secondary">Coding sessions to solve real-world problems across
                               sectors including healthcare, fintech, education, and agriculture.</p>
                           <span class="badge bg-danger position-absolute top-0 end-0 m-3 shadow-sm">Popular</span>
                       </div>
@@ -1470,191 +1299,44 @@
       </section>
 
 
-      <!-- Registration Section -->
-      <section id="register" class="section-padding intro">
-          <div class="container">
-              <!-- Title + Intro -->
-              <div class="row justify-content-center mb-5 ">
-                  <div class="col-lg-8 text-center" data-aos="fade-up">
-                      <div class="container section-title">
-                          <h2>Register for Kenya Software Summit 2025</h2>
-                      </div>
-                      <p class="lead text-muted dark">
-                          Join <strong>500+ developers, entrepreneurs, and tech leaders</strong>
-                          for Africa's premier software development conference.
-                      </p>
+    <!-- Partners Section -->
+    <section id="partners" class="section-padding py-5">
+      <div class="container">
+        <!-- Section Title -->
+        <div class="section-title text-center mb-3">
+          <h2 class="fw-bold text-uppercase" style="color: #000;">Supporting Partners</h2>
+        </div>
+
+        <!-- Loop Through Each Sponsor Package -->
+        {% for package, partners in sponsor_packages.items %}
+          {% if partners %}
+            <div class="package-section mb-5">
+              <h3 class="fw-semibold text-uppercase text-center mb-4" style="color: #000;">{{ package }}</h3>
+
+              <div class="partners-grid d-flex flex-wrap justify-content-center align-items-center gap-4" data-aos="fade-up">
+                {% for partner in partners %}
+                  <div class="partner-card text-center p-3">
+                    {% if partner.website %}
+                      <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ partner.logo.url }}"
+                             alt="{{ partner.name }}"
+                             class="partner-logo img-fluid"
+                             loading="lazy">
+                      </a>
+                    {% else %}
+                      <img src="{{ partner.logo.url }}"
+                           alt="{{ partner.name }}"
+                           class="partner-logo img-fluid"
+                           loading="lazy">
+                    {% endif %}
                   </div>
+                {% endfor %}
               </div>
-              <!-- End Section Title -->
-
-
-              <!-- Registration Form -->
-              <div class="row justify-content-center ">
-                  <div class="col-lg-7 col-md-9">
-                      <div class="card registration-card p-4 ">
-                          <form id="registration-form" method="post" novalidate>
-                              {% csrf_token %}
-
-                              <!-- Title, First Name, Second Name -->
-                              <div class="row g-3">
-                                  <div class="col-md-12">
-                                      <label for="title" class="form-label fw-semibold dark">Title</label>
-                                      {{ form.title }}
-                                  </div>
-                                  <div class="col-md-12">
-                                      <label for="id_first_name" class="form-label fw-semibold dark">First Name</label>
-                                      {{ form.first_name }}
-                                  </div>
-                                  <div class="col-md-12">
-                                      <label for="id_second_name" class="form-label fw-semibold dark">Other Names</label>
-                                      {{ form.second_name }}
-                                  </div>
-                              </div>
-
-                              <!-- Email + Phone -->
-                              <div class="row g-3 mt-3">
-                                  <div class="col-md-6">
-                                      <label for="id_email" class="form-label fw-semibold dark">Email</label>
-                                      {{ form.email }}
-                                  </div>
-                                  <div class="col-md-6">
-                                      <label for="id_phone" class="form-label fw-semibold dark">Phone</label>
-                                      {{ form.phone }}
-                                  </div>
-                              </div>
-
-                              <!-- Organization Type -->
-                              <div class="row g-3 mt-3">
-                                  <div class="col-md-6">
-                                      <label for="id_organization_type" class="form-label fw-semibold dark">Organization</label>
-                                      {{ form.organization_type }}
-                                  </div>
-                                  <div class="col-md-6" id="other-org-type" style="display:none;">
-                                      <label for="id_other_organization_type" class="form-label fw-semibold dark">Please specify</label>
-                                      {{ form.other_organization_type }}
-                                  </div>
-                              </div>
-
-                              <!-- Job Title -->
-                              <div class="mt-3">
-                                  <label for="id_job_title" class="form-label fw-semibold dark">Job Title / Role</label>
-                                  {{ form.job_title }}
-                              </div>
-
-                              <!-- Interests -->
-                              <div class="mt-3">
-                                  <label for="id_interests_1" class="form-label fw-semibold dark">Areas of Interest</label>
-                                  <div id="id_interests" class="d-flex flex-wrap gap-3">
-                                      {% for checkbox in form.interests %}
-                                          <div class="form-check">
-                                              <input type="checkbox"
-                                                    name="{{ checkbox.data.name }}"
-                                                    value="{{ checkbox.data.value }}"
-                                                    {% if checkbox.data.selected %}checked{% endif %}
-                                                    class="form-check-input"
-                                                    id="id_interests_{{ forloop.counter }}">
-                                              <label class="form-check-label" for="id_interests_{{ forloop.counter }}">
-                                                  {{ checkbox.choice_label }}
-                                              </label>
-                                          </div>
-                                      {% endfor %}
-                                  </div>
-                              </div>
-
-                              <!-- Other Interest -->
-                              <div class="mt-3" id="other-interest" style="display:none;">
-                                  <label for="id_other_interest" class="form-label fw-semibold dark">Please specify</label>
-                                  {{ form.other_interest }}
-                              </div>
-                              
-                              <!-- Terms -->
-                              <div class="mt-3 form-label">
-                                <input type="checkbox" id="terms" name="terms" required>
-                                <label for="terms">I agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *</label>
-                              </div>
-
-                              <!-- Submit -->
-                              <div class="d-grid mt-4">
-                                  <button type="submit" id="submit-btn"
-                                          class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark">
-                                      <i class="fa fa-paper-plane me-2"></i> Register Now
-                                  </button>
-                              </div>
-                          </form>
-
-
-                          <!-- Alerts -->
-                          <div id="alert-container" class="mt-3"></div>
-                      </div>
-
-                  </div>
-              </div>
-          </div>
-      </section>
-
-      <!-- Sponsors Section  -->
-      <section id="partners" class="section-padding ">
-
-          <div class="container">
-              <h2 class="section-title text-dark fw-bold dark">
-                  Kenya Software Summit 2025 Sponsors
-              </h2>
-
-              <div class="partners-logos" data-aos="fade-up">
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/micde_logo.png' %}" alt="MICDE" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/odpc_logo.png' %}" alt="ODPC" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/icta_logo.png' %}" alt="ICT Authority" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/konza_logo.png' %}" alt="Konza Technopolis"
-                          class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/afralti_logo.png' %}" alt="AFRALTI" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/kaist_logo.png' %}" alt="KAIST" class="partner-logo">
-                  </div>
-
-              </div>
-      </section>
-
-      <!-- Partners Section  -->
-      <section id="partners" class="section-padding ">
-          <div class="container">
-              <h2 class="section-title fw-bold dark">
-                  Our Partners
-              </h2>
-
-              <div class="partners-logos" data-aos="fade-up">
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/micde_logo.png' %}" alt="Ministry of ICT" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/odpc_logo.png' %}" alt="ODPC" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/icta_logo.png' %}" alt="ICT Authority" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/konza_logo.png' %}" alt="Konza Technopolis"
-                          class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/afralti_logo.png' %}" alt="AFRALTI" class="partner-logo">
-                  </div>
-                  <div class="partner-logo-container">
-                      <img src="{% static 'images/partners/kaist_logo.png' %}" alt="KAIST" class="partner-logo">
-                  </div>
-              </div>
-          </div>
-      </section>
-
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
 
       <!-- Gallery Section -->
       <section id="gallery" class="gallery section">
@@ -1662,8 +1344,8 @@
 
           <!-- Section Title -->
           <div class="container section-title">
-              <h2>Event Highlights</h2>
-              <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
+              <h2>Highlights</h2>
+              <!-- <p></p> -->
           </div><!-- End Section Title -->
 
           <div class="container-fluid">
@@ -1672,9 +1354,9 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_1_0.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_1_2.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_1_0.jpg' %}" title="Gallery 1"
+                              <a href="{% static 'images/gallery/photo_1_2.webp' %}" loading="lazy"  title="Gallery 3"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1683,9 +1365,9 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_2.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_4.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_2.jpg' %}" title="Gallery 2"
+                              <a href="{% static 'images/gallery/photo_4.webp' %}" loading="lazy"  title="Gallery 4"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1694,9 +1376,9 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_1_2.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_6.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_1_2.jpg' %}" title="Gallery 3"
+                              <a href="{% static 'images/gallery/photo_6.webp' %}" loading="lazy"  title="Gallery 6"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1705,9 +1387,9 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_4.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_7.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_4.jpg' %}" title="Gallery 4"
+                              <a href="{% static 'images/gallery/photo_7.webp' %}" loading="lazy"  title="Gallery 7"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1716,9 +1398,9 @@
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_5.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_5.jpg' %}" title="Gallery 5"
+                              <a href="{% static 'images/gallery/photo_1_0.webp' %}" loading="lazy"  title="Gallery 1"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1726,32 +1408,32 @@
                   </div><!-- End Gallery Item -->
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
-                      <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_6.jpg' %}" class="img-fluid" alt="">
-                          <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_6.jpg' %}" title="Gallery 6"
-                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                          </div>
-                      </div>
-                  </div><!-- End Gallery Item -->
+                              <div class="gallery-item h-100">
+                                  <img src="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  class="img-fluid" alt="">
+                                  <div class="gallery-links d-flex align-items-center justify-content-center">
+                                      <a href="{% static 'images/gallery/photo_2.webp' %}" loading="lazy"  title="Gallery 2"
+                                        class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                                      <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                                  </div>
+                              </div>
+                          </div><!-- End Gallery Item -->
+
+                  <div class="col-xl-3 col-lg-4 col-md-6">
+                              <div class="gallery-item h-100">
+                                  <img src="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  class="img-fluid" alt="">
+                                  <div class="gallery-links d-flex align-items-center justify-content-center">
+                                      <a href="{% static 'images/gallery/photo_8.webp' %}" loading="lazy"  title="Gallery 8"
+                                        class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                                      <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                                  </div>
+                              </div>
+                          </div><!-- End Gallery Item -->
 
                   <div class="col-xl-3 col-lg-4 col-md-6">
                       <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_7.jpg' %}" class="img-fluid" alt="">
+                          <img src="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  class="img-fluid" alt="">
                           <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_7.jpg' %}" title="Gallery 7"
-                                class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                              <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                          </div>
-                      </div>
-                  </div><!-- End Gallery Item -->
-
-                  <div class="col-xl-3 col-lg-4 col-md-6">
-                      <div class="gallery-item h-100">
-                          <img src="{% static 'images/gallery/photo_8.jpg' %}" class="img-fluid" alt="">
-                          <div class="gallery-links d-flex align-items-center justify-content-center">
-                              <a href="{% static 'images/gallery/photo_8.jpg' %}" title="Gallery 8"
+                              <a href="{% static 'images/gallery/photo_5.webp' %}" loading="lazy"  title="Gallery 5"
                                 class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
                               <!-- <a href="gallery-single.html" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
                           </div>
@@ -1791,47 +1473,61 @@
           <div class="row gy-4 justify-content-evenly">
               <div class="col-lg-4 col-md-6 footer-about">
                   <a href="{% url 'home' %}" class="logo d-flex align-items-center">
-                      <span class="sitename"> Kenya Software Summit</span>
+                      <span class="sitename"> The Kenya Software & AI Summit</span>
                   </a>
 
                   <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
                       Africa’s digital economy through collaboration, talent development, and innovation.</p>
                   <div class="social-links d-flex mt-3">
-                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/MoICTKenya" target="_blank">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
                           <i class="bi bi-twitter-x"></i>
                       </a>
-                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/MoICTKE" target="_blank">
-                          <i class="bi bi-facebook"></i>
-                      </a>
                       <a aria-label="Connect with us on LinkedIn"
-                        href="https://www.linkedin.com/company/ministry-of-information-communications-and-the-digital-economy/"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
                         target="_blank">
                           <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
                       </a>
                       <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
                         target="_blank">
                           <i class="fab fa-youtube"></i>
                       </a>
+
                   </div>
               </div>
+
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
+          </div>
 
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="#intro">About</a></li>
+              <li><a href="{% url 'places' %}">Venue</a></li>
               <li><a href="{% url 'speakers' %}">Speakers</a></li>
-              <li><a href="#schedule">Agenda</a></li>
-              <li><a href="#register">Register</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
             </ul>
           </div>
 
           <div class="col-lg-2 col-md-3 footer-links">
             <h4>Resources</h4>
             <ul>
-              <li><a href="#features">Features</a></li>
+              <li><a href="#features">Activities</a></li>
               <li><a href="#partners">Partners</a></li>
-              <li><a href="#gallery">Media</a></li>
-              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
             </ul>
           </div>
 
@@ -1839,8 +1535,8 @@
       </div>
 
       <div class="container copyright text-center mt-4">
-          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">Kenya
-              Software Summit. </strong> <span>All Rights Reserved. </span></p>
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit
+              </strong> <span>All Rights Reserved. </span></p>
 
       </div>
 
@@ -1856,7 +1552,7 @@
     <!-- Preloader -->
     <div id="preloader">
       <!-- Light mode logo -->
-      <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+      <img src="{% static 'images/summit_logo_dark.webp'  %}" alt="Summit Logo" class="logo-loader light-logo">
       <!-- Dark mode logo -->
       <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
     </div>
@@ -1905,6 +1601,7 @@
       window.addEventListener("click", (e) => {
         if (e.target === modal) modal.style.display = "none";
       });
+
     });
     </script>
 

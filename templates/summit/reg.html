@@ -1,0 +1,694 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kenya Software & AI Summit 2025 - Connecting minds, Shaping software, Driving growth </title>
+
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+</head>
+
+<body class="buy-tickets-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          <img alt="Court of Arms" src="{% static 'images/court_of_arms.png' %}">
+            <div class="logo-divider mx-2"></div>
+          <img alt="Summit Logo" src="{% static 'images/summit_logo_light.webp' %}" style="max-height: 100px;">
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" class="active">HOME</a></li>
+            <li><a href="{% url 'home' %}#intro">ABOUT</a></li>
+            <li class="dropdown"><a href="#"><span>REGISTER</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                  <li><a href="#">DELEGATE</a></li>
+                <li><a href="{% url 'exhibitor' %}">EXHIBITOR</a></li>
+                  <li><a href="{% url 'summit_sponsor_registration' %}">PARTNER</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#schedule">PROGRAM</a></li>
+            <li><a href="{% url 'speakers' %}">SPEAKERS</a></li>
+            <li class="dropdown"><a href="#"><span>VENUE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'places' %}">VENUE</a></li>
+                <li><a href="{% url 'accommodation' %}">ACCOMMODATIONS</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'home' %}#partners">PARTNERS</a></li>
+            <li class="dropdown"><a href="#"><span>MORE</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="{% url 'gallery' %}">GALLERY</a></li>
+                <li><a href="{% url 'privacy' %}">PRIVACY</a></li>
+              </ul>
+            </li>
+
+            <!-- Jambojet Offer Button -->
+            <li class="ms-lg-3 my-2 my-lg-0">
+              <a href="{% url 'places' %}#jambo" class="btn btn-primary w-100 w-lg-auto px-3 py-2 rounded-3 text-white fw-semibold text-center">
+                Jambojet Offer
+              </a>
+            </li>
+
+            <!-- 🌐 Translate Icon -->
+            <li class="d-none d-md-block ms-3">
+              <i class="translate-toggle fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+            </li>
+          </ul>
+
+          <div class="nav-extras d-flex align-items-center gap-2">
+            <!-- Mobile nav toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+            <!-- Translate Globe (mobile only) -->
+            <i class="translate-toggle d-xl-none fs-4" aria-label="Translate" style="font-style: normal !important;">🌐</i>
+
+            <!-- Translation widget (popover, hidden by default) -->
+            <div class="translate-popover d-none">
+              <div class="gtranslate_wrapper"></div>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+  </header>
+
+<main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background">
+        <div class="container position-relative">
+            <h1>Register</h1>
+            <p>Register for the Kenya Software & AI Summit 2025</p>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="current">Register</li>
+                </ol>
+            </nav>
+        </div>
+    </div><!-- End Page Title -->
+
+    <!-- Register Section -->
+    <section id="buy-tickets" class="buy-tickets section">
+
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+                    <div class="ticket-form-wrapper">
+                        <div class="event-info mb-5">
+                            <h3>The Kenya Software & AI Summit 2025 Registration</h3>
+                            <div class="event-details">
+                                <div class="event-meta">
+                                    <span><i class="bi bi-calendar-event"></i> November 10-12, 2025</span>
+                                    <span><i class="bi bi-geo-alt"></i> Moi University, Annex Campus, Eldoret</span>
+                                    <!--                    <span><i class="bi bi-clock"></i> 9:00 AM - 6:00 PM</span>-->
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        <div class="alert alert-warning text-center py-5 rounded-3 shadow-sm">-->
+<!--                          <h4 class="fw-bold text-uppercase mb-2">Registration Closed</h4>-->
+<!--                          <p class="mb-0">Thank you for your interest in the <strong>Kenya Software & AI Summit 2025</strong>. -->
+<!--                          Registration is now closed.</p>-->
+<!--                        </div>-->
+
+
+                        <form id="registration-form" method="post" enctype="multipart/form-data" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Title, First Name, Second Name -->
+                            <div class="row g-2">
+                                <div class="col-md-12 mb-2">
+                                    <label for="title" class="form-label fw-semibold dark mb-1">Title</label>
+                                    {{ form.title }}
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_first_name" class="form-label fw-semibold dark mb-1">First
+                                        Name</label>
+                                    {{ form.first_name }}
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_second_name" class="form-label fw-semibold dark mb-1">Other
+                                        Names</label>
+                                    {{ form.second_name }}
+                                </div>
+                            </div>
+
+                            <!-- Email + Confirm Email + Phone -->
+                              <div class="mt-3 mb-3">
+                                <label for="id_email" class="form-label fw-semibold dark mb-1">Email</label>
+                                {{ form.email }}
+                              </div>
+
+                            <div class="row g-2 mt-2">
+                              <div class="col-md-6 mb-2">
+                                <label for="id_confirm_email" class="form-label fw-semibold dark mb-1">Confirm Email</label>
+                                {{ form.confirm_email }}
+                                {% if form.confirm_email.errors %}
+                                  <div class="text-danger small mt-1">{{ form.confirm_email.errors }}</div>
+                                {% endif %}
+                              </div>
+                            <!-- Phone -->
+                              <div class="col-md-6 mb-2">
+                                <label for="id_phone" class="form-label fw-semibold dark mb-1">Phone</label>
+                                {{ form.phone }}
+                              </div>
+                            </div>
+
+                            <!-- Organization Type -->
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_organization_type" class="form-label fw-semibold dark mb-1">Organization</label>
+                                    {{ form.organization_type }}
+                                    <small class="text-muted d-block mt-1">
+                                        Select student or organization
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mb-2" id="other-org-type">
+                                    <label for="id_other_organization_type" class="form-label fw-semibold dark mb-1">Institution
+                                        name</label>
+                                    {{ form.other_organization_type }}
+                                </div>
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <div class="mt-3 mb-3">
+                                    <label for="id_category" class="form-label fw-semibold dark mb-1">Category</label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}
+                                        <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                                    {% endif %}
+                                    <small class="text-muted d-block mt-1">
+                                        Register as either delegate or student
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- student registration number -->
+                            <div class="mt-3 mb-3">
+                                <label for="id_admn_number" class="form-label fw-semibold dark mb-1">Student Registration Number</label>
+                                {{ form.admn_number }}
+                            </div>
+
+                            <div class="row g-2 mt-2">
+                                <!-- Job Title -->
+                                <div class="col-md-6 mb-2">
+                                    <label for="id_job_title" class="form-label fw-semibold dark mb-1">
+                                        Job Title / Role
+                                    </label>
+                                    {{ form.job_title }}
+                                </div>
+
+                                <!-- Days to Attend -->
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-semibold dark mb-1">Days to attend</label>
+
+                                    <div class="form-check-group">
+                                        {% for checkbox in form.days_to_attend %}
+                                            <div class="form-check form-check-inline">
+                                                {{ checkbox.tag }}
+                                                <label class="form-check-label ms-1" for="{{ checkbox.id_for_label }}">
+                                                    {{ checkbox.choice_label }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% if form.days_to_attend.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.days_to_attend.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <!-- Interests -->
+                            <div class="mt-4 mb-2">
+                                <label class="form-label fw-semibold dark mb-1">Areas of Interest</label>
+                                <div id="id_interests" class="d-flex flex-wrap gap-2">
+                                    {% for checkbox in form.interests %}
+                                        <div class="form-check mb-1">
+                                            {{ checkbox.tag }}  <!-- ✅ Let Django render the correct value -->
+                                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                                {{ checkbox.choice_label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Other Interest -->
+                            <div class="mt-2 mb-2" id="other-interest" style="display:none;">
+                                <label for="id_other_interest" class="form-label fw-semibold dark mb-1">Please
+                                    specify</label>
+                                {{ form.other_interest }}
+                            </div>
+
+
+                            <!-- National ID and Passport -->
+                            <div class="mt-3 mb-3">
+                                <label for="id_national_id_number" class="form-label fw-semibold dark mb-1">National ID
+                                    /Passport Number</label>
+                                {{ form.national_id_number }}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label for="id_national_id_scan" class="form-label fw-semibold dark mb-1">Upload Scanned
+                                    National ID/Passport</label>
+                                {{ form.national_id_scan }}
+                                <small class="text-muted d-block mt-1">
+                                    Accepted formats: .jpg, .png, .pdf | Max size: 2 MB
+                                </small>
+                                <div id="id_scan_preview" class="mt-3"></div>
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label for="id_passport_photo" class="form-label fw-semibold dark mb-1">Upload Passport
+                                    Photo (JPG or PNG)</label>
+                                {{ form.passport_photo }}
+                                <small class="text-muted d-block mt-1">
+                                    Accepted formats: .jpg, .png | Max size: 2 MB
+                                </small>
+                                <div id="passport_preview" class="mt-3"></div>
+                            </div>
+
+                            <!-- Privacy Agreement -->
+                            <div class="mt-3 mb-2 form-check text-center">
+                                <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        name="{{ form.privacy_agreed.name }}"
+                                        id="id_privacy_agreed"
+                                        value="true"
+                                        {% if form.privacy_agreed.value %}checked{% endif %}
+                                        required
+                                >
+                                <label for="id_privacy_agreed" class="form-check-label fw-semibold dark">
+                                    I have read and agree to the
+                                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> *
+                                </label>
+
+                                {% if form.privacy_agreed.errors %}
+                                    <div class="text-danger small mt-1">{{ form.privacy_agreed.errors }}</div>
+                                {% endif %}
+                            </div>
+
+
+                            <!-- Submit -->
+                            <div class="d-grid mt-3">
+                                <button type="submit" id="submit-btn"
+                                        class="btn btn-bg-light btn-lg bg-success text-white fw-semibold dark">
+                                    <i class="fa fa-paper-plane me-2"></i> Register Now
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Alerts -->
+                        <div id="alert-container" class="mt-2"></div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section><!-- /Buy Tickets Section -->
+
+</main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer position-relative dark-background">
+
+      <div class="container footer-top">
+          <div class="row gy-4 justify-content-evenly">
+              <div class="col-lg-4 col-md-6 footer-about">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                      <span class="sitename"> The Kenya Software & AI Summit 2025</span>
+                  </a>
+
+                  <p>Africa’s premier software development and innovation conference. Join us in shaping the future of
+                      Africa’s digital economy through collaboration, talent development, and innovation.</p>
+                  <div class="social-links d-flex mt-3">
+                      <a aria-label="Follow us on X (Twitter)" href="https://x.com/software_summit" target="_blank">
+                          <i class="bi bi-twitter-x"></i>
+                      </a>
+                      <a aria-label="Connect with us on LinkedIn"
+                        href="https://www.linkedin.com/in/the-kenya-software-and-ai-summit-8a8a55396?"
+                        target="_blank">
+                          <i class="bi bi-linkedin"></i>
+                      </a>
+                      <a aria-label="Follow us on Instagram" href="https://www.instagram.com/kenya_software_and_ai_summit/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                      <a aria-label="Follow us on Facebook" href="https://www.facebook.com/people/The-Kenya-Software-AI-Summit/61582894265190/" target="_blank">
+                          <i class="bi bi-facebook"></i>
+                      </a>
+                      <a aria-label="Subscribe to our Youtube Channel" href="https://www.youtube.com/@micde_ke/"
+                        target="_blank">
+                          <i class="fab fa-youtube"></i>
+                      </a>
+
+                  </div>
+              </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Register</h4>
+            <ul>
+              <li><a href="{% url 'register' %}#features">Delegate</a></li>
+              <li><a href="{% url 'exhibitor' %}#partners">Exhibitor</a></li>
+              <li><a href="{% url 'summit_sponsor_registration' %}">Partner</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{% url 'places' %}">Venue</a></li>
+              <li><a href="{% url 'speakers' %}">Speakers</a></li>
+              <li><a href="{% url 'home' %}#schedule">Program</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{% url 'home' %}#features">Activities</a></li>
+              <li><a href="{% url 'home' %}#partners">Partners</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a href="{% url 'accommodation' %}">Accommodations</a></li>
+            </ul>
+          </div>
+
+          </div>
+      </div>
+
+      <div class="container copyright text-center mt-4">
+          <p class="text-light mb-0">&copy; <span id="year"> </span> <span>Copyright</span> <strong class="px-1 sitename">The Kenya Software & AI Summit 2025</strong>
+              <span>All Rights Reserved. </span></p>
+
+      </div>
+
+  </footer>
+
+<!-- Scroll Top -->
+<a id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- Preloader -->
+<div id="preloader">
+    <!-- Light mode logo -->
+    <img src="{% static 'images/summit_logo_light.webp' %}" alt="Summit Logo" class="logo-loader light-logo">
+    <!-- Dark mode logo -->
+    <img src="{% static 'images/summit_logo_dark.webp' %}" alt="Summit Logo" class="logo-loader dark-logo">
+</div>
+
+
+<!-- Scripts -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'vendor/aos/aos.js' %}"></script>
+<script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+<script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+<script src="{% static 'vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'js/Accessibility/sienna.min.js' %}" defer></script>
+<script src="{% static 'js/translate.js' %}"></script>
+<script src="{% static 'js/translater.js' %}" defer></script>
+
+
+<!-- Main JS File -->
+<script src="{% static 'js/main.js' %}"></script>
+
+<script src="{% static 'js/custom/main.js' %}"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // ==============================
+        // 🔹 Flash alerts auto-hide
+        // ==============================
+        const flashAlert = document.getElementById("flash-alert");
+        if (flashAlert) {
+            setTimeout(() => {
+                flashAlert.classList.remove("show");
+                flashAlert.classList.add("hide");
+            }, 5000);
+        }
+
+        // ==============================
+        // 🔹 Toggle "Other" interest
+        // ==============================
+        const otherInterestWrapper = document.getElementById("other-interest-wrapper");
+        const interestsInputs = document.querySelectorAll("input[name='interests']");
+
+        function toggleOtherInterest() {
+            if (!otherInterestWrapper) return;
+            const show = Array.from(interestsInputs).some(
+                input => input.checked && input.value === "others"
+            );
+            otherInterestWrapper.style.display = show ? "block" : "none";
+        }
+
+        if (interestsInputs.length) {
+            interestsInputs.forEach(input => input.addEventListener("change", toggleOtherInterest));
+            toggleOtherInterest();
+        }
+
+        // ==============================
+        // 🔹 Ticket price calculation
+        // ==============================
+        const ticketRadios = document.querySelectorAll("input[name='ticket_type']");
+        const quantitySelect = document.getElementById("quantity");
+        const ticketNameDisplay = document.querySelector(".ticket-name-display");
+        const quantityDisplay = document.querySelector(".quantity-display");
+        const unitPriceDisplay = document.querySelector(".unit-price-display");
+        const totalPriceDisplay = document.querySelector(".total-price");
+
+        const ticketPrices = {
+            "early-bird": {name: "Early Bird Pass", price: 199},
+            "standard": {name: "Standard Pass", price: 249},
+            "vip": {name: "VIP Pass", price: 399},
+            "student": {name: "Student Pass", price: 99}
+        };
+
+        function updateSummary() {
+            const selected = document.querySelector("input[name='ticket_type']:checked");
+            if (!selected || !quantitySelect) return;
+            const ticket = ticketPrices[selected.value];
+            const quantity = parseInt(quantitySelect.value) || 1;
+            if (ticketNameDisplay) ticketNameDisplay.textContent = ticket.name;
+            if (quantityDisplay) quantityDisplay.textContent = quantity;
+            if (unitPriceDisplay) unitPriceDisplay.textContent = "Ksh " + ticket.price;
+            if (totalPriceDisplay) totalPriceDisplay.textContent = "Ksh " + (ticket.price * quantity);
+        }
+
+        if (ticketRadios.length && quantitySelect) {
+            ticketRadios.forEach(r => r.addEventListener("change", updateSummary));
+            quantitySelect.addEventListener("change", updateSummary);
+            updateSummary();
+        }
+
+        // ==============================
+        // 🔹 AJAX Form Submission
+        // ==============================
+        const form = document.querySelector(".ticket-form");
+        if (form) {
+            const submitBtn = document.getElementById("submit-btn");
+            const spinner = submitBtn.querySelector(".spinner-border");
+            const btnText = submitBtn.querySelector(".btn-text");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                // Show spinner
+                submitBtn.disabled = true;
+                spinner.classList.remove("d-none");
+                btnText.textContent = "Processing...";
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: "POST",
+                    body: formData,
+                    headers: {"X-Requested-With": "XMLHttpRequest"},
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showAlert("success", data.message);
+                            form.reset();
+                            updateSummary();
+                        } else {
+                            for (let field in data.errors) {
+                                const input = document.querySelector(`[name="${field}"]`);
+                                if (input) {
+                                    const errorDiv = document.createElement("div");
+                                    errorDiv.className = "text-danger small mt-1";
+                                    errorDiv.innerText = data.errors[field].join(", ");
+                                    input.insertAdjacentElement("afterend", errorDiv);
+                                }
+                            }
+                            showAlert("danger", "⚠️ Please correct the errors below.");
+                        }
+                    })
+                    .catch(err => {
+                        showAlert("danger", "❌ Something went wrong. Try again.");
+                        console.error(err);
+                    })
+                    .finally(() => {
+                        // Hide spinner, restore button
+                        submitBtn.disabled = false;
+                        spinner.classList.add("d-none");
+                        btnText.textContent = "Proceed to Payment";
+                    });
+            });
+
+
+            function showAlert(type, message) {
+                const container = document.createElement("div");
+                container.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+                container.role = "alert";
+                container.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+                const alertContainer = document.getElementById("alert-container");
+                if (alertContainer) {
+                    alertContainer.innerHTML = "";
+                    alertContainer.appendChild(container);
+                } else {
+                    form.insertAdjacentElement("beforebegin", container);
+                }
+                setTimeout(() => container.remove(), 5000);
+            }
+        }
+    });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const orgSelect = document.getElementById("id_organization_type");
+    const categorySelect = document.getElementById("id_category");
+    const admnNumberInput = document.getElementById("id_admn_number");
+
+    // 🔒 Exit early if any critical elements are missing
+    if (!orgSelect || !categorySelect || !admnNumberInput) return;
+
+    // Use a flexible wrapper selector (works with Bootstrap form-group or mt-3/mb-3)
+    const studentRegDiv = admnNumberInput.closest(".form-group, .mb-3, .mt-3, div");
+
+    function updateFormBehavior() {
+        const selectedOrg = orgSelect.value?.trim().toLowerCase() || "";
+
+        if (selectedOrg === "student") {
+            // ✅ Show & require admission number
+            studentRegDiv.style.display = "block";
+            admnNumberInput.setAttribute("required", "required");
+
+            // 🎯 Auto-select "Student" category
+            let matched = false;
+            for (let option of categorySelect.options) {
+                if (option.text.trim().toLowerCase() === "student") {
+                    option.selected = true;
+                    matched = true;
+                    break;
+                }
+            }
+
+            // fallback: disable manual category editing
+            categorySelect.setAttribute("readonly", "readonly");
+            categorySelect.style.pointerEvents = "none";
+
+        } else {
+            // 🚫 Hide and clear admission number
+            studentRegDiv.style.display = "none";
+            admnNumberInput.removeAttribute("required");
+            admnNumberInput.value = "";
+
+            // 🎯 Auto-select "Delegate" category
+            for (let option of categorySelect.options) {
+                if (option.text.trim().toLowerCase() === "delegate") {
+                    option.selected = true;
+                    break;
+                }
+            }
+
+            // fallback: disable manual category editing
+            categorySelect.setAttribute("readonly", "readonly");
+            categorySelect.style.pointerEvents = "none";
+        }
+    }
+
+    // Run immediately on load (for preselected org types)
+    updateFormBehavior();
+
+    // Watch for changes
+    orgSelect.addEventListener("change", updateFormBehavior);
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const email = document.getElementById("id_email");
+    const confirmEmail = document.getElementById("id_confirm_email");
+
+    // Create a small message element below confirmEmail
+    const message = document.createElement("div");
+    message.classList.add("text-danger", "small", "mt-1");
+    confirmEmail.parentNode.appendChild(message);
+
+    // Live validation
+    function validateEmails() {
+        if (!confirmEmail.value.trim()) {
+            message.textContent = "";
+            confirmEmail.classList.remove("is-invalid", "is-valid");
+            return;
+        }
+
+        if (email.value.trim().toLowerCase() !== confirmEmail.value.trim().toLowerCase()) {
+            confirmEmail.classList.add("is-invalid");
+            confirmEmail.classList.remove("is-valid");
+            message.textContent = "Email addresses do not match.";
+        } else {
+            confirmEmail.classList.remove("is-invalid");
+            confirmEmail.classList.add("is-valid");
+            message.textContent = "";
+        }
+    }
+
+    confirmEmail.addEventListener("input", validateEmails);
+    email.addEventListener("input", validateEmails);
+});
+</script>
+
+
+</body>
+
+</html>

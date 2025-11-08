@@ -1,0 +1,91 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="card my-5 mx-auto" style="max-width: 100%;">
+        <div class="card-body">
+            <h3 class="text-center mb-4"><b>Edit Category</b></h3>
+
+            <form id="edit_category_form" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ category.id }}">
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" id="category" name="category" value="{{ category.name }}" placeholder="Enter the category name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                              placeholder="Enter category description...">{{ category.description }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="color" class="form-label">Category Color</label>
+                    <div class="input-group">
+                        <input type="color" class="form-control form-control-color" id="color_picker"
+                               value="{{ category.color|default:'#3b82f6' }}" title="Choose color" style="max-width: 80px;">
+                        <input type="text" class="form-control" id="color" name="color"
+                               value="{{ category.color|default:'#3b82f6' }}" placeholder="#000000" pattern="^#[0-9A-Fa-f]{6}$"
+                               title="Enter a valid hex color code (e.g., #3b82f6)" required>
+                    </div>
+                    <small class="form-text text-muted">Pick a color or enter a hex code (e.g., #3b82f6)</small>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Sync color picker with text input
+        const colorPicker = document.getElementById('color_picker');
+        const colorInput = document.getElementById('color');
+
+        colorPicker.addEventListener('input', function() {
+            colorInput.value = this.value.toUpperCase();
+        });
+
+        colorInput.addEventListener('input', function() {
+            const hexValue = this.value.trim();
+            // Validate hex color format
+            if (/^#[0-9A-Fa-f]{6}$/.test(hexValue)) {
+                colorPicker.value = hexValue;
+            }
+        });
+
+        document.getElementById('edit_category_form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch("{% url 'editCategory' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        notyf.success(data.message);
+
+                        // Redirect after short delay (e.g., 1.5 seconds)
+                        setTimeout(() => {
+                            window.location.href = '/categories/';
+                        }, 1500);
+
+                    } else {
+                        notyf.error(data.message);
+                    }
+
+                })
+                .catch(() => {
+                    notyf.error('Something went wrong. Try again later.');
+                });
+        });
+    </script>
+
+{% endblock %}

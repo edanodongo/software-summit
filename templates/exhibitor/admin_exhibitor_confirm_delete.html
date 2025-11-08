@@ -1,0 +1,20 @@
+{% extends "summit/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm border-0 rounded-4 p-4">
+    <h4 class="fw-semibold text-danger mb-3">
+      Confirm Delete Exhibitor
+    </h4>
+    <p>Are you sure you want to delete <strong>{{ exhibitor.get_full_name }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

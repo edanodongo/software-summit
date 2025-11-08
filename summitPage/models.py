@@ -1,14 +1,49 @@
-from django.db import models
+# models.py
+import os
 import uuid
+from PIL import Image
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
+from django_countries.fields import CountryField
 
 
-# ---------------------------
-# Initial Registration model
-# --------------------------- 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    color = models.CharField(max_length=255, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+def get_category_choices():
+    choices = [("", "Select Category")]
+    choices += [(c.id, c.name) for c in Category.objects.all()]
+    return choices
+
+
+# --------------------------------------------
+
+
+def get_category_id():
+    """Return category choices safely even if DB isn't ready."""
+    try:
+        return [("", "Select Category")] + [(str(c.id), c.name) for c in Category.objects.all()]
+    except Exception:
+        return [("", "Select Category")]
+
+
+# --------------------------------------------
+
+
+# ============================================================
+# REGISTRANT MODEL
+# ============================================================
 class Registrant(models.Model):
     TITLE_CHOICES = [
-        ('', 'Select Title'),
+        ("", "Select Title"),
         ("Prof", "Prof."),
         ("Dr", "Dr."),
         ("Eng", "Eng."),
@@ -18,7 +53,7 @@ class Registrant(models.Model):
     ]
 
     ORG_TYPE_CHOICES = [
-        ('', 'Select Organization'),
+        ("", "Select Organization"),
         ("Government Agency", "Government Agency"),
         ("Private Company", "Private Company"),
         ("Academic Institution", "Academic Institution"),
@@ -36,7 +71,6 @@ class Registrant(models.Model):
         ("others", "Others"),
     ]
 
-    # ==== Fields ====
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, blank=True)
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100)
@@ -48,29 +82,72 @@ class Registrant(models.Model):
     other_organization_type = models.CharField(max_length=255, blank=True, null=True)
 
     job_title = models.CharField(max_length=255, blank=True)
-
     interests = models.JSONField(default=list, blank=True)
-    other_interest = models.CharField(max_length=255, blank=True, null=True)
+    other_interest = models.TextField(blank=True, null=True)
 
+    is_printed = models.IntegerField(null=True, blank=True)
+    category = models.CharField(
+        max_length=50, choices=get_category_id, verbose_name="Registration Category"
+    )
+    privacy_agreed = models.BooleanField(default=False, verbose_name="Agreed to Privacy Policy")
+
+    approved = models.BooleanField(default=False)
     accessibility_needs = models.TextField(blank=True, null=True)
     updates_opt_in = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
-    # ==== Display helpers ====
+    days_to_attend = models.CharField(max_length=150, blank=True, null=True)
+    admn_number = models.CharField(
+        max_length=25,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="National ID Number",
+    )
+    national_id_number = models.CharField(
+        max_length=20,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="National ID Number",
+    )
+
+    national_id_scan = models.FileField(
+        upload_to="uploads/id_scans/",
+        blank=True,
+        null=True,
+        verbose_name="Scanned National ID (JPG/PDF)",
+    )
+
+    passport_photo = models.ImageField(
+        upload_to="uploads/passport_photos/",
+        blank=True,
+        null=True,
+        verbose_name="Passport Photo (JPG/PDF)",
+    )
+
+    def get_category_display(self):
+        """Handle callable choices for category gracefully."""
+        try:
+            choices = get_category_id() if callable(get_category_id) else get_category_id
+            return dict(choices).get(self.category, self.category or "—")
+        except Exception:
+            return self.category or "—"
+
+    def get_days_list(self):
+        if self.days_to_attend:
+            return [day.strip() for day in self.days_to_attend.split(",")]
+        return []
+
     def display_org_type(self):
-        """
-        Always merge dropdown + textbox if textbox is filled.
-        Example: 'Private Company - Safaricom'
-        """
         base_label = self.get_organization_type_display()
         if self.other_organization_type:
             return f"{base_label} - {self.other_organization_type}"
         return base_label
 
     def display_interests(self):
-        """Return interests as labels, merging 'Others' with custom text if provided."""
         items = []
         for i in self.interests:
             if i in ["other", "others"] and self.other_interest:
@@ -79,29 +156,46 @@ class Registrant(models.Model):
                 items.append(dict(self.INTEREST_CHOICES).get(i, i))
         return ", ".join(items)
 
-    
     def get_full_name(self):
         return f"{self.title} {self.first_name} {self.second_name}".strip()
 
     def __str__(self):
         return f"{self.title} {self.first_name} {self.second_name}"
 
+    # ✅ Save method: create upload folders + resize image to 600×600
+    def save(self, *args, **kwargs):
+        upload_dirs = [
+            os.path.join(settings.MEDIA_ROOT, "uploads/id_scans"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/passport_photos"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/id_scans/"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/exhibitors/photos/"),
+            os.path.join(settings.MEDIA_ROOT, "uploads/partners/logos/"),
+        ]
+        for path in upload_dirs:
+            os.makedirs(path, exist_ok=True)
 
+        super().save(*args, **kwargs)
 
-
+        # ⚡ Resize passport photo
+        if self.passport_photo:
+            try:
+                img = Image.open(self.passport_photo.path)
+                if img.format.lower() in ["jpeg", "jpg", "png"]:
+                    img = img.convert("RGB")
+                    img.thumbnail((600, 600))
+                    img.save(self.passport_photo.path, format="JPEG", quality=85)
+            except Exception as e:
+                print(f"⚠️ Could not resize passport photo: {e}")
 
 
 # ---------------------------
 # New registration model for applications on IOS & Android
-# --------------------------- 
-
-from django.db import models
-import uuid
+# ---------------------------
 
 
 class Registration(models.Model):
     TITLE_CHOICES = [
-        ('', 'Select Title'),
+        ("", "Select Title"),
         ("Prof", "Prof."),
         ("Dr", "Dr."),
         ("Eng", "Eng."),
@@ -111,7 +205,7 @@ class Registration(models.Model):
     ]
 
     ORG_TYPE_CHOICES = [
-        ('', 'Select Organization'),
+        ("", "Select Organization"),
         ("Government Agency", "Government Agency"),
         ("Private Company", "Private Company"),
         ("Academic Institution", "Academic Institution"),
@@ -179,464 +273,668 @@ class Registration(models.Model):
         return self.get_full_name()
 
 
+# --------------------------------------------
+# gallery model
+# --------------------------------------------
 
-# from django.db import models
-# from django.utils import timezone
-# import uuid
-
-# # ---------------------------
-# # Core event / venue models
-# # ---------------------------
-
-# class Event(models.Model):
-#     """Top-level event (a summit). You can host multiple events in the same system."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(max_length=255)
-#     slug = models.SlugField(max_length=255, unique=True)
-#     description = models.TextField(blank=True)
-#     start_date = models.DateTimeField()
-#     end_date = models.DateTimeField()
-#     timezone = models.CharField(max_length=64, default="UTC")
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Venue(models.Model):
-#     """Venue for an event. Can hold rooms, halls, and floor plans."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="venues")
-#     name = models.CharField(max_length=255)
-#     address = models.TextField(blank=True)
-#     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-#     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-#     map_embed_url = models.URLField(blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.name} - {self.event.name}"
-
-
-# class VenueRoom(models.Model):
-#     """Rooms inside a venue (used for session locations)."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="rooms")
-#     name = models.CharField(max_length=255)
-#     capacity = models.PositiveIntegerField(blank=True, null=True)
-#     floor = models.CharField(max_length=50, blank=True)
-#     layout_image = models.ImageField(upload_to="venue_layouts/", blank=True, null=True)
-
-#     def __str__(self):
-#         return f"{self.name} ({self.venue.name})"
-
-# # ---------------------------
-# # Tracks, tags and categories
-# # ---------------------------
-
-# class Track(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="tracks")
-#     name = models.CharField(max_length=150)
-#     slug = models.SlugField(max_length=150)
-#     description = models.TextField(blank=True)
-#     color_hex = models.CharField(max_length=7, blank=True)  # optional UI hint
-
-#     class Meta:
-#         unique_together = ("event", "slug")
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Tag(models.Model):
-#     """Generic tags (topics, interests) used across sessions and attendees."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(max_length=100, unique=True)
-
-#     def __str__(self):
-#         return self.name
-
-# # ---------------------------
-# # Sessions & agenda
-# # ---------------------------
-
-# class Session(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="sessions")
-#     title = models.CharField(max_length=255)
-#     slug = models.SlugField(max_length=255)
-#     abstract = models.TextField(blank=True)
-#     description = models.TextField(blank=True)
-#     start_time = models.DateTimeField()
-#     end_time = models.DateTimeField()
-#     track = models.ForeignKey(Track, on_delete=models.SET_NULL, null=True, blank=True, related_name="sessions")
-#     room = models.ForeignKey(VenueRoom, on_delete=models.SET_NULL, null=True, blank=True, related_name="sessions")
-#     capacity = models.PositiveIntegerField(null=True, blank=True)
-#     tags = models.ManyToManyField(Tag, blank=True, related_name="sessions")
-#     is_keynote = models.BooleanField(default=False)
-#     is_panel = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ("start_time",)
-#         unique_together = ("event", "slug")
-
-#     def __str__(self):
-#         return f"{self.title} ({self.event.name})"
-
-
-# class SessionSpeakerRole(models.Model):
-#     """Role of a speaker on a session (speaker, moderator, panelist)."""
-#     ROLE_CHOICES = [("speaker", "Speaker"), ("moderator", "Moderator"), ("panelist", "Panelist")]
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name="speaker_roles")
-#     speaker = models.ForeignKey("Speaker", on_delete=models.CASCADE, related_name="session_roles")
-#     role = models.CharField(max_length=32, choices=ROLE_CHOICES, default="speaker")
-
-#     class Meta:
-#         unique_together = ("session", "speaker", "role")
-
-#     def __str__(self):
-#         return f"{self.speaker} as {self.role} for {self.session}"
-
-# # ---------------------------
-# # People: Speakers, Exhibitors, Sponsors
-# # ---------------------------
-
-# class Speaker(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(max_length=255)
-#     bio = models.TextField(blank=True)
-#     photo = models.ImageField(upload_to="speakers/", blank=True, null=True)
-#     organization = models.CharField(max_length=255, blank=True)
-#     title = models.CharField(max_length=255, blank=True)
-#     social_links = models.JSONField(default=dict, blank=True)  # e.g. {"linkedin": "...", "twitter": "..."}
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Exhibitor(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="exhibitors")
-#     name = models.CharField(max_length=255)
-#     description = models.TextField(blank=True)
-#     logo = models.ImageField(upload_to="exhibitors/", blank=True, null=True)
-#     website = models.URLField(blank=True, null=True)
-#     booth_number = models.CharField(max_length=64, blank=True, null=True)
-#     contact_email = models.EmailField(blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Sponsor(models.Model):
-#     LEVEL_CHOICES = [("platinum", "Platinum"), ("gold", "Gold"), ("silver", "Silver"), ("bronze", "Bronze")]
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="sponsors")
-#     name = models.CharField(max_length=255)
-#     level = models.CharField(max_length=32, choices=LEVEL_CHOICES)
-#     logo = models.ImageField(upload_to="sponsors/", blank=True, null=True)
-#     website = models.URLField(blank=True, null=True)
-#     display_order = models.PositiveIntegerField(default=0)
-
-#     def __str__(self):
-#         return f"{self.name} ({self.level})"
-
-# # ---------------------------
-# # Registration & Attendee
-# # ---------------------------
-# # Note: You already provided a Registration model in the prompt. We'll refer to it here
-# # as a pre-existing model. If you prefer to use Django's AUTH user model, replace
-# # references to Registration with settings.AUTH_USER_MODEL.
-
-# class AttendeeProfile(models.Model):
-#     """Profile information connected to Registration."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     registration = models.OneToOneField("Registration", on_delete=models.CASCADE, related_name="profile")
-#     display_name = models.CharField(max_length=255, blank=True)
-#     bio = models.TextField(blank=True)
-#     photo = models.ImageField(upload_to="attendees/", blank=True, null=True)
-#     interests = models.JSONField(default=list, blank=True)  # list of tags or strings
-#     social_links = models.JSONField(default=dict, blank=True)
-#     company = models.CharField(max_length=255, blank=True)
-#     job_title = models.CharField(max_length=255, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.display_name or self.registration.get_full_name()
-
-
-# class ConnectionRequest(models.Model):
-#     STATUS_CHOICES = [("pending", "Pending"), ("accepted", "Accepted"), ("declined", "Declined"), ("blocked", "Blocked")]
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     from_profile = models.ForeignKey(AttendeeProfile, related_name="sent_requests", on_delete=models.CASCADE)
-#     to_profile = models.ForeignKey(AttendeeProfile, related_name="received_requests", on_delete=models.CASCADE)
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-#     message = models.TextField(blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         unique_together = (("from_profile", "to_profile"),)
-
-#     def __str__(self):
-#         return f"{self.from_profile} -> {self.to_profile} ({self.status})"
-
-
-# class ChatThread(models.Model):
-#     """Optional grouping for messages between multiple participants (2+)."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="chat_threads")
-#     participants = models.ManyToManyField(AttendeeProfile, related_name="chat_threads")
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-
-# class ChatMessage(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     thread = models.ForeignKey(ChatThread, on_delete=models.CASCADE, related_name="messages", null=True, blank=True)
-#     sender = models.ForeignKey(AttendeeProfile, on_delete=models.CASCADE, related_name="sent_messages")
-#     receiver = models.ForeignKey(AttendeeProfile, on_delete=models.CASCADE, related_name="received_messages", null=True, blank=True)
-#     message = models.TextField()
-#     attachments = models.JSONField(default=list, blank=True)  # list of file refs
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ("created_at",)
-
-# # ---------------------------
-# # Tickets, Orders, Payments, Check-ins
-# # ---------------------------
-
-# class TicketType(models.Model):
-#     """Defines ticket types available for purchase for an event."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ticket_types")
-#     name = models.CharField(max_length=100)  # e.g., Standard, VIP, Student
-#     slug = models.SlugField(max_length=100)
-#     description = models.TextField(blank=True)
-#     price = models.DecimalField(max_digits=10, decimal_places=2)
-#     quantity = models.PositiveIntegerField(null=True, blank=True)  # null = unlimited
-#     active = models.BooleanField(default=True)
-
-#     class Meta:
-#         unique_together = (("event", "slug"),)
-
-#     def __str__(self):
-#         return f"{self.name} - {self.event.name}"
-
-
-# class Order(models.Model):
-#     """User order which may contain multiple Ticket instances."""
-#     STATUS_CHOICES = [("pending", "Pending"), ("paid", "Paid"), ("cancelled", "Cancelled"), ("refunded", "Refunded")]
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     registration = models.ForeignKey("Registration", on_delete=models.CASCADE, related_name="orders")
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="orders")
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-#     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
-#     currency = models.CharField(max_length=10, default="USD")
-#     payment_reference = models.CharField(max_length=255, blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return f"Order {self.id} - {self.registration.email}"
-
-
-# class Ticket(models.Model):
-#     """A concrete ticket issued to a registration (can be multiple per order)."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="tickets")
-#     ticket_type = models.ForeignKey(TicketType, on_delete=models.PROTECT)
-#     holder = models.ForeignKey("Registration", on_delete=models.CASCADE, related_name="tickets")
-#     issued_at = models.DateTimeField(auto_now_add=True)
-#     qr_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # token encoded into QR
-#     checked_in = models.BooleanField(default=False)
-#     checked_in_at = models.DateTimeField(null=True, blank=True)
-
-#     def __str__(self):
-#         return f"{self.ticket_type.name} for {self.holder.email}"
-
-
-# class Payment(models.Model):
-#     """Record coming back from the payment gateway."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="payment")
-#     gateway = models.CharField(max_length=64)  # e.g., stripe, flutterwave
-#     amount = models.DecimalField(max_digits=12, decimal_places=2)
-#     currency = models.CharField(max_length=10, default="USD")
-#     reference = models.CharField(max_length=255, unique=True)
-#     raw_response = models.JSONField(blank=True, null=True)
-#     status = models.CharField(max_length=32)  # authorized, captured, failed
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"Payment {self.reference} ({self.status})"
-
-
-# class CheckIn(models.Model):
-#     """Records ticket check-ins (scanning QR codes)."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     ticket = models.OneToOneField(Ticket, on_delete=models.CASCADE, related_name="checkin")
-#     scanned_by = models.ForeignKey("Registration", on_delete=models.SET_NULL, null=True, blank=True)  # staff who scanned
-#     scanned_at = models.DateTimeField(auto_now_add=True)
-#     location = models.CharField(max_length=255, blank=True)
-
-#     def __str__(self):
-#         return f"CheckIn {self.ticket} at {self.scanned_at}"
-
-# # ---------------------------
-# # Engagement: Polls, Q&A, Live
-# # ---------------------------
-
-# class Poll(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="polls")
-#     session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name="polls", null=True, blank=True)
-#     question = models.CharField(max_length=512)
-#     anonymous = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.question
-
-
-# class PollOption(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="options")
-#     text = models.CharField(max_length=255)
-#     order = models.PositiveIntegerField(default=0)
-
-#     def vote_count(self):
-#         return self.responses.count()
-
-#     def __str__(self):
-#         return self.text
-
-
-# class PollResponse(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="responses")
-#     option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="responses")
-#     registration = models.ForeignKey("Registration", on_delete=models.SET_NULL, null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         unique_together = (("poll", "registration"),)  # one vote per user
-
-
-# class Question(models.Model):
-#     """Live Q&A question posted by an attendee for a session."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name="questions")
-#     registration = models.ForeignKey("Registration", on_delete=models.SET_NULL, null=True, blank=True)
-#     text = models.TextField()
-#     upvotes = models.PositiveIntegerField(default=0)
-#     answered = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"Q: {self.text[:80]}"
-
-
-# class QuestionAnswer(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
-#     responder = models.ForeignKey(Speaker, on_delete=models.SET_NULL, null=True, blank=True)
-#     text = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# # ---------------------------
-# # Feedback & Surveys
-# # ---------------------------
-
-# class Feedback(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="feedback")
-#     registration = models.ForeignKey("Registration", on_delete=models.SET_NULL, null=True, blank=True)
-#     session = models.ForeignKey(Session, on_delete=models.SET_NULL, null=True, blank=True)
-#     rating = models.PositiveSmallIntegerField(null=True, blank=True)  # 1-5
-#     comment = models.TextField(blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-
-# # ---------------------------
-# # Notifications & push
-# # ---------------------------
-
-# class Notification(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="notifications")
-#     title = models.CharField(max_length=255)
-#     body = models.TextField()
-#     data = models.JSONField(blank=True, null=True)  # arbitrary payload for the app
-#     send_at = models.DateTimeField(null=True, blank=True)  # scheduled
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     sent = models.BooleanField(default=False)
-#     target_registrations = models.ManyToManyField("Registration", blank=True)
-
-#     def __str__(self):
-#         return self.title
-
-
-# class PushSubscription(models.Model):
-#     """Holds a user's device subscription info for web push / mobile tokens."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     registration = models.ForeignKey("Registration", on_delete=models.CASCADE, related_name="push_subscriptions")
-#     device_id = models.CharField(max_length=255, blank=True)
-#     platform = models.CharField(max_length=50, blank=True)  # android, ios, web
-#     token = models.TextField()  # FCM token or push subscription JSON
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# # ---------------------------
-# # Media & misc
-# # ---------------------------
-
-# class MediaAsset(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="media_assets")
-#     file = models.FileField(upload_to="media/")
-#     caption = models.CharField(max_length=255, blank=True)
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-
-# class FloorPlan(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="floor_plans")
-#     image = models.ImageField(upload_to="floorplans/")
-#     description = models.TextField(blank=True)
-
-
-# class Booth(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     exhibitor = models.ForeignKey(Exhibitor, on_delete=models.CASCADE, related_name="booths")
-#     floor_plan = models.ForeignKey(FloorPlan, on_delete=models.SET_NULL, null=True, blank=True)
-#     x = models.FloatField(null=True, blank=True)  # normalized coordinates
-#     y = models.FloatField(null=True, blank=True)
-#     width = models.FloatField(null=True, blank=True)
-#     height = models.FloatField(null=True, blank=True)
-#     label = models.CharField(max_length=255, blank=True)
-
-# # ---------------------------
-# # Admin, logs & utilities
-# # ---------------------------
-
-# class AdminActionLog(models.Model):
-#     """Simple audit log for admin dashboard actions."""
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     user = models.ForeignKey("Registration", on_delete=models.SET_NULL, null=True, blank=True)
-#     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True)
-#     action = models.CharField(max_length=255)
-#     details = models.JSONField(blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# # ---------------------------
-# # Helpers / Managers to be added below (e.g. availability checks, seat allocation, etc.)
-# # ---------------------------
 
+class SummitGallery(models.Model):
+    """Model for managing event gallery images shown in the gallery section."""
 
+    title = models.CharField(max_length=150)
+    image = models.ImageField(upload_to="gallery/")
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    uploaded_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ["order", "-uploaded_at"]
 
+    def __str__(self):
+        return self.title
+
+
+# --------------------------------------------
+
+
+class SummitPartner(models.Model):
+    """Represents a sponsor or partner displayed on the website."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=150, help_text="Official name of the partner or sponsor")
+    logo = models.ImageField(
+        upload_to="uploads/partners/logos/", help_text="Upload the partner's logo image"
+    )
+    website = models.URLField(blank=True, null=True, help_text="Optional: Link to partner website")
+    order = models.PositiveIntegerField(
+        default=0, help_text="Order of display on the sponsors section"
+    )
+    is_active = models.BooleanField(default=True, help_text="Show or hide this partner on the site")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "name"]
+        verbose_name = "Partner"
+        verbose_name_plural = "Partners"
+
+    def __str__(self):
+        return self.name
+
+
+# --------------------------------------------
+# Schedule model
+# --------------------------------------------
+
+
+class SummitScheduleDay(models.Model):
+    """Represents each summit day (e.g., Day 1, Day 2, Day 3)."""
+
+    title = models.CharField(max_length=100, help_text="e.g. Day 1 - November 10")
+    date = models.DateField(help_text="Date of the event day.")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["date"]
+        verbose_name = "Schedule Day"
+        verbose_name_plural = "Schedule Days"
+
+    def __str__(self):
+        return f"{self.title} ({self.date})"
+
+
+# --------------------------------------------
+
+
+class SummitTimeSlot(models.Model):
+    """Represents a time slot block on a given day."""
+
+    day = models.ForeignKey(SummitScheduleDay, on_delete=models.CASCADE, related_name="timeslots")
+    start_time = models.TimeField()
+    end_time = models.TimeField(blank=True, null=True)
+    label = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Optional label like 'All Day' or 'Morning'",
+    )
+    duration = models.CharField(max_length=50, blank=True, null=True, help_text="e.g. 1 hr 30 min")
+
+    class Meta:
+        ordering = ["start_time"]
+        verbose_name = "Time Slot"
+        verbose_name_plural = "Time Slots"
+
+    def __str__(self):
+        return f"{self.day.title} - {self.start_time.strftime('%I:%M %p')}"
+
+
+# --------------------------------------------
+
+
+class SummitSession(models.Model):
+    """Represents each session or event in the schedule."""
+
+    SESSION_TYPES = [
+        ("keynote", "Keynote"),
+        ("networking", "Networking"),
+        ("panel", "Panel Discussion"),
+        ("break", "Break"),
+        ("workshop", "Workshop"),
+        ("hackathon", "Hackathon"),
+        ("exhibition", "Exhibition"),
+        ("closing", "Closing"),
+        ("other", "Other"),
+    ]
+
+    timeslot = models.ForeignKey(SummitTimeSlot, on_delete=models.CASCADE, related_name="sessions")
+    session_type = models.CharField(max_length=50, choices=SESSION_TYPES, default="other")
+    title = models.CharField(max_length=200, help_text="e.g. 'Software Ecosystem Landscape'")
+    description = models.TextField(blank=True, null=True)
+    venue = models.CharField(max_length=100, blank=True, null=True)
+    is_break = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0, help_text="Order of appearance in the slot")
+
+    class Meta:
+        ordering = ["timeslot__start_time", "order"]
+        verbose_name = "Session"
+        verbose_name_plural = "Sessions"
+
+    def __str__(self):
+        return f"{self.title} ({self.session_type})"
+
+
+# --------------------------------------------
+
+
+class SummitPanelist(models.Model):
+    """Panelists or presenters associated with a session."""
+
+    session = models.ForeignKey(SummitSession, on_delete=models.CASCADE, related_name="panelists")
+    role = models.CharField(
+        max_length=150, help_text="e.g. 'Keynote Address', 'Presentation', 'Moderator'"
+    )
+    name = models.CharField(max_length=200, blank=True, null=True, help_text="e.g. 'Dr. Jane Doe'")
+    organization = models.CharField(max_length=200, blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Panelist"
+        verbose_name_plural = "Panelists"
+
+    def __str__(self):
+        return f"{self.role}: {self.name or 'TBA'}"
+
+
+# --------------------------------------------
+# speaker model
+# --------------------------------------------
+
+
+class SummitSpeaker(models.Model):
+    """Model for Summit Speakers."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    full_name = models.CharField(max_length=150)
+    position = models.CharField(max_length=150)
+    organization = models.CharField(max_length=250)
+    track = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="E.g., Keynote Speaker, Panelist, Moderator",
+    )
+    topic = models.CharField(max_length=255)
+    summary = models.TextField(blank=True)
+    bio = models.TextField(blank=True)
+    photo = models.ImageField(upload_to="uploads/speakers/", blank=True, null=True)
+    linkedin_url = models.URLField(blank=True, null=True)
+    twitter_url = models.URLField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["full_name"]
+
+    def __str__(self):
+        return self.full_name
+
+    def photo_url(self):
+        """Returns photo URL safely for templates."""
+        if self.photo:
+            return self.photo.url
+        return "static/images/speakers/placeholder.webp"
+
+
+# --------------------------------------------
+
+
+class ApiAccessLog(models.Model):
+    api_key = models.CharField(max_length=100, blank=True, null=True)
+    endpoint = models.CharField(max_length=255)
+    method = models.CharField(max_length=10)
+    ip_address = models.GenericIPAddressField()
+    query_params = models.TextField(blank=True, null=True)
+    status_code = models.PositiveSmallIntegerField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.method} {self.endpoint} - {self.status_code}"
+
+
+# --------------------------------------------
+
+
+class EmailLog(models.Model):
+    STATUS_CHOICES = [
+        ("success", "Success"),
+        ("failed", "Failed"),
+        ("pending", "Pending"),
+    ]
+
+    registrant = models.ForeignKey("Registrant", on_delete=models.CASCADE, related_name="emaillog")
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    sent_at = models.DateTimeField(null=False, blank=False)
+    attempts = models.IntegerField(default=0)
+    error_message = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # ✅ Automatically set sent_at if not provided
+        if not self.sent_at:
+            self.sent_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+# --------------------------------------------
+
+
+class EmailLogs(models.Model):
+    STATUS_CHOICES = [
+        ("success", "Success"),
+        ("failed", "Failed"),
+        ("pending", "Pending"),
+    ]
+
+    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="emaillog")
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    sent_at = models.DateTimeField(null=False, blank=False)
+    attempts = models.IntegerField(default=0)
+    error_message = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # ✅ Automatically set sent_at if not provided
+        if not self.sent_at:
+            self.sent_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.recipient} - {self.status} ({self.sent_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+# --------------------------------------------
+# EXHIBITION SECTION
+# --------------------------------------------
+
+
+class ExhibitionCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+def get_category_choice():
+    choices = [("", "Select Category")]
+    choices += [(c.id, c.name) for c in ExhibitionCategory.objects.all()]
+    return choices
+
+
+# --------------------------------------------
+
+
+def get_exhibcategory_id():
+    """Safely return category choices, even when the DB isn't ready."""
+    try:
+        return [("", "Select Category")] + [
+            (str(c.id), str(c.id)) for c in ExhibitionCategory.objects.all()
+        ]
+    except Exception:
+        # Happens before migrations or when DB is unavailable
+        return [("", "Select Category")]
+
+
+class ExhibitionSection(models.Model):
+    """Sections within the exhibition hall (e.g., Innovation, Corporate, Startups)."""
+
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def available_booths(self):
+        """Return only unbooked booths."""
+        return self.booths.filter(is_booked=False)
+
+
+# --------------------------------------------
+# BOOTH
+# --------------------------------------------
+class Booth(models.Model):
+    BOOTH_TYPE_CHOICES = [
+        ("standard", "Standard Booth"),
+        ("premium", "Premium Booth"),
+        ("custom", "Custom Booth"),
+    ]
+
+    section = models.ForeignKey(ExhibitionSection, on_delete=models.CASCADE, related_name="booths")
+    booth_number = models.CharField(max_length=20, unique=True)
+    booth_type = models.CharField(max_length=20, choices=BOOTH_TYPE_CHOICES, default="standard")
+    size = models.CharField(max_length=50, help_text="e.g., 3m x 3m")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_booked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.booth_number} - {self.get_booth_type_display()}"
+
+    def mark_booked(self):
+        self.is_booked = True
+        self.save(update_fields=["is_booked"])
+
+    def mark_available(self):
+        self.is_booked = False
+        self.save(update_fields=["is_booked"])
+
+
+# --------------------------------------------
+# BOOTH BOOKING
+# --------------------------------------------
+class BoothBooking(models.Model):
+    exhibitor = models.ForeignKey("Exhibitor", on_delete=models.CASCADE, related_name="bookings")
+    booth = models.OneToOneField(Booth, on_delete=models.CASCADE, related_name="booking")
+    booked_at = models.DateTimeField(default=timezone.now)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.exhibitor.organization_name} → {self.booth.booth_number}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Auto mark the booth as booked
+        self.booth.mark_booked()
+
+    def delete(self, *args, **kwargs):
+        # Free up booth on deletion
+        self.booth.mark_available()
+        super().delete(*args, **kwargs)
+
+
+# ============================================================
+# EXHIBITOR MODEL
+# ============================================================
+class Exhibitor(models.Model):
+    """Main exhibitor registration details (local & international)."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    # --- Personal Info ---
+    title = models.CharField(
+        max_length=10,
+        choices=[
+            ("", "Select Title"),
+            ("Prof", "Prof."),
+            ("Dr", "Dr."),
+            ("Mr", "Mr."),
+            ("Mrs", "Mrs."),
+            ("Ms", "Ms."),
+        ],
+    )
+
+    APPROVAL_STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
+    first_name = models.CharField(max_length=100)
+    second_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+
+    # --- Organization Info ---
+    organization_type = models.CharField(max_length=200)
+    job_title = models.CharField(max_length=200)
+    category = models.CharField(
+        max_length=50,
+        choices=[
+            ("", "Select Category"),
+            ("startup", "Startup"),
+            ("corporate", "Corporate"),
+            ("government", "Government Agency"),
+            ("academic", "Academic Institution"),
+            ("ngo", "Not for Profit"),
+            ("other", "Other"),
+        ],
+    )
+    product_description = models.TextField(blank=True, null=True)
+
+    exhibit_category = models.ForeignKey(
+        "ExhibitionCategory",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Exhibition Category",
+    )
+    total_count = models.IntegerField(default=0)
+
+    # --- Booth & Section ---
+    booth = models.ForeignKey("Booth", on_delete=models.SET_NULL, null=True, blank=True)
+    section = models.ForeignKey(
+        "ExhibitionSection", on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    # --- Identity Verification ---
+    national_id_number = models.CharField(max_length=50)
+    national_id_scan = models.FileField(upload_to="uploads/exhibitors/id_scans/")
+    passport_photo = models.ImageField(upload_to="uploads/exhibitors/photos/")
+
+    # --- Business Type Toggle ---
+    BUSINESS_TYPE_CHOICES = [
+        ("local", "Local (Kenyan)"),
+        ("international", "International"),
+    ]
+    business_type = models.CharField(
+        max_length=20,
+        choices=BUSINESS_TYPE_CHOICES,
+        default="local",
+        help_text="Select whether this is a local or international business",
+    )
+
+    logo = models.ImageField(
+        upload_to="uploads/exhibitors/logos/",
+        blank=True,
+        null=True,
+        help_text="Optional logo upload",
+    )
+
+    # --- Business Documents ---
+    kra_pin = models.CharField(max_length=20, blank=True, null=True)
+    business_registration_doc = models.FileField(
+        upload_to="uploads/exhibitors/business_docs/", blank=True, null=True
+    )
+    international_business_doc = models.FileField(
+        upload_to="uploads/exhibitors/international_docs/", blank=True, null=True
+    )
+
+    # --- Country (django-countries) ---
+    country_of_registration = CountryField(blank=True, null=True)
+
+    # --- Beneficial Ownership ---
+    beneficial_owner_details = models.TextField(blank=True, null=True)
+    beneficial_owner_doc = models.FileField(
+        upload_to="uploads/exhibitors/owners_docs/", blank=True, null=True
+    )
+
+    # --- Legal & Timestamps ---
+    privacy_agreed = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    approval_status = models.CharField(
+        max_length=20, choices=APPROVAL_STATUS_CHOICES, default="pending"
+    )
+    approved_at = models.DateTimeField(null=True, blank=True)
+
+    def approve(self, count):
+        """Approve exhibitor and assign booth count."""
+        self.approval_status = "approved"
+        self.approved = True
+        self.total_count = count
+        self.approved_at = timezone.now()
+        self.save()
+
+    def get_full_name(self):
+        return f"{self.title} {self.first_name} {self.second_name or ''}".strip()
+
+    def display_total(self):
+        return f"Total Count: {self.total_count}"
+
+    def __str__(self):
+        return f"{self.get_full_name()} - {self.organization_type}"
+
+    # ✅ Save method: resize passport & logo images to 600×600
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        image_fields = [self.passport_photo, self.logo]
+        for img_field in image_fields:
+            if img_field and os.path.exists(img_field.path):
+                try:
+                    img = Image.open(img_field.path)
+                    if img.format.lower() in ["jpeg", "jpg", "png"]:
+                        img = img.convert("RGB")
+                        img.thumbnail((600, 600))
+                        img.save(img_field.path, format="JPEG", quality=85)
+                except Exception as e:
+                    print(f"⚠️ Could not resize {img_field.name}: {e}")
+
+
+# --------------------------------------------
+
+
+class BeneficialOwner(models.Model):
+    exhibitor = models.ForeignKey(Exhibitor, on_delete=models.CASCADE, related_name="owners")
+    full_name = models.CharField(max_length=255)
+    nationality = models.CharField(max_length=500)
+    identification_type = models.CharField(
+        max_length=20,
+        choices=[("national_id", "National ID"), ("passport", "Passport")],
+    )
+    id_number = models.CharField(max_length=50)
+    ownership_percentage = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    supporting_document = models.FileField(
+        upload_to="uploads/exhibitors/ownership_docs/", blank=True, null=True
+    )
+
+    def __str__(self):
+        return f"{self.full_name} ({self.ownership_percentage or 0}%)"
+
+
+# ---------------------------------------------
+
+
+class SummitSponsor(models.Model):
+    """Model to register and manage Summit Sponsors or Partners."""
+
+    # ---------- 1. Organization Details ----------
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    organization_name = models.CharField(max_length=255)
+    registration_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Business registration number or PIN (optional)",
+    )
+    sector = models.CharField(max_length=150, help_text="Industry or sector of operation")
+    website = models.URLField(blank=True, null=True)
+    logo = models.ImageField(
+        upload_to="uploads/sponsors/logos/",
+        blank=True,
+        null=True,
+        help_text="Optional logo upload",
+    )
+
+    # ---------- 2. Contact Person ----------
+    contact_full_name = models.CharField(max_length=150)
+    contact_designation = models.CharField(max_length=150)
+    contact_email = models.EmailField()
+    contact_phone = models.CharField(max_length=50)
+
+    # ---------- 3. Sponsorship Details ----------
+    AREAS_OF_INTEREST_CHOICES = [
+        ("branding", "Branding"),
+        ("csr_collaboration", "CSR Collaboration"),
+        ("exhibition", "Exhibition"),
+        ("media_support", "Media Support"),
+        ("technical_support", "Technical Support"),
+        ("other", "Other"),
+    ]
+    areas_of_interest = models.JSONField(
+        default=list, help_text="List of selected areas of interest (checkboxes)"
+    )
+    proposed_contribution = models.TextField(
+        blank=True, help_text="Description of proposed contribution"
+    )
+    proposal_file = models.FileField(
+        upload_to="uploads/sponsors/proposals/",
+        blank=True,
+        null=True,
+        help_text="Optional detailed proposal file",
+    )
+
+    # ---------- 4. Supporting Documents ----------
+    company_profile = models.FileField(
+        upload_to="uploads/sponsors/documents/",
+        blank=True,
+        null=True,
+        help_text="Upload company profile (PDF/DOCX)",
+    )
+    tax_compliance_certificate = models.FileField(
+        upload_to="uploads/sponsors/documents/",
+        blank=True,
+        null=True,
+        help_text="Tax compliance certificate or letter of intent",
+    )
+
+    # ---------- 5. Consent & Declaration ----------
+    consent_confirmation = models.BooleanField(
+        default=False,
+        help_text="Confirms accuracy and agreement with Government of Kenya partnership guidelines",
+    )
+
+    # ---------- Metadata ----------
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Summit Sponsor"
+        verbose_name_plural = "Summit Sponsors"
+        ordering = ["-submitted_at"]
+
+    def __str__(self):
+        return self.organization_name
+
+
+# ---------------------------------------------
+
+
+class DashboardSetting(models.Model):
+    max_count = models.PositiveIntegerField(default=10)
+
+    def __str__(self):
+        return f"Dashboard Settings (Max Count: {self.max_count})"
+
+    class Meta:
+        verbose_name = "Dashboard Setting"
+        verbose_name_plural = "Dashboard Settings"
+
+
+class PrintLog(models.Model):
+    record_id = models.ForeignKey("Registrant", on_delete=models.CASCADE, related_name="print_logs")
+    printed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="printed_records",
+    )
+    reprint = models.BooleanField(default=False, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Record {self.record_id} printed by {self.printed_by} on {self.timestamp}"
+
+
+class CategoryColor(models.Model):
+    color_hex_code = models.CharField(max_length=7)  # e.g. #FF5733
+    category_to_rep = models.TextField(help_text="Comma-separated category names")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.color_hex_code} → {self.category_to_rep}"

@@ -1,0 +1,52 @@
+<div id="exhibitor-edit-modal">
+  <form
+    method="post"
+    enctype="multipart/form-data"
+    id="edit-exhibitor-form"
+    action="{% url 'edit_exhibitor_modal' exhibitor.id %}">
+    {% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-4">{{ form.title.label_tag }} {{ form.title }}</div>
+      <div class="col-md-4">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+      <div class="col-md-4">{{ form.second_name.label_tag }} {{ form.second_name }}</div>
+
+      <div class="col-md-6">{{ form.email.label_tag }} {{ form.email }}</div>
+      <div class="col-md-6">{{ form.phone.label_tag }} {{ form.phone }}</div>
+
+      <div class="col-md-6">{{ form.organization_type.label_tag }} {{ form.organization_type }}</div>
+      <div class="col-md-6">{{ form.job_title.label_tag }} {{ form.job_title }}</div>
+
+      <div class="col-md-6">{{ form.category.label_tag }} {{ form.category }}</div>
+      <div class="col-md-6">{{ form.exhibit_category.label_tag }} {{ form.exhibit_category }}</div>
+
+      <div class="col-md-12">{{ form.product_description.label_tag }} {{ form.product_description }}</div>
+
+      <div class="col-md-6">{{ form.national_id_number.label_tag }} {{ form.national_id_number }}</div>
+      <div class="col-md-6">{{ form.national_id_scan.label_tag }} {{ form.national_id_scan }}</div>
+
+      <div class="col-md-6">{{ form.passport_photo.label_tag }} {{ form.passport_photo }}</div>
+      <div class="col-md-6">{{ form.logo.label_tag }} {{ form.logo }}</div>
+
+      <div class="col-md-6">{{ form.country_of_registration.label_tag }} {{ form.country_of_registration }}</div>
+      <div class="col-md-6">{{ form.business_type.label_tag }} {{ form.business_type }}</div>
+
+      <div class="col-md-12">{{ form.beneficial_owner_details.label_tag }} {{ form.beneficial_owner_details }}</div>
+
+      <div class="col-md-6">{{ form.beneficial_owner_doc.label_tag }} {{ form.beneficial_owner_doc }}</div>
+      <div class="col-md-6">{{ form.business_registration_doc.label_tag }} {{ form.business_registration_doc }}</div>
+    </div>
+
+    <div class="form-check mt-3">
+      {{ form.privacy_agreed }}
+      <label class="form-check-label" for="{{ form.privacy_agreed.id_for_label }}">
+        I agree to the <a href="/privacy-policy/" target="_blank">Privacy Policy</a>.
+      </label>
+    </div>
+
+    <div class="text-end mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Changes
+      </button>
+    </div>
+  </form>
+</div>

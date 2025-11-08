@@ -1,0 +1,88 @@
+{% extends "summit/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="page-header d-print-none">
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">User Registration Form</h3>
+                </div>
+                <form enctype="multipart/form-data" id="registerForm" method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="first_name" class="form-label required">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name"
+                                       placeholder="Enter first name"
+                                       required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label required">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name"
+                                       placeholder="Enter Surname"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label for="emailInput" class="form-label">Email</label>
+                                <input class="form-control" id="emailInput" name="email"
+                                       placeholder="Enter your email address" required type="email">
+                                <small class="form-text" id="emailFeedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector("button[type='submit']");
+
+        // Disable button and show loading text
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Sending...`;
+
+        fetch("{% url 'save_user' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    notyf.success(data.message);
+                    form.reset();
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch((err) => {
+                console.error("Registration error:", err);
+                notyf.error("Something went wrong. Try again later.");
+            })
+            .finally(() => {
+                // Re-enable button and restore text
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
+    });
+    </script>
+
+{% endblock %}

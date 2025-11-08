@@ -41,6 +41,7 @@ htmlcov/
 
 
 venv/*
+slyenv/*
 env/*
 static_root/*
 media_root/*
@@ -55,3 +56,4 @@ _pycache_/
 django.txt
 *.sqlite3
 backup/*
+uploads/
