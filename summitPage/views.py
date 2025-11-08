@@ -3064,9 +3064,12 @@ def generate_all_exhibitor_badges(request):
             batch_zip_buffer = BytesIO()
             with zipfile.ZipFile(batch_zip_buffer, "w", zipfile.ZIP_DEFLATED) as batch_zip:
                 for exhib in batch_exhibitors:
-                    pdf_buffer = build_exhibitor_badge_pdf(exhib)
-                    filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
-                    batch_zip.writestr(filename, pdf_buffer.getvalue())
+                    try:
+                        pdf_buffer = build_exhibitor_badge_pdf(exhib)
+                        filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
+                        batch_zip.writestr(filename, pdf_buffer.getvalue())
+                    except Exception as e:
+                        print(f"❌ Error building badge for {exhib.id}: {e}")
 
             # Add batch ZIP into master ZIP
             batch_zip_buffer.seek(0)
