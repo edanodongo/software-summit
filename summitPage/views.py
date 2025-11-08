@@ -1,9 +1,8 @@
 # imports
 import math
-import zipfile
 from collections import Counter
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
@@ -25,32 +24,28 @@ from .utils import *
 PanelistFormSet = inlineformset_factory(
     SummitSession, SummitPanelist, form=PanelistForm, extra=1, can_delete=True
 )
-from django.http import FileResponse, JsonResponse, Http404
-from datetime import datetime, timedelta
+from django.http import FileResponse, Http404
 from django.contrib.auth.views import LogoutView, LoginView
 from django.db.models import Case, When, Value, IntegerField, Max, OuterRef, Subquery, Count, Sum, Q
 from django.db import transaction
 from django.template.loader import render_to_string
 from summitPage.forms import DashboardSettingForm
 from summitPage.models import (
-    ExhibitionSection, EmailLogs, Registrant, SummitPartner, SummitSponsor,
+    ExhibitionSection, EmailLogs, SummitPartner, SummitSponsor,
     SummitGallery, SummitSpeaker, SummitSession,
     SummitScheduleDay, Booth, DashboardSetting, EmailLog
 )
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
-from django.utils import timezone
 from django.db.models.functions import TruncDate, TruncMonth
 from django.utils.timezone import now
 from PIL import ImageDraw, Image
-from io import BytesIO
 import os
 import qrcode
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.contrib.auth.decorators import login_required
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import portrait, A7
 from reportlab.lib.utils import ImageReader
@@ -61,14 +56,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 from openpyxl import Workbook
-from django.http import HttpResponse
 from .models import Exhibitor
 from django.shortcuts import redirect
 from math import ceil
 from io import BytesIO
 import zipfile
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .models import Registrant, Category
 from datetime import datetime, timedelta
@@ -952,7 +945,7 @@ def delete_registrant(request, pk):
     except Registrant.DoesNotExist:
         return JsonResponse({"success": False, "error": "Registrant not found"}, status=404)
     except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=400)
+        return JsonResponse({"success": False, "error": "Error in deleting registrant"})
 
 
 def privacy(request):
@@ -1065,7 +1058,7 @@ def sendMail(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email'
             })
 
     # Invalid request method
@@ -1526,7 +1519,7 @@ def resend_confirmation_email(request, registrant_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "here theres an error log it at this point",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M")
@@ -1569,7 +1562,7 @@ def save_category(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to save details: {str(e)}'
+                'message': f'Failed to save details:'
             })
 
     # Invalid request method
@@ -1598,7 +1591,7 @@ def delete_category(request, pk):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to delete category: {str(e)}'
+                'message': f'Failed to delete category: stre thats the loggging thing '
             })
 
     # If not POST, return an error
@@ -1643,7 +1636,7 @@ def edit_category(request):
             return JsonResponse({'status': 'success', 'message': message})
 
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Error: {str(e)}'})
+            return JsonResponse({'status': 'error', 'message': f'Error: loghere'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
@@ -2479,7 +2472,7 @@ def resend_exhibitor_confirmation_email(request, exhibitor_id):
 
         return JsonResponse({
             "success": False,
-            "error": str(e),
+            "error": "log here",
             "attempts": log.attempts,
             "status": log.status,
             "last_sent": log.sent_at.strftime("%b %d, %Y %H:%M"),
@@ -3039,6 +3032,7 @@ def count_registrations_in_range(request):
 
     return JsonResponse({"count": count})
 
+
 def protocol(request):
     if request.method == 'POST':
         form = ProtocolRegistrationForm(request.POST, request.FILES)
@@ -3354,7 +3348,7 @@ def save_user(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': f'Failed to send email: {str(e)}'
+                'message': f'Failed to send email:'
             })
 
     # Invalid request method
@@ -3876,7 +3870,7 @@ def create_badge(request, reg_id, page_size=portrait(A7)):
         "category": category
     })
 
-    #if we need to log errors again add try: at the top
+    # if we need to log errors again add try: at the top
     # add this at  the bottom after the final JsonResponse
     # except Exception as e:
     #         # Log the full traceback and error details 75
@@ -3933,8 +3927,7 @@ def mark_printed(request, reg_id):
 
     except Exception as e:
         return JsonResponse({
-            "error": str(e),
-            "type": type(e).__name__
+            "error": "Internal server error"
         }, status=500)
 
 
