@@ -1,5 +1,6 @@
 # imports
 import math
+import json
 from collections import Counter
 
 from django.contrib.auth import get_user_model, authenticate, login
@@ -2365,7 +2366,49 @@ def dashboard_student_view(request):
     # Include only students
     registrants = (
         Registrant.objects.filter(
-            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids),
+            approved=False
+        )
+        .order_by("-created_at")
+        .annotate(
+            email_attempts=Count("emaillog"),
+            email_status=Max("emaillog__status"),
+            email_last_sent=Max("emaillog__sent_at"),
+        )
+    )
+
+    for reg in registrants:
+        reg.category_name = get_category_name_from_id(reg.category)
+
+    context = {
+        "registrations": registrations,
+        "total_users": total_users,
+        "updates_count": updates_count,
+        "registrants": registrants,
+        "org_type_choices": Registrant.ORG_TYPE_CHOICES,
+        "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
+        "current_year": timezone.now().year,
+    }
+    return render(request, "summit/student.html", context)
+
+@login_required
+def student_approved(request):
+    registrations = Registrant.objects.all().order_by("created_at")
+
+    total_users = Registrant.objects.filter(
+        Q(organization_type='Student') | Q(category='4'), approved=True
+    ).count()
+    updates_count = Registrant.objects.filter(updates_opt_in=True).count()
+
+    # Convert category IDs to strings because Registrant.category is a CharField
+    student_category_ids = [str(cid) for cid in
+                            Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+
+    # Include only students
+    registrants = (
+        Registrant.objects.filter(
+            Q(organization_type__iexact="Student") | Q(category__in=student_category_ids),
+            approved=True
         )
         .order_by("-created_at")
         .annotate(
@@ -2418,6 +2461,73 @@ def approve_student(request, registrant_id):
         return JsonResponse({
             "status": "error",
             "message": "An unexpected error occurred while approving the student."
+        }, status=500)
+
+@login_required
+@require_POST
+def mass_approve_student(request, registrant_id=None):
+    try:
+        # Try to read multiple IDs from POST (JSON body or form data)
+        try:
+            body = json.loads(request.body.decode("utf-8"))
+            ids = body.get("ids", [])
+        except json.JSONDecodeError:
+            ids = request.POST.getlist("ids[]", [])
+
+        # If no list is given, fall back to single registrant_id
+        if not ids and registrant_id:
+            ids = [registrant_id]
+
+        if not ids:
+            return JsonResponse({
+                "status": "error",
+                "message": "No registrant IDs provided."
+            }, status=400)
+
+        approved_names = []
+        failed_ids = []
+
+        with transaction.atomic():
+            registrants = Registrant.objects.filter(id__in=ids)
+
+            for registrant in registrants:
+                try:
+                    registrant.approved = True
+                    registrant.save(update_fields=["approved"])
+                    approved_names.append(f"{registrant.first_name} {registrant.second_name}")
+
+                    try:
+                        send_student_email_verify(registrant)
+                    except Exception as e:
+                        print(f"Email send error for {registrant.id}: {e}")
+
+                except Exception as e:
+                    failed_ids.append(registrant.id)
+                    print(f"Approval error for {registrant.id}: {e}")
+
+        # Build summary message
+        success_count = len(approved_names)
+        fail_count = len(failed_ids)
+
+        if success_count and not fail_count:
+            msg = f"{success_count} student(s) approved successfully."
+        elif success_count and fail_count:
+            msg = f"{success_count} approved, {fail_count} failed."
+        else:
+            msg = "No students were approved."
+
+        return JsonResponse({
+            "status": "success" if success_count else "error",
+            "message": msg,
+            "approved_names": approved_names,
+            "failed_ids": failed_ids
+        })
+
+    except Exception as e:
+        print(f"Mass approval general error: {e}")
+        return JsonResponse({
+            "status": "error",
+            "message": "An unexpected error occurred during mass approval."
         }, status=500)
 
 

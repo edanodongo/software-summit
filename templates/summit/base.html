@@ -1,179 +1,192 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenya Software Summit 2025 - Connecting minds, Shaping software, Driving growth</title>
 
-  <!-- Fontawesome -->
-  <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" rel="stylesheet">
 
-  <!-- Favicons -->
-  <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
-  <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link href="{% static 'images/summit_logo.ico' %}" rel="icon">
+    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Vendor CSS Files -->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
-  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
-  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
-  <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
-  <link href="{% static 'css/notyf.min.css' %}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/notyf.min.css' %}" rel="stylesheet">
 
-  <!-- Main CSS Files -->
-  <link href="{% static 'css/dash.css' %}" rel="stylesheet">
-  <link href="{% static 'css/extra/base.css' %}" rel="stylesheet">
-  <meta name="csrf-token" content="{{ csrf_token }}">
+    <!-- Main CSS Files -->
+    <link href="{% static 'css/dash.css' %}" rel="stylesheet">
+    <link href="{% static 'css/extra/base.css' %}" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token }}">
 
-  <!-- Responsive Enhancements -->
-  <style>
-    /* Make cards, forms, and tables adapt better to smaller screens */
-    @media (max-width: 768px) {
-      .btn,
-      .form-select,
-      .form-control {
-        font-size: 0.9rem;
-      }
+    <!-- Responsive Enhancements -->
+    <style>
+        /* Make cards, forms, and tables adapt better to smaller screens */
+        @media (max-width: 768px) {
+            .btn,
+            .form-select,
+            .form-control {
+                font-size: 0.9rem;
+            }
 
-      .table th,
-      .table td {
-        font-size: 0.8rem;
-        white-space: nowrap;
-      }
+            .table th,
+            .table td {
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
 
-      .btn-group .btn {
-        padding: 0.25rem 0.4rem;
-      }
+            .btn-group .btn {
+                padding: 0.25rem 0.4rem;
+            }
 
-      .sidebar {
-        width: 250px;
-        position: fixed;
-        left: -250px;
-        transition: left 0.3s ease;
-        z-index: 1050;
-      }
+            .sidebar {
+                width: 250px;
+                position: fixed;
+                left: -250px;
+                transition: left 0.3s ease;
+                z-index: 1050;
+            }
 
-      .sidebar.active {
-        left: 0;
-      }
+            .sidebar.active {
+                left: 0;
+            }
 
-      .overlay.active {
-        display: block;
-      }
+            .overlay.active {
+                display: block;
+            }
 
-      .content {
-        padding: 1rem;
-      }
+            .content {
+                padding: 1rem;
+            }
 
-      .topbar {
-        flex-wrap: wrap;
-        padding: 0.75rem;
-      }
+            .topbar {
+                flex-wrap: wrap;
+                padding: 0.75rem;
+            }
 
-      .topbar .brand span {
-        display: none;
-      }
-    }
+            .topbar .brand span {
+                display: none;
+            }
+        }
 
-    .table td {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 160px;
-    }
+        .table td {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 160px;
+        }
 
-    .table-responsive {
-      overflow-x: auto;
-    }
-  </style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container-fluid p-0">
+<div class="container-fluid p-0">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-      <h2 class="my-4 text-center">
-        <span>Summit Admin</span>
-      </h2>
+        <h2 class="my-4 text-center">
+            <span>Summit Admin</span>
+        </h2>
 
-      <a href="{% url 'main_dashboard_view' %}">
-        <i class="fas fa-chart-line"></i> <span> Statistics</span>
-      </a>
-
-      <!-- Registrations Dashboard -->
-      <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#delegateSubmenu" role="button"
-        aria-expanded="false" aria-controls="delegateSubmenu">
-        <i class="fas fa-users"></i> <span> Registrations </span>
-      </a>
-      <div class="collapse ps-4" id="delegateSubmenu">
-        <a href="{% url 'dashboard' %}" class="d-block py-1 text-white-50">
-          <i class="fas fa-id-badge"></i> Delegate
+        <a href="{% url 'main_dashboard_view' %}">
+            <i class="fas fa-chart-line"></i> <span> Statistics</span>
         </a>
-        <a href="{% url 'student' %}" class="d-block py-1 text-white-50">
-          <i class="fas fa-user-graduate"></i> Student
+
+        <!-- Registrations Dashboard -->
+        <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#delegateSubmenu"
+           role="button"
+           aria-expanded="false" aria-controls="delegateSubmenu">
+            <i class="fas fa-users"></i> <span> Registrations </span>
         </a>
-      </div>
+        <div class="collapse ps-4" id="delegateSubmenu">
+            <a href="{% url 'dashboard' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-id-badge"></i> Delegate
+            </a>
 
-      <!-- Exhibitors Dashboard -->
-      <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#exhibitorSubmenu" role="button"
-        aria-expanded="false" aria-controls="exhibitorSubmenu">
-        <i class="fas fa-store-alt"></i> <span> Exhibitors </span>
-      </a>
-      <div class="collapse ps-4" id="exhibitorSubmenu">
-        <a href="{% url 'admin_dashboard' %}" class="d-block py-1 text-white-50">
-          <i class="fas fa-clipboard-list"></i> Registered
+            <!-- Student dropdown -->
+            <a class="d-block py-1 text-white-50" data-bs-toggle="collapse" href="#studentSubmenu" role="button"
+               aria-expanded="false" aria-controls="studentSubmenu">
+                <i class="fas fa-user-graduate"></i> Student <i class="fas fa-caret-down float-end"></i>
+            </a>
+            <div class="collapse ps-4" id="studentSubmenu">
+                <a href="{% url 'student' %}" class="d-block py-1 text-white-50">
+                    <i class="fas fa-hourglass-half"></i> Pending
+                </a>
+                <a href="{% url 'student_approved' %}" class="d-block py-1 text-white-50">
+                    <i class="fas fa-check-circle"></i> Approved
+                </a>
+            </div>
+        </div>
+
+
+        <!-- Exhibitors Dashboard -->
+        <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#exhibitorSubmenu"
+           role="button"
+           aria-expanded="false" aria-controls="exhibitorSubmenu">
+            <i class="fas fa-store-alt"></i> <span> Exhibitors </span>
         </a>
-        <a href="{% url 'approved_exhibitors' %}" class="d-block py-1 text-white-50">
-          <i class="fas fa-check-circle"></i> Approved
+        <div class="collapse ps-4" id="exhibitorSubmenu">
+            <a href="{% url 'admin_dashboard' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-clipboard-list"></i> Registered
+            </a>
+            <a href="{% url 'approved_exhibitors' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-check-circle"></i> Approved
+            </a>
+        </div>
+
+        <a href="{% url 'speaker_dashboard' %}">
+            <i class="fas fa-microphone-alt"></i> <span> Speaker profiles</span>
         </a>
-      </div>
-
-      <a href="{% url 'speaker_dashboard' %}">
-        <i class="fas fa-microphone-alt"></i> <span> Speaker profiles</span>
-      </a>
-      <a href="{% url 'partner_dashboard' %}">
-        <i class="fas fa-handshake"></i> <span> Partner logos</span>
-      </a>
-
-      <a href="{% url 'sponsor_dashboard' %}">
-        <i class="fas fa-hand-holding-usd"></i> <span> Sponsor Applications</span>
-      </a>
-      <a href="{% url 'gallery_dashboard' %}">
-        <i class="fas fa-images"></i> <span> Gallery Uploads</span>
-      </a>
-      <a href="{% url 'categories' %}">
-        <i class="fas fa-list-alt"></i> <span> Guest Categories</span>
-      </a>
-      <a href="{% url 'dashboard_home' %}">
-        <i class="fas fa-calendar-alt"></i> <span> Agenda Dashboard</span>
-      </a>
-      <a href="{% url 'mailme' %}">
-        <i class="fas fa-envelope-open-text"></i> <span> Email Client</span>
-      </a>
-      <a href="{% url 'users' %}">
-        <i class="fas fa-user-cog"></i> <span> User Management</span>
-      </a>
-
-      <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#audit" role="button"
-        aria-expanded="false" aria-controls="audit">
-        <i class="fas fa-file-signature"></i> <span> Audit & Trails</span>
-      </a>
-      <div class="collapse ps-4" id="audit">
-        <a href="{% url 'api_trails' %}" class="d-block py-1 text-white-50">
-          <i class="fas fa-link"></i> API Trails
+        <a href="{% url 'partner_dashboard' %}">
+            <i class="fas fa-handshake"></i> <span> Partner logos</span>
         </a>
-      </div>
 
-      <form method="post" action="{% url 'logout' %}" class="mt-3">
-        {% csrf_token %}
-        <button type="submit">
-          <i class="fas fa-sign-out-alt"></i> <span> Logout</span>
-        </button>
-      </form>
+        <a href="{% url 'sponsor_dashboard' %}">
+            <i class="fas fa-hand-holding-usd"></i> <span> Sponsor Applications</span>
+        </a>
+        <a href="{% url 'gallery_dashboard' %}">
+            <i class="fas fa-images"></i> <span> Gallery Uploads</span>
+        </a>
+        <a href="{% url 'categories' %}">
+            <i class="fas fa-list-alt"></i> <span> Guest Categories</span>
+        </a>
+        <a href="{% url 'dashboard_home' %}">
+            <i class="fas fa-calendar-alt"></i> <span> Agenda Dashboard</span>
+        </a>
+        <a href="{% url 'mailme' %}">
+            <i class="fas fa-envelope-open-text"></i> <span> Email Client</span>
+        </a>
+        <a href="{% url 'users' %}">
+            <i class="fas fa-user-cog"></i> <span> User Management</span>
+        </a>
+
+        <a class="d-block text-white dropdown-toggle py-2" data-bs-toggle="collapse" href="#audit" role="button"
+           aria-expanded="false" aria-controls="audit">
+            <i class="fas fa-file-signature"></i> <span> Audit & Trails</span>
+        </a>
+        <div class="collapse ps-4" id="audit">
+            <a href="{% url 'api_trails' %}" class="d-block py-1 text-white-50">
+                <i class="fas fa-link"></i> API Trails
+            </a>
+        </div>
+
+        <form method="post" action="{% url 'logout' %}" class="mt-3">
+            {% csrf_token %}
+            <button type="submit">
+                <i class="fas fa-sign-out-alt"></i> <span> Logout</span>
+            </button>
+        </form>
     </nav>
 
     <!-- 🌫️ Overlay for mobile -->
@@ -181,51 +194,51 @@
 
     <!-- Topbar -->
     <header class="topbar d-flex justify-content-between align-items-center" id="topbar">
-      <div class="d-flex align-items-center gap-3">
-        <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-        <div class="brand d-flex align-items-center gap-2">
-          <img src="{% static 'images/summit_logo.png' %}" alt="Summit Logo" height="36">
-          <span class="fw-bold">Software Summit Admin</span>
+        <div class="d-flex align-items-center gap-3">
+            <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+            <div class="brand d-flex align-items-center gap-2">
+                <img src="{% static 'images/summit_logo.png' %}" alt="Summit Logo" height="36">
+                <span class="fw-bold">Software Summit Admin</span>
+            </div>
         </div>
-      </div>
 
-      <div class="dropdown user-dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <i class="fas fa-user-circle me-1"></i> {{ user.username }}
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-          <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit" class="dropdown-item text-danger">
-                <i class="fas fa-sign-out-alt me-2"></i> Logout
-              </button>
-            </form>
-          </li>
-        </ul>
-      </div>
+        <div class="dropdown user-dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="fas fa-user-circle me-1"></i> {{ user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </header>
 
     <!-- Main Content -->
     <main class="content" id="content">
-      {% block content %}
-      {% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
 
     <footer id="footer">
-      <div class="text-center mt-5 mb-4">
-        Software Summit Dashboard • &copy; {{ current_year }} • All rights reserved.
-      </div>
+        <div class="text-center mt-5 mb-4">
+            Software Summit Dashboard • &copy; {{ current_year }} • All rights reserved.
+        </div>
     </footer>
-  </div>
+</div>
 
-  <!-- Scripts -->
+<!-- Scripts -->
 <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
@@ -244,24 +257,24 @@
 <script src="{% static 'js/extra/external.js' %}"></script>
 <script src="{% static 'js/extra/base.js' %}"></script>
 
-  {% block scripts %}{% endblock %}
+{% block scripts %}{% endblock %}
 
-  <!-- Sidebar Toggle Script -->
-  <script>
+<!-- Sidebar Toggle Script -->
+<script>
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('toggleSidebar');
 
     toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
     });
 
     overlay.addEventListener('click', () => {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
     });
-  </script>
+</script>
 </body>
 
 </html>
