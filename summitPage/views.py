@@ -2904,7 +2904,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
         os.path.join(logos_dir, f)
         for f in os.listdir(logos_dir)
         if f.lower().endswith((".png", ".jpg", ".jpeg"))
-    ])[:20]
+    ])[:50]
 
     if logo_files:
         num_logos = len(logo_files)
