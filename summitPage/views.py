@@ -955,6 +955,8 @@ def privacy(request):
 def places(request):
     return render(request, "summit/venue.html")
 
+def cyber_drill(request):
+    return render(request, "summit/cyber_drill.html")
 
 def accommodation(request):
     return render(request, "summit/accommodations.html")
@@ -2661,13 +2663,14 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
 
     # --- Registrant Info ---
     text_y = photo_y - s(12)
-    c.setFillColor(colors.white)
+    c.setFillColor(colors.black)
     c.setFont("Helvetica-Bold", s(8.5))
     c.drawCentredString(width / 2, text_y, full_name[:35])
 
     c.setFont("Helvetica-Bold", s(13))
     c.drawCentredString(width / 2, text_y - s(11), category[:35])
 
+    c.setFillColor(colors.white)
     # Define fonts and sizes
     base_font = "Helvetica-Bold"
     base_size = s(20)  # Increased from 15.5
@@ -2752,7 +2755,6 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
     c.setFillColor(colors.white)
     c.rect(0, 0, width, height, fill=1)
 
-    draw_accent_shapes()  # yes you drew again, I keep it exactly
 
     # --- Summit Logos again ---
 
@@ -2785,70 +2787,6 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A8)):
             c.drawImage(img, start_x, y_pos, width=w, height=logo_h,
                         preserveAspectRatio=True, mask="auto")
             start_x += w + spacing
-
-    # --- 10th–12th date / November text ---
-    c.setFillColor(colors.white)
-    base_font = "Helvetica-Bold"
-    base_size = s(20)
-    sup_size = s(12)
-    text_main1, text_sup1 = "10", "th"
-    text_main2, text_sup2 = "12", "th"
-    dash = "–"
-
-    w_main1 = c.stringWidth(text_main1, base_font, base_size)
-    w_sup1 = c.stringWidth(text_sup1, base_font, sup_size)
-    w_dash = c.stringWidth(dash, base_font, base_size)
-    w_main2 = c.stringWidth(text_main2, base_font, base_size)
-    w_sup2 = c.stringWidth(text_sup2, base_font, sup_size)
-
-    total_width_date = w_main1 + w_sup1 + w_dash + w_main2 + w_sup2
-    x_start = (width / 4.3) - (total_width_date / 2)
-    y_base = s(40)
-
-    c.setFont(base_font, base_size)
-    c.drawString(x_start, y_base, text_main1)
-    x_start += w_main1
-
-    c.setFont(base_font, sup_size)
-    c.drawString(x_start, y_base + s(7), text_sup1)
-    x_start += w_sup1
-
-    c.setFont(base_font, base_size)
-    c.drawString(x_start, y_base, dash)
-    x_start += w_dash
-
-    c.drawString(x_start, y_base, text_main2)
-    x_start += w_main2
-
-    c.setFont(base_font, sup_size)
-    c.drawString(x_start, y_base + s(7), text_sup2)
-
-    # --- "November 2025" ---
-    text = "November 2025"
-    text_x = width / 4.2
-    text_y = s(30)
-    c.setFont("Helvetica", s(11))
-    c.setFillColor(colors.whitesmoke)
-    c.drawCentredString(text_x, text_y, text)
-
-    text_w = c.stringWidth(text, "Helvetica", s(11))
-    c.setLineWidth(s(0.6))
-    c.setStrokeColor(colors.white)
-    c.line(text_x - text_w / 2, text_y - s(3), text_x + text_w / 2, text_y - s(3))
-
-    # --- Venue ---
-    c.setFont("Helvetica", s(6))
-    c.drawCentredString(width / 4, s(20), "Moi University Annex Campus, ")
-    c.drawCentredString(width / 6.8, s(12), "Eldoret Kenya, ")
-
-    # --- QR ---
-    qr_size, qr_margin = s(40), s(7)
-    c.drawImage(qr_reader,
-                width - qr_size - qr_margin,
-                qr_margin,
-                width=qr_size,
-                height=qr_size,
-                mask="auto")
 
     # --- Sponsor / Partner Logo Grid ---
     logos_dir = os.path.join(settings.BASE_DIR, "static", "images", "badge_logos")

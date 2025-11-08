@@ -136,6 +136,21 @@
     </div>
   </div>
 
+  <!-- ✅ REGISTRANT CATEGORIES -->
+  <h5 class="fw-bold text-primary mt-5 mb-3">Registration Categories</h5>
+  <div class="row g-3 mb-4">
+    {% for item in category_stats %}
+    <div class="col-6 col-md-3 col-lg-2">
+      <div class="card shadow-sm border-0 rounded-4 p-3 text-center h-100">
+        <div class="fw-semibold text-secondary">{{ item.name }}</div>
+        <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted text-center">No category data available.</p>
+    {% endfor %}
+  </div>
+
   <!-- ✅ TRENDS -->
   <div class="row g-3 mb-4">
     <div class="col-md-6">
@@ -176,20 +191,6 @@
     </div>
   </div>
 
-  <!-- ✅ REGISTRANT CATEGORIES -->
-  <h5 class="fw-bold text-primary mt-5 mb-3">Registration Categories</h5>
-  <div class="row g-3 mb-4">
-    {% for item in category_stats %}
-    <div class="col-6 col-md-3 col-lg-2">
-      <div class="card shadow-sm border-0 rounded-4 p-3 text-center h-100">
-        <div class="fw-semibold text-secondary">{{ item.name }}</div>
-        <h4 class="fw-bold text-dark mb-0">{{ item.count }}</h4>
-      </div>
-    </div>
-    {% empty %}
-    <p class="text-muted text-center">No category data available.</p>
-    {% endfor %}
-  </div>
 
 
   <!-- ✅ Chart Container -->
