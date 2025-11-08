@@ -2898,25 +2898,35 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
                         preserveAspectRatio=True, mask="auto")
             start_x += w + spacing
 
-    # --- Sponsor / Partner Logo Grid ---
+    # --- Sponsor / Partner Logo Grid (Full Back Coverage + Margin + Top-Down Layout) ---
     logos_dir = os.path.join(settings.BASE_DIR, "static", "images", "badge_logos")
     logo_files = sorted([
         os.path.join(logos_dir, f)
         for f in os.listdir(logos_dir)
         if f.lower().endswith((".png", ".jpg", ".jpeg"))
-    ])[:20]
+    ])[:40]
 
     if logo_files:
         num_logos = len(logo_files)
         cols = 5
         rows = math.ceil(num_logos / cols)
 
-        grid_top = height - s(75)
-        grid_height = s(95)  # was s(80)
-        grid_width = width * 0.95  # was width * 0.9
+        # Margin around the grid
+        grid_margin = s(3)
 
-        start_x = (width - grid_width) / 2
-        start_y = grid_top - grid_height
+        available_top = y_pos - s(15)
+        available_bottom = s(20)
+
+        full_height = available_top - available_bottom
+        full_width = width
+
+        # Apply margin
+        grid_height = full_height - grid_margin * 2
+        grid_width = full_width - grid_margin * 2
+
+        # Left margin only, no centering
+        start_x = grid_margin
+        start_y = available_bottom + grid_margin
 
         cell_w = grid_width / cols
         cell_h = grid_height / rows
@@ -2928,16 +2938,21 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
                 row = idx // cols
 
                 x = start_x + col * cell_w
-                y = start_y + (rows - 1 - row) * cell_h
+
+                # Top to bottom placement
+                y = start_y + (grid_height - (row + 1) * cell_h)
 
                 padding = s(1.5)
-                c.drawImage(img,
-                            x + padding,
-                            y + padding,
-                            width=cell_w - padding * 2,
-                            height=cell_h - padding * 2,
-                            preserveAspectRatio=True,
-                            mask="auto")
+
+                c.drawImage(
+                    img,
+                    x + padding,
+                    y + padding,
+                    width=cell_w - padding * 2,
+                    height=cell_h - padding * 2,
+                    preserveAspectRatio=True,
+                    mask="auto"
+                )
             except Exception:
                 pass
 
