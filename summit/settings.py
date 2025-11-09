@@ -160,3 +160,29 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # for Remember Me on login page
 
 #  python -c "import uuid; print(uuid.uuid4())"
 SPECIAL_ACCESS_KEY = "ce9e2f46-2579-4467-a856-05a04d0caac5"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/home/micde/summit/logs/badge_generation.log',
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {name} {message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
