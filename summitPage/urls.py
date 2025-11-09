@@ -10,6 +10,7 @@ urlpatterns = [
     path("mailme/", views.mailme_view, name="mailme"),
     # path("protocol/", views.protocol, name="protocol"),
     path("register-org/", views.special_registration, name="special_registration"),
+    path("register-add/", views.additional_registration, name="additional_registration"),
     path("register/", views.reg, name="register"),
     path(
         "registrant/<int:registrant_id>/edit/",

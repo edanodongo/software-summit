@@ -61,6 +61,7 @@ class Registrant(models.Model):
         ("Industry Advocacy Groups", "Industry Advocacy Groups"),
         ("Development Partners", "Development Partners"),
         ("Student", "Student"),
+        ("Hackathon", "Hackathon"),
         ("other", "Others"),
     ]
 
