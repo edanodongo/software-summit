@@ -590,7 +590,6 @@
     }
 });
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const startDate = document.getElementById("startDate");
   const endDate = document.getElementById("endDate");
@@ -629,46 +628,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Handle form submit without full page reload ---
-  form.addEventListener("submit", async (e) => {
+  // --- Handle form submit for streaming ZIP ---
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    const params = new URLSearchParams(formData).toString();
     const batchSize = form.querySelector('input[name="batch_size"]').value;
     const url = `{% url 'generate_all_exhibitor_badges' %}?batch_size=${batchSize}&start_date=${startDate.value}&end_date=${endDate.value}&category=${categorySelect.value}`;
 
 
-    // Show spinner immediately
-    spinner.classList.remove("d-none");
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Failed to generate ZIP");
-
-      // Create a downloadable blob
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "Software_Summit_Badges.zip";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(downloadUrl);
-    } catch (error) {
-      console.error(error);
-      alert("There was an error generating the ZIP file.");
-    } finally {
-      // Hide spinner after a short delay for smoother UX
-      setTimeout(() => spinner.classList.add("d-none"), 1200);
-    }
-  });
 
   // --- Update count whenever filters change ---
   [startDate, endDate, categorySelect].forEach(el =>
     el.addEventListener("change", updateCount)
   );
+
+  // Trigger count on page load
+  updateCount();
 });
 </script>
 
