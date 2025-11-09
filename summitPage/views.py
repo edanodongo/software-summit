@@ -2990,14 +2990,24 @@ def generate_all_reg_badges(request):
             "Content-Disposition": "attachment; filename=All_Registration_Badges.zip"
         }
     )
+import zipstream
+from django.http import StreamingHttpResponse
+from django.utils.text import slugify
+from math import ceil
+from datetime import datetime, timedelta
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
 @login_required
 def generate_all_exhibitor_badges(request):
-    """Generate all exhibitor badges, optionally filtered by date and/or category, grouped into batch ZIP files."""
+    """Stream all exhibitor badges as a single ZIP file — efficient and memory-safe."""
+
     if not request.user.is_superuser:
         logout(request)
         return redirect("custom_login")
 
-    # --- Parameters ---
     batch_size = int(request.GET.get("batch_size", 2000))
     start_date = request.GET.get("start_date")
     end_date = request.GET.get("end_date")
@@ -3006,66 +3016,42 @@ def generate_all_exhibitor_badges(request):
     # --- Base queryset ---
     exhibitors = Registrant.objects.all().order_by("created_at")
 
-    # --- Filter by date range ---
+    # --- Date filter ---
     if start_date and end_date:
-        start = datetime.strptime(start_date, "%Y-%m-%d")
-        end = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)
-        start = timezone.make_aware(start)
-        end = timezone.make_aware(end)
+        start = timezone.make_aware(datetime.strptime(start_date, "%Y-%m-%d"))
+        end = timezone.make_aware(datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1))
         exhibitors = exhibitors.filter(created_at__range=(start, end))
 
-    # --- Filter by category ---
+    # --- Category filter ---
     if category and category.lower() != "all":
-        # ✅ Handle Student category safely regardless of stored value
-        # You can replace "1" with your actual stored key if different
-        if category.lower() in ["student", "1", "stu"]:
-            exhibitors = exhibitors.filter(approved=True, category__iexact=category)
-        else:
-            exhibitors = exhibitors.filter(category=category)
+        exhibitors = exhibitors.filter(category=category)
 
-    # --- Handle empty queryset ---
     total = exhibitors.count()
     if total == 0:
-        return HttpResponse(
-            "No exhibitors found for the specified filters.",
-            content_type="text/plain",
-        )
+        return HttpResponse("No exhibitors found", content_type="text/plain")
 
     total_batches = ceil(total / batch_size)
-    master_zip_buffer = BytesIO()
 
-    # --- Master ZIP containing batch zips ---
-    with zipfile.ZipFile(master_zip_buffer, "w", zipfile.ZIP_DEFLATED) as master_zip:
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = start_idx + batch_size
-            batch_exhibitors = exhibitors[start_idx:end_idx]
+    # --- Create the streaming ZIP ---
+    z = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
 
-            batch_zip_buffer = BytesIO()
-            with zipfile.ZipFile(batch_zip_buffer, "w", zipfile.ZIP_DEFLATED) as batch_zip:
-                for exhib in batch_exhibitors:
-                    try:
-                        pdf_buffer = build_exhibitor_badge_pdf(exhib)
-                        filename = f"{exhib.first_name}_{exhib.second_name}_Badge.pdf"
-                        batch_zip.writestr(filename, pdf_buffer.getvalue())
-                    except Exception as e:
-                        print(f"❌ Error building badge for {exhib.id}: {e}")
+    for exhib in exhibitors.iterator():
+        try:
+            pdf_buffer = build_exhibitor_badge_pdf(exhib)
+            safe_name = slugify(f"{exhib.first_name}_{exhib.second_name}")
+            pdf_filename = f"{safe_name}_Badge.pdf"
 
-            # Add batch ZIP into master ZIP
-            batch_zip_buffer.seek(0)
-            batch_name = f"Batch_{batch_num + 1:03d}.zip"
-            master_zip.writestr(batch_name, batch_zip_buffer.getvalue())
+            # Add the PDF stream to the ZIP
+            z.write_iter(pdf_filename, iter([pdf_buffer.getvalue()]))
+        except Exception as e:
+            print(f"❌ Error building badge for {exhib.id}: {e}")
 
-    # --- Finalize ZIP and prepare response ---
-    master_zip_buffer.seek(0)
-    zip_bytes = master_zip_buffer.getvalue()
-
+    # --- Build streaming response ---
     timestamp = timezone.now().strftime("%Y%m%d-%H%M%S")
-    filename = f"All_Registration_Batches_{timestamp}.zip"
+    filename = f"All_Exhibitor_Badges_{timestamp}.zip"
 
-    response = HttpResponse(zip_bytes, content_type="application/zip")
-    response["Content-Disposition"] = f'attachment; filename="{filename}"'
-    response["Content-Length"] = str(len(zip_bytes))
+    response = StreamingHttpResponse(z, content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     return response
 
