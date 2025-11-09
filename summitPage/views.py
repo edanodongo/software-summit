@@ -2601,6 +2601,7 @@ def generate_exhibitor_badge(request, exhibitor_id):
     return FileResponse(pdf_buffer, as_attachment=True, filename=filename)
 
 
+
 def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
     category_obj = Category.objects.only("name", "color").get(id=exhib.category)
     badge_color = category_obj.color or colors.black
@@ -2727,27 +2728,14 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
 
     def draw_passport():
         try:
-            # Check if the passport photo exists
             if not (exhib.passport_photo and default_storage.exists(exhib.passport_photo.name)):
-                placeholder_path = os.path.join(settings.BASE_DIR, "static", "images", "placeholder.jpg")
-                if os.path.exists(placeholder_path):
-                    c.drawImage(
-                        ImageReader(placeholder_path),
-                        photo_x, photo_y,
-                        width=photo_w, height=photo_h,
-                        preserveAspectRatio=True, mask="auto"
-                    )
-                else:
-                    draw_placeholder()
-                return
+                return draw_placeholder()
 
-            # Use actual passport photo
             photo_path = default_storage.path(exhib.passport_photo.name)
             img = Image.open(photo_path).convert("RGBA")
             img = img.point(lambda p: p * 1.03)
             img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
 
-            # Crop to circle
             min_side = min(img.size)
             offset = int(min_side * 0.10)
             left = (img.width - min_side) / 2
@@ -2757,6 +2745,7 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
 
             mask = Image.new("L", img.size, 0)
             ImageDraw.Draw(mask).ellipse((0, 0, img.size[0], img.size[1]), fill=255)
+
             circ = Image.new("RGBA", img.size)
             circ.paste(img, (0, 0), mask=mask)
 
@@ -2767,28 +2756,19 @@ def build_exhibitor_badge_pdf(exhib, page_size=portrait(A7)):
             c.drawImage(ImageReader(buf), photo_x, photo_y,
                         width=photo_w, height=photo_h, mask="auto")
 
-            # Decorative borders
             center_x = width / 2
             center_y = photo_y + photo_h / 2
+
             c.setLineWidth(1.6)
             c.setStrokeColor(colors.white)
             c.circle(center_x, center_y, (photo_w / 2) + 1)
+
             c.setLineWidth(0.8)
             c.setStrokeColor(colors.HexColor("#3aa655"))
             c.circle(center_x, center_y, (photo_w / 2) + 2)
 
         except Exception:
-            # Fallback if anything goes wrong
-            placeholder_path = os.path.join(settings.BASE_DIR, "static", "images", "placeholder.jpg")
-            if os.path.exists(placeholder_path):
-                c.drawImage(
-                    ImageReader(placeholder_path),
-                    photo_x, photo_y,
-                    width=photo_w, height=photo_h,
-                    preserveAspectRatio=True, mask="auto"
-                )
-            else:
-                draw_placeholder()
+            draw_placeholder()
 
     draw_passport()
 
