@@ -2991,89 +2991,55 @@ def generate_all_reg_badges(request):
         }
     )
 import zipstream
+import logging
 from django.http import StreamingHttpResponse
 from django.utils.text import slugify
-from math import ceil
-from datetime import datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-import zipstream
-import logging
-import traceback
-from django.http import StreamingHttpResponse, HttpResponse
-from django.utils.text import slugify
-from django.utils import timezone
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from math import ceil
-from datetime import datetime, timedelta
 
-logger = logging.getLogger(__name__)  # uses Django logging
+logger = logging.getLogger(__name__)
 
 @login_required
 def generate_all_exhibitor_badges(request):
-    """Stream all exhibitor badges as a single ZIP file — memory-safe and logs errors."""
-
     if not request.user.is_superuser:
         logout(request)
         return redirect("custom_login")
 
-    batch_size = int(request.GET.get("batch_size", 2000))
     start_date = request.GET.get("start_date")
     end_date = request.GET.get("end_date")
     category = request.GET.get("category")
 
     exhibitors = Registrant.objects.all().order_by("created_at")
-
-    # --- Date range filter ---
     if start_date and end_date:
-        try:
-            start = timezone.make_aware(datetime.strptime(start_date, "%Y-%m-%d"))
-            end = timezone.make_aware(datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1))
-            exhibitors = exhibitors.filter(created_at__range=(start, end))
-        except ValueError:
-            logger.error(f"Invalid date format: start={start_date}, end={end_date}")
-            return HttpResponse("Invalid date format. Use YYYY-MM-DD.", content_type="text/plain")
-
-    # --- Category filter ---
+        start = timezone.make_aware(datetime.strptime(start_date, "%Y-%m-%d"))
+        end = timezone.make_aware(datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1))
+        exhibitors = exhibitors.filter(created_at__range=(start, end))
     if category and category.lower() != "all":
         exhibitors = exhibitors.filter(category=category)
 
-    total = exhibitors.count()
-    if total == 0:
-        logger.info("No exhibitors found for the specified filters")
-        return HttpResponse("No exhibitors found for the specified filters.", content_type="text/plain")
+    if not exhibitors.exists():
+        return HttpResponse("No exhibitors found", content_type="text/plain")
 
     z = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
 
-    # --- Add files to ZIP stream ---
     for exhib in exhibitors.iterator():
         try:
             pdf_buffer = build_exhibitor_badge_pdf(exhib)
-            if not pdf_buffer:
-                logger.warning(f"PDF generation returned empty for exhibitor {exhib.id}")
-                continue
-
-            safe_name = slugify(f"{exhib.first_name}_{exhib.second_name}") or f"exhibitor_{exhib.id}"
+            safe_name = slugify(f"{exhib.first_name}_{exhib.second_name}")
             pdf_filename = f"{safe_name}_Badge.pdf"
-
             z.write_iter(pdf_filename, iter([pdf_buffer.getvalue()]))
-
         except Exception as e:
-            logger.error(f"Error building badge for exhibitor {exhib.id}: {e}\n{traceback.format_exc()}")
+            logger.error(f"Failed to generate badge for {exhib.id}: {e}")
+            continue
 
     timestamp = timezone.now().strftime("%Y%m%d-%H%M%S")
-    filename = f"Exhibitor_Badges_{timestamp}.zip"
+    filename = f"All_Exhibitor_Badges_{timestamp}.zip"
 
-    response = StreamingHttpResponse(z, content_type="application/zip")
-    response["Content-Disposition"] = f'attachment; filename="{filename}"'
-    response["Cache-Control"] = "no-cache"
-    response["X-Accel-Buffering"] = "no"  # Nginx streaming hint
-
-    logger.info(f"Started streaming {total} badges as {filename}")
-
+    response = StreamingHttpResponse(z, content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    response['X-Accel-Buffering'] = 'no'  # for Nginx streaming
     return response
 
 
