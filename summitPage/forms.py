@@ -268,7 +268,274 @@ class QuickRegistrationForm(forms.ModelForm):
 
 
 # --------------------------------------------
+class AdditionalRegistrationForm(forms.ModelForm):
+    # =====================================================
+    # Custom Field Definitions
+    # =====================================================
+    organization_type = forms.ChoiceField(
+        choices=[("Hackathon", "Hackathon")],
+        widget=forms.Select(attrs={"class": "form-select"}),
+        required=True,
+    )
 
+    national_id_number = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "National ID Number",
+            }
+        ),
+    )
+
+    national_id_scan = forms.FileField(
+        required=True,
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Scanned National ID (JPG/PDF)",
+    )
+
+    passport_photo = forms.FileField(
+        required=True,
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+        label="Upload Passport Photo (JPG/PDF)",
+    )
+
+    interests = forms.MultipleChoiceField(
+        choices=Registrant.INTEREST_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+    updates_opt_in = forms.BooleanField(required=False)
+
+    other_organization_type = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Please enter organization/institution name",
+            }
+        ),
+    )
+
+    other_interest = forms.CharField(
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "class": "form-control",
+                "placeholder": "Please specify...",
+            }
+        ),
+    )
+
+    category = forms.ChoiceField(
+        choices=get_category_choices,
+        required=True,
+        widget=forms.Select(attrs={"class": "form-select"}),
+        label="Registration Category",
+    )
+
+    privacy_agreed = forms.BooleanField(
+        required=True,
+        label="I have read and agree to the Privacy Policy",
+        error_messages={"required": "You must agree to the Privacy Policy to register."},
+    )
+
+    DAY_CHOICES = [
+        ("Day 1", "Day 1"),
+        ("Day 2", "Day 2"),
+        ("Day 3", "Day 3"),
+    ]
+
+    days_to_attend = forms.MultipleChoiceField(
+        choices=DAY_CHOICES,
+        required=True,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
+        label="Select Days to Attend",
+        error_messages={"required": "Please select day(s) to attend."},
+    )
+
+    confirm_email = forms.EmailField(
+        label="Confirm Email",
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Re-enter your email address",
+            }
+        ),
+    )
+
+    # =====================================================
+    # Meta Configuration
+    # =====================================================
+    class Meta:
+        model = Registrant
+        fields = [
+            "title",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "other_organization_type",
+            "job_title",
+            "category",
+            "interests",
+            "other_interest",
+            "accessibility_needs",
+            "updates_opt_in",
+            "privacy_agreed",
+            "admn_number",
+            "days_to_attend",
+            "national_id_number",
+            "national_id_scan",
+            "passport_photo",
+        ]
+        widgets = {
+            "title": forms.Select(attrs={"class": "form-select"}),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "First Name"}
+            ),
+            "second_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Other Names"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email Address"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Phone Number"}
+            ),
+            # ✅ organization_type widget REMOVED
+            "other_organization_type": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Institution name"}
+            ),
+            "admn_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Student Registration Number",
+                }
+            ),
+            "job_title": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Job Title / Role"}
+            ),
+            "category": forms.HiddenInput(),
+            "accessibility_needs": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                    "placeholder": "Accessibility/Dietary Needs (optional)",
+                }
+            ),
+        }
+
+    # =====================================================
+    # Force organization_type to Hackathon only
+    # =====================================================
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["organization_type"].initial = "Hackathon"
+        self.fields["organization_type"].widget.attrs["disabled"] = True
+        self.fields["organization_type"].widget.attrs["readonly"] = True
+
+    def clean_organization_type(self):
+        return "Hackathon"
+
+    # =====================================================
+    # Individual Clean Methods
+    # =====================================================
+    def clean_days_to_attend(self):
+        data = self.cleaned_data.get("days_to_attend", [])
+        return ",".join(data)
+
+    def validate_file(self, file, allowed_extensions):
+        if not file:
+            return
+        max_size_mb = 2
+        if file.size > max_size_mb * 1024 * 1024:
+            raise ValidationError(f"File size should not exceed {max_size_mb} MB.")
+        ext = file.name.split(".")[-1].lower()
+        if ext not in allowed_extensions:
+            raise ValidationError(
+                f"Unsupported file format. Allowed: {', '.join(allowed_extensions)}"
+            )
+
+    def clean_national_id_scan(self):
+        file = self.cleaned_data.get("national_id_scan")
+        if not file:
+            raise ValidationError("Please upload your scanned National ID.")
+        self.validate_file(file, ["jpg", "jpeg", "png", "pdf"])
+        return file
+
+    def clean_passport_photo(self):
+        file = self.cleaned_data.get("passport_photo")
+        if not file:
+            raise ValidationError("Please upload your passport photo.")
+        self.validate_file(file, ["jpg", "jpeg", "png", "pdf"])
+        return file
+
+    def clean_national_id_number(self):
+        id_number = self.cleaned_data.get("national_id_number", "").strip()
+        if not id_number:
+            raise ValidationError("Please enter your National ID number.")
+        if len(id_number) < 6:
+            raise ValidationError("Please enter a valid National ID number.")
+        return id_number
+
+    # =====================================================
+    # Unified Clean
+    # =====================================================
+    def clean(self):
+        cleaned_data = super().clean()
+
+        email = cleaned_data.get("email")
+        confirm_email = cleaned_data.get("confirm_email")
+        if email and confirm_email and email.strip().lower() != confirm_email.strip().lower():
+            self.add_error("confirm_email", "Email addresses do not match.")
+
+        organization_type = cleaned_data.get("organization_type")
+        other_organization_type = cleaned_data.get("other_organization_type")
+        if organization_type == "other" and not other_organization_type:
+            self.add_error("other_organization_type", "Please specify your organization type.")
+
+        interests = cleaned_data.get("interests") or []
+        other_interest = cleaned_data.get("other_interest")
+        if "others" in interests and not other_interest:
+            self.add_error("other_interest", "Please specify your interest.")
+
+        if not cleaned_data.get("privacy_agreed"):
+            self.add_error(
+                "privacy_agreed",
+                "You must agree to the Privacy Policy before continuing.",
+            )
+
+        admn_number = cleaned_data.get("admn_number")
+        try:
+            if organization_type and organization_type.strip().lower() == "student":
+                student_category = Category.objects.filter(name__iexact="Student").first()
+                if student_category:
+                    cleaned_data["category"] = str(student_category.id)
+                else:
+                    self.add_error("category", "Student category not found in database.")
+
+                if not admn_number:
+                    self.add_error(
+                        "admn_number",
+                        "Student Registration Number is required for students.",
+                    )
+            else:
+                delegate_category = Category.objects.filter(name__iexact="Delegate").first()
+                if delegate_category:
+                    cleaned_data["category"] = str(delegate_category.id)
+                else:
+                    self.add_error("category", "Delegate category not found in database.")
+                cleaned_data["admn_number"] = admn_number or None
+        except Exception as e:
+            self.add_error("category", f"Error setting category automatically: {e}")
+
+        return cleaned_data
+
+# --------------------------------------------
 
 class RegistrantForm(forms.ModelForm):
     interests = forms.MultipleChoiceField(
