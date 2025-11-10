@@ -73,20 +73,10 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Phone</th>
                             <th>Organization</th>
-                            <th>Org. Type</th>
                             <th>Job Title</th>
                             <th>Category</th>
-                            <th>Days to attend</th>
                             <th>National ID</th>
-                            <th>ID Scan</th>
-                            <th>Passport</th>
-                            <th>Interests</th>
-                            <th>Privacy</th>
-                            <th>Email Attempts</th>
-                            <th>Email Status</th>
-                            <th>Last Sent</th>
                             <th>Registered At</th>
                             <th>Action</th>
                         </tr>
@@ -97,69 +87,10 @@
                                 <td>{{ forloop.counter|default:"" }}</td>
                                 <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                                 <td>{{ registrant.email }}</td>
-                                <td>{{ registrant.phone }}</td>
                                 <td>{{ registrant.display_org_type }}</td>
-                                <td>{{ registrant.get_organization_type_display }}</td>
                                 <td>{{ registrant.job_title|default:"—" }}</td>
                                 <td>{{ registrant.category_name|default:"—" }}</td>
-                                <td>{{ registrant.days_to_attend|default:"—" }}</td>
                                 <td>{{ registrant.national_id_number|default:"—" }}</td>
-
-                                <td>
-                                    {% if registrant.national_id_scan %}
-                                        <a href="{{ registrant.national_id_scan.url }}" target="_blank" class="text-primary">
-                                            <i class="fas fa-file-pdf"></i> View
-                                        </a>
-                                    {% else %}—{% endif %}
-                                </td>
-
-                                <td>
-                                    {% if registrant.passport_photo %}
-                                        <a href="{{ registrant.passport_photo.url }}" target="_blank">
-                                            <img src="{{ registrant.passport_photo.url }}" alt="Passport"
-                                                 style="height:35px;width:35px;border-radius:50%;object-fit:cover;">
-                                        </a>
-                                    {% else %}—{% endif %}
-                                </td>
-
-                                <td class="truncate">{{ registrant.display_interests|default:"—" }}</td>
-
-                                <td class="text-center">
-                                    {% if registrant.privacy_agreed %}
-                                        <i class="fas fa-check-circle text-success"></i>
-                                    {% else %}
-                                        <i class="fas fa-times-circle text-danger"></i>
-                                    {% endif %}
-                                </td>
-
-                                <td class="text-center email-attempts">
-                                    <span class="badge bg-info-subtle text-info border border-info px-2">
-                                        {{ registrant.email_attempts|default:"0" }}
-                                    </span>
-                                </td>
-
-                                <td class="text-center email-status">
-                                    {% if registrant.email_status %}
-                                        {% if registrant.email_status|lower == "success" %}
-                                            <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
-                                        {% elif registrant.email_status|lower == "failed" %}
-                                            <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">
-                                                {{ registrant.email_status|capfirst }}
-                                            </span>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
-                                    {% endif %}
-                                </td>
-
-                                <td class="text-center email-last-sent">
-                                    {% if registrant.email_last_sent %}
-                                        {{ registrant.email_last_sent|date:"M d, Y H:i" }}
-                                    {% else %}—{% endif %}
-                                </td>
-
                                 <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
 
                                 <td>
@@ -209,20 +140,6 @@
                             </th>
                             <th><input type="text" placeholder="Filter National ID"
                                        class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter ID Scan" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Passport" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Interests" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Privacy" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Email Attempts"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Email Status"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Last Sent" class="form-control form-control-sm"/>
-                            </th>
                             <th><input type="text" placeholder="Filter Registered At"
                                        class="form-control form-control-sm"/></th>
                             <th><input type="text" placeholder="Filter Action" class="form-control form-control-sm"/>
