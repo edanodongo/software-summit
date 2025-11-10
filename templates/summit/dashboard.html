@@ -71,6 +71,7 @@
                         <thead class="table-primary text-white">
                         <tr>
                             <th>#</th>
+                            <th>id</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Organization</th>
@@ -85,6 +86,7 @@
                         {% for registrant in registrants %}
                             <tr id="row-{{ registrant.id }}">
                                 <td>{{ forloop.counter|default:"" }}</td>
+                                <td>{{ registrant.id }}</td>
                                 <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                                 <td>{{ registrant.email }}</td>
                                 <td>{{ registrant.display_org_type }}</td>
@@ -118,7 +120,7 @@
 
                         {% empty %}
                             <tr>
-                                <td colspan="17" class="text-center py-4 text-muted">No registrations yet.</td>
+                                <td colspan="18" class="text-center py-4 text-muted">No registrations yet.</td>
                             </tr>
                         {% endfor %}
                         </tbody>
