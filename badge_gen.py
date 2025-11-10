@@ -627,10 +627,9 @@ def process_all_badges(batch_size=10, max_batches=None, enable_gc=True):
 
     # Query registrants that haven't been printed
     # Use only() to fetch minimal fields for counting
-    unprinted_query = (
-        Registrant.objects.filter(is_printed__isnull=True) |
-        Registrant.objects.exclude(is_printed=1)
-    )
+    # ✅ Process only registrants with specific IDs
+    ids_to_process = [2187]  # <-- put your desired IDs here
+    unprinted_query = Registrant.objects.filter(id__in=ids_to_process)
 
     total_count = unprinted_query.count()
     logger.info(f"📊 Found {total_count} registrants to process")
