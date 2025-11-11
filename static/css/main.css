@@ -6985,3 +6985,7 @@ html {
     font-size: 0.95rem;
     color: #6c757d;
 }
+#submit-btn[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
