@@ -777,38 +777,42 @@ def sendMail(request):
         message = request.POST.get("message")
         emails = request.POST.getlist("recipient_emails")
 
-        # Case 1: If getlist() found nothing (maybe input is a text field)
         if not emails:
             emails = request.POST.get("recipient_emails")
 
-        # Case 2: Handle "all"
         if emails == "all" or (isinstance(emails, list) and "all" in emails):
             emails = list(Registrant.objects.values_list('email', flat=True))
-
-        # Case 3: If it's a string, split it into a list (comma-separated)
         elif isinstance(emails, str):
             emails = [e.strip() for e in emails.split(",") if e.strip()]
-
-        # Case 4: Clean up any list input
         else:
             emails = [e.strip() for e in emails if e.strip()]
 
+        # ✅ Read the uploaded file
+        attachment = request.FILES.get("attachment")
+
+        # ✅ Build attachments list for sendmailer()
+        attachments = []
+        if attachment:
+            attachments.append({
+                "filename": attachment.name,
+                "content": attachment.read(),
+                "mimetype": attachment.content_type
+            })
+
         try:
-            # Send to all recipients in one go
-            sendmailer(subject, message, emails)
+            sendmailer(subject, message, emails, attachments)
 
             return JsonResponse({
-                'status': 'success',
-                'message': f'Email(s) sent successfully to {len(emails)} recipient(s).'
+                "status": "success",
+                "message": f"Email(s) sent successfully to {len(emails)} recipient(s)."
             })
-        except Exception as e:
+        except Exception:
             return JsonResponse({
-                'status': 'error',
-                'message': f'Failed to send email'
+                "status": "error",
+                "message": "Failed to send email"
             })
 
-    # Invalid request method
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+    return JsonResponse({"status": "error", "message": "Invalid request method."})
 
 
 @login_required

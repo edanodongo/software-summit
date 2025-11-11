@@ -17,14 +17,17 @@ from .models import Category, EmailLog, EmailLogs
 from_email = settings.EMAIL_HOST_USER
 current_year = datetime.now().year
 
-
-def sendmailer(subject, message, recipients):
+def sendmailer(subject, message, recipients, attachments=None):
     """
     Send a styled email with logos and message card.
+    Supports file attachments.
     All recipients are hidden using BCC.
     """
     if isinstance(recipients, str):
         recipients = [recipients]
+
+    if attachments is None:
+        attachments = []
 
     try:
         current_year = datetime.now().year
@@ -65,19 +68,32 @@ def sendmailer(subject, message, recipients):
         # --- Plain text fallback ---
         plain_message = message
 
-        # --- Compose & send ---
-        # Send to yourself in "To" field, hide recipients in BCC
+        # --- Compose ---
         email_obj = EmailMultiAlternatives(
-            subject, plain_message, from_email, [from_email], bcc=recipients
+            subject,
+            plain_message,
+            from_email,
+            [from_email],      # sent to yourself
+            bcc=recipients     # hide actual recipients
         )
+
         email_obj.attach_alternative(html_message, "text/html")
         email_obj.mixed_subtype = "related"
-        email_obj.send(fail_silently=False)
 
-        print(f" Email sent successfully to {len(recipients)} recipients (hidden).")
+        # --- Attach files ---
+        for item in attachments:
+            email_obj.attach(
+                item["filename"],
+                item["content"],
+                item["mimetype"]
+            )
+
+        # --- Send ---
+        email_obj.send(fail_silently=False)
+        print(f"Email sent successfully to {len(recipients)} recipients (hidden).")
 
     except Exception as e:
-        print(" Email sending failed:", str(e))
+        print("Email sending failed:", str(e))
         traceback.print_exc()
 
 
