@@ -569,6 +569,7 @@ def export_print_speakers(request):
         "speakers": speakers,
     })
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def dashboard_view(request):
@@ -576,7 +577,12 @@ def dashboard_view(request):
         logout(request)
         return redirect('custom_login')
 
-    registrations = Registrant.objects.all().order_by("created_at")
+    # Only fetch necessary fields for initial stats
+    registrations = (
+        Registrant.objects.only("id", "organization_type", "category", "created_at")
+        .order_by("created_at")
+    )
+
     total_users = Registrant.objects.exclude(
         Q(organization_type='Student') | Q(category='4')
     ).count()
@@ -584,13 +590,29 @@ def dashboard_view(request):
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
     # Convert category IDs to strings because Registrant.category is a CharField
-    student_category_ids = [str(cid) for cid in
-                            Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
+    student_category_ids = [
+        str(cid)
+        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
+    ]
 
-    # Exclude students (either via org_type or category)
-    registrants = (
+    # Fetch registrants efficiently — exclude students and annotate
+    registrants_qs = (
         Registrant.objects.exclude(
             Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
+        )
+        .only(
+            "id",
+            "first_name",
+            "second_name",
+            "email",
+            "phone",
+            "organization_type",
+            "other_organization_type",
+            "job_title",
+            "category",
+            "days_to_attend",
+            "national_id_number",
+            "created_at",
         )
         .order_by("-created_at")
         .annotate(
@@ -599,7 +621,18 @@ def dashboard_view(request):
             email_last_sent=Max("emaillog__sent_at"),
         )
     )
-    # categories = Category.objects.all().order_by("name")
+
+    # --- PAGINATION ---
+    paginator = Paginator(registrants_qs, 100)  # 100 per page
+    page = request.GET.get("page", 1)
+    try:
+        registrants = paginator.page(page)
+    except PageNotAnInteger:
+        registrants = paginator.page(1)
+    except EmptyPage:
+        registrants = paginator.page(paginator.num_pages)
+
+    # Add readable category names
     categories = Registrant._meta.get_field("category").choices
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
@@ -615,7 +648,6 @@ def dashboard_view(request):
         "current_year": timezone.now().year,
     }
     return render(request, "summit/dashboard.html", context)
-
 
 # Endpoint for charts (AJAX/React)
 @login_required

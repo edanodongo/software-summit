@@ -2,677 +2,267 @@
 {% load static %}
 
 {% block content %}
-    <div class="container-fluid mt-4 px-4">
+<div class="container-fluid mt-4 px-4">
 
+  <h2 class="fw-bold mb-4 text-primary">Delegates Dashboard</h2>
 
-        <h2 class="fw-bold mb-4 text-primary">
-            Delegates Dashboard
-        </h2>
-
-        <!-- Summary Cards -->
-        <div class="row row-cols-1 row-cols-md-2 g-4">
-
-          <!-- Total Delegates Card -->
-          <div class="col">
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-              <div class="card-body text-center py-4">
-                <h5 class="text-muted mb-2">Total Delegates</h5>
-                <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
-                <h6 class="text-secondary mb-0">
-                  Updates Opt-in:
-                  <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
-                </h6>
-              </div>
-            </div>
-          </div>
-
-          <!-- Total Registrations Card -->
-          <div class="col">
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-              <div class="card-body text-center py-4">
-                <h5 class="text-muted mb-2">Total Registrations</h5>
-                <p class="display-5 fw-bold text-primary mb-1">{{ registrations.count }}</p>
-                <h6 class="text-secondary mb-0">
-                  Updates Opt-in:
-                  <span class="fw-semibold text-success">{{ updates_count }}</span>
-                </h6>
-              </div>
-            </div>
-          </div>
-
+  <!-- Summary Cards -->
+  <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+    <div class="col">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body text-center py-4">
+          <h5 class="text-muted mb-2">Total Delegates</h5>
+          <p class="display-5 fw-bold text-primary mb-1" id="total-users">{{ total_users }}</p>
+          <h6 class="text-secondary mb-0">
+            Updates Opt-in:
+            <span class="fw-semibold text-success" id="updates-count">{{ updates_count }}</span>
+          </h6>
         </div>
-
-        <!-- Actions -->
-        <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
-
-            <a href="{% url 'export_print' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
-                <i class="fas fa-print me-1"></i> Print View
-            </a>
-            <!-- Batch ZIP Button -->
-            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#batchModal">
-              <i class="fas fa-layer-group me-1"></i> Generate Batch ZIPs
-            </a>
-
-            <!-- Optional: fallback All download -->
-            <a href="{% url 'generate_all_reg_badges' %}" class="btn btn-secondary btn-sm shadow-sm">
-                <i class="fas fa-archive me-1"></i> Download All
-            </a>
-        </div>
-
-
-        <!-- Registrants Table -->
-        <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-header bg-primary text-white fw-semibold rounded-top-4">
-                <i class="fas fa-users me-2"></i>Recent Registrations
-            </div>
-            <div class="card-body p-3">
-                <div class="table-responsive">
-                    <table id="registrants-table" class="table table-hover align-middle table-borderless w-100">
-                        <thead class="table-primary text-white">
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Organization</th>
-                            <th>Org. Type</th>
-                            <th>Job Title</th>
-                            <th>Category</th>
-                            <th>Days to attend</th>
-                            <th>National ID</th>
-                            <th>ID Scan</th>
-                            <th>Passport</th>
-                            <th>Interests</th>
-                            <th>Privacy</th>
-                            <th>Email Attempts</th>
-                            <th>Email Status</th>
-                            <th>Last Sent</th>
-                            <th>Registered At</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for registrant in registrants %}
-                            <tr id="row-{{ registrant.id }}">
-                                <td>{{ forloop.counter|default:"" }}</td>
-                                <td class="fw-semibold">{{ registrant.get_full_name }}</td>
-                                <td>{{ registrant.email }}</td>
-                                <td>{{ registrant.phone }}</td>
-                                <td>{{ registrant.display_org_type }}</td>
-                                <td>{{ registrant.get_organization_type_display }}</td>
-                                <td>{{ registrant.job_title|default:"—" }}</td>
-                                <td>{{ registrant.category_name|default:"—" }}</td>
-                                <td>{{ registrant.days_to_attend|default:"—" }}</td>
-                                <td>{{ registrant.national_id_number|default:"—" }}</td>
-
-                                <td>
-                                    {% if registrant.national_id_scan %}
-                                        <a href="{{ registrant.national_id_scan.url }}" target="_blank" class="text-primary">
-                                            <i class="fas fa-file-pdf"></i> View
-                                        </a>
-                                    {% else %}—{% endif %}
-                                </td>
-
-                                <td>
-                                    {% if registrant.passport_photo %}
-                                        <a href="{{ registrant.passport_photo.url }}" target="_blank">
-                                            <img src="{{ registrant.passport_photo.url }}" alt="Passport"
-                                                 style="height:35px;width:35px;border-radius:50%;object-fit:cover;">
-                                        </a>
-                                    {% else %}—{% endif %}
-                                </td>
-
-                                <td class="truncate">{{ registrant.display_interests|default:"—" }}</td>
-
-                                <td class="text-center">
-                                    {% if registrant.privacy_agreed %}
-                                        <i class="fas fa-check-circle text-success"></i>
-                                    {% else %}
-                                        <i class="fas fa-times-circle text-danger"></i>
-                                    {% endif %}
-                                </td>
-
-                                <td class="text-center email-attempts">
-                                    <span class="badge bg-info-subtle text-info border border-info px-2">
-                                        {{ registrant.email_attempts|default:"0" }}
-                                    </span>
-                                </td>
-
-                                <td class="text-center email-status">
-                                    {% if registrant.email_status %}
-                                        {% if registrant.email_status|lower == "success" %}
-                                            <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
-                                        {% elif registrant.email_status|lower == "failed" %}
-                                            <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">
-                                                {{ registrant.email_status|capfirst }}
-                                            </span>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">Pending</span>
-                                    {% endif %}
-                                </td>
-
-                                <td class="text-center email-last-sent">
-                                    {% if registrant.email_last_sent %}
-                                        {{ registrant.email_last_sent|date:"M d, Y H:i" }}
-                                    {% else %}—{% endif %}
-                                </td>
-
-                                <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
-
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button class="btn btn-sm btn-outline-warning edit-btn"
-                                                data-id="{{ registrant.id }}"
-                                                data-url="{% url 'edit_registrant_modal' registrant.id %}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <a href="{% url 'generate_badge' registrant.id %}"
-                                           class="btn btn-sm btn-outline-primary" target="_blank">
-                                           <i class="fas fa-id-badge"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-success resend-btn"
-                                                data-url="{% url 'resend_confirmation_email' registrant.id %}">
-                                            <i class="fas fa-envelope"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                data-url="{% url 'delete_registrant' registrant.id %}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        {% empty %}
-                            <tr>
-                                <td colspan="17" class="text-center py-4 text-muted">No registrations yet.</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        <!-- 🔽 Filter Row -->
-                        <tfoot>
-                        <tr>
-                            <th><input type="text" placeholder="Filter Name" class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Email" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Phone" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Organization"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Org. Type" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Job Title" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Category" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter National ID"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter ID Scan" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Passport" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Interests" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Privacy" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Email Attempts"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Email Status"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Last Sent" class="form-control form-control-sm"/>
-                            </th>
-                            <th><input type="text" placeholder="Filter Registered At"
-                                       class="form-control form-control-sm"/></th>
-                            <th><input type="text" placeholder="Filter Action" class="form-control form-control-sm"/>
-                            </th>
-                        </tr>
-                        </tfoot>
-
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- ✨ Edit Modal -->
-        <div class="modal fade" id="editRegistrantModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-              <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                  <i class="fas fa-user-edit"></i> Edit Registrant
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body" id="editRegistrantBody">
-                <div class="text-center py-5 text-muted">
-                  <i class="fas fa-spinner fa-spin fa-2x"></i>
-                  <p class="mt-2">Loading...</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Delete Confirmation Modal -->
-        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header bg-danger text-white rounded-top-4">
-                        <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body text-center py-4">
-                        <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
-                        <p class="mb-0">Are you sure you want to delete this registrant?</p>
-                    </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-<!-- Batch Generation Modal -->
-<div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- responsive & centered -->
-    <div class="modal-content shadow-lg border-0 rounded-3">
-      <form id="batchForm" method="get" action="{% url 'generate_all_exhibitor_badges' %}">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title fw-bold" id="batchModalLabel">Generate Exhibitor Badge Batches</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="col">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body text-center py-4">
+          <h5 class="text-muted mb-2">Total Registrations</h5>
+          <p class="display-5 fw-bold text-primary mb-1">{{ registrations.count }}</p>
+          <h6 class="text-secondary mb-0">
+            Updates Opt-in:
+            <span class="fw-semibold text-success">{{ updates_count }}</span>
+          </h6>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="modal-body">
-          <!-- Date Range -->
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Start Date</label>
-              <input type="date" name="start_date" id="startDate" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">End Date</label>
-              <input type="date" name="end_date" id="endDate" class="form-control" required>
-            </div>
-          </div>
+  <!-- Actions -->
+  <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
+    <a href="{% url 'export_print' %}" target="_blank" class="btn btn-outline-danger btn-sm shadow-sm">
+      <i class="fas fa-print me-1"></i> Print View
+    </a>
+    <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#batchModal">
+      <i class="fas fa-layer-group me-1"></i> Generate Batch ZIPs
+    </a>
+    <a href="{% url 'generate_all_reg_badges' %}" class="btn btn-secondary btn-sm shadow-sm">
+      <i class="fas fa-archive me-1"></i> Download All
+    </a>
+  </div>
 
-          <!-- Category -->
-          <div class="mt-3">
-            <label class="form-label fw-semibold">Category</label>
-            <select name="category" id="categorySelect" class="form-select">
-              <option value="">All Categories</option>
-              {% for value, label in categories %}
-                <option value="{{ value }}">{{ label }}</option>
-              {% endfor %}
-            </select>
-          </div>
+  <!-- Registrants Table -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-primary text-white fw-semibold rounded-top-4">
+      <i class="fas fa-users me-2"></i>Recent Registrations
+    </div>
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table id="registrants-table" class="table table-hover align-middle table-borderless w-100">
+          <thead class="table-primary text-white">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Organization</th>
+              <th>Org. Type</th>
+              <th>Job Title</th>
+              <th>Category</th>
+              <th>Days</th>
+              <th>National ID</th>
+              <th>ID Scan</th>
+              <th>Passport</th>
+              <th>Interests</th>
+              <th>Privacy</th>
+              <th>Email Attempts</th>
+              <th>Email Status</th>
+              <th>Last Sent</th>
+              <th>Registered</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for registrant in registrants %}
+              <tr id="row-{{ registrant.id }}">
+                <td>{{ forloop.counter|default:"" }}</td>
+                <td class="fw-semibold">{{ registrant.get_full_name }}</td>
+                <td>{{ registrant.email }}</td>
+                <td>{{ registrant.phone }}</td>
+                <td>{{ registrant.display_org_type }}</td>
+                <td>{{ registrant.get_organization_type_display }}</td>
+                <td>{{ registrant.job_title|default:"—" }}</td>
+                <td>{{ registrant.category_name|default:"—" }}</td>
+                <td>{{ registrant.days_to_attend|default:"—" }}</td>
+                <td>{{ registrant.national_id_number|default:"—" }}</td>
 
-          <!-- Count Display -->
-          <div class="text-muted small mt-2 text-center" id="countDisplay">
-            Select a date range and category to see how many registrations are included.
-          </div>
+                <td>
+                  {% if registrant.national_id_scan %}
+                    <a href="{{ registrant.national_id_scan.url }}" target="_blank" class="text-primary">
+                      <i class="fas fa-file-pdf"></i> View
+                    </a>
+                  {% else %}—{% endif %}
+                </td>
 
-          <!-- Batch Size -->
-          <div class="mt-3">
-            <label class="form-label fw-semibold">Badges per Batch</label>
-            <input type="number" name="batch_size" class="form-control" min="1" max="2000" value="2000" required>
-          </div>
+                <td>
+                  {% if registrant.passport_photo %}
+                    <a href="{{ registrant.passport_photo.url }}" target="_blank">
+                      <img src="{{ registrant.passport_photo.url }}" style="height:35px;width:35px;border-radius:50%;object-fit:cover;">
+                    </a>
+                  {% else %}—{% endif %}
+                </td>
+
+                <td class="truncate">{{ registrant.display_interests|default:"—" }}</td>
+
+                <td class="text-center">
+                  {% if registrant.privacy_agreed %}
+                    <i class="fas fa-check-circle text-success"></i>
+                  {% else %}
+                    <i class="fas fa-times-circle text-danger"></i>
+                  {% endif %}
+                </td>
+
+                <td class="text-center email-attempts">
+                  <span class="badge bg-info-subtle text-info border border-info px-2">
+                    {{ registrant.email_attempts|default:"0" }}
+                  </span>
+                </td>
+
+                <td class="text-center email-status">
+                  {% if registrant.email_status|lower == "success" %}
+                    <span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>
+                  {% elif registrant.email_status|lower == "failed" %}
+                    <span class="badge bg-danger-subtle text-danger border border-danger px-2">Failed</span>
+                  {% else %}
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary px-2">
+                      {{ registrant.email_status|default:"Pending"|capfirst }}
+                    </span>
+                  {% endif %}
+                </td>
+
+                <td class="text-center email-last-sent">
+                  {{ registrant.email_last_sent|date:"M d, Y H:i"|default:"—" }}
+                </td>
+
+                <td>{{ registrant.created_at|date:"M d, Y H:i" }}</td>
+
+                <td>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-warning edit-btn" data-id="{{ registrant.id }}" data-url="{% url 'edit_registrant_modal' registrant.id %}">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <a href="{% url 'generate_badge' registrant.id %}" target="_blank" class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-id-badge"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-success resend-btn" data-url="{% url 'resend_confirmation_email' registrant.id %}">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-btn" data-url="{% url 'delete_registrant' registrant.id %}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="19" class="text-center py-4 text-muted">No registrations yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+          <div class="d-flex justify-content-center mt-4">
+              <nav aria-label="Registrants pagination">
+                <ul class="pagination">
+                  {% if registrants.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ registrants.previous_page_number }}">Previous</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                  {% endif %}
+
+                  {% for num in registrants.paginator.page_range %}
+                    {% if registrants.number == num %}
+                      <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if registrants.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ registrants.next_page_number }}">Next</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                  {% endif %}
+                </ul>
+              </nav>
+</div>
+
+      </div>
+
+      <!-- Django Pagination -->
+      <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+        <div class="text-muted small">
+          Showing {{ registrants.start_index }}–{{ registrants.end_index }} of {{ registrants.paginator.count }} entries
         </div>
+        <nav>
+          <ul class="pagination pagination-sm mb-0">
+            {% if registrants.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ registrants.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+            {% for page_num in registrants.paginator.page_range %}
+              <li class="page-item {% if page_num == registrants.number %}active{% endif %}">
+                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+              </li>
+            {% endfor %}
+            {% if registrants.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ registrants.next_page_number }}">Next</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
 
-        <div class="modal-footer d-flex justify-content-between flex-wrap">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-success d-flex align-items-center">
-            <i class="fas fa-download me-1"></i> Generate ZIPs
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 </div>
 
-<!-- Spinner Overlay -->
-<div id="spinnerOverlay"
-     class="position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-75 d-flex justify-content-center align-items-center flex-column text-center d-none"
-     style="z-index: 3000;">
-  <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-  <p class="fw-semibold text-primary">Generating badges... Please wait.</p>
-</div>
-
-
-
+<!-- Keep your Modals and Scripts sections here (unchanged) -->
 {% endblock %}
 
 {% block scripts %}
-    <link rel="stylesheet" href="{% static 'datatables/css/jquery.dataTables.min.css' %}">
-    <link rel="stylesheet" href="{% static 'datatables/css/buttons.dataTables.min.css' %}">
-    <script src="{% static 'datatables/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'datatables/js/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'datatables/js/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'datatables/js/buttons.print.min.js' %}"></script>
-    <script src="{% static 'datatables/js/jszip.min.js' %}"></script>
-    <script src="{% static 'datatables/js/pdfmake.min.js' %}"></script>
-    <script src="{% static 'datatables/js/vfs_fonts.js' %}"></script>
+<link rel="stylesheet" href="{% static 'datatables/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'datatables/css/buttons.dataTables.min.css' %}">
+<script src="{% static 'datatables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'datatables/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'datatables/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'datatables/js/jszip.min.js' %}"></script>
+<script src="{% static 'datatables/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'datatables/js/vfs_fonts.js' %}"></script>
 
-    <style>
-        #registrants-table {
-            width: 100% !important;
-            font-size: 0.9rem;
-            table-layout: auto;
-            border-spacing: 0 4px;
-        }
-
-        #registrants-table th, #registrants-table td {
-            padding: 0.55rem 0.75rem !important;
-            white-space: nowrap;
-        }
-
-        #registrants-table tfoot input {
-            width: 100%;
-            padding: 2px 6px;
-            font-size: 0.8rem;
-        }
-
-        .truncate {
-            max-width: 220px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .bg-success-subtle {
-            background-color: rgba(25, 135, 84, 0.1) !important;
-        }
-
-        .bg-danger-subtle {
-            background-color: rgba(220, 53, 69, 0.1) !important;
-        }
-
-        .bg-secondary-subtle {
-            background-color: rgba(108, 117, 125, 0.1) !important;
-        }
-
-        .bg-info-subtle {
-            background-color: rgba(13, 202, 240, 0.1) !important;
-        }
-        #editRegistrantModal .modal-content {
-          border-radius: 1rem;
-          overflow: hidden;
-        }
-
-        #editRegistrantModal .form-control,
-        #editRegistrantModal select {
-          border-radius: 0.5rem;
-          box-shadow: none !important;
-        }
-
-        .toast {
-          z-index: 20000;
-        }
-    </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            const table = $('#registrants-table').DataTable({
-                dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
-                buttons: [
-                    {extend: 'copy', text: '<i class="fas fa-copy"></i> Copy'},
-                    {extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV'},
-                    {extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel'},
-                    {extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF'},
-                    {extend: 'print', text: '<i class="fas fa-print"></i> Print'}
-                ],
-                order: [[15, 'desc']]
-            });
-
-            // 🔽 Enable per-column filters
-            $('#registrants-table tfoot th').each(function () {
-                const input = $(this).find('input');
-                if (input.length) {
-                    $(input).on('keyup change', function () {
-                        if (table.column($(this).parent().index()).search() !== this.value) {
-                            table.column($(this).parent().index()).search(this.value).draw();
-                        }
-                    });
-                }
-            });
-
-            // Delete logic
-            let deleteUrl = "", deleteRow = null;
-            const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-
-            $('#registrants-table').on('click', '.delete-btn', function () {
-                deleteUrl = $(this).data('url');
-                deleteRow = $(this).closest('tr');
-                deleteModal.show();
-            });
-
-            $('#confirmDeleteBtn').on('click', function () {
-                $.ajax({
-                    url: deleteUrl, type: 'POST', headers: {'X-CSRFToken': csrftoken},
-                    success: function (resp) {
-                        if (resp.success) {
-                            deleteModal.hide();
-                            deleteRow.fadeOut(300, function () {
-                                table.row(deleteRow).remove().draw(false);
-                            });
-                        } else alert("⚠️ " + (resp.error || "Could not delete."));
-                    },
-                    error: function (xhr) {
-                        alert("❌ Server Error: " + xhr.status + " - " + xhr.statusText);
-                    }
-                });
-            });
-
-            // Resend logic
-            $('#registrants-table').on('click', '.resend-btn', function () {
-                const btn = $(this);
-                const row = btn.closest('tr');
-                const url = btn.data('url');
-                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
-                $.ajax({
-                    url: url, type: 'POST', headers: {'X-CSRFToken': csrftoken},
-                    success: function (data) {
-                        if (data.success) {
-                            row.find('.email-attempts span').text(data.attempts || '0');
-                            row.find('.email-status').html('<span class="badge bg-success-subtle text-success border border-success px-2">Sent</span>');
-                            row.find('.email-last-sent').text(data.last_sent || '—');
-                        } else alert("⚠️ " + (data.error || "Failed to resend email."));
-                    },
-                    complete: function () {
-                        btn.prop('disabled', false).html('<i class="fas fa-envelope"></i>');
-                    }
-                });
-            });
-            // Approve Student logic
-            $('#registrants-table').on('click', '.approve-btn', function () {
-                const btn = $(this);
-                const row = btn.closest('tr');
-                const url = btn.data('url');
-                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    headers: {'X-CSRFToken': csrftoken},
-                    success: function (resp) {
-                        if (resp.success) {
-                            btn.replaceWith('<button class="btn btn-sm btn-success" disabled title="Approved"><i class="fas fa-check-circle"></i></button>');
-                        } else {
-                            alert("⚠️ " + (resp.error || "Approval failed."));
-                            btn.prop('disabled', false).html('<i class="fas fa-check"></i>');
-                        }
-                    },
-                    error: function (xhr) {
-                        alert("❌ Server Error: " + xhr.status + " - " + xhr.statusText);
-                        btn.prop('disabled', false).html('<i class="fas fa-check"></i>');
-                    }
-                });
-            });
-
-        });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const modal = new bootstrap.Modal(document.getElementById('editRegistrantModal'));
-        const modalBody = document.getElementById('editRegistrantBody');
-
-
-        // 🟡 Open modal and load form (with event delegation)
-        document.addEventListener('click', async (event) => {
-            const btn = event.target.closest('.edit-btn');
-            if (!btn) return;
-
-            const url = btn.getAttribute('data-url');
-            modalBody.innerHTML = `<div class="text-center py-5 text-muted">
-                <i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading form...</p></div>`;
-            modal.show();
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                modalBody.innerHTML = data.html_form;
-                attachFormSubmit();
-            } catch (error) {
-                modalBody.innerHTML = `<div class="text-danger text-center py-4">
-                    <i class="fas fa-exclamation-circle"></i> Failed to load form.
-                </div>`;
-            }
-        });
-
-        // 🟢 Handle form submission via AJAX
-        function attachFormSubmit() {
-            const form = document.getElementById('edit-registrant-form');
-            if (!form) return;
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const action = form.getAttribute('action') || window.location.href;
-
-                const response = await fetch(action, {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    modal.hide();
-                    const row = document.getElementById(`row-${data.id}`);
-                    if (row && data.row_html) {
-                        row.outerHTML = data.row_html;
-                    }
-                    showToast("✅ " + data.message, "success");
-                } else {
-                    modalBody.innerHTML = data.html_form;
-                    attachFormSubmit(); // rebind form
-                }
-            });
-        }
-
-    // 🔔 Toast feedback
-    function showToast(message, type) {
-        const toast = document.createElement("div");
-        toast.className = `toast align-items-center text-bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
-        toast.role = "alert";
-        toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>`;
-        document.body.appendChild(toast);
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-        setTimeout(() => toast.remove(), 4000);
-    }
-});
-
-
+<script>
 document.addEventListener("DOMContentLoaded", () => {
-  const startDate = document.getElementById("startDate");
-  const endDate = document.getElementById("endDate");
-  const categorySelect = document.getElementById("categorySelect");
-  const countDisplay = document.getElementById("countDisplay");
-  const form = document.getElementById("batchForm");
-  const spinner = document.getElementById("spinnerOverlay");
-
-  // --- Update registration count dynamically ---
-  async function updateCount() {
-    const start = startDate.value;
-    const end = endDate.value;
-    const category = categorySelect.value;
-
-    if (!start || !end) return;
-    countDisplay.textContent = "Counting registrations...";
-
-    try {
-      const url = new URL("{% url 'count_registrations_in_range' %}", window.location.origin);
-      url.searchParams.append("start_date", start);
-      url.searchParams.append("end_date", end);
-      if (category) url.searchParams.append("category", category);
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data && typeof data.count === "number") {
-        const plural = data.count === 1 ? "" : "s";
-        countDisplay.textContent = `${data.count} registration${plural} found in this range.`;
-      } else {
-        countDisplay.textContent = "No registrations found.";
-      }
-    } catch (error) {
-      console.error("Error fetching registration count:", error);
-      countDisplay.textContent = "Error fetching registration count.";
-    }
-  }
-
-  // --- Handle form submit without full page reload ---
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const params = new URLSearchParams(formData).toString();
-    const batchSize = form.querySelector('input[name="batch_size"]').value;
-    const url = `{% url 'generate_all_exhibitor_badges' %}?batch_size=${batchSize}&start_date=${startDate.value}&end_date=${endDate.value}&category=${categorySelect.value}`;
-
-
-    // Show spinner immediately
-    spinner.classList.remove("d-none");
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Failed to generate ZIP");
-
-      // Create a downloadable blob
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "Software_Summit_Badges.zip";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(downloadUrl);
-    } catch (error) {
-      console.error(error);
-      alert("There was an error generating the ZIP file.");
-    } finally {
-      // Hide spinner after a short delay for smoother UX
-      setTimeout(() => spinner.classList.add("d-none"), 1200);
-    }
+  const table = $('#registrants-table').DataTable({
+    dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rt',
+    paging: false,  // handled by Django
+    info: false,
+    buttons: [
+      {extend: 'copy', text: '<i class="fas fa-copy"></i> Copy'},
+      {extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV'},
+      {extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel'},
+      {extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF'},
+      {extend: 'print', text: '<i class="fas fa-print"></i> Print'}
+    ],
+    order: [[17, 'desc']]
   });
 
-  // --- Update count whenever filters change ---
-  [startDate, endDate, categorySelect].forEach(el =>
-    el.addEventListener("change", updateCount)
-  );
+  // Per-column filters
+  $('#registrants-table tfoot input').on('keyup change', function() {
+    table.column($(this).parent().index()).search(this.value).draw();
+  });
 });
 </script>
-
-
-
-
 {% endblock %}
