@@ -82,7 +82,7 @@
           <tbody>
             {% for registrant in registrants %}
               <tr id="row-{{ registrant.id }}">
-                <td>{{ forloop.counter|default:"" }}</td>
+                <td>{{ forloop.counter0|add:start_index|add:"1" }}</td>
                 <td class="fw-semibold">{{ registrant.get_full_name }}</td>
                 <td>{{ registrant.email }}</td>
                 <td>{{ registrant.phone }}</td>
