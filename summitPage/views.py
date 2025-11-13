@@ -350,6 +350,10 @@ def dashboard_stats(request):
 # --------------------------------------------
 # === Excel Export ===
 # --------------------------------------------
+from openpyxl import Workbook
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def export_registrants_excel(request):
     wb = Workbook()
@@ -363,20 +367,25 @@ def export_registrants_excel(request):
     ]
     ws.append(headers)
 
-    for r in Registrant.objects.all():
+    # Fetch all registrants
+    registrants = Registrant.objects.all().order_by("-created_at")
+
+    for r in registrants:
         ws.append([
-            r.full_name,
-            r.email,
-            r.phone,
+            r.get_full_name(),
+            r.email or "—",
+            r.phone or "—",
             r.organization or "—",
             r.job_title or "—",
-            r.get_category_display(),
-            ", ".join(r.interests) if r.interests else "—",
+            getattr(r, "category_name", get_category_name_from_id(r.category)),
+            ", ".join(r.interests) if hasattr(r, "interests") and r.interests else "—",
             "Yes" if r.updates_opt_in else "No",
-            r.created_at.strftime("%Y-%m-%d %H:%M"),
+            r.created_at.strftime("%Y-%m-%d %H:%M") if r.created_at else "—",
         ])
 
-    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
     response["Content-Disposition"] = 'attachment; filename="registrants.xlsx"'
     wb.save(response)
     return response
@@ -570,6 +579,11 @@ def export_print_speakers(request):
     })
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count, Max, Q
+from django.utils import timezone
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.conf import settings
 
 @login_required
 def dashboard_view(request):
@@ -577,7 +591,7 @@ def dashboard_view(request):
         logout(request)
         return redirect('custom_login')
 
-    # Only fetch necessary fields for initial stats
+    # --- Initial stats ---
     registrations = (
         Registrant.objects.only("id", "organization_type", "category", "created_at")
         .order_by("created_at")
@@ -589,13 +603,13 @@ def dashboard_view(request):
 
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # Convert category IDs to strings because Registrant.category is a CharField
+    # Convert student category IDs to strings
     student_category_ids = [
         str(cid)
         for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
     ]
 
-    # Fetch registrants efficiently — exclude students and annotate
+    # --- Registrants queryset ---
     registrants_qs = (
         Registrant.objects.exclude(
             Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
@@ -624,25 +638,28 @@ def dashboard_view(request):
 
     # --- PAGINATION ---
     paginator = Paginator(registrants_qs, 100)  # 100 per page
-    page = request.GET.get("page", 1)
+    page_number = request.GET.get("page", 1)
     try:
-        registrants = paginator.page(page)
+        registrants = paginator.page(page_number)
     except PageNotAnInteger:
         registrants = paginator.page(1)
     except EmptyPage:
         registrants = paginator.page(paginator.num_pages)
 
+    # Compute start index for continuous numbering
+    start_index = registrants.start_index() - 1  # subtract 1 because forloop.counter0 starts at 0
+
     # Add readable category names
-    categories = Registrant._meta.get_field("category").choices
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
 
     context = {
-        "categories": categories,
+        "categories": Registrant._meta.get_field("category").choices,
         "registrations": registrations,
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants,
+        "registrants": registrants,  # Page object
+        "start_index": start_index,  # for numbering in template
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
