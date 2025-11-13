@@ -350,10 +350,6 @@ def dashboard_stats(request):
 # --------------------------------------------
 # === Excel Export ===
 # --------------------------------------------
-from openpyxl import Workbook
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def export_registrants_excel(request):
     wb = Workbook()
@@ -367,25 +363,20 @@ def export_registrants_excel(request):
     ]
     ws.append(headers)
 
-    # Fetch all registrants
-    registrants = Registrant.objects.all().order_by("-created_at")
-
-    for r in registrants:
+    for r in Registrant.objects.all():
         ws.append([
-            r.get_full_name(),
-            r.email or "—",
-            r.phone or "—",
+            r.full_name,
+            r.email,
+            r.phone,
             r.organization or "—",
             r.job_title or "—",
-            getattr(r, "category_name", get_category_name_from_id(r.category)),
-            ", ".join(r.interests) if hasattr(r, "interests") and r.interests else "—",
+            r.get_category_display(),
+            ", ".join(r.interests) if r.interests else "—",
             "Yes" if r.updates_opt_in else "No",
-            r.created_at.strftime("%Y-%m-%d %H:%M") if r.created_at else "—",
+            r.created_at.strftime("%Y-%m-%d %H:%M"),
         ])
 
-    response = HttpResponse(
-        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response["Content-Disposition"] = 'attachment; filename="registrants.xlsx"'
     wb.save(response)
     return response
@@ -578,12 +569,6 @@ def export_print_speakers(request):
         "speakers": speakers,
     })
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Count, Max, Q
-from django.utils import timezone
-from django.contrib.auth import logout
-from django.shortcuts import render, redirect
-from django.conf import settings
 
 @login_required
 def dashboard_view(request):
@@ -591,42 +576,21 @@ def dashboard_view(request):
         logout(request)
         return redirect('custom_login')
 
-    # --- Initial stats ---
-    registrations = (
-        Registrant.objects.only("id", "organization_type", "category", "created_at")
-        .order_by("created_at")
-    )
-
+    registrations = Registrant.objects.all().order_by("created_at")
     total_users = Registrant.objects.exclude(
         Q(organization_type='Student') | Q(category='4')
     ).count()
 
     updates_count = Registrant.objects.filter(updates_opt_in=True).count()
 
-    # Convert student category IDs to strings
-    student_category_ids = [
-        str(cid)
-        for cid in Category.objects.filter(name__iexact="Student").values_list("id", flat=True)
-    ]
+    # Convert category IDs to strings because Registrant.category is a CharField
+    student_category_ids = [str(cid) for cid in
+                            Category.objects.filter(name__iexact="Student").values_list("id", flat=True)]
 
-    # --- Registrants queryset ---
-    registrants_qs = (
+    # Exclude students (either via org_type or category)
+    registrants = (
         Registrant.objects.exclude(
             Q(organization_type__iexact="Student") | Q(category__in=student_category_ids)
-        )
-        .only(
-            "id",
-            "first_name",
-            "second_name",
-            "email",
-            "phone",
-            "organization_type",
-            "other_organization_type",
-            "job_title",
-            "category",
-            "days_to_attend",
-            "national_id_number",
-            "created_at",
         )
         .order_by("-created_at")
         .annotate(
@@ -635,36 +599,23 @@ def dashboard_view(request):
             email_last_sent=Max("emaillog__sent_at"),
         )
     )
-
-    # --- PAGINATION ---
-    paginator = Paginator(registrants_qs, 100)  # 100 per page
-    page_number = request.GET.get("page", 1)
-    try:
-        registrants = paginator.page(page_number)
-    except PageNotAnInteger:
-        registrants = paginator.page(1)
-    except EmptyPage:
-        registrants = paginator.page(paginator.num_pages)
-
-    # Compute start index for continuous numbering
-    start_index = registrants.start_index() - 1  # subtract 1 because forloop.counter0 starts at 0
-
-    # Add readable category names
+    # categories = Category.objects.all().order_by("name")
+    categories = Registrant._meta.get_field("category").choices
     for reg in registrants:
         reg.category_name = get_category_name_from_id(reg.category)
 
     context = {
-        "categories": Registrant._meta.get_field("category").choices,
+        "categories": categories,
         "registrations": registrations,
         "total_users": total_users,
         "updates_count": updates_count,
-        "registrants": registrants,  # Page object
-        "start_index": start_index,  # for numbering in template
+        "registrants": registrants,
         "org_type_choices": Registrant.ORG_TYPE_CHOICES,
         "AUTO_LOGOUT_TIMEOUT": settings.AUTO_LOGOUT_TIMEOUT,
         "current_year": timezone.now().year,
     }
     return render(request, "summit/dashboard.html", context)
+
 
 # Endpoint for charts (AJAX/React)
 @login_required
